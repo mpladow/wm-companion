@@ -1,1 +1,1 @@
-type playerTypes = "playerOne" | "playerTwo";
+export type playerTypes = "playerOne" | "playerTwo";

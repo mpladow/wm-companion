@@ -1,7 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+
+import { playerTypes } from "@/utils/constants";
 import PlayerSection from "./components/PlayerSection";
+import ResultSection from "./components/ResultSection";
 
 const results = {
 	Victory: "Victory",
@@ -12,21 +15,6 @@ const results = {
 export const Home = () => {
 	const [playerOneScore, setPlayerOneScore] = useState<number>(1);
 	const [playerTwoScore, setPlayerTwoScore] = useState<number>(0);
-
-	const incrementScore = (player: playerTypes) => {
-		if (player == "playerOne") {
-			setPlayerOneScore(playerOneScore + 1);
-		} else {
-			setPlayerTwoScore(playerTwoScore + 1);
-		}
-	};
-	const decrementScore = (player: playerTypes) => {
-		if (player == "playerOne") {
-			setPlayerOneScore(playerOneScore - 1);
-		} else {
-			setPlayerTwoScore(playerTwoScore - 1);
-		}
-	};
 
 	const combatResultPlayerOne = useMemo(() => {
 		if (playerOneScore > playerTwoScore) {
@@ -77,12 +65,7 @@ export const Home = () => {
 				/>
 			</View>
 			<View>
-				<View style={[{ justifyContent: "center" }, { transform: [{ rotate: "180deg" }] }]}>
-					<Text>{combatResultPlayerTwo}</Text>
-				</View>
-				<View style={{ justifyContent: "center" }}>
-					<Text>{combatResultPlayerOne}</Text>
-				</View>
+				<ResultSection resultOne={combatResultPlayerOne} resultTwo={combatResultPlayerTwo} />
 			</View>
 			<View
 				style={[
