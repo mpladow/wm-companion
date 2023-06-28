@@ -1,5 +1,8 @@
 {
   "expo": {
+    "expiriments": {
+      "tsconfigPaths": true
+    },
     "name": "wm-companion",
     "slug": "wm-companion",
     "version": "1.0.0",
