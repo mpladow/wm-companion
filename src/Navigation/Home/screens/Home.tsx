@@ -2,24 +2,14 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import { playerTypes } from "@Utils/constants";
+import constants, { margin, playerTypes, results } from "@utils/constants";
 import { PlayerSection, ResultSection } from "./components";
-import Button from "@Components/button";
-// import PlayerSection from "./components/PlayerSection";
-// import ResultSection from "./components/ResultSection";
-
-export const results = {
-	Victory: "Victory",
-	Defeat: "Defeat",
-	Draw: "Draw",
-};
-
-export type ResultProps = {
-	result: string;
-	diff: number;
-};
+import CentreSection from "./components/CentreSection";
+import { ResultProps } from "@utils/types";
+import { useTheme } from "@hooks/useTheme";
 
 export const Home = () => {
+	const theme = useTheme();
 	const [playerOneScore, setPlayerOneScore] = useState<number>(1);
 	const [playerTwoScore, setPlayerTwoScore] = useState<number>(0);
 	const [p1CasualtyScore, setP1CasualtyScore] = useState<number>(0);
@@ -27,30 +17,33 @@ export const Home = () => {
 	const [p1CombatBonus, setP1CombatBonus] = useState<number>(0);
 	const [p2CombatBonus, setP2CombatBonus] = useState<number>(0);
 
-	const combatResultPlayerOne = useMemo(() => {
+	const combatResultTop = useMemo(() => {
 		const diff = playerOneScore - playerTwoScore;
+        const diffConverted = Math.abs(diff);
+
 		if (diff > 0) {
-			return { result: results.Victory, diff: diff } as ResultProps;
+			return { result: results.Victory, diff: diffConverted } as ResultProps;
 		}
 		if (diff == 0) {
-			return { result: results.Draw, diff: diff } as ResultProps;
+			return { result: results.Draw, diff: diffConverted } as ResultProps;
 		}
 		if (diff < 0) {
-			return { result: results.Defeat, diff: diff } as ResultProps;
+			return { result: results.Defeat, diff: diffConverted } as ResultProps;
 		}
 		return;
 	}, [playerOneScore, playerTwoScore]);
 
-	const combatResultPlayerTwo = useMemo(() => {
+	const combatResultBottom = useMemo(() => {
 		const diff = playerTwoScore - playerOneScore;
+		const diffConverted = Math.abs(diff);
 		if (diff > 0) {
-			return { result: results.Victory, diff: diff } as ResultProps;
+			return { result: results.Victory, diff: diffConverted } as ResultProps;
 		}
 		if (diff == 0) {
-			return { result: results.Draw, diff: diff } as ResultProps;
+			return { result: results.Draw, diff: diffConverted } as ResultProps;
 		}
 		if (diff < 0) {
-			return { result: results.Defeat, diff: diff } as ResultProps;
+			return { result: results.Defeat, diff: diffConverted } as ResultProps;
 		}
 		return;
 	}, [playerOneScore, playerTwoScore]);
@@ -96,7 +89,12 @@ export const Home = () => {
 			<View
 				style={[
 					styles.container,
-					{ transform: [{ rotate: "180deg" }], justifyContent: "space-between", flexDirection: "row" },
+					{
+						transform: [{ rotate: "180deg" }],
+						justifyContent: "space-between",
+						flexDirection: "row",
+						backgroundColor: theme.theme.backgroundVariant,
+					},
 				]}
 			>
 				<PlayerSection
@@ -109,22 +107,25 @@ export const Home = () => {
 					handleSetCR={(player, score) => handleSetPlayerCombatBonus(player, score)}
 				/>
 			</View>
-			<View style={{ flex: 1, flexDirection: "row", flexGrow: 0.2, paddingHorizontal: 8 }}>
-				<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-start" }}>
-					<Button
-						onPress={handleReset}
-						variant={"default"}
-					><Text>Reset</Text></Button>
-				</View>
-				<ResultSection resultOne={combatResultPlayerOne} resultTwo={combatResultPlayerTwo} />
-				<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-					<Text>TEST</Text>
-				</View>
+			<View
+				style={{
+					flex: 1,
+					flexDirection: "row",
+					flexGrow: 0.2,
+					paddingHorizontal: margin * 3,
+					backgroundColor: theme.theme.backgroundVariant2,
+				}}
+			>
+				<CentreSection
+					handleReset={handleReset}
+					topResultValue={combatResultTop}
+					bottomResultValue={combatResultBottom}
+				/>
 			</View>
 			<View
 				style={[
 					styles.container,
-					{ justifyContent: "space-between", flexDirection: "row", backgroundColor: "green" },
+					{ justifyContent: "space-between", flexDirection: "row", backgroundColor: theme.theme.background },
 				]}
 			>
 				<PlayerSection
