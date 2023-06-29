@@ -9,7 +9,7 @@ type buttonProps = {
 };
 const Button = ({ children, onPress, variant }: buttonProps) => {
 	return (
-		<TouchableOpacity hitSlop={20} activeOpacity={0.8} onPress={onPress} style={[styles.button]}>
+		<TouchableOpacity hitSlop={20} activeOpacity={0.8} onPress={onPress} style={[styles.button, {alignItems: 'center'}]}>
 			{children}
 		</TouchableOpacity>
 	);
