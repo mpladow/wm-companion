@@ -1,8 +1,9 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { playerTypes } from "@Utils/constants";
+import { playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
-import { Constants, Styling } from "@Utils/index";
+import { Constants, Styling } from "@utils/index";
+import { useTheme } from "@hooks/useTheme";
 
 type PlayerSectionProps = {
 	player: playerTypes;
@@ -17,18 +18,12 @@ type PlayerSectionProps = {
 const PlayerSection = ({
 	player,
 	playerScore,
-	handleSetPlayerScore,
 	playerCasualty,
 	playerCombatBonus: playerCombatResult,
 	handleSetCasualty,
 	handleSetCR,
 }: PlayerSectionProps) => {
-	const incrementScore = () => {
-		handleSetPlayerScore(player, playerScore + 1);
-	};
-	const decrementScore = () => {
-		handleSetPlayerScore(player, playerScore - 1);
-	};
+	const { theme } = useTheme();
 	const incrementPlayerCasualty = () => {
 		handleSetCasualty(player, playerCasualty + 1);
 	};
@@ -44,17 +39,26 @@ const PlayerSection = ({
 
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#eaeaea" }}>
-				<Text style={{ fontSize: 50 }}>{playerScore}</Text>
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#eaeae" }}>
+				<Text style={{ fontSize: 50, color: theme.text }}>{playerScore}</Text>
 			</View>
-			<SectionDials
-				textSize={Styling.xxl}
-				direction={"row"}
-				onLeftButtonPress={() => decrementPlayerCasualty()}
-				onRightButtonPress={() => incrementPlayerCasualty()}
-				value={playerCasualty}
-			/>
-			<View style={{ flex: 1, flexDirection: "row" }}>
+
+			<View style={{ flex: 1, flexDirection: "column" }}>
+				<View style={{ justifyContent: "flex-end", alignItems: "center" }}>
+					<Text style={{ color: theme.text }}>Casualties Inflicted</Text>
+				</View>
+				<SectionDials
+					textSize={Styling.xxl}
+					direction={"row"}
+					onLeftButtonPress={() => decrementPlayerCasualty()}
+					onRightButtonPress={() => incrementPlayerCasualty()}
+					value={playerCasualty}
+				/>
+			</View>
+			<View style={{ flex: 1, flexDirection: "column" }}>
+				<View style={{ justifyContent: "flex-end", alignItems: "center" }}>
+                <Text style={{ color: theme.text }}>Combat Bonuses</Text>
+				</View>
 				<SectionDials
 					direction={"row"}
 					onLeftButtonPress={() => decrementPlayerCR()}
