@@ -40,7 +40,7 @@ const PlayerSection = ({
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#eaeae" }}>
-				<Text style={{ fontSize: 50, color: theme.text }}>{playerScore}</Text>
+				<Text style={{ fontSize: 70, color: theme.text }}>{playerScore}</Text>
 			</View>
 
 			<View style={{ flex: 1, flexDirection: "column" }}>

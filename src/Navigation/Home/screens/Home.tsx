@@ -1,15 +1,18 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import constants, { margin, playerTypes, results } from "@utils/constants";
 import { PlayerSection, ResultSection } from "./components";
 import CentreSection from "./components/CentreSection";
 import { ResultProps } from "@utils/types";
 import { useTheme } from "@hooks/useTheme";
+import CustomModal from "@components/CustomModal";
+import Settings from "@navigation/Settings/screens/Settings";
 
 export const Home = () => {
 	const theme = useTheme();
+	const [modalVisible, setModalVisible] = useState(false);
 	const [playerOneScore, setPlayerOneScore] = useState<number>(1);
 	const [playerTwoScore, setPlayerTwoScore] = useState<number>(0);
 	const [p1CasualtyScore, setP1CasualtyScore] = useState<number>(0);
@@ -19,7 +22,7 @@ export const Home = () => {
 
 	const combatResultTop = useMemo(() => {
 		const diff = playerOneScore - playerTwoScore;
-        const diffConverted = Math.abs(diff);
+		const diffConverted = Math.abs(diff);
 
 		if (diff > 0) {
 			return { result: results.Victory, diff: diffConverted } as ResultProps;
@@ -117,6 +120,7 @@ export const Home = () => {
 				}}
 			>
 				<CentreSection
+					handleSettingsPress={() => setModalVisible(!modalVisible)}
 					handleReset={handleReset}
 					topResultValue={combatResultTop}
 					bottomResultValue={combatResultBottom}
@@ -139,6 +143,9 @@ export const Home = () => {
 				/>
 			</View>
 			<StatusBar style='auto' />
+			<CustomModal setModalVisible={() => setModalVisible(!modalVisible)} modalVisible={modalVisible}>
+				<Settings/>
+			</CustomModal>
 		</View>
 	);
 };
