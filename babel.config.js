@@ -10,7 +10,8 @@ module.exports = function (api) {
 						"@components": "./src/components",
 						"@utils": "./src/utils",
             "@hooks": "./src/hooks",
-            "@context": "./src/context"
+            "@context": "./src/context",
+            "@navigation": "./src/Navigation"
 					},
 					extensions: [".js", ".jsx", ".ts", ".tsx"],
 				},

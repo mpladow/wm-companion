@@ -1,3 +1,3 @@
 import { default as Button } from "./button";
-
-export { Button };
+import {default as Text} from "./CustomText";
+export { Button, Text };
