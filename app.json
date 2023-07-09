@@ -19,16 +19,29 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": 0.1
+      "buildNumber": "0.1"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mldevelopment.wmcompanion"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e7bcb57d-bc08-49e5-a158-b19bd96e432c"
+      }
+    },
+    "owner": "mldevelopment",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/e7bcb57d-bc08-49e5-a158-b19bd96e432c"
     }
   }
 }
