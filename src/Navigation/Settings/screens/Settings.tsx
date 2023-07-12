@@ -15,6 +15,7 @@ const Settings = () => {
 		<View style={{ display: "flex", flex: 1 }}>
 			<View>
 				<Text style={{ fontSize: Styling.lg }}>WMR Combat Calculator</Text>
+				<Text>Alpha</Text>
 				<View style={{ marginVertical: margin }}>
 					<Text>A companion app to assist in Warmaster and Warmaster Revolution wargaming.</Text>
 					<Text>Future features:</Text>
