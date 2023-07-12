@@ -41,12 +41,12 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 				<View
 					style={[{ justifyContent: "center", alignItems: "center" }, { transform: [{ rotate: "180deg" }] }]}
 				>
-					<Text style={{ fontSize: 18, color: resultOneStyle }}>
+					<Text style={{ fontSize: 24, color: resultOneStyle }}>
 						{resultOne?.result} by {resultOne?.diff}
 					</Text>
 				</View>
 				<View style={{ justifyContent: "center", alignItems: "center" }}>
-					<Text style={{ fontSize: 18, color: resultTwoStyle }}>
+					<Text style={[{ fontSize: 24, color: resultTwoStyle }, resultTwo?.result == "Victory" && {fontWeight: 'bold'}]}>
 						{resultTwo?.result} by {resultTwo?.diff}
 					</Text>
 				</View>

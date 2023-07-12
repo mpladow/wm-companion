@@ -14,11 +14,13 @@ const Settings = () => {
 	return (
 		<View style={{ display: "flex", flex: 1 }}>
 			<View>
-				<Text style={{ fontSize: Styling.lg }}>WMR Combat Calculator</Text>
-				<Text>Alpha</Text>
+				<Text style={{ fontSize: Styling.xl, fontWeight: "bold" }}>WMR Combat Calculator</Text>
+				<View style={{marginVertical: margin}}>
+				<Text style={{fontWeight: "bold"}}>This is a pre-alpha build and will have barebones functionality.</Text>
+				</View>
 				<View style={{ marginVertical: margin }}>
 					<Text>A companion app to assist in Warmaster and Warmaster Revolution wargaming.</Text>
-					<Text>Future features:</Text>
+					<Text style={{fontWeight:'bold'}}>Future features:</Text>
 					<Text>- Combat score visual customisations</Text>
 					<Text>- Victory Points calculator</Text>
 					<Text>- Tournament Progress Management</Text>
