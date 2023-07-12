@@ -18,7 +18,7 @@ const CentreSection = ({ handleReset, handleSettingsPress, topResultValue, botto
 		<>
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-start" }}>
 				<Pressable onPress={handleReset}>
-					<Ionicons name='refresh' size={24} color={theme.text} />
+					<Ionicons name='refresh' size={32} color={theme.text} />
 				</Pressable>
 			</View>
 			<ResultSection resultOne={bottomResultValue} resultTwo={topResultValue} />
