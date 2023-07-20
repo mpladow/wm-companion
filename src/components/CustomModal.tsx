@@ -1,13 +1,12 @@
-import { Alert, Dimensions, Modal, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Dimensions, Modal, Pressable, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
-import Button from "./button";
 import { useTheme } from "@hooks/useTheme";
 
 type CustomModalProps = {
 	setModalVisible: () => void;
 	modalVisible: boolean;
-	children: JSX.Element;
+	children?: JSX.Element;
 };
 
 const CustomModal = ({ setModalVisible, modalVisible, children }: CustomModalProps) => {
@@ -38,7 +37,6 @@ const CustomModal = ({ setModalVisible, modalVisible, children }: CustomModalPro
 						{children}
 					</>
 				</View>
-				<View></View>
 			</View>
 		</Modal>
 	);

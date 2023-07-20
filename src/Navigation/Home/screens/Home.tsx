@@ -2,13 +2,15 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useMemo, useState } from "react";
 import { Alert, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import constants, { margin, playerTypes, results } from "@utils/constants";
+import constants, { margin, Pages, playerTypes, results } from "@utils/constants";
 import { PlayerSection, ResultSection } from "./components";
 import CentreSection from "./components/CentreSection";
 import { ResultProps } from "@utils/types";
 import { useTheme } from "@hooks/useTheme";
 import CustomModal from "@components/CustomModal";
 import Settings from "@navigation/Settings/screens/Settings";
+import { current } from "@reduxjs/toolkit";
+import BlunderChart from "@navigation/Charts/BlunderChart";
 
 export const Home = () => {
 	const theme = useTheme();
@@ -19,6 +21,7 @@ export const Home = () => {
 	const [p2CasualtyScore, setP2CasualtyScore] = useState<number>(0);
 	const [p1CombatBonus, setP1CombatBonus] = useState<number>(0);
 	const [p2CombatBonus, setP2CombatBonus] = useState<number>(0);
+	const [currentModalContent, setCurrentModalContent] = useState<string>(Pages.Blunders);
 
 	const combatResultTop = useMemo(() => {
 		const diff = playerOneScore - playerTwoScore;
@@ -79,6 +82,17 @@ export const Home = () => {
 			setP2CombatBonus(score);
 		}
 	};
+	const onSettingsPress = () => {
+		setCurrentModalContent(Pages.Settings);
+		setModalVisible(true);
+	};
+	const onBlunderPress = () => {
+		setCurrentModalContent(Pages.Blunders);
+		setModalVisible(true)
+	}
+	// useEffect(() => {
+	// 	if (currentModalContent != "") setModalVisible(true);
+	// }, [currentModalContent]);
 
 	const handleReset = () => {
 		setP1CasualtyScore(0);
@@ -86,6 +100,13 @@ export const Home = () => {
 		setP1CombatBonus(0);
 		setP2CombatBonus(0);
 	};
+
+	const renderModalContent = useMemo(() => {
+		let component: JSX.Element = <></>;
+		if (currentModalContent == Pages.Settings) component = <Settings />;
+		if (currentModalContent == Pages.Blunders) component = <BlunderChart />;
+		return component;
+	}, [currentModalContent]);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -117,10 +138,12 @@ export const Home = () => {
 					flexGrow: 0.2,
 					paddingHorizontal: margin * 3,
 					backgroundColor: theme.theme.backgroundVariant2,
+					overflow: "visible",
 				}}
 			>
 				<CentreSection
-					handleSettingsPress={() => setModalVisible(!modalVisible)}
+					handleSettingsPress={onSettingsPress}
+					handleBlunderPress={onBlunderPress}
 					handleReset={handleReset}
 					topResultValue={combatResultTop}
 					bottomResultValue={combatResultBottom}
@@ -129,7 +152,12 @@ export const Home = () => {
 			<View
 				style={[
 					styles.container,
-					{ justifyContent: "space-between", flexDirection: "row", backgroundColor: theme.theme.background },
+					{
+						zIndex: -5,
+						justifyContent: "space-between",
+						flexDirection: "row",
+						backgroundColor: theme.theme.background,
+					},
 				]}
 			>
 				<PlayerSection
@@ -144,7 +172,7 @@ export const Home = () => {
 			</View>
 			<StatusBar style='auto' />
 			<CustomModal setModalVisible={() => setModalVisible(!modalVisible)} modalVisible={modalVisible}>
-				<Settings/>
+				{renderModalContent}
 			</CustomModal>
 		</View>
 	);

@@ -6,5 +6,8 @@ export const results = {
 	Defeat: "Defeat",
 	Draw: "Draw",
 };
-
+export const Pages = {
+	Settings: "Settings",
+	Blunders: "Blunders",
+};
 export default playerTypes;

@@ -1,19 +1,50 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
 import ResultSection from "./ResultSection";
-import Button from "@components/button";
 import { ResultProps } from "@utils/types";
 import { useTheme } from "@hooks/useTheme";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import MenuModal, { MenuOptions } from "./MenuModal";
+import { AntDesign } from "@expo/vector-icons";
 
 type CentreSectionProps = {
 	handleReset: () => void;
 	handleSettingsPress: () => void;
+	handleBlunderPress: () => void;
 	topResultValue?: ResultProps;
 	bottomResultValue?: ResultProps;
 };
-const CentreSection = ({ handleReset, handleSettingsPress, topResultValue, bottomResultValue }: CentreSectionProps) => {
+const CentreSection = ({
+	handleReset,
+	handleSettingsPress,
+	handleBlunderPress,
+	topResultValue,
+	bottomResultValue,
+}: CentreSectionProps) => {
 	const { theme } = useTheme();
+	const [menuOpen, setMenuOpen] = useState(false);
+
+	const onExpandedPress = () => {
+		console.log(menuOpen ? "expanded" : "collapsed");
+		setMenuOpen(!menuOpen);
+	};
+	const test = [
+		{
+			label: "Settings",
+			onPress: handleSettingsPress,
+			// icon: <Ionicons name='settings' size={24} color={theme.text} />,
+			icon: <AntDesign name="infocirlce" size={24} color={theme.text} />
+		} as MenuOptions,
+		{
+			label: "Close",
+			icon: <AntDesign name='close' size={24} color={theme.text} />,
+		} as MenuOptions,
+		{
+			label: "Blunder",
+			onPress: handleBlunderPress,
+			icon: <Ionicons name='warning' size={24} color={theme.text} />,
+		},
+	];
 	return (
 		<>
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-start" }}>
@@ -22,10 +53,21 @@ const CentreSection = ({ handleReset, handleSettingsPress, topResultValue, botto
 				</Pressable>
 			</View>
 			<ResultSection resultOne={bottomResultValue} resultTwo={topResultValue} />
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-				<Pressable onPress={handleSettingsPress}>
-					<Ionicons name='settings-outline' size={24} color={theme.text} />
-				</Pressable>
+			<View
+				style={{
+					flex: 1,
+					justifyContent: "center",
+					alignItems: "flex-end",
+					overflow: "visible",
+					zIndex: 999999,
+				}}
+			>
+				<MenuModal
+					options={test}
+					visible={menuOpen}
+					onDismiss={() => setMenuOpen(!setMenuOpen)}
+					handleMenuPress={onExpandedPress}
+				/>
 			</View>
 		</>
 	);
