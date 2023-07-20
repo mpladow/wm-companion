@@ -26,7 +26,7 @@ const MenuModal = ({ options, visible, onDismiss, handleMenuPress }: MenuModalPr
 	useEffect(() => {
 		Animated.timing(fadeAnimation, {
 			toValue: visible ? 0 : 1,
-			duration: 200,
+			duration: 1200,
 			useNativeDriver: true,
 		}).start();
 	}, [visible]);
