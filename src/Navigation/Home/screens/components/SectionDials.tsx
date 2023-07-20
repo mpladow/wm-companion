@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Button from "@components/button";
 import { Styling } from "@utils/index";
@@ -16,7 +16,7 @@ const SectionDials = ({ onLeftButtonPress, onRightButtonPress, textSize, value, 
 	const { theme } = useTheme();
 	return (
 		<View style={{ flex: 1, flexDirection: direction, alignItems: "center" }}>
-			<View style={{ flex: 1, marginHorizontal: margin * 8 }}>
+			<View onTouchStart={onLeftButtonPress} style={{ flex: 1, marginHorizontal: margin * 8 }}>
 				<Button
 					onPress={onLeftButtonPress}
 					variant={"default"}
