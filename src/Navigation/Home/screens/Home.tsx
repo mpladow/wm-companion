@@ -22,6 +22,7 @@ export const Home = () => {
 	const [p1CombatBonus, setP1CombatBonus] = useState<number>(0);
 	const [p2CombatBonus, setP2CombatBonus] = useState<number>(0);
 	const [currentModalContent, setCurrentModalContent] = useState<string>(Pages.Blunders);
+	const [currentModalHeader, setCurrentModalHeader] = useState<string>("");
 
 	const combatResultTop = useMemo(() => {
 		const diff = playerOneScore - playerTwoScore;
@@ -88,8 +89,8 @@ export const Home = () => {
 	};
 	const onBlunderPress = () => {
 		setCurrentModalContent(Pages.Blunders);
-		setModalVisible(true)
-	}
+		setModalVisible(true);
+	};
 	// useEffect(() => {
 	// 	if (currentModalContent != "") setModalVisible(true);
 	// }, [currentModalContent]);
@@ -103,8 +104,14 @@ export const Home = () => {
 
 	const renderModalContent = useMemo(() => {
 		let component: JSX.Element = <></>;
-		if (currentModalContent == Pages.Settings) component = <Settings />;
-		if (currentModalContent == Pages.Blunders) component = <BlunderChart />;
+		if (currentModalContent == Pages.Settings) {
+			component = <Settings />;
+			setCurrentModalHeader("WM-Companion");
+		}
+		if (currentModalContent == Pages.Blunders) {
+			component = <BlunderChart />;
+			setCurrentModalHeader(Pages.Blunders)
+		}
 		return component;
 	}, [currentModalContent]);
 
@@ -171,7 +178,7 @@ export const Home = () => {
 				/>
 			</View>
 			<StatusBar style='auto' />
-			<CustomModal setModalVisible={() => setModalVisible(!modalVisible)} modalVisible={modalVisible}>
+			<CustomModal headerTitle={currentModalHeader}setModalVisible={() => setModalVisible(!modalVisible)} modalVisible={modalVisible}>
 				{renderModalContent}
 			</CustomModal>
 		</View>

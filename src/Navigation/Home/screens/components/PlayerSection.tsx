@@ -1,9 +1,10 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import React from "react";
 import { playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
 import { Constants, Styling } from "@utils/index";
 import { useTheme } from "@hooks/useTheme";
+import { Text, TextBlock } from "@components/index";
 
 type PlayerSectionProps = {
 	player: playerTypes;

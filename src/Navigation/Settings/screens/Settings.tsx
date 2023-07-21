@@ -14,11 +14,6 @@ const Settings = () => {
 	const settings = ["About"];
 	return (
 		<View style={{ display: "flex", flex: 1 }}>
-			<TextBlock variant='medium' centered>
-				<Text bold style={{ fontSize: fontSize.xl }}>
-					WM-Companion
-				</Text>
-			</TextBlock>
 			<View style={{ justifyContent: "space-evenly" }}>
 				<View style={{ marginVertical: margin }}>
 					<Text style={{ fontWeight: "bold" }}>
@@ -33,9 +28,11 @@ const Settings = () => {
 						<Text style={{ fontWeight: "bold" }}>Future features:</Text>
 					</TextBlock>
 					<TextBlock>
-						<Text>- Combat score visual customisations</Text>
-						<Text>- Victory Points calculator</Text>
-						<Text>- Tournament Progress Management</Text>
+						<>
+							<Text>- Combat score visual customisations</Text>
+							<Text>- Victory Points calculator</Text>
+							<Text>- Tournament Progress Management</Text>
+						</>
 					</TextBlock>
 				</View>
 				<View style={{ marginVertical: margin }}>

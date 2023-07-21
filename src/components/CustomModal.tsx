@@ -1,17 +1,21 @@
-import { Alert, Dimensions, Modal, Pressable, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Dimensions, Modal, Pressable, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
+import { Text, TextBlock } from "@components/index";
+import fontSize from "@utils/styling";
 
 type CustomModalProps = {
 	setModalVisible: () => void;
 	modalVisible: boolean;
 	children?: JSX.Element;
+	headerComponentRight?: JSX.Element;
+	headerTitle: string;
 };
 
-const CustomModal = ({ setModalVisible, modalVisible, children }: CustomModalProps) => {
+const CustomModal = ({ setModalVisible, modalVisible, children, headerTitle }: CustomModalProps) => {
 	const windowWidth = Dimensions.get("window").width;
-    const {theme} = useTheme();
+	const { theme } = useTheme();
 
 	return (
 		<Modal
@@ -27,15 +31,28 @@ const CustomModal = ({ setModalVisible, modalVisible, children }: CustomModalPro
 				<View style={styles.modalOverlay} />
 			</TouchableWithoutFeedback>
 			<View style={styles.centeredView}>
-				<View style={[styles.modalView, { width: windowWidth - 40, backgroundColor:  theme.background}]}>
-					<>
-						<View style={{ position: "absolute", right: 0, flexDirection: "row", padding: 20 }}>
-							<Pressable onPress={setModalVisible}>
-								<AntDesign name='close' size={24} color={theme.text} />
-							</Pressable>
+				<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.black }]}>
+					<View style={{ flexDirection: "row", padding: 20 }}>
+						<View
+							style={{
+								width: "100%",
+								flexDirection: "row",
+								alignItems: "center",
+								justifyContent: "space-between",
+							}}
+						>
+							<View style={{ flex: 1, alignItems: "flex-start" }}></View>
+							<View style={{ flex: 3, alignItems: "center" }}>
+								<Text style={{ fontSize: fontSize.xl }} bold>{headerTitle}</Text>
+							</View>
+							<View style={{ flex: 1, alignItems: "flex-end" }}>
+								<TouchableOpacity onPress={setModalVisible}>
+									<AntDesign name='close' size={24} color={theme.text} />
+								</TouchableOpacity>
+							</View>
 						</View>
-						{children}
-					</>
+					</View>
+					<View style={{ padding: 20, flex: 1 }}>{children}</View>
 				</View>
 			</View>
 		</Modal>
@@ -64,8 +81,8 @@ const styles = StyleSheet.create({
 		margin: 50,
 		backgroundColor: "white",
 		borderRadius: 20,
-		paddingVertical: 40,
-        paddingHorizontal: 40,
+		// paddingVertical: 40,
+		// paddingHorizontal: 40,
 		//alignItems: "center",
 		shadowColor: "#000",
 		shadowOffset: {

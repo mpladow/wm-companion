@@ -10,11 +10,6 @@ const BlunderChart = () => {
 	const { theme } = useTheme();
 	return (
 		<ScrollView style={{ display: "flex", flex: 1 }} showsVerticalScrollIndicator={false}>
-			<TextBlock variant='medium' centered>
-				<Text bold style={{ fontSize: fontSize.xl }}>
-					Blunders
-				</Text>
-			</TextBlock>
 			<View style={{ flexDirection: "row" }}>
 				<View style={{ flex: 1 }}>
 					<TextBlock>
