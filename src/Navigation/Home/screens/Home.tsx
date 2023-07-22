@@ -21,7 +21,7 @@ export const Home = () => {
 	const [p2CasualtyScore, setP2CasualtyScore] = useState<number>(0);
 	const [p1CombatBonus, setP1CombatBonus] = useState<number>(0);
 	const [p2CombatBonus, setP2CombatBonus] = useState<number>(0);
-	const [currentModalContent, setCurrentModalContent] = useState<string>(Pages.Blunders);
+	const [page, setPage] = useState<string>(Pages.Settings);
 	const [currentModalHeader, setCurrentModalHeader] = useState<string>("");
 
 	const combatResultTop = useMemo(() => {
@@ -84,11 +84,11 @@ export const Home = () => {
 		}
 	};
 	const onSettingsPress = () => {
-		setCurrentModalContent(Pages.Settings);
+		setPage(Pages.Settings);
 		setModalVisible(true);
 	};
 	const onBlunderPress = () => {
-		setCurrentModalContent(Pages.Blunders);
+		setPage(Pages.Blunders);
 		setModalVisible(true);
 	};
 	// useEffect(() => {
@@ -101,19 +101,6 @@ export const Home = () => {
 		setP1CombatBonus(0);
 		setP2CombatBonus(0);
 	};
-
-	const renderModalContent = useMemo(() => {
-		let component: JSX.Element = <></>;
-		if (currentModalContent == Pages.Settings) {
-			component = <Settings />;
-			setCurrentModalHeader("WM-Companion");
-		}
-		if (currentModalContent == Pages.Blunders) {
-			component = <BlunderChart />;
-			setCurrentModalHeader(Pages.Blunders)
-		}
-		return component;
-	}, [currentModalContent]);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -178,9 +165,12 @@ export const Home = () => {
 				/>
 			</View>
 			<StatusBar style='auto' />
-			<CustomModal headerTitle={currentModalHeader}setModalVisible={() => setModalVisible(!modalVisible)} modalVisible={modalVisible}>
-				{renderModalContent}
-			</CustomModal>
+			<CustomModal
+				headerTitle={currentModalHeader}
+				setModalVisible={() => setModalVisible(!modalVisible)}
+				modalVisible={modalVisible}
+				page={page}
+			/>
 		</View>
 	);
 };

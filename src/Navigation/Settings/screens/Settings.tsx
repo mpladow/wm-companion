@@ -16,7 +16,7 @@ const Settings = () => {
 		<View style={{ display: "flex", flex: 1 }}>
 			<View style={{ justifyContent: "space-evenly" }}>
 				<View style={{ marginVertical: margin }}>
-					<Text style={{ fontWeight: "bold" }}>
+					<Text bold>
 						This is a pre-alpha build and will have barebones functionality.
 					</Text>
 				</View>
@@ -36,7 +36,7 @@ const Settings = () => {
 					</TextBlock>
 				</View>
 				<View style={{ marginVertical: margin }}>
-					<Text italic>
+					<Text bold>
 						Disclaimer: This is a fan-made hobby project and I have no affiliation with Games Workshop or
 						its affiliates.
 					</Text>

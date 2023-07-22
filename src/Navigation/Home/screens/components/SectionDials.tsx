@@ -16,8 +16,9 @@ const SectionDials = ({ onLeftButtonPress, onRightButtonPress, textSize, value, 
 	const { theme } = useTheme();
 	return (
 		<View style={{ flex: 1, flexDirection: direction, alignItems: "center" }}>
-			<View onTouchStart={onLeftButtonPress} style={{ flex: 1, marginHorizontal: margin * 8 }}>
+			<View onTouchStart={onLeftButtonPress} style={{ flex: 1, alignItems: 'center', marginHorizontal: margin * 8 }}>
 				<Button
+				circle
 					onPress={onLeftButtonPress}
 					variant={"default"}
 					children={<Text style={{ fontSize: Styling.xl, color: theme.text }}>-</Text>}
@@ -26,8 +27,9 @@ const SectionDials = ({ onLeftButtonPress, onRightButtonPress, textSize, value, 
 			<View style={{ justifyContent: "center", alignItems: "center" }}>
 				<Text style={{ fontSize: textSize, color: theme.text }}>{value}</Text>
 			</View>
-			<View style={{ flex: 1, marginHorizontal: margin * 8 }}>
+			<View style={{ flex: 1, alignItems: 'center',marginHorizontal: margin * 8 }}>
 				<Button
+				circle
 					onPress={onRightButtonPress}
 					variant={"default"}
 					children={<Text style={{ fontSize: Styling.xl, color: theme.text }}>+</Text>}

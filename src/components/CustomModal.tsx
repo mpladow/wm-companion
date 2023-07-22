@@ -1,9 +1,21 @@
-import { Alert, Dimensions, Modal, Pressable, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import React from "react";
+import {
+	Alert,
+	Dimensions,
+	Modal,
+	Pressable,
+	StyleSheet,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
 import fontSize from "@utils/styling";
+import Settings from "@navigation/Settings/screens/Settings";
+import { Pages } from "@utils/constants";
+import BlunderChart from "@navigation/Charts/BlunderChart";
 
 type CustomModalProps = {
 	setModalVisible: () => void;
@@ -11,11 +23,48 @@ type CustomModalProps = {
 	children?: JSX.Element;
 	headerComponentRight?: JSX.Element;
 	headerTitle: string;
+	footerLeft?: JSX.Element;
+	footerRight?: JSX.Element;
+	page?: string;
 };
 
-const CustomModal = ({ setModalVisible, modalVisible, children, headerTitle }: CustomModalProps) => {
+export type ModalMetaContentType = {
+	pageNumber?: string;
+};
+
+const CustomModal = ({
+	setModalVisible,
+	page,
+	modalVisible,
+	children,
+	headerTitle,
+	footerLeft,
+	footerRight,
+}: CustomModalProps) => {
 	const windowWidth = Dimensions.get("window").width;
 	const { theme } = useTheme();
+	const [modalContent, setModalContent] = useState(<Settings />);
+	const [modalHeader, setModalHeader] = useState<string>("");
+
+	const [loading, setLoading] = useState(false);
+	const [modalMetaContent, setModalMetaContent] = useState<ModalMetaContentType>();
+	useEffect(() => {
+		setLoading(true);
+		if (page) {
+			if (page == Pages.Settings) {
+				// get additional data for this page
+				setModalContent(<Settings />);
+				setModalHeader("WM-Companion");
+				setModalMetaContent(null)
+			}
+			if (page == Pages.Blunders) {
+				setModalContent(<BlunderChart />);
+				setModalHeader(Pages.Blunders);
+				setModalMetaContent({ pageNumber: "pg 61" } as ModalMetaContentType);
+			}
+			setLoading(false);
+		}
+	}, [page]);
 
 	return (
 		<Modal
@@ -43,16 +92,49 @@ const CustomModal = ({ setModalVisible, modalVisible, children, headerTitle }: C
 						>
 							<View style={{ flex: 1, alignItems: "flex-start" }}></View>
 							<View style={{ flex: 3, alignItems: "center" }}>
-								<Text style={{ fontSize: fontSize.xl }} bold>{headerTitle}</Text>
+								<Text style={{ fontSize: fontSize.xl }} variant={"heading1"} bold>
+									{modalHeader}
+								</Text>
 							</View>
 							<View style={{ flex: 1, alignItems: "flex-end" }}>
-								<TouchableOpacity onPress={setModalVisible}>
+								{/* <TouchableOpacity onPress={setModalVisible}>
 									<AntDesign name='close' size={24} color={theme.text} />
-								</TouchableOpacity>
+								</TouchableOpacity> */}
 							</View>
 						</View>
 					</View>
-					<View style={{ padding: 20, flex: 1 }}>{children}</View>
+					<View style={{ padding: 20, paddingBottom: 60, flex: 1 }}>
+						{modalContent ? modalContent : children}
+					</View>
+					<View
+						style={{
+							width: "100%",
+							flexDirection: "row",
+							alignItems: "flex-end",
+							justifyContent: "center",
+						}}
+					>
+						<View style={{ position: "absolute", left: 0 }}>{footerLeft}</View>
+						<View
+							style={{
+								position: "absolute",
+								top: -40,
+								width: 70,
+								height: 70,
+								backgroundColor: theme.background,
+								borderRadius: 200,
+								alignItems: "center",
+								justifyContent: "center",
+							}}
+						>
+							<TouchableOpacity hitSlop={40} onPress={setModalVisible}>
+								<AntDesign name='close' size={24} color={theme.text} />
+							</TouchableOpacity>
+						</View>
+						<View style={{ position: "absolute", right: 0, padding: 18 }}>
+							<Text>{modalMetaContent?.pageNumber}</Text>
+						</View>
+					</View>
 				</View>
 			</View>
 		</Modal>

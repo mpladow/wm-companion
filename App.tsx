@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import HomeStack from "./src/Navigation/Home/HomeStack";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContextProvider } from "@context/ThemeContext";
+import { useFonts } from "expo-font";
+import * as SplashScreen from 'expo-splash-screen';
 
 const darkTheme = {
 	dark: true,
@@ -19,7 +21,25 @@ const darkTheme = {
 	},
 };
 
+SplashScreen.preventAutoHideAsync();
+
 const App = () => {
+	const [fontsLoaded] = useFonts({
+		'GaramondItalic': require("./assets/fonts/EBGaramond-Italic.ttf"),
+		'GaramondRegular': require("./assets/fonts/EBGaramond-Regular.ttf"),
+		'GaramondBold': require("./assets/fonts/EBGaramond-ExtraBold.ttf"),
+		'PTSans-Bold': require("./assets/fonts/PTSans-Bold.ttf")
+	});
+
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded) {
+			await SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded]);
+
+	if (!fontsLoaded) {
+		return null;
+	}
 	return (
 		<ThemeContextProvider>
 			<NavigationContainer theme={darkTheme}>
