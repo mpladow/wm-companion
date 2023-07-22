@@ -21,7 +21,7 @@ const darkTheme = {
 	},
 };
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const App = () => {
 	const [fontsLoaded] = useFonts({

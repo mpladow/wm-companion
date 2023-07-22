@@ -25,7 +25,7 @@ const Settings = () => {
 						<Text>A companion app to assist in Warmaster and Warmaster Revolution wargaming.</Text>
 					</TextBlock>
 					<TextBlock>
-						<Text style={{ fontWeight: "bold" }}>Future features:</Text>
+						<Text bold>Future features:</Text>
 					</TextBlock>
 					<TextBlock>
 						<>

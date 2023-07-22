@@ -26,6 +26,7 @@ const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypePro
 				else return fonts.GaramondRegular;
 			default:
 				if (italic) return fonts.GaramondItalic
+				if (bold) return fonts.GaramondBold;
 				return fonts.GaramondRegular;
 		}
 	};
