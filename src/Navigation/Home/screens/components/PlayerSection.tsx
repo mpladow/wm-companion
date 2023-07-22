@@ -1,9 +1,10 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import React from "react";
 import { playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
 import { Constants, Styling } from "@utils/index";
 import { useTheme } from "@hooks/useTheme";
+import { Text, TextBlock } from "@components/index";
 
 type PlayerSectionProps = {
 	player: playerTypes;
@@ -40,7 +41,7 @@ const PlayerSection = ({
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#eaeae" }}>
-				<Text style={{ fontSize: 70, color: theme.text }}>{playerScore}</Text>
+				<Text variant="heading1" style={{ fontSize: 70, color: theme.text }}>{playerScore}</Text>
 			</View>
 
 			<View style={{ flex: 1, flexDirection: "column" }}>

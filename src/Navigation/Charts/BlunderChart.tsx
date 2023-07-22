@@ -10,12 +10,7 @@ const BlunderChart = () => {
 	const { theme } = useTheme();
 	return (
 		<ScrollView style={{ display: "flex", flex: 1 }} showsVerticalScrollIndicator={false}>
-			<TextBlock variant='medium' centered>
-				<Text bold style={{ fontSize: fontSize.xl }}>
-					Blunders
-				</Text>
-			</TextBlock>
-			<View style={{ flexDirection: "row" }}>
+			<View style={{ flexDirection: "row", paddingBottom: 4 }}>
 				<View style={{ flex: 1 }}>
 					<TextBlock>
 						<Text bold style={{ fontSize: fontSize.lg }}>
@@ -45,11 +40,11 @@ const BlunderChart = () => {
 					</TextBlock>
 				</View>
 			</View>
-			<View style={{ flexDirection: "row" }}>
+			<View style={{ flexDirection: "row", paddingBottom: 4 }}>
 				<View style={{ flex: 1 }}>
 					<TextBlock>
 						<Text bold style={{ fontSize: fontSize.lg }}>
-							2-3
+							2 - 3
 						</Text>
 					</TextBlock>
 				</View>
@@ -75,11 +70,11 @@ const BlunderChart = () => {
 					</TextBlock>
 				</View>
 			</View>
-			<View style={{ flexDirection: "row" }}>
+			<View style={{ flexDirection: "row", paddingBottom: 4 }}>
 				<View style={{ flex: 1 }}>
-					<TextBlock>
+					<TextBlock >
 						<Text bold  style={{ fontSize: fontSize.lg }}>
-							4-5
+							4 - 5
 						</Text>
 					</TextBlock>
 				</View>
@@ -94,7 +89,7 @@ const BlunderChart = () => {
 					</TextBlock>
 				</View>
 			</View>
-			<View style={{ flexDirection: "row" }}>
+			<View style={{ flexDirection: "row", paddingBottom: 4 }}>
 				<View style={{ flex: 1 }}>
 					<TextBlock>
 						<Text bold style={{ fontSize: fontSize.lg }}>
@@ -110,7 +105,7 @@ const BlunderChart = () => {
 					</TextBlock>
 					<TextBlock>
 						<Text>
-							the unit must move at its maximum pace towards the nearest visible enemy unit, and will
+							The unit must move at its maximum pace towards the nearest visible enemy unit, and will
 							charge if possible.
 						</Text>
 					</TextBlock>

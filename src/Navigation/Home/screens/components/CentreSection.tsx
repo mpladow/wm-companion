@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import ResultSection from "./ResultSection";
 import { ResultProps } from "@utils/types";
@@ -48,9 +48,9 @@ const CentreSection = ({
 	return (
 		<>
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-start" }}>
-				<Pressable onPress={handleReset}>
+				<TouchableOpacity onPress={handleReset}>
 					<Ionicons name='refresh' size={32} color={theme.text} />
-				</Pressable>
+				</TouchableOpacity>
 			</View>
 			<ResultSection resultOne={bottomResultValue} resultTwo={topResultValue} />
 			<View

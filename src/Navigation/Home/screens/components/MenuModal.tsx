@@ -48,7 +48,7 @@ const MenuModal = ({ options, visible, onDismiss, handleMenuPress }: MenuModalPr
 
 	// const [dropdownTop, setDropdownTop] = useState(0);
 
-	const dropdownButton = useRef<View>(null);
+	const dropdownButton = useRef<TouchableOpacity>(null);
 	const onMenuPress = (): void => {
 		console.log("-----");
 		console.log("Open and close dropdown");
@@ -59,7 +59,7 @@ const MenuModal = ({ options, visible, onDismiss, handleMenuPress }: MenuModalPr
 	};
 
 	return (
-		<Pressable onPress={onMenuPress} ref={dropdownButton} style={{ overflow: "visible" }}>
+		<TouchableOpacity onPress={onMenuPress} ref={dropdownButton} style={{ overflow: "visible" }}>
 			<Animated.View
 				style={{
 					opacity: fadeAnimation,
@@ -94,7 +94,7 @@ const MenuModal = ({ options, visible, onDismiss, handleMenuPress }: MenuModalPr
 					</TouchableOpacity>
 				))}
 			</Animated.View>
-		</Pressable>
+		</TouchableOpacity>
 	);
 };
 
