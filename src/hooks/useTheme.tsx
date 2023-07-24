@@ -14,6 +14,7 @@ export interface Theme {
 	warning: string;
 	error: string;
     black: string;
+	white: string;
     disabled: string;
 }
 const darkColours = {
@@ -41,6 +42,7 @@ const darkTheme: Theme = {
 	warning: darkColours.YELLO,
 	error: darkColours.RED,
     black: darkColours.BLACK,
+	white: darkColours.WHITE,
     disabled: darkColours.GREY1
 };
 

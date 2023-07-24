@@ -55,7 +55,7 @@ const CustomModal = ({
 				// get additional data for this page
 				setModalContent(<Settings />);
 				setModalHeader("WM-Companion");
-				setModalMetaContent(null)
+				setModalMetaContent(undefined)
 			}
 			if (page == Pages.Blunders) {
 				setModalContent(<BlunderChart />);

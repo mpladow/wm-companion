@@ -10,4 +10,9 @@ export const Pages = {
 	Settings: "Settings",
 	Blunders: "Blunders",
 };
+export const Factions = {
+	Bretonnians: 1,
+	Orcs: 2,
+	Vampire_Counts: 3
+}
 export default playerTypes;

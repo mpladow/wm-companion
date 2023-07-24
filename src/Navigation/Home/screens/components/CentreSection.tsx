@@ -11,6 +11,7 @@ type CentreSectionProps = {
 	handleReset: () => void;
 	handleSettingsPress: () => void;
 	handleBlunderPress: () => void;
+	handleVictoryPointsPress: () => void;
 	topResultValue?: ResultProps;
 	bottomResultValue?: ResultProps;
 };
@@ -18,6 +19,7 @@ const CentreSection = ({
 	handleReset,
 	handleSettingsPress,
 	handleBlunderPress,
+	handleVictoryPointsPress,
 	topResultValue,
 	bottomResultValue,
 }: CentreSectionProps) => {
@@ -43,6 +45,11 @@ const CentreSection = ({
 			label: "Blunder",
 			onPress: handleBlunderPress,
 			icon: <Ionicons name='warning' size={24} color={theme.text} />,
+		},
+		{
+			label: "VictoryPoints",
+			onPress: handleVictoryPointsPress,
+			icon: <Ionicons name="trophy" size={24} color={theme.text}  />,
 		},
 	];
 	return (
