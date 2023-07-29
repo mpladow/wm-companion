@@ -4,8 +4,9 @@
     "id": 2,
     "group": 0,
     "order": 3,
-    "units": {
-      "Orc Warriors": {
+    "units": [
+      {
+        "name": "Orc Warriors",
         "order": 0,
         "type": "Infantry",
         "attack": 4,
@@ -15,7 +16,8 @@
         "points": 60,
         "min": 2
       },
-      "Black Orcs": {
+      {
+        "name": "Black Orcs",
         "order": 1,
         "type": "Infantry",
         "attack": 4,
@@ -25,7 +27,8 @@
         "points": 110,
         "max": 1
       },
-      "Goblins": {
+      {
+        "name": "Goblins",
         "order": 2,
         "type": "Infantry",
         "attack": "2/1",
@@ -35,7 +38,8 @@
         "points": 30,
         "min": 2
       },
-      "Trolls": {
+      {
+        "name": "Trolls",
         "order": 3,
         "type": "Infantry",
         "attack": 5,
@@ -45,7 +49,8 @@
         "points": 110,
         "max": 3
       },
-      "Ogres": {
+      {
+        "name": "Ogres",
         "order": 4,
         "type": "Infantry",
         "attack": 4,
@@ -55,7 +60,8 @@
         "points": 105,
         "max": 1
       },
-      "Boar Riders": {
+      {
+        "name": "Boar Riders",
         "order": 5,
         "type": "Cavalry",
         "attack": 4,
@@ -64,7 +70,8 @@
         "size": 3,
         "points": 110
       },
-      "Wolf Riders": {
+      {
+        "name": "Wolf Riders",
         "order": 6,
         "type": "Cavalry",
         "attack": "2/1",
@@ -74,7 +81,8 @@
         "size": 3,
         "points": 60
       },
-      "Wolf Chariots": {
+      {
+        "name": "Wolf Chariots",
         "order": 7,
         "type": "Chariot",
         "attack": 3,
@@ -84,7 +92,8 @@
         "points": 80,
         "max": 3
       },
-      "Giant": {
+      {
+        "name": "Giant",
         "order": 8,
         "type": "Monster",
         "attack": 8,
@@ -94,7 +103,8 @@
         "points": 135,
         "max": 1
       },
-      "Rock Lobber": {
+      {
+        "name": "Rock Lobber",
         "order": 9,
         "type": "Artillery",
         "attack": "1/3",
@@ -107,7 +117,8 @@
           "Stone Thrower"
         ]
       },
-      "Orc General": {
+      {
+        "name": "Orc General",
         "order": 10,
         "type": "General",
         "attack": "+2",
@@ -121,7 +132,8 @@
           "Chariot"
         ]
       },
-      "Orc Hero": {
+      {
+        "name": "Orc Hero",
         "order": 11,
         "type": "Hero",
         "attack": "+1",
@@ -134,7 +146,8 @@
           "Chariot"
         ]
       },
-      "Orc Shaman": {
+      {
+        "name": "Orc Shaman",
         "order": 12,
         "type": "Wizard",
         "attack": "+0",
@@ -147,7 +160,8 @@
           "Chariot"
         ]
       },
-      "Goblin Hero": {
+      {
+        "name": "Goblin Hero",
         "order": 13,
         "type": "Hero",
         "attack": "+1",
@@ -160,7 +174,8 @@
           "Chariot"
         ]
       },
-      "Goblin Shaman": {
+      {
+        "name": "Goblin Shaman",
         "order": 14,
         "type": "Wizard",
         "attack": "+0",
@@ -173,23 +188,25 @@
           "Chariot"
         ]
       }
-    },
-    "upgrades": {
-      "Wyvern": {
+    ],
+    "upgrades": [
+      {
+        "name": "Wyvern",
         "order": 0,
         "type": "Monstrous Mount",
         "attack": "+2",
         "points": "+80",
         "max": 1
       },
-      "Chariot": {
+      {
+        "name": "Chariot",
         "order": 1,
         "type": "Chariot Mount",
         "attack": "+1",
         "points": "+10",
         "max": 1
       }
-    },
+    ],
     "magic": true,
     "specialRules": {
       "Goblins": {

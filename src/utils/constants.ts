@@ -13,6 +13,6 @@ export const Pages = {
 export const Factions = {
 	Bretonnians: 1,
 	Orcs: 2,
-	Vampire_Counts: 3
+	Tomb_Kings: 3,
 }
 export default playerTypes;

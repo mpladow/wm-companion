@@ -4,6 +4,8 @@ import ModalContainer from "@components/ModalContainer";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import bretonnianList from "../../data/json/wmr/bretonnian.json";
+import orcList from "../../data/json/wmr/orks.json";
+import tombKingsList from "../../data/json/wmr/tombKings.json";
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 
 import playerTypes, { Factions } from "@utils/constants";
@@ -13,7 +15,7 @@ import UnitSelector from "./components/UnitSelector";
 import Points from "./components/Points";
 import { DropDownItemProps, PlayerDetailsProps } from "@navigation/Home/screens/Home";
 import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 
 type VictoryPointsProps = {
 	player: playerTypes;
@@ -77,10 +79,13 @@ const VictoryPoints = () => {
 				case Factions.Bretonnians:
 					list = bretonnianList.units;
 					setFactionList(bretonnianList);
-					// const array = Object.entries(bretonnianList.units);
-					// set faction list
 					break;
-
+				case Factions.Orcs:
+					list = orcList.units;
+					setFactionList(orcList);
+				case Factions.Tomb_Kings:
+					list = tombKingsList.units;
+					setFactionList(tombKingsList);
 				default:
 					break;
 			}
@@ -236,13 +241,20 @@ const VictoryPoints = () => {
 											);
 										})}
 									</View>
-									<View style={{ flex: 1, flexDirection: "row", alignItems: 'center', justifyContent: "flex-end" }}>
+									<View
+										style={{
+											flex: 1,
+											flexDirection: "row",
+											alignItems: "center",
+											justifyContent: "flex-end",
+										}}
+									>
 										<View>
 											<Button
 												onPress={() => vpContext.toggleHalfPoints(item.id)}
 												variant={"default"}
 											>
-												<Text italic={item.isHalfPoints }>{unitTotalScore}</Text>
+												<Text italic={item.isHalfPoints}>{unitTotalScore}</Text>
 											</Button>
 										</View>
 										<View style={{ marginLeft: 12 }}>
