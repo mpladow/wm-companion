@@ -4,7 +4,8 @@ import HomeStack from "./src/Navigation/Home/HomeStack";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContextProvider } from "@context/ThemeContext";
 import { useFonts } from "expo-font";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
+import { VPContextProvider } from "@context/VPContext";
 
 const darkTheme = {
 	dark: true,
@@ -25,10 +26,10 @@ const darkTheme = {
 
 const App = () => {
 	const [fontsLoaded] = useFonts({
-		'GaramondItalic': require("./assets/fonts/EBGaramond-Italic.ttf"),
-		'GaramondRegular': require("./assets/fonts/EBGaramond-Regular.ttf"),
-		'GaramondBold': require("./assets/fonts/EBGaramond-ExtraBold.ttf"),
-		'PTSans-Bold': require("./assets/fonts/PTSans-Bold.ttf")
+		GaramondItalic: require("./assets/fonts/EBGaramond-Italic.ttf"),
+		GaramondRegular: require("./assets/fonts/EBGaramond-Regular.ttf"),
+		GaramondBold: require("./assets/fonts/EBGaramond-ExtraBold.ttf"),
+		"PTSans-Bold": require("./assets/fonts/PTSans-Bold.ttf"),
 	});
 
 	const onLayoutRootView = useCallback(async () => {
@@ -42,10 +43,12 @@ const App = () => {
 	}
 	return (
 		<ThemeContextProvider>
-			<NavigationContainer theme={darkTheme}>
-				<HomeStack />
-				<StatusBar hidden />
-			</NavigationContainer>
+			<VPContextProvider>
+				<NavigationContainer theme={darkTheme}>
+					<HomeStack />
+					<StatusBar hidden />
+				</NavigationContainer>
+			</VPContextProvider>
 		</ThemeContextProvider>
 	);
 };

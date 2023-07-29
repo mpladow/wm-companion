@@ -1,22 +1,24 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import Button from "@components/button";
-import { DropDownItemProps } from "../VictoryPoints";
 import { useTheme } from "@hooks/useTheme";
 import { AntDesign } from "@expo/vector-icons";
+import { DropDownItemProps } from "@navigation/Home/screens/Home";
+import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
 
 type UnitSelectorProps = {
 	ddFactions: DropDownItemProps[];
-	ddUnits: DropDownItemProps[];
-	ddMagicItems: DropDownItemProps[];
-	factionSelection: DropDownItemProps;
-	unitSelection: DropDownItemProps;
-	magicItemsSelections: any[];
+	ddUnits?: DropDownItemProps[];
+	ddMagicItems?: DropDownItemProps[];
+	factionSelection?: number;
+	unitSelection?: DropDownItemProps;
+	magicItemsSelections?: any[];
 	handleSetFactionSelection: (item: any) => void;
 	handleSetUnitSelection: (item: any) => void;
 	handleSetMagicItemsSelection: (item: any) => void;
 	multiSelectRef: any;
+	addUnitPressed: (isHalfPoints: boolean) => void;
 };
 const UnitSelector = forwardRef(
 	({
@@ -30,12 +32,27 @@ const UnitSelector = forwardRef(
 		unitSelection,
 		magicItemsSelections,
 		multiSelectRef,
+		addUnitPressed,
 	}: UnitSelectorProps) => {
 		const { theme } = useTheme();
+		const [defaultFaction, setDefaultFaction] = useState<DropDownItemProps>();
+		const [disableAddButton, setDisableAddButton] = useState(true);
+		useEffect(() => {
+			const faction = ddFactions.find((x) => x.value == factionSelection);
+			setDefaultFaction(faction);
+		}, [factionSelection, ddFactions]);
+		useEffect(() => {
+			if (factionSelection == null || unitSelection == null) {
+				setDisableAddButton(true);
+			} else {
+				setDisableAddButton(false);
+			}
+		}, [factionSelection, unitSelection]);
 		return (
 			<View>
 				<View style={{ marginBottom: 4 }}>
 					<Dropdown
+						value={defaultFaction}
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
 						placeholder='Select Faction'
 						placeholderStyle={{ color: "#ddd" }}
@@ -43,9 +60,8 @@ const UnitSelector = forwardRef(
 						labelField='label'
 						valueField='value'
 						onChange={(item) => {
-							handleSetFactionSelection(item);
+							handleSetFactionSelection(item.value);
 						}}
-						value={factionSelection}
 					/>
 				</View>
 				<View style={{ marginBottom: 4 }}>
@@ -54,7 +70,7 @@ const UnitSelector = forwardRef(
 						placeholderStyle={{ color: "#ddd" }}
 						disable={factionSelection == undefined}
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
-						data={ddUnits}
+						data={ddUnits ? ddUnits : []}
 						labelField='label'
 						valueField='value'
 						onChange={(item) => handleSetUnitSelection(item)}
@@ -71,11 +87,12 @@ const UnitSelector = forwardRef(
 						search
 						searchPlaceholder='Search...'
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
-						data={ddMagicItems}
+						data={ddMagicItems ? ddMagicItems : []}
 						labelField='label'
 						valueField='value'
 						disable={unitSelection == null}
 						onChange={(item) => {
+							console.log(item, "MAGIC ITEM SELECTED");
 							handleSetMagicItemsSelection(item);
 							multiSelectRef?.current?.close();
 						}}
@@ -90,10 +107,17 @@ const UnitSelector = forwardRef(
 						)}
 					/>
 				</View>
-				<View style={{ marginTop: 16 }}>
-					<Button onPress={() => console.log("done")} variant={"default"}>
-						<Text>Add To Score</Text>
-					</Button>
+				<View style={{ flexDirection: "row", marginTop: 4, justifyContent: "space-between", alignContent: "center" }}>
+					<View style={{ flex: 1, margin: 4 }}>
+						<Button variant={"default"} disabled={disableAddButton} onPress={() => addUnitPressed(true)}>
+							<Text>Add half VP Only</Text>
+						</Button>
+					</View>
+					<View style={{ flex: 1,margin: 4 }}>
+						<Button disabled={disableAddButton} onPress={() => addUnitPressed(false)} variant={"confirm"}>
+							<Text>Add To VP</Text>
+						</Button>
+					</View>
 				</View>
 			</View>
 		);

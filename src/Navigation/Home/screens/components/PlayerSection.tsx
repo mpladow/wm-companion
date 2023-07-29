@@ -1,10 +1,13 @@
-import { Button, StyleSheet, View } from "react-native";
-import React from "react";
-import { playerTypes } from "@utils/constants";
+import { Button, Pressable, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Factions, playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
 import { Constants, Styling } from "@utils/index";
 import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
+import { Dropdown } from "react-native-element-dropdown";
+import { DropDownItemProps, PlayerDetailsProps } from "../Home";
+import { useVictoryPoints } from "@context/VPContext";
 
 type PlayerSectionProps = {
 	player: playerTypes;
@@ -25,10 +28,14 @@ const PlayerSection = ({
 	handleSetCR,
 }: PlayerSectionProps) => {
 	const { theme } = useTheme();
+	const vpContext = useVictoryPoints()
+	// const [faction, setFaction] = useState<DropDownItemProps>();
+
 	const incrementPlayerCasualty = () => {
 		handleSetCasualty(player, playerCasualty + 1);
 	};
 	const decrementPlayerCasualty = () => {
+console.log(playerCasualty, 'pc')
 		handleSetCasualty(player, playerCasualty - 1);
 	};
 	const incrementPlayerCR = () => {
@@ -37,11 +44,14 @@ const PlayerSection = ({
 	const decrementPlayerCR = () => {
 		handleSetCR(player, playerCombatResult - 1);
 	};
+	// get faction names and set that here
 
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#eaeae" }}>
-				<Text variant="heading1" style={{ fontSize: 70, color: theme.text }}>{playerScore}</Text>
+				<Text variant='heading1' style={{ fontSize: 70, color: theme.text }}>
+					{playerScore}
+				</Text>
 			</View>
 
 			<View style={{ flex: 1, flexDirection: "column" }}>
@@ -58,7 +68,7 @@ const PlayerSection = ({
 			</View>
 			<View style={{ flex: 1, flexDirection: "column" }}>
 				<View style={{ justifyContent: "flex-end", alignItems: "center" }}>
-                <Text style={{ color: theme.text }}>Combat Bonuses</Text>
+					<Text style={{ color: theme.text }}>Combat Bonuses</Text>
 				</View>
 				<SectionDials
 					direction={"row"}

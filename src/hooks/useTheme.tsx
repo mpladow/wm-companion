@@ -16,6 +16,7 @@ export interface Theme {
     black: string;
 	white: string;
     disabled: string;
+	grey: string;
 }
 const darkColours = {
 	DARK_GREEN: "#588157", //dark green
@@ -27,7 +28,8 @@ const darkColours = {
 	RED: "#d90429",
 	YELLO: "#fca311",
     BLACK: "#000000",
-    GREY1: "#6c757d"
+    GREY1: "#6c757d",
+	GREY2: "#dddddd"
 };
 const darkTheme: Theme = {
 	background: darkColours.DARK_GREEN_2,
@@ -43,7 +45,8 @@ const darkTheme: Theme = {
 	error: darkColours.RED,
     black: darkColours.BLACK,
 	white: darkColours.WHITE,
-    disabled: darkColours.GREY1
+    disabled: darkColours.GREY1,
+	grey: darkColours.GREY2
 };
 
 interface UseThemeHook {

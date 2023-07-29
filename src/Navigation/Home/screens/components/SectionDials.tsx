@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Button from "@components/button";
 import { Styling } from "@utils/index";
 import { margin } from "@utils/constants";
 import { useTheme } from "@hooks/useTheme";
+import { Text, TextBlock } from "@components/index";
 
 type SectionDialsProps = {
 	onLeftButtonPress: () => void;
@@ -16,7 +17,7 @@ const SectionDials = ({ onLeftButtonPress, onRightButtonPress, textSize, value, 
 	const { theme } = useTheme();
 	return (
 		<View style={{ flex: 1, flexDirection: direction, alignItems: "center" }}>
-			<View onTouchStart={onLeftButtonPress} style={{ flex: 1, alignItems: 'center', marginHorizontal: margin * 8 }}>
+			<View style={{ flex: 1, alignItems: 'center', marginHorizontal: margin * 8 }}>
 				<Button
 				circle
 					onPress={onLeftButtonPress}
