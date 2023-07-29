@@ -44,8 +44,8 @@ const VP_KYS = {
 export const VPContextProvider = ({ children }: any) => {
 	const [p1VpScore, setP1VpScore] = useState<VPScoreProps[]>([] as VPScoreProps[]);
 	const [p2VpScore, setP2VpScore] = useState<VPScoreProps[]>([] as VPScoreProps[]);
-	const [p1VpFaction, setP1VpFaction] = useState<number | undefined>(Factions.Bretonnians);
-	const [p2VpFaction, setP2VpFaction] = useState<number | undefined>(Factions.Bretonnians);
+	const [p1VpFaction, setP1VpFaction] = useState<number | undefined>();
+	const [p2VpFaction, setP2VpFaction] = useState<number | undefined>();
 
 	const [selectedPlayer, setSelectedPlayer] = useState<playerTypes>("playerOne");
 	const setPlayer = (player: playerTypes) => {
@@ -102,11 +102,17 @@ export const VPContextProvider = ({ children }: any) => {
 	};
 	const toggleHalfPoints = (scoreId: string) => {
 		let arrToUpdate: VPScoreProps[];
+
 		if (selectedPlayer == "playerOne") {
 			arrToUpdate = p1VpScore;
 		} else {
 			arrToUpdate = p2VpScore;
 		}
+		const scoreInArr = arrToUpdate.find((x) => x.id == scoreId);
+		if (scoreInArr?.sourceName == "Additional Points") {
+			return;
+		}
+
 		const scoreToUpdateIndex = arrToUpdate.findIndex((x) => x.id == scoreId);
 		const updatedScore: VPScoreProps = {
 			...arrToUpdate[scoreToUpdateIndex],
@@ -129,11 +135,6 @@ export const VPContextProvider = ({ children }: any) => {
 	};
 	const addScore = (score: VPScoreProps) => {
 		// append this score to the array
-		console.log(score, "adding points");
-		console.log(selectedPlayer, "selected player");
-		console.log(p1VpScore, "existing score");
-		console.log(p2VpScore, "existing score");
-
 		selectedPlayer == "playerOne" ? setP1VpScore([...p1VpScore, score]) : setP2VpScore([...p2VpScore, score]);
 	};
 	useEffect(() => {
@@ -141,43 +142,55 @@ export const VPContextProvider = ({ children }: any) => {
 	}, []);
 
 	useEffect(() => {
-		const p1State: PlayerDetailsProps = {
-			player: "playerOne",
-			score: p1VpScore,
-			faction: p1VpFaction,
-		};
-		const p2State: PlayerDetailsProps = {
-			player: "playerTwo",
-			score: p2VpScore,
-			faction: p2VpFaction,
-		};
-		updateStorage(p1State);
-		updateStorage(p2State);
-	}, [p1VpScore, p2VpScore, p1VpFaction, p2VpFaction]);
+		console.log(p2VpScore, "1SCORE");
+		console.log(p2VpFaction, "1FACTION");
+		if (p1VpScore && p1VpFaction) {
+			const p1State: PlayerDetailsProps = {
+				player: "playerOne",
+				score: p1VpScore,
+				faction: p1VpFaction,
+			};
+			console.log(p1State, "p1State");
+			updateStorage(p1State);
+		}
+	}, [p1VpScore, p1VpFaction]);
+	useEffect(() => {
+		console.log(p2VpScore, "2SCORE");
+		console.log(p2VpFaction, "2FACTION");
+		if (p2VpScore && p2VpFaction) {
+			const p2State: PlayerDetailsProps = {
+				player: "playerTwo",
+				score: p2VpScore,
+				faction: p2VpFaction,
+			};
+			console.log(p2State, "p2State");
+
+			updateStorage(p2State);
+		}
+	}, [p2VpScore, p2VpFaction]);
 
 	const updateStorage = async (score: PlayerDetailsProps) => {
 		try {
-			console.log(score.score, `ASYNCSTORAGE::Update storageSCORE.SCORE`);
-			console.log(score.faction, `ASYNCSTORAGE::Update storage: SCORE.faction`);
-
+			console.log(JSON.stringify(score.score), "SCORE IN UPDTTE STORAGE");
 			if (selectedPlayer == "playerOne") {
 				await AsyncStorage.setItem(`${VP_KYS.p1VpScore}`, JSON.stringify(score.score));
 				await AsyncStorage.setItem(`${VP_KYS.p1DefaultFaction}`, JSON.stringify(score.faction));
-			} else {
+			}
+			if (selectedPlayer == "playerTwo") {
 				await AsyncStorage.setItem(`${VP_KYS.p2VpScore}`, JSON.stringify(score.score));
 				await AsyncStorage.setItem(`${VP_KYS.p2DefaultFaction}`, JSON.stringify(score.faction));
 			}
 		} catch (e) {}
 	};
+
 	const getScoresFromStorage = async () => {
 		try {
+			//await AsyncStorage.clear();
+
 			const p1VpScore = await AsyncStorage.getItem(`${VP_KYS.p1VpScore}`);
 			const p2VpScore = await AsyncStorage.getItem(`${VP_KYS.p2VpScore}`);
 			const p1VpFaction = await AsyncStorage.getItem(`${VP_KYS.p1DefaultFaction}`);
 			const p2VpFaction = await AsyncStorage.getItem(`${VP_KYS.p2DefaultFaction}`);
-
-			console.log(p1VpScore, `${VP_KYS.p1VpScore}, ASYNC STORAGE:: GETTINGG SCORESp1 SCORE FROM STORAGE`);
-			console.log(p2VpScore, `${VP_KYS.p2VpScore}  ASYNC STORAGE:: p2 SCORE FROM STORAGE`);
 
 			const p1VpScoreObj: VPScoreProps[] = p1VpScore && JSON.parse(p1VpScore);
 			const p2VpScoreObj: VPScoreProps[] = p2VpScore && JSON.parse(p2VpScore);
@@ -186,13 +199,16 @@ export const VPContextProvider = ({ children }: any) => {
 			const p2VpFactionObj: number = p2VpFaction && JSON.parse(p2VpFaction);
 
 			if (p1VpScoreObj != null) {
+				console.log(`${p1VpScore} SETTING P1`);
 				setP1VpScore(p1VpScoreObj);
 				setP1VpFaction(p1VpFactionObj);
 			}
 
-			if (p1VpScoreObj != null) {
+			if (p2VpScoreObj != null) {
+				console.log(`${p2VpScore} SETTING P2`);
+
 				setP2VpScore(p2VpScoreObj);
-				setP1VpFaction(p2VpFactionObj);
+				setP2VpFaction(p2VpFactionObj);
 			}
 		} catch (e) {}
 	};

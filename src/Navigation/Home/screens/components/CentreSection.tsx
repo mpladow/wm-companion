@@ -46,11 +46,6 @@ const CentreSection = ({
 			onPress: handleBlunderPress,
 			icon: <Ionicons name='warning' size={24} color={theme.text} />,
 		},
-		{
-			label: "VictoryPoints",
-			onPress: handleVictoryPointsPress,
-			icon: <Ionicons name="trophy" size={24} color={theme.text}  />,
-		},
 	];
 	return (
 		<>

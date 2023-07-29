@@ -1,4 +1,4 @@
-import { Button, Pressable, StyleSheet, View } from "react-native";
+import { Button, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Factions, playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
@@ -8,7 +8,10 @@ import { Text, TextBlock } from "@components/index";
 import { Dropdown } from "react-native-element-dropdown";
 import { DropDownItemProps, PlayerDetailsProps } from "../Home";
 import { useVictoryPoints } from "@context/VPContext";
-
+import { Foundation } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { HomeStackParamList } from "@navigation/Home/HomeStack";
 type PlayerSectionProps = {
 	player: playerTypes;
 	playerScore: number;
@@ -28,14 +31,15 @@ const PlayerSection = ({
 	handleSetCR,
 }: PlayerSectionProps) => {
 	const { theme } = useTheme();
-	const vpContext = useVictoryPoints()
+	const vpContext = useVictoryPoints();
+	const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
 	// const [faction, setFaction] = useState<DropDownItemProps>();
 
 	const incrementPlayerCasualty = () => {
 		handleSetCasualty(player, playerCasualty + 1);
 	};
 	const decrementPlayerCasualty = () => {
-console.log(playerCasualty, 'pc')
+		console.log(playerCasualty, "pc");
 		handleSetCasualty(player, playerCasualty - 1);
 	};
 	const incrementPlayerCR = () => {
@@ -44,14 +48,42 @@ console.log(playerCasualty, 'pc')
 	const decrementPlayerCR = () => {
 		handleSetCR(player, playerCombatResult - 1);
 	};
-	// get faction names and set that here
+	const onVPPRess = () => {
+		vpContext.setPlayer(player);
+		navigation.navigate("VictoryPoints");
 
+	}
+	// get faction names and set that here
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#eaeae" }}>
-				<Text variant='heading1' style={{ fontSize: 70, color: theme.text }}>
-					{playerScore}
-				</Text>
+			<View
+				style={{
+					flex: 1,
+					flexDirection: "row",
+					justifyContent: "center",
+					alignItems: "center",
+					backgroundColor: "#eaeae",
+				}}
+			>
+				<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+					<TouchableOpacity>
+					</TouchableOpacity>
+				</View>
+				<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+					<Text variant='heading1' style={{ fontSize: 70, color: theme.text }}>
+						{playerScore}
+					</Text>
+				</View>
+				<View style={{ flex: 1, position: 'relative',justifyContent: "center", alignItems: "center" }}>
+					<View style={{position: 'absolute', top: '-10%', left: '28%'}}>
+						<Foundation name='trophy' size={80} color='black' />
+					</View>
+					<TouchableOpacity onPress={() => onVPPRess() }>
+						<Text style={{ fontSize: 28 }}>
+							{player == "playerTwo" ? vpContext.getP2TotalPoints : vpContext.getP1TotalPoints}
+						</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 
 			<View style={{ flex: 1, flexDirection: "column" }}>

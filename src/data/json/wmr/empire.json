@@ -3,8 +3,9 @@
     "version": "Warmaster Revolution",
     "group": 0,
     "order": 0,
-    "units": {
-      "Halberdiers": {
+    "units": [
+      {
+        "name": "Halberdiers",
         "order": 0,
         "type": "Infantry",
         "attack": 3,
@@ -14,7 +15,8 @@
         "points": 45,
         "min": 2
       },
-      "Handgunners": {
+      {
+        "name": "Handgunners",
         "order": 1,
         "type": "Infantry",
         "attack": "3/1",
@@ -24,7 +26,8 @@
         "points": 65,
         "max": 3
       },
-      "Crossbowmen": {
+      {
+        "name": "Crossbowmen",
         "order": 2,
         "type": "Infantry",
         "attack": "3/1",
@@ -37,7 +40,8 @@
           "Handgunners"
         ]
       },
-      "Flagellants": {
+      {
+        "name": "Flagellants",
         "order": 3,
         "type": "Infantry",
         "attack": 5,
@@ -46,7 +50,8 @@
         "points": 70,
         "max": 1
       },
-      "Skirmishers": {
+      {
+        "name": "Skirmishers",
         "order": 4,
         "type": "Infantry",
         "attack": 4,
@@ -63,7 +68,8 @@
         "noCount": true,
         "noMagic": true
       },
-      "Knights": {
+      {
+        "name": "Knights",
         "order": 5,
         "type": "Cavalry",
         "attack": 3,
@@ -72,7 +78,8 @@
         "size": 3,
         "points": 110
       },
-      "Pistoliers": {
+      {
+        "name": "Pistoliers",
         "order": 6,
         "type": "Cavalry",
         "attack": "3/1",
@@ -83,7 +90,8 @@
         "points": 95,
         "max": 4
       },
-      "Helblaster": {
+      {
+        "name": "Helblaster",
         "order": 7,
         "type": "Artillery",
         "attack": "1/8-4-2",
@@ -93,7 +101,8 @@
         "points": 50,
         "max": 1
       },
-      "Cannon": {
+      {
+        "name": "Cannon",
         "order": 8,
         "type": "Artillery",
         "attack": "1/2+bounce",
@@ -103,7 +112,8 @@
         "points": 85,
         "max": 1
       },
-      "Steam Tank": {
+      {
+        "name": "Steam Tank",
         "order": 9,
         "type": "Machine",
         "attack": "3/3",
@@ -114,7 +124,8 @@
         "points": 130,
         "max": 1
       },
-      "General": {
+      {
+        "name": "General",
         "order": 10,
         "type": "General",
         "attack": "+2",
@@ -127,7 +138,8 @@
           "Griffon"
         ]
       },
-      "Hero": {
+      {
+        "name": "Hero",
         "order": 11,
         "type": "Hero",
         "attack": "+1",
@@ -139,7 +151,8 @@
           "Griffon"
         ]
       },
-      "Wizard": {
+      {
+        "name": "Wizard",
         "order": 12,
         "type": "Wizard",
         "attack": "+0",
@@ -152,33 +165,36 @@
           "War Altar"
         ]
       }
-    },
-    "upgrades": {
-      "Griffon": {
+    ],
+    "upgrades": [
+      {
+        "name": "Griffon",
         "order": 0,
         "type": "Monstrous Mount",
         "attack": "+2",
-        "points": "+80",
+        "points": 80,
         "max": 1
       },
-      "War Altar": {
+      {
+        "name": "War Altar",
         "order": 1,
         "type": "Chariot Mount",
         "attack": "+1",
-        "points": "+15",
+        "points": 15,
         "armyMax": 1
       },
-      "Handgunners": {
+      {
+        "name": "Handgunners",
         "order": 2,
         "type": "Special",
         "attack": "3/1",
         "range": "30cm",
         "hits": 3,
         "size": 3,
-        "points": "+10",
+        "points": 10,
         "max": 1
       }
-    },
+    ],
     "magic": true,
     "specialRules": {
       "Handgunners": {

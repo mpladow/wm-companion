@@ -6,6 +6,12 @@ import { Picker } from "@react-native-picker/picker";
 import bretonnianList from "../../data/json/wmr/bretonnian.json";
 import orcList from "../../data/json/wmr/orks.json";
 import tombKingsList from "../../data/json/wmr/tombKings.json";
+import empireList from "../../data/json/wmr/empire.json";
+import skavenList from "../../data/json/wmr/skaven.json";
+import chaosList from "../../data/json/wmr/chaos.json";
+import woodElvesList from "../../data/json/wmr/woodElves.json";
+
+
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 
 import playerTypes, { Factions } from "@utils/constants";
@@ -47,7 +53,6 @@ const VictoryPoints = () => {
 
 	// on startup, if a selected faction exists, use this faction
 	useEffect(() => {
-		console.log(vpContext.p1DefaultFaction, "p1Defalt faction");
 		vpContext.selectedPlayer == "playerOne"
 			? setFactionSelection(vpContext.p1DefaultFaction)
 			: setFactionSelection(vpContext.p2DefaultFaction);
@@ -66,14 +71,17 @@ const VictoryPoints = () => {
 	useEffect(() => {
 		// get list of factions
 		const factions = Object.keys(Factions);
-		const dropdownList = factions.map(
-			(x, index) => ({ label: x.replace("_", " "), value: index + 1 } as DropDownItemProps)
-		);
-		setDdFactions(dropdownList);
+
+		const ddList = [];
+		for (const [key, value] of Object.entries(Factions)) {
+			ddList.push({ label: key.replace("_", " "), value: value } as DropDownItemProps);
+		}
+		setDdFactions(ddList);
 	}, []);
 
 	useEffect(() => {
 		let list: any[] = [];
+		console.log(factionSelection, "factionSelection");
 		if (factionSelection) {
 			switch (factionSelection) {
 				case Factions.Bretonnians:
@@ -83,9 +91,25 @@ const VictoryPoints = () => {
 				case Factions.Orcs:
 					list = orcList.units;
 					setFactionList(orcList);
+					break;
 				case Factions.Tomb_Kings:
 					list = tombKingsList.units;
 					setFactionList(tombKingsList);
+					break;
+				case Factions.Empire:
+					list = empireList.units;
+					setFactionList(empireList);
+					break;
+				case Factions.Skaven:
+					list = skavenList.units;
+					setFactionList(skavenList);
+					break;
+				case Factions.Chaos:
+					list = chaosList.units;
+					setFactionList(chaosList);
+				case Factions.Wood_Elves:
+					list = woodElvesList.units;
+					setFactionList(woodElvesList);
 				default:
 					break;
 			}
@@ -93,6 +117,7 @@ const VictoryPoints = () => {
 				label: `${x.name} - ${x.points}pts`,
 				value: x.name ? x.name : "",
 			}));
+			console.log(test, "test");
 			setDdUnits(test);
 		}
 
@@ -112,7 +137,12 @@ const VictoryPoints = () => {
 		if (unit != undefined) {
 			const itemsArray: any[] = magicItemsList.upgrades;
 			const factionUpgrades: any[] = factionList?.upgrades;
-			const totalItems = itemsArray.concat(factionUpgrades);
+			let totalItems = [];
+			if (!factionUpgrades == undefined) {
+				totalItems = itemsArray.concat(factionUpgrades);
+			} else {
+				totalItems = itemsArray;
+			}
 			setAllMagicItems(totalItems);
 			// set points value depending on the unit selected
 			const allitems = totalItems.map((x) => ({
@@ -136,18 +166,19 @@ const VictoryPoints = () => {
 			if (isVariable) {
 				// is variable, add this
 				console.log("variable");
-				const unitArmour = unit?.armour;
+				let unitArmour = unit?.armour;
+                if (unitArmour == null)
+                unitArmour = "-"
 				const unitHits = unit?.hits;
 				let isVariableByHits = false;
-				console.log(unitArmour, "unit armour");
-				console.log(unitHits, "unit hits");
+
 				if (unitHits) {
 					isVariableByHits = magicItem.points[unitHits.toString()] !== undefined;
 					console.log(magicItem.points[unitHits.toString()], "key of magic item");
 					if (isVariableByHits) points = magicItem.points[unitHits.toString()];
 				}
 				if (unitArmour && !isVariableByHits) {
-					console.log(magicItem.points[unitArmour]);
+					console.log(magicItem.points[unitArmour], 'magic points armour');
 					points = magicItem.points[unitArmour];
 				}
 			} else {
@@ -160,6 +191,19 @@ const VictoryPoints = () => {
 		console.log(selectedItems, "UPGRADES TO ADD");
 	}, [magicItemsSelections]);
 
+	const handleAddVPs = (points: number) => {
+		//create a new VPScoreProps object
+		let vpObject: VPScoreProps = {
+			id: Math.random().toString(),
+			sourceName: "Additional Points",
+			sourcePoints: points,
+			isUnit: false,
+			isItem: false,
+			isHalfPoints: false,
+		};
+		// add unit
+		vpContext.addScore(vpObject);
+	};
 	const handleAddUnit = (isHalfPoints: boolean) => {
 		//create a new VPScoreProps object
 		let vpObject: VPScoreProps = {
@@ -184,6 +228,7 @@ const VictoryPoints = () => {
 			vpObject.attachedItems = mappedItems;
 		}
 		// add unit
+        setMagicItemsSelections([]);
 		vpContext.addScore(vpObject);
 	};
 	const [bottomSection, setBottomSection] = useState<"units" | "vps">("units");
@@ -296,7 +341,7 @@ const VictoryPoints = () => {
 							addUnitPressed={handleAddUnit}
 						/>
 					) : (
-						<Points />
+						<Points onAddVPPressed={handleAddVPs} />
 					)}
 				</ScrollView>
 			</View>

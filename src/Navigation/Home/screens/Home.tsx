@@ -42,9 +42,6 @@ export const Home = () => {
 	const [p1CombatBonus, setP1CombatBonus] = useState<number>(0);
 	const [p2CombatBonus, setP2CombatBonus] = useState<number>(0);
 
-	const [playerOneFaction, setPlayerOneFaction] = useState<DropDownItemProps>();
-	const [playerTwoFaction, setPlayerTwoFaction] = useState<DropDownItemProps>();
-
 	const combatResultTop = useMemo(() => {
 		const diff = playerOneScore - playerTwoScore;
 		const diffConverted = Math.abs(diff);
@@ -167,7 +164,6 @@ export const Home = () => {
 					handleReset={handleReset}
 					topResultValue={combatResultTop}
 					bottomResultValue={combatResultBottom}
-
 					// add plauyer one score object
 					//add player two score object
 				/>

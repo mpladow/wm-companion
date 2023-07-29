@@ -1,11 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useEffect, useState } from "react";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
-import Button from "@components/button";
 import { useTheme } from "@hooks/useTheme";
 import { AntDesign } from "@expo/vector-icons";
 import { DropDownItemProps } from "@navigation/Home/screens/Home";
 import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
+import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
+import fonts from "@utils/fonts";
 
 type UnitSelectorProps = {
 	ddFactions: DropDownItemProps[];
@@ -51,7 +52,7 @@ const UnitSelector = forwardRef(
 		return (
 			<View>
 				<View style={{ marginBottom: 4 }}>
-					<Dropdown
+					<CustomDropdown
 						value={defaultFaction}
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
 						placeholder='Select Faction'
@@ -65,7 +66,7 @@ const UnitSelector = forwardRef(
 					/>
 				</View>
 				<View style={{ marginBottom: 4 }}>
-					<Dropdown
+					<CustomDropdown
 						placeholder='Select a Unit'
 						placeholderStyle={{ color: "#ddd" }}
 						disable={factionSelection == undefined}
@@ -90,6 +91,7 @@ const UnitSelector = forwardRef(
 						data={ddMagicItems ? ddMagicItems : []}
 						labelField='label'
 						valueField='value'
+                        fontFamily={fonts.PTSansBold}
 						disable={unitSelection == null}
 						onChange={(item) => {
 							console.log(item, "MAGIC ITEM SELECTED");
@@ -156,6 +158,7 @@ const styles = StyleSheet.create({
 	textSelectedStyle: {
 		marginRight: 5,
 		fontSize: 12,
+        color: 'green'
 	},
 	selectedTextStyle: {
 		fontSize: 14,
