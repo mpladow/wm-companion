@@ -4,8 +4,9 @@
     "id": 3,
     "group": 1,
     "order": 5,
-    "units": {
-      "Skeletons": {
+    "units": [
+      {
+        "name": "Skeletons",
         "order": 0,
         "type": "Infantry",
         "attack": 2,
@@ -15,7 +16,8 @@
         "points": 30,
         "min": 2
       },
-      "Zombies": {
+      {
+        "name": "Zombies",
         "order": 1,
         "type": "Infantry",
         "attack": 2,
@@ -24,7 +26,8 @@
         "points": 35,
         "min": 2
       },
-      "Ghouls": {
+      {
+        "name": "Ghouls",
         "order": 2,
         "type": "Infantry",
         "attack": 4,
@@ -32,7 +35,8 @@
         "size": 3,
         "points": 55
       },
-      "Grave Guard": {
+      {
+        "name": "Grave Guard",
         "order": 3,
         "type": "Infantry",
         "attack": 3,
@@ -42,7 +46,8 @@
         "points": 60,
         "max": 4
       },
-      "Ethereal Host": {
+      {
+        "name": "Ethereal Host",
         "order": 4,
         "type": "Infantry",
         "attack": 3,
@@ -52,7 +57,8 @@
         "max": 2,
         "noMagic": true
       },
-      "Black Knights": {
+      {
+        "name": "Black Knights",
         "order": 5,
         "type": "Cavalry",
         "attack": 3,
@@ -62,7 +68,8 @@
         "points": 110,
         "max": 4
       },
-      "Dire Wolves": {
+      {
+        "name": "Dire Wolves",
         "order": 6,
         "type": "Cavalry",
         "attack": 2,
@@ -72,7 +79,8 @@
         "max": 4,
         "noMagic": true
       },
-      "Fell Bats": {
+      {
+        "name": "Fell Bats",
         "order": 7,
         "type": "Monster",
         "attack": 2,
@@ -82,7 +90,8 @@
         "points": 65,
         "max": 1
       },
-      "Vampire Lord": {
+      {
+        "name": "Vampire Lord",
         "order": 8,
         "type": "General",
         "attack": "+2",
@@ -101,7 +110,8 @@
           "Rod of Repetition"
         ]
       },
-      "Vampire": {
+      {
+        "name": "Vampire",
         "order": 9,
         "type": "Hero",
         "attack": "+1",
@@ -114,7 +124,8 @@
           "Black Coach"
         ]
       },
-      "Necromancer": {
+      {
+        "name": "Necromancer",
         "order": 10,
         "type": "Wizard",
         "attack": "+0",
@@ -126,23 +137,25 @@
           "Winged Nightmare"
         ]
       }
-    },
-    "upgrades": {
-      "Winged Nightmare": {
+    ],
+    "upgrades": [
+      {
+        "name": "Winged Nightmare",
         "order": 0,
         "type": "Monstrous Mount",
         "attack": "+2",
         "points": "+80",
         "max": 1
       },
-      "Black Coach": {
+      {
+        "name": "Black Coach",
         "order": 1,
         "type": "Chariot Mount",
         "attack": "+1",
         "points": "+40",
         "max": 1
       }
-    },
+    ],
     "magic": true,
     "armyRules": [
       "Undead troops are quite beyond any feelings of revulsion, fear, trepidation or anything else for that matter. They are dead and as such nothing holds any real terror for them. Conversely the spells that bind them to life allow only the most rudimentary or specialised intelligence. The following rules apply to all units except for Ghouls. Ghouls are considered to be ordinary mortal troops and the following rules do not apply to them.",

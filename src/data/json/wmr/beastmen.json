@@ -3,8 +3,9 @@
     "version": "Warmaster Revolution",
     "group": 2,
     "order": 5,
-    "units": {
-      "Beastherd": {
+    "units": [
+      {
+        "name": "Beastherd",
         "order": 0,
         "type": "Infantry",
         "attack": 3,
@@ -17,7 +18,8 @@
           "Beastherd/Herdkin"
         ]
       },
-      "Herdkin": {
+      {
+        "name": "Herdkin",
         "order": 1,
         "type": "Infantry",
         "attack": "3/1",
@@ -30,7 +32,8 @@
           "Beastherd/Herdkin"
         ]
       },
-      "Bestigors": {
+      {
+        "name": "Bestigors",
         "order": 2,
         "type": "Infantry",
         "attack": 4,
@@ -40,7 +43,8 @@
         "points": 75,
         "max": 2
       },
-      "Minotaurs": {
+      {
+        "name": "Minotaurs",
         "order": 3,
         "type": "Infantry",
         "attack": 5,
@@ -49,7 +53,8 @@
         "points": 80,
         "max": 2
       },
-      "Centigors": {
+      {
+        "name": "Centigors",
         "order": 4,
         "type": "Cavalry",
         "attack": "3/1",
@@ -60,7 +65,8 @@
         "points": 75,
         "max": 2
       },
-      "Chaos Hounds": {
+      {
+        "name": "Chaos Hounds",
         "order": 5,
         "type": "Cavalry",
         "attack": 3,
@@ -69,7 +75,8 @@
         "points": 40,
         "max": 6
       },
-      "Tuskgor Chariots": {
+      {
+        "name" : "Tuskgor Chariots",
         "order": 6,
         "type": "Chariot",
         "attack": 3,
@@ -79,7 +86,8 @@
         "points": 95,
         "max": 4
       },
-      "Dragon Ogres": {
+      {
+        "name": "Dragon Ogres",
         "order": 7,
         "type": "Monster",
         "attack": 6,
@@ -89,7 +97,8 @@
         "points": 230,
         "max": 1
       },
-      "Chaos Spawn": {
+      {
+        "name": "Chaos Spawn",
         "order": 8,
         "type": "Monster",
         "attack": "3/3",
@@ -100,7 +109,8 @@
         "points": 110,
         "max": 2
       },
-      "Dragon Ogre Shaggoth": {
+      {
+        "name": "Dragon Ogre Shaggoth",
         "order": 9,
         "type": "Monster",
         "attack": 8,
@@ -110,7 +120,8 @@
         "points": 160,
         "max": 1
       },
-      "Beastlord": {
+      {
+        "name": "Beastlord",
         "order": 10,
         "type": "General",
         "attack": "+2",
@@ -123,7 +134,8 @@
           "Tuskgor Chariot"
         ]
       },
-      "Doombull": {
+      {
+        "name": "Doombull",
         "order": 11,
         "type": "Hero",
         "attack": "+2",
@@ -132,7 +144,8 @@
         "points": 80,
         "armyMax": 1
       },
-      "Wargor": {
+      {
+        "name": "Wargor",
         "order": 12,
         "type": "Hero",
         "attack": "+1",
@@ -144,7 +157,8 @@
           "Tuskgor Chariot"
         ]
       },
-      "Bray Shaman": {
+      {
+        "name": "Bray Shaman",
         "order": 13,
         "type": "Wizard",
         "attack": "+0",
@@ -153,16 +167,17 @@
         "points": 80,
         "max": 1
       }
-    },
-    "upgrades": {
-      "Tuskgor Chariot": {
+    ],
+    "upgrades": [
+      {
+        "name": "Tuskgor Chariot",
         "order": 0,
         "type": "Chariot Mount",
         "attack": "+1",
         "points": "+10",
         "max": 1
       }
-    },
+    ],
     "magic": true,
     "armyRules": [
       "__The things in the woods.__ Beastmen infantry do not suffer the usual -1 Command penalty when within woodland."

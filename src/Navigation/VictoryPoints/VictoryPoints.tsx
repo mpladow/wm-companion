@@ -10,7 +10,9 @@ import empireList from "../../data/json/wmr/empire.json";
 import skavenList from "../../data/json/wmr/skaven.json";
 import chaosList from "../../data/json/wmr/chaos.json";
 import woodElvesList from "../../data/json/wmr/woodElves.json";
-
+import vampireCountsList from "../../data/json/wmr/vampireCounts.json";
+import beastmenList from "../../data/json/wmr/beastmen.json";
+import cathayList from "../../data/json/wmr/cathay.json";
 
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 
@@ -72,10 +74,19 @@ const VictoryPoints = () => {
 		// get list of factions
 		const factions = Object.keys(Factions);
 
-		const ddList = [];
+		let ddList = [];
 		for (const [key, value] of Object.entries(Factions)) {
 			ddList.push({ label: key.replace("_", " "), value: value } as DropDownItemProps);
 		}
+		ddList = ddList.sort((a, b) =>  {
+			if (a.label < b.label) {
+				return -1;
+			}
+			if (a.label > b.label) {
+				return 1;
+			}
+			return 0;
+		});
 		setDdFactions(ddList);
 	}, []);
 
@@ -107,9 +118,23 @@ const VictoryPoints = () => {
 				case Factions.Chaos:
 					list = chaosList.units;
 					setFactionList(chaosList);
+					break;
 				case Factions.Wood_Elves:
 					list = woodElvesList.units;
 					setFactionList(woodElvesList);
+					break;
+				case Factions.Vampire_Counts:
+					list = vampireCountsList.units;
+					setFactionList(vampireCountsList);
+					break;
+				case Factions.Beastmen:
+					list = beastmenList.units;
+					setFactionList(beastmenList);
+					break;
+				case Factions.Cathay:
+					list = cathayList.units;
+					setFactionList(cathayList);
+					break;
 				default:
 					break;
 			}
@@ -127,7 +152,6 @@ const VictoryPoints = () => {
 	useEffect(() => {
 		// get magic items for unit
 		if (unitSelection && factionList) {
-			console.log(unitSelection, "unitSelection");
 			const _unit = factionList.units.find((x: any) => x.name == unitSelection.value);
 			setUnit({ name: _unit.name, armour: _unit.armour, hits: _unit.hits, points: _unit.points });
 		}
@@ -167,8 +191,7 @@ const VictoryPoints = () => {
 				// is variable, add this
 				console.log("variable");
 				let unitArmour = unit?.armour;
-                if (unitArmour == null)
-                unitArmour = "-"
+				if (unitArmour == null) unitArmour = "-";
 				const unitHits = unit?.hits;
 				let isVariableByHits = false;
 
@@ -178,7 +201,7 @@ const VictoryPoints = () => {
 					if (isVariableByHits) points = magicItem.points[unitHits.toString()];
 				}
 				if (unitArmour && !isVariableByHits) {
-					console.log(magicItem.points[unitArmour], 'magic points armour');
+					console.log(magicItem.points[unitArmour], "magic points armour");
 					points = magicItem.points[unitArmour];
 				}
 			} else {
@@ -228,7 +251,7 @@ const VictoryPoints = () => {
 			vpObject.attachedItems = mappedItems;
 		}
 		// add unit
-        setMagicItemsSelections([]);
+		setMagicItemsSelections([]);
 		vpContext.addScore(vpObject);
 	};
 	const [bottomSection, setBottomSection] = useState<"units" | "vps">("units");

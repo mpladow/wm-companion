@@ -17,6 +17,9 @@ export const Factions = {
 	Empire: 4,
 	Skaven: 5,
 	Chaos: 6,
-	Wood_Elves: 7
+	Wood_Elves: 7,
+	Vampire_Counts: 8,
+	Beastmen: 9,
+	Cathay: 10
 }
 export default playerTypes;
