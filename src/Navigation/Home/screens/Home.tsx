@@ -7,22 +7,40 @@ import { PlayerSection, ResultSection } from "./components";
 import CentreSection from "./components/CentreSection";
 import { ResultProps } from "@utils/types";
 import { useTheme } from "@hooks/useTheme";
-import CustomModal from "@components/CustomModal";
-import Settings from "@navigation/Settings/screens/Settings";
-import { current } from "@reduxjs/toolkit";
-import BlunderChart from "@navigation/Charts/BlunderChart";
+import { useNavigation } from "@react-navigation/native";
+import { HomeStackParamList } from "../HomeStack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useVictoryPoints } from "@context/VPContext";
+
+export type PlayerDetailsProps = {
+	player: playerTypes;
+	score?: VPScoreProps[];
+	faction?: string;
+};
+export type VPScoreProps = {
+	sourceName: string;
+	sourcePoints: string;
+	isUnit: boolean; // if false, the source comes from victory points
+	isItem: boolean;
+	attachedItems?: VPScoreProps[];
+};
+
+export type DropDownItemProps = {
+	label: string;
+	value: string | number;
+};
 
 export const Home = () => {
+	const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
 	const theme = useTheme();
-	const [modalVisible, setModalVisible] = useState(false);
+	const vpContext = useVictoryPoints();
+
 	const [playerOneScore, setPlayerOneScore] = useState<number>(1);
 	const [playerTwoScore, setPlayerTwoScore] = useState<number>(0);
 	const [p1CasualtyScore, setP1CasualtyScore] = useState<number>(0);
 	const [p2CasualtyScore, setP2CasualtyScore] = useState<number>(0);
 	const [p1CombatBonus, setP1CombatBonus] = useState<number>(0);
 	const [p2CombatBonus, setP2CombatBonus] = useState<number>(0);
-	const [page, setPage] = useState<string>(Pages.Settings);
-	const [currentModalHeader, setCurrentModalHeader] = useState<string>("");
 
 	const combatResultTop = useMemo(() => {
 		const diff = playerOneScore - playerTwoScore;
@@ -84,17 +102,21 @@ export const Home = () => {
 		}
 	};
 	const onSettingsPress = () => {
-		setPage(Pages.Settings);
-		setModalVisible(true);
+		navigation.navigate("Settings");
+		// setPage(Pages.Settings);
+		// setModalVisible(true);
 	};
 	const onBlunderPress = () => {
-		setPage(Pages.Blunders);
-		setModalVisible(true);
-	};
-	// useEffect(() => {
-	// 	if (currentModalContent != "") setModalVisible(true);
-	// }, [currentModalContent]);
+		navigation.navigate("Blunders");
 
+		// setPage(Pages.Blunders);
+		// setModalVisible(true);
+	};
+	const onVictoryPointsPress = (player?: playerTypes) => {
+		// this needs to be udpates to
+		vpContext.setPlayer("playerOne");
+		navigation.navigate("VictoryPoints");
+	};
 	const handleReset = () => {
 		setP1CasualtyScore(0);
 		setP2CasualtyScore(0);
@@ -138,9 +160,12 @@ export const Home = () => {
 				<CentreSection
 					handleSettingsPress={onSettingsPress}
 					handleBlunderPress={onBlunderPress}
+					handleVictoryPointsPress={onVictoryPointsPress}
 					handleReset={handleReset}
 					topResultValue={combatResultTop}
 					bottomResultValue={combatResultBottom}
+					// add plauyer one score object
+					//add player two score object
 				/>
 			</View>
 			<View
@@ -165,12 +190,6 @@ export const Home = () => {
 				/>
 			</View>
 			<StatusBar style='auto' />
-			<CustomModal
-				headerTitle={currentModalHeader}
-				setModalVisible={() => setModalVisible(!modalVisible)}
-				modalVisible={modalVisible}
-				page={page}
-			/>
 		</View>
 	);
 };

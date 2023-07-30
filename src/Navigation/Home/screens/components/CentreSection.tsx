@@ -11,6 +11,7 @@ type CentreSectionProps = {
 	handleReset: () => void;
 	handleSettingsPress: () => void;
 	handleBlunderPress: () => void;
+	handleVictoryPointsPress: () => void;
 	topResultValue?: ResultProps;
 	bottomResultValue?: ResultProps;
 };
@@ -18,6 +19,7 @@ const CentreSection = ({
 	handleReset,
 	handleSettingsPress,
 	handleBlunderPress,
+	handleVictoryPointsPress,
 	topResultValue,
 	bottomResultValue,
 }: CentreSectionProps) => {
