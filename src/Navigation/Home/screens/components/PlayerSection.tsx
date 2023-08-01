@@ -1,4 +1,4 @@
-import { Button, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Button, Pressable, StyleSheet, Touchable, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Factions, playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
@@ -51,8 +51,7 @@ const PlayerSection = ({
 	const onVPPRess = () => {
 		vpContext.setPlayer(player);
 		navigation.navigate("VictoryPoints");
-
-	}
+	};
 	// get faction names and set that here
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
@@ -66,23 +65,31 @@ const PlayerSection = ({
 				}}
 			>
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-					<TouchableOpacity>
-					</TouchableOpacity>
+					<TouchableOpacity></TouchableOpacity>
 				</View>
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 					<Text variant='heading1' style={{ fontSize: 70, color: theme.text }}>
 						{playerScore}
 					</Text>
 				</View>
-				<View style={{ flex: 1, position: 'relative',justifyContent: "center", alignItems: "center" }}>
-					<View style={{position: 'absolute', top: '-10%', left: '28%'}}>
-						<Foundation name='trophy' size={80} color='black' />
+				<View
+					style={{
+						flex: 1,
+						position: "relative",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					<View style={{ borderRadius: 200, backgroundColor: theme.secondary, height: 70, width: 70 }}>
+						<TouchableOpacity onPress={() => onVPPRess()}>
+							<View style={{ position: "absolute", top: "-10%", left: "28%" }}>
+								<Foundation name='trophy' size={80} color='black' />
+							</View>
+							<Text style={{ fontSize: 28 }}>
+								{player == "playerTwo" ? vpContext.getP2TotalPoints : vpContext.getP1TotalPoints}
+							</Text>
+						</TouchableOpacity>
 					</View>
-					<TouchableOpacity onPress={() => onVPPRess() }>
-						<Text style={{ fontSize: 28 }}>
-							{player == "playerTwo" ? vpContext.getP2TotalPoints : vpContext.getP1TotalPoints}
-						</Text>
-					</TouchableOpacity>
 				</View>
 			</View>
 

@@ -43,7 +43,6 @@ const App = () => {
 		}
 
 		prepare();
-		SplashScreen.hideAsync();
 	}, [fontsLoaded]);
 
 	if (!fontsLoaded) {
