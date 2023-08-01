@@ -21,8 +21,10 @@ export interface Theme {
 const darkColours = {
 	DARK_GREEN: "#588157", //dark green
 	LIGHT_GREEN: "#80ed99", //light brown
+	LIGHT_GREEN2: "#BDE4A8", // light green
 	DARK_GREEN_2: "#344e41", // darkgreen
 	DARK_BROWN_2: "#6c584c", // dark brown
+	DARK_BLUE: "#00798C",
 	WHITE: "#ffffff",
 	DARK_BLUE_3: "#14213d",
 	RED: "#d90429",
@@ -40,7 +42,7 @@ const darkTheme: Theme = {
 	secondary: darkColours.DARK_GREEN,
 	secondaryVariant: darkColours.LIGHT_GREEN,
 	accent: darkColours.LIGHT_GREEN,
-	success: darkColours.LIGHT_GREEN,
+	success: darkColours.DARK_BLUE,
 	warning: darkColours.YELLO,
 	error: darkColours.RED,
     black: darkColours.BLACK,

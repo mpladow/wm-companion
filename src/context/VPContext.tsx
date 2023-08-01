@@ -58,12 +58,17 @@ export const VPContextProvider = ({ children }: any) => {
 			const p1UnitsScore = p1UnitsArr.reduce((partial, a) => partial + a, 0);
 			// get total score for magic items
 			let p1UnitUpgrades = p1VpScore.filter((x) => x.attachedItems && x.attachedItems?.length > 0);
-			let p1UnitUpgradesArr = p1UnitUpgrades.map((x) => x.sourcePoints);
-			const p1UnitUpgradesScore = p1UnitUpgradesArr.reduce((partial, a) => partial + a, 0);
+            console.log(p1UnitUpgrades, 'p1 unit upgrades')
+            let p1TotalUpgradesArr: number[] = [];
+			p1UnitUpgrades.map(upgrade => upgrade.attachedItems?.map(x => p1TotalUpgradesArr.push(x.sourcePoints)));
+            console.log(p1TotalUpgradesArr,'upgrades arr')
+			const p1UnitUpgradesScore = p1TotalUpgradesArr.reduce((partial, a) => partial + a, 0);
+            console.log(p1UnitUpgradesScore, 'upgrades score')
+
 			res = p1UnitsScore + p1UnitUpgradesScore;
 		}
 		return res; // + variable scores
-	}, [p1VpScore]);
+	}, [p1VpScore]); 
 
 	const getP2TotalPoints = useMemo(() => {
 		// PLAYER TWO
@@ -73,9 +78,13 @@ export const VPContextProvider = ({ children }: any) => {
 			const p2UnitsScore = p2UnitsArr.reduce((partial, a) => partial + a, 0);
 			// get total score for magic items
 			let p2UnitUpgrades = p2VpScore.filter((x) => x.attachedItems && x.attachedItems?.length > 0);
-			let p2UnitUpgradesArr = p2UnitUpgrades.map((x) => x.sourcePoints);
-			let p2UnitUpgradesScore = p2UnitUpgradesArr.reduce((partial, a) => partial + 1, 0);
-			res = p2UnitsScore + p2UnitUpgradesScore;
+            let p1TotalUpgradesArr: number[] = [];
+			p2UnitUpgrades.map(upgrade => upgrade.attachedItems?.map(x => p1TotalUpgradesArr.push(x.sourcePoints)));
+            console.log(p1TotalUpgradesArr,'upgrades arr')
+			const p1UnitUpgradesScore = p1TotalUpgradesArr.reduce((partial, a) => partial + a, 0);
+            console.log(p1UnitUpgradesScore, 'upgrades score')
+
+			res = p2UnitsScore + p1UnitUpgradesScore;
 		}
 		return res; // + variable scores
 	}, [p2VpScore]);
@@ -142,28 +151,22 @@ export const VPContextProvider = ({ children }: any) => {
 	}, []);
 
 	useEffect(() => {
-		console.log(p2VpScore, "1SCORE");
-		console.log(p2VpFaction, "1FACTION");
 		if (p1VpScore && p1VpFaction) {
 			const p1State: PlayerDetailsProps = {
 				player: "playerOne",
 				score: p1VpScore,
 				faction: p1VpFaction,
 			};
-			console.log(p1State, "p1State");
 			updateStorage(p1State);
 		}
 	}, [p1VpScore, p1VpFaction]);
 	useEffect(() => {
-		console.log(p2VpScore, "2SCORE");
-		console.log(p2VpFaction, "2FACTION");
 		if (p2VpScore && p2VpFaction) {
 			const p2State: PlayerDetailsProps = {
 				player: "playerTwo",
 				score: p2VpScore,
 				faction: p2VpFaction,
 			};
-			console.log(p2State, "p2State");
 
 			updateStorage(p2State);
 		}
@@ -171,7 +174,6 @@ export const VPContextProvider = ({ children }: any) => {
 
 	const updateStorage = async (score: PlayerDetailsProps) => {
 		try {
-			console.log(JSON.stringify(score.score), "SCORE IN UPDTTE STORAGE");
 			if (selectedPlayer == "playerOne") {
 				await AsyncStorage.setItem(`${VP_KYS.p1VpScore}`, JSON.stringify(score.score));
 				await AsyncStorage.setItem(`${VP_KYS.p1DefaultFaction}`, JSON.stringify(score.faction));

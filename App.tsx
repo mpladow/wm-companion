@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import HomeStack from "./src/Navigation/Home/HomeStack";
 import { StatusBar } from "expo-status-bar";
@@ -22,7 +22,7 @@ const darkTheme = {
 	},
 };
 
-// SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync();
 
 const App = () => {
 	const [fontsLoaded] = useFonts({
@@ -30,12 +30,20 @@ const App = () => {
 		GaramondRegular: require("./assets/fonts/EBGaramond-Regular.ttf"),
 		GaramondBold: require("./assets/fonts/EBGaramond-ExtraBold.ttf"),
 		"PTSans-Bold": require("./assets/fonts/PTSans-Bold.ttf"),
+		"PTSans-Regular": require("./assets/fonts/PTSans-Regular.ttf"),
+		"PTSans-Italic": require("./assets/fonts/PTSans-Italic.ttf"),
 	});
-
-	const onLayoutRootView = useCallback(async () => {
-		if (fontsLoaded) {
-			await SplashScreen.hideAsync();
+	useEffect(() => {
+		async function prepare() {
+			if (fontsLoaded) {
+				console.log("loading ss");
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+				await SplashScreen.hideAsync();
+			}
 		}
+
+		prepare();
+		SplashScreen.hideAsync();
 	}, [fontsLoaded]);
 
 	if (!fontsLoaded) {

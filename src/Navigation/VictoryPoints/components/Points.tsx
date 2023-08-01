@@ -1,12 +1,15 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { Button, Text, TextBlock } from "@components/index";
 import { useVictoryPoints } from "@context/VPContext";
+import { useTheme } from "@hooks/useTheme";
+import fonts from "@utils/fonts";
 
 type PointsProps = {
 	onAddVPPressed: (points: number) => void;
 };
 const Points = ({ onAddVPPressed }: PointsProps) => {
+	const { theme } = useTheme();
 	const [value, setValue] = useState(0);
 
 	const onAddVpPress = () => {
@@ -18,6 +21,15 @@ const Points = ({ onAddVPPressed }: PointsProps) => {
 	const decrementPoint = (toDecrement: number = 1) => {
 		if (value > 0 && value - toDecrement >= 0) {
 			setValue(value - toDecrement);
+		}
+	};
+	const setValManually = (val: string) => {
+		const valueParsed = parseInt(val);
+		if (!isNaN(valueParsed)) {
+			if (valueParsed < 0) setValue(0);
+			else {
+				setValue(parseInt(val));
+			}
 		}
 	};
 	return (
@@ -40,7 +52,14 @@ const Points = ({ onAddVPPressed }: PointsProps) => {
 					</Button>
 				</View>
 				<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-					<Text>{value}</Text>
+					{/* <Text style={{fontSize: 28}}>{value}</Text> */}
+					<TextInput
+						onChangeText={(val) => setValManually(val)}
+						style={{ color: theme.text, fontFamily: fonts.PTSansBold, fontSize: 32, textAlign: "center" }}
+						keyboardType='numeric'
+					>
+						{value}
+					</TextInput>
 				</View>
 				<View style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
 					<Button onPress={incrementPoint} variant={"default"}>
@@ -53,7 +72,7 @@ const Points = ({ onAddVPPressed }: PointsProps) => {
 			</View>
 			<View style={{ flex: 1, margin: 4 }}>
 				<Button disabled={value == 0} onPress={() => onAddVpPress()} variant={"confirm"}>
-					<Text>Add To VP</Text>
+					<Text bold>Add VPs</Text>
 				</Button>
 			</View>
 		</>

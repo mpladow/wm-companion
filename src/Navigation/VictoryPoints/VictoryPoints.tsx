@@ -13,6 +13,11 @@ import woodElvesList from "../../data/json/wmr/woodElves.json";
 import vampireCountsList from "../../data/json/wmr/vampireCounts.json";
 import beastmenList from "../../data/json/wmr/beastmen.json";
 import cathayList from "../../data/json/wmr/cathay.json";
+import nightGoblinsList from "../../data/json/wmr/nightGoblins.json";
+import dwarvesList from "../../data/json/wmr/dwarves.json";
+import darkElvesList from "../../data/json/wmr/darkelves.json";
+import highElvesList from "../../data/json/wmr/highElves.json";
+import daemonsList from "../../data/json/wmr/daemons.json";
 
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 
@@ -78,7 +83,7 @@ const VictoryPoints = () => {
 		for (const [key, value] of Object.entries(Factions)) {
 			ddList.push({ label: key.replace("_", " "), value: value } as DropDownItemProps);
 		}
-		ddList = ddList.sort((a, b) =>  {
+		ddList = ddList.sort((a, b) => {
 			if (a.label < b.label) {
 				return -1;
 			}
@@ -135,6 +140,26 @@ const VictoryPoints = () => {
 					list = cathayList.units;
 					setFactionList(cathayList);
 					break;
+				case Factions.Goblins:
+					list = nightGoblinsList.units;
+					setFactionList(nightGoblinsList);
+					break;
+				case Factions.Dwarves:
+					list = dwarvesList.units;
+					setFactionList(dwarvesList);
+					break;
+				case Factions.Dark_Elves:
+					list = darkElvesList.units;
+					setFactionList(darkElvesList);
+					break;
+				case Factions.High_Elves:
+					list = highElvesList.units;
+					setFactionList(highElvesList);
+					break;
+				case Factions.Daemons:
+					list = daemonsList.units;
+					setFactionList(daemonsList);
+					break;
 				default:
 					break;
 			}
@@ -161,10 +186,14 @@ const VictoryPoints = () => {
 		if (unit != undefined) {
 			const itemsArray: any[] = magicItemsList.upgrades;
 			const factionUpgrades: any[] = factionList?.upgrades;
+            console.log(factionUpgrades, 'Faction upgrades')
 			let totalItems = [];
-			if (!factionUpgrades == undefined) {
+			if (!factionUpgrades == undefined || factionUpgrades.length > 0) {
+                console.log(`faction upgrades added`)
 				totalItems = itemsArray.concat(factionUpgrades);
 			} else {
+                console.log(`NO faction upgrades added`)
+
 				totalItems = itemsArray;
 			}
 			setAllMagicItems(totalItems);
@@ -267,7 +296,7 @@ const VictoryPoints = () => {
 				<View style={[styles.topContainer]}>
 					<FlatList
 						data={vpContext.selectedPlayer == "playerOne" ? vpContext.p1VpScore : vpContext.p2VpScore}
-						renderItem={({ item }) => {
+						renderItem={({ item, index }) => {
 							const unitScore = item.isHalfPoints ? Math.round(item.sourcePoints / 2) : item.sourcePoints;
 							let unitUpgrades = item.attachedItems?.map((x) => x.sourcePoints);
 							const unitUpgradesScore = unitUpgrades
@@ -276,6 +305,7 @@ const VictoryPoints = () => {
 							const unitTotalScore = unitScore + unitUpgradesScore;
 							return (
 								<View
+                                key={`unit$_{index}`}
 									style={[
 										styles.listItem,
 										{
@@ -291,9 +321,9 @@ const VictoryPoints = () => {
 										<Text italic={item.isHalfPoints ? true : false}>
 											{item.sourceName} - {unitScore}pts
 										</Text>
-										{item.attachedItems?.map((item) => {
+										{item.attachedItems?.map((item, index) => {
 											return (
-												<View
+												<View key={`upgrade_${index}`}
 													style={{
 														justifyContent: "center",
 														alignItems: "center",
@@ -318,12 +348,14 @@ const VictoryPoints = () => {
 										}}
 									>
 										<View>
-											<Button
-												onPress={() => vpContext.toggleHalfPoints(item.id)}
-												variant={"default"}
-											>
-												<Text italic={item.isHalfPoints}>{unitTotalScore}</Text>
-											</Button>
+											{item.sourceName != "Additional Points" ? (
+												<Button
+													onPress={() => vpContext.toggleHalfPoints(item.id)}
+													variant={"default"}
+												>
+													<Text italic={item.isHalfPoints}>{unitTotalScore}</Text>
+												</Button>
+											) : null}
 										</View>
 										<View style={{ marginLeft: 12 }}>
 											<Button onPress={() => vpContext.removeScore(item.id)} variant={"danger"}>
@@ -345,7 +377,7 @@ const VictoryPoints = () => {
 						</View>
 						<View style={{ flex: 1, alignItems: "center" }}>
 							<TouchableOpacity onPress={() => setBottomSection("vps")}>
-								<Text style={bottomSection == "vps" && { color: theme.accent }}>VPs</Text>
+								<Text style={bottomSection == "vps" && { color: theme.accent }}>Additional</Text>
 							</TouchableOpacity>
 						</View>
 					</View>

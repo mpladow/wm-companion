@@ -20,6 +20,11 @@ export const Factions = {
 	Wood_Elves: 7,
 	Vampire_Counts: 8,
 	Beastmen: 9,
-	Cathay: 10
+	Cathay: 10,
+	Goblins: 11,
+	Dwarves: 12,
+	Dark_Elves: 13,
+	High_Elves: 14,
+	Daemons: 15
 }
 export default playerTypes;

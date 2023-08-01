@@ -112,12 +112,12 @@ const UnitSelector = forwardRef(
 				<View style={{ flexDirection: "row", marginTop: 4, justifyContent: "space-between", alignContent: "center" }}>
 					<View style={{ flex: 1, margin: 4 }}>
 						<Button variant={"default"} disabled={disableAddButton} onPress={() => addUnitPressed(true)}>
-							<Text>Add half VP Only</Text>
+							<Text>Add half VPs</Text>
 						</Button>
 					</View>
 					<View style={{ flex: 1,margin: 4 }}>
 						<Button disabled={disableAddButton} onPress={() => addUnitPressed(false)} variant={"confirm"}>
-							<Text>Add To VP</Text>
+							<Text bold>Add VPs</Text>
 						</Button>
 					</View>
 				</View>
