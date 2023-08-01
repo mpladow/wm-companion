@@ -21,13 +21,13 @@ const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypePro
 				return fonts.PTSansBold;
 				break;
 			case "bold":
-				if (bold) return fonts.GaramondBold;
-				if (italic) return fonts.GaramondItalic
-				else return fonts.GaramondRegular;
+				if (bold) return fonts.PTSansBold;
+				if (italic) return fonts.PTSansItalic;
+				else return fonts.PTSansRegular;
 			default:
-				if (italic) return fonts.GaramondItalic
-				if (bold) return fonts.GaramondBold;
-				return fonts.GaramondRegular;
+				if (italic) return fonts.PTSansItalic
+				if (bold) return fonts.PTSansBold;
+				return fonts.PTSansRegular;
 		}
 	};
 
@@ -38,7 +38,7 @@ const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypePro
 				{
 					fontFamily: setTextFont(),
 					color: theme.text,
-					fontSize: 18,
+					fontSize: 16,
 				},
 				props.style,
 			]}

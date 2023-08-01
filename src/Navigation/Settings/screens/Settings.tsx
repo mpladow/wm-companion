@@ -6,6 +6,7 @@ import { ModalContainer, Text, TextBlock } from "@components/index";
 import { margin } from "@utils/constants";
 import fontSize from "@utils/styling";
 import { useNavigation } from "@react-navigation/native";
+import Constants from "expo-constants";
 
 const Settings = () => {
 	const { theme } = useTheme();
@@ -14,12 +15,27 @@ const Settings = () => {
 		console.log("onPress");
 	};
 	const settings = ["About"];
+	const version = Constants?.manifest?.version;
+
 	return (
-		<ModalContainer onPageModalClosePressed={() => navigation.goBack()} headerTitle={"Settings"} >
+		<ModalContainer onPageModalClosePressed={() => navigation.goBack()} headerTitle={"Information"}>
 			<View style={{ display: "flex", flex: 1, backgroundColor: theme.black, padding: 8 }}>
 				<View style={{ justifyContent: "space-evenly" }}>
 					<View style={{ marginVertical: margin }}>
-						<Text bold>This is a pre-alpha build and will have barebones functionality.</Text>
+						<TextBlock>
+							<>
+								<Text bold>{version}</Text>
+								<Text bold>
+									This is an alpha build with additional functionality being added over time.
+								</Text>
+							</>
+						</TextBlock>
+						<TextBlock>
+							<>
+								<Text>If any bugs are found, please report them to: </Text>
+								<Text>ml.development.2022@gmail.com</Text>
+							</>
+						</TextBlock>
 					</View>
 					<View style={{ marginVertical: margin }}>
 						<TextBlock>
@@ -30,9 +46,11 @@ const Settings = () => {
 						</TextBlock>
 						<TextBlock>
 							<>
-								<Text>- Combat score visual customisations</Text>
-								<Text>- Victory Points calculator</Text>
+								<Text>- Additional Faction support</Text>
+								<Text>- UI Improvements</Text>
 								<Text>- Tournament Progress Management</Text>
+								<Text>- Ability to save game results</Text>
+								<Text>- Army List creator</Text>
 							</>
 						</TextBlock>
 					</View>
