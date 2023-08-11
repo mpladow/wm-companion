@@ -4,8 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ChariotIcon from "@components/SVGS/ChariotIcon";
 import { IconImageProps } from "./types";
 
-
-const Chariot = ({ size = 16, color = "black" }: IconImageProps) => {
+const Chariot = ({ size = 16, color = "black", isUpgrade }: IconImageProps) => {
 	return (
 		<View
 			style={{
@@ -13,7 +12,7 @@ const Chariot = ({ size = 16, color = "black" }: IconImageProps) => {
 				height: 28,
 				alignItems: "center",
 				justifyContent: "center",
-				backgroundColor: "#e3d9bc",
+				backgroundColor: isUpgrade ? "#CDE6F5" : "#e3d9bc",
 				padding: 0,
 			}}
 		>

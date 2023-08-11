@@ -22,7 +22,7 @@ const PopupConfirm = ({ onConfirm, onCancel, text, confirmText, cancelText, visi
 					marginTop: 400,
 					alignItems: "center",
 					justifyContent: "center",
-					backgroundColor: theme.black,
+					backgroundColor: theme.blueGrey,
 					padding: 16,
 					margin: 12,
 					borderRadius: 20,

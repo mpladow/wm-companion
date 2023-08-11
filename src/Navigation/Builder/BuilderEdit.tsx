@@ -372,7 +372,7 @@ const BuilderEdit = () => {
 							justifyContent: "space-between",
 						}}
 					>
-						<Text style={{ textTransform: "uppercase" }}>{title}</Text>
+						<Text bold style={{ textTransform: "uppercase" }}>{title}</Text>
 						{/* //TODO: Extract into seperate button */}
 						<TouchableOpacity onPress={() => handleAddUnitPress(title != "Leaders")}>
 							<View style={{ backgroundColor: theme.accent, borderRadius: 4, padding: 4 }}>

@@ -5,6 +5,8 @@ import { Button, Text } from "@components/index";
 import { useTheme } from "@hooks/useTheme";
 import PointsContainer from "@components/pointsContainer";
 import { Entypo } from "@expo/vector-icons";
+import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
+import { UpgradeTypes } from "@utils/constants";
 
 type UpgradeCardProps = {
 	upgrade: UpgradesProps;
@@ -31,9 +33,12 @@ const UpgradeCard = ({ upgrade, targetUnitName, key, onAddUpgradePress, currentC
 				justifyContent: "center",
 				marginBottom: 8,
 				backgroundColor: theme.blueGrey,
-			padding: 8,
+				padding: 8,
 			}}
 		>
+			<View style={{ marginRight: 8 }}>
+				<UpgradeIcon type={upgrade.type as UpgradeTypes} />
+			</View>
 			<View style={{ flex: 2 }}>
 				<Text bold>{upgrade.name}</Text>
 

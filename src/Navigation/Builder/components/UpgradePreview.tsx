@@ -9,6 +9,8 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useBuilderContext } from "@context/BuilderContext";
+import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
+import { UpgradeTypes } from "@utils/constants";
 
 type UpgradePreviewProps = {
 	handleSetVisible: (visible: boolean) => void;
@@ -21,10 +23,9 @@ const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: U
 	const [headerTitle, setHeaderTitle] = useState(selectedUpgradeDetails?.name);
 	const [specialRules, setSpecialRules] = useState<UpgradesProps>();
 
-useEffect(() => {
-  console.log(`specialRuless: ${JSON.stringify(specialRules)}`)
-
-}, [])
+	useEffect(() => {
+		console.log(`specialRuless: ${JSON.stringify(specialRules)}`);
+	}, []);
 
 	return (
 		<CustomModal
@@ -38,6 +39,9 @@ useEffect(() => {
 				<View style={{ flexDirection: "column" }}>
 					<View style={{ flex: 1, marginBottom: 8 }}>
 						<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
+							<UpgradeIcon
+								type={selectedUpgradeDetails?.type as UpgradeTypes}
+							/>
 							<Text bold style={{ fontSize: 16 }}>
 								{selectedUpgradeDetails?.type}
 							</Text>
@@ -47,7 +51,6 @@ useEffect(() => {
 					{selectedUpgradeDetails ? (
 						<View style={{ flex: 3, justifyContent: "center", flexDirection: "column" }}>
 							<View style={{ flex: 1, flexDirection: "column" }}>
-
 								{selectedUpgradeDetails?.text?.map((x) => {
 									if (x)
 										return (

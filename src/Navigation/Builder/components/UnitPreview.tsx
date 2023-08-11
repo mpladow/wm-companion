@@ -30,9 +30,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 			const _specialRules = builder.factionDetails?.specialRules[selectedUnitDetails?.name];
 			const _genericSpecialRules = getGenericSpecialRules();
 			const specialRulesExist = _genericSpecialRules[selectedUnitDetails?.name];
-			console.log(_specialRules, 'SPECIAL RULES');
-			console.log(specialRulesExist, 'GENERIC RULESS')
-			if (_specialRules.text != undefined) {
+			if (_specialRules?.text != undefined) {
 				setSpecialRules(_specialRules);
 			} else if (specialRulesExist != undefined) setSpecialRules(specialRulesExist);
 			else {
@@ -41,6 +39,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 		}
 	}, [selectedUnitDetails]);
 
+	const STAT_FONT_SIZE = 22;
 	return (
 		<CustomModal
 			setModalVisible={() => {
@@ -65,38 +64,38 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 					{selectedUnitDetails?.command ? (
 						<View style={{ flex: 3, marginBottom: 8, justifyContent: "center", flexDirection: "row" }}>
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-								<Text>Command</Text>
-								<Text>{selectedUnitDetails?.command}</Text>
+								<Text style={{ fontSize: 20 }}>Command</Text>
+								<Text bold style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.command}</Text>
 							</View>
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-								<Text>Attack Bonus</Text>
-								<Text>{selectedUnitDetails.attack}</Text>
+								<Text style={{ fontSize: 20 }}>Attack Bonus</Text>
+								<Text bold style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails.attack}</Text>
 							</View>
 						</View>
 					) : (
 						<View style={{ flex: 3, marginBottom: 8, justifyContent: "center", flexDirection: "row" }}>
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 								<Text>Attack</Text>
-								<Text style={{ fontSize: 20 }}>{selectedUnitDetails?.attack}</Text>
+								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.attack}</Text>
 							</View>
 							{selectedUnitDetails?.range ? (
 								<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 									<Text>Range</Text>
-									<Text style={{ fontSize: 20 }}>{selectedUnitDetails?.range || "-"}</Text>
+									<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.range || "-"}</Text>
 								</View>
 							) : null}
 
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 								<Text>Hits</Text>
-								<Text style={{ fontSize: 20 }}>{selectedUnitDetails?.hits}</Text>
+								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.hits}</Text>
 							</View>
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 								<Text>Armour</Text>
-								<Text style={{ fontSize: 20 }}>{selectedUnitDetails?.armour || "-"}</Text>
+								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.armour || "-"}</Text>
 							</View>
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 								<Text>Size</Text>
-								<Text style={{ fontSize: 20 }}>{selectedUnitDetails?.size}</Text>
+								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.size}</Text>
 							</View>
 						</View>
 					)}

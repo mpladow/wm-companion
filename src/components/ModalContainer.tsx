@@ -44,7 +44,9 @@ const ModalContainer = ({
 
 	return (
 		<View style={styles.centeredView}>
-			<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.black }]}>
+			<View style={[styles.modalView, { width: windowWidth - 20, 
+				backgroundColor: theme.black 
+				}]}>
 				<View style={{ flexDirection: "row", padding: 12 }}>
 					<View
 						style={{

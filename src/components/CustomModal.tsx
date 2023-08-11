@@ -89,7 +89,7 @@ const CustomModal = ({
 				<View style={styles.modalOverlay} />
 			</TouchableWithoutFeedback>
 			<View style={styles.centeredView}>
-				<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.black }]}>
+				<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.blueGrey }]}>
 					<View style={{ flexDirection: "row", padding: 12 }}>
 						<View
 							style={{
@@ -123,8 +123,7 @@ const CustomModal = ({
 							justifyContent: "center",
 						}}
 					>
-						<View style={{ position: "absolute", left: 0, padding: 12 }}>
-							{footerLeft}</View>
+						<View style={{ position: "absolute", left: 0, padding: 12 }}>{footerLeft}</View>
 						<View
 							style={{
 								position: "absolute",

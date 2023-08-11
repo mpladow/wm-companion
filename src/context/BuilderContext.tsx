@@ -87,10 +87,8 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const [userArmyLists, setUserArmyLists] = useState<ArmyListProps[]>([]);
 	const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
 	const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
-	const [genericSpecialRules, setGenericSpecialRules] = useState<any>([])
 	useEffect(() => {
 		getScoresFromStorage();
-		setGenericSpecialRules(getGenericSpecialRules())
 	}, []);
 	useEffect(() => {
 		// save changes to local storage

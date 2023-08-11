@@ -13,6 +13,7 @@ import Infantry from "@components/UnitCards/Infantry";
 import { UnitTypes } from "@utils/constants";
 import Cavalry from "@components/UnitCards/Cavalry";
 import UnitIcon from "@components/UnitCards/UnitIcon";
+import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
 
 type UnitCardDetailsProps = {
 	unit: UnitProps;
@@ -47,12 +48,12 @@ const UnitDetailsCard = ({
 					<TouchableOpacity onPress={() => onUnitCardPress(unit.name)}>
 						<View style={{ flex: 3, flexDirection: "row", alignItems: "center" }}>
 							<View style={{ marginRight: 8 }}>
-								<UnitIcon type={unit.type} canShoot={unit.range == undefined? false : true}/>
+								<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
 							</View>
 							<Text bold style={{ fontSize: 16 }}>
 								{`${existingUnits} x ${unit.name}`}
 							</Text>
-							<View style={{ alignItems: "flex-start", justifyContent: 'center', marginLeft: 12 }}>
+							<View style={{ alignItems: "flex-start", justifyContent: "center", marginLeft: 12 }}>
 								<PointsContainer points={unit.points} />
 							</View>
 						</View>
@@ -64,7 +65,7 @@ const UnitDetailsCard = ({
 							</MenuTrigger>
 							<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 120, padding: 4 }}>
 								<MenuOption onSelect={() => onDeleteUnit(key)}>
-									<View style={{ flexDirection: "row" }}>
+									<View style={{ flexDirection: "row", padding: 4 }}>
 										<AntDesign name='delete' size={18} color={theme.black} />
 										<View style={{ marginLeft: 8 }}>
 											<Text style={{ color: theme.black }}>Delete</Text>
@@ -73,7 +74,7 @@ const UnitDetailsCard = ({
 								</MenuOption>
 								{!unit.noMagic ? (
 									<MenuOption onSelect={() => onAddUpgrade(key)}>
-										<View style={{ flexDirection: "row", marginTop: 8 }}>
+										<View style={{ flexDirection: "row", marginTop: 12, padding: 4 }}>
 											<AntDesign name='plus' size={18} color='black' />
 											<View style={{ marginLeft: 8 }}>
 												<Text style={{ color: theme.black }}>Add Item</Text>
@@ -107,9 +108,12 @@ const UnitDetailsCard = ({
 								}}
 							>
 								<TouchableOpacity
-									style={{ flexDirection: "row" }}
+									style={{ flexDirection: "row", alignItems: "center" }}
 									onPress={() => onUpgradePress(item.upgradeName)}
 								>
+									<View style={{ marginRight: 8 }}>
+										<UpgradeIcon type={item.type} />
+									</View>
 									<Text>{item.currentCount} x </Text>
 									<Text bold>{item.upgradeName}</Text>
 									<View style={{ marginLeft: 8 }}>
