@@ -10,6 +10,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useBuilderContext } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
+import { getGenericSpecialRules } from "@utils/factionHelpers";
 
 type UnitPreviewProps = {
 	handleSetVisible: (visible: boolean) => void;
@@ -27,7 +28,13 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 		if (builder.factionDetails?.specialRules && selectedUnitDetails?.name) {
 			//@ts-ignore - TODO: need to check typing
 			const _specialRules = builder.factionDetails?.specialRules[selectedUnitDetails?.name];
-			if (_specialRules) setSpecialRules(_specialRules);
+			const _genericSpecialRules = getGenericSpecialRules();
+			const specialRulesExist = _genericSpecialRules[selectedUnitDetails?.name];
+			console.log(_specialRules, 'SPECIAL RULES');
+			console.log(specialRulesExist, 'GENERIC RULESS')
+			if (_specialRules.text != undefined) {
+				setSpecialRules(_specialRules);
+			} else if (specialRulesExist != undefined) setSpecialRules(specialRulesExist);
 			else {
 				setSpecialRules(null);
 			}
@@ -100,7 +107,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 								<Text bold style={{ fontSize: 16 }}>
 									Special Rules
 								</Text>
-								{specialRules.text.map((x) => {
+								{specialRules?.text?.map((x) => {
 									if (x)
 										return (
 											<View style={{ marginBottom: 4, alignItems: "flex-start" }}>

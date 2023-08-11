@@ -17,6 +17,8 @@ import daemonsList from "../data/json/wmr/daemons.json";
 import nipponList from "../data/json/wmr/nippon.json";
 import chaosDwarvesList from "../data/json/wmr/chaosDwarves.json";
 
+import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
+
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 
 export const getFactions = () => {
@@ -37,6 +39,9 @@ export const getFactions = () => {
 };
 export const getKeyByValue = (object, value) => {
 	return Object.keys(object).find((key) => object[key] === value);
+};
+export const getGenericSpecialRules = () => {
+	return genericSpecialRules;
 };
 export const getFactionUnits = (factionSelection: number) => {
 	let list: any[] = [];
