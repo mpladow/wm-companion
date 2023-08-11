@@ -1,17 +1,15 @@
-import { Button, Pressable, StyleSheet, Touchable, TouchableOpacity, View } from "react-native";
+import { Button, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Factions, playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
 import { Constants, Styling } from "@utils/index";
 import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
-import { Dropdown } from "react-native-element-dropdown";
-import { DropDownItemProps, PlayerDetailsProps } from "../Home";
 import { useVictoryPoints } from "@context/VPContext";
 import { Foundation } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { HomeStackParamList } from "@navigation/Home/HomeStack";
+import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
 type PlayerSectionProps = {
 	player: playerTypes;
 	playerScore: number;
@@ -21,7 +19,6 @@ type PlayerSectionProps = {
 	handleSetCasualty: (player: playerTypes, score: number) => void;
 	handleSetCR: (player: playerTypes, score: number) => void;
 };
-
 const PlayerSection = ({
 	player,
 	playerScore,
@@ -32,7 +29,7 @@ const PlayerSection = ({
 }: PlayerSectionProps) => {
 	const { theme } = useTheme();
 	const vpContext = useVictoryPoints();
-	const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
+	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
 	// const [faction, setFaction] = useState<DropDownItemProps>();
 
 	const incrementPlayerCasualty = () => {

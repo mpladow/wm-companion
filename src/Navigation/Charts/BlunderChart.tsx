@@ -64,18 +64,16 @@ const BlunderChart = () => {
 						</TextBlock>
 						<TextBlock>
 							<Text>
-								The unit may not move and -1 Command Penalty to <Text bold>unit</Text> for the rest of
-								the battle.
+								If there are no visible units within a full pace move of the unit or brigade then the unit/brigade halts.
 							</Text>
 						</TextBlock>
 						<TextBlock variant='small'>
 							<Text>
-								If a brigade has blundered then this penalty applies to one unit of the player's
-								choosing.
+								If there are visible enemy units within a full pace move of the unit/brigade, then the blundering unit/brigade must move the shortest route to get outside a full pace move from all enemy units.
 							</Text>
 						</TextBlock>
 						<TextBlock variant='small'>
-							<Text>This penalty is cumulative.</Text>
+							<Text>If unable to comply, the unit/brigade moves as far away from all enemy units as possible instead.</Text>
 						</TextBlock>
 					</View>
 				</View>

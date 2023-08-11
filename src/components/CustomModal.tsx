@@ -22,10 +22,11 @@ type CustomModalProps = {
 	modalVisible: boolean;
 	children?: JSX.Element;
 	headerComponentRight?: JSX.Element;
-	headerTitle: string;
+	headerTitle?: string;
 	footerLeft?: JSX.Element;
 	footerRight?: JSX.Element;
 	page?: string;
+	onDismiss?: () => void;
 };
 
 export type ModalMetaContentType = {
@@ -40,14 +41,18 @@ const CustomModal = ({
 	headerTitle,
 	footerLeft,
 	footerRight,
+	onDismiss,
 }: CustomModalProps) => {
 	const windowWidth = Dimensions.get("window").width;
 	const { theme } = useTheme();
-	const [modalContent, setModalContent] = useState(<Settings />);
-	const [modalHeader, setModalHeader] = useState<string>("");
+	const [modalContent, setModalContent] = useState<JSX.Element | undefined>(<Settings />);
+	const [modalHeader, setModalHeader] = useState<string | undefined>(headerTitle);
 
 	const [loading, setLoading] = useState(false);
 	const [modalMetaContent, setModalMetaContent] = useState<ModalMetaContentType>();
+	useEffect(() => {
+		setModalHeader(headerTitle);
+	}, [headerTitle]);
 	useEffect(() => {
 		setLoading(true);
 		if (page) {
@@ -55,7 +60,7 @@ const CustomModal = ({
 				// get additional data for this page
 				setModalContent(<Settings />);
 				setModalHeader("WM-Companion");
-				setModalMetaContent(undefined)
+				setModalMetaContent(undefined);
 			}
 			if (page == Pages.Blunders) {
 				setModalContent(<BlunderChart />);
@@ -63,6 +68,8 @@ const CustomModal = ({
 				setModalMetaContent({ pageNumber: "pg 61" } as ModalMetaContentType);
 			}
 			setLoading(false);
+		} else {
+			setModalContent(undefined);
 		}
 	}, [page]);
 
@@ -71,8 +78,10 @@ const CustomModal = ({
 			animationType='fade'
 			transparent={true}
 			visible={modalVisible}
+			onDismiss={() => {
+				onDismiss && onDismiss();
+			}}
 			onRequestClose={() => {
-				Alert.alert("Modal has been closed.");
 				setModalVisible();
 			}}
 		>
@@ -81,7 +90,7 @@ const CustomModal = ({
 			</TouchableWithoutFeedback>
 			<View style={styles.centeredView}>
 				<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.black }]}>
-					<View style={{ flexDirection: "row", padding: 20 }}>
+					<View style={{ flexDirection: "row", padding: 12 }}>
 						<View
 							style={{
 								width: "100%",
@@ -92,7 +101,7 @@ const CustomModal = ({
 						>
 							<View style={{ flex: 1, alignItems: "flex-start" }}></View>
 							<View style={{ flex: 3, alignItems: "center" }}>
-								<Text style={{ fontSize: fontSize.xl }} variant={"heading1"} bold>
+								<Text style={{ fontSize: fontSize.xl, textAlign: "center" }} variant={"heading1"} bold>
 									{modalHeader}
 								</Text>
 							</View>
@@ -103,7 +112,7 @@ const CustomModal = ({
 							</View>
 						</View>
 					</View>
-					<View style={{ padding: 20, paddingBottom: 60, flex: 1 }}>
+					<View style={{ padding: 12, paddingBottom: 60, flex: 1 }}>
 						{modalContent ? modalContent : children}
 					</View>
 					<View
@@ -114,7 +123,8 @@ const CustomModal = ({
 							justifyContent: "center",
 						}}
 					>
-						<View style={{ position: "absolute", left: 0 }}>{footerLeft}</View>
+						<View style={{ position: "absolute", left: 0, padding: 12 }}>
+							{footerLeft}</View>
 						<View
 							style={{
 								position: "absolute",
@@ -131,7 +141,7 @@ const CustomModal = ({
 								<AntDesign name='close' size={24} color={theme.text} />
 							</TouchableOpacity>
 						</View>
-						<View style={{ position: "absolute", right: 0, padding: 18 }}>
+						<View style={{ position: "absolute", right: 0, padding: 12 }}>
 							<Text>{modalMetaContent?.pageNumber}</Text>
 						</View>
 					</View>

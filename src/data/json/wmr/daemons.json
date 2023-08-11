@@ -68,7 +68,8 @@
 			"armour": "5+",
 			"size": 3,
 			"points": 200,
-			"max": 1
+			"max": 1,
+			"noMagic": true
 		},
 		{
 			"name": "Daemon Flyers",
@@ -79,7 +80,8 @@
 			"armour": "5+",
 			"size": 3,
 			"points": 80,
-			"max": 1
+			"max": 1,
+			"noMagic": true
 		},
 		{
 			"name": "Greater Daemon",
@@ -90,7 +92,8 @@
 			"armour": "4+",
 			"size": 1,
 			"points": 280,
-			"max": 1
+			"max": 1,
+			"noMagic": true
 		},
 		{
 			"name": "Daemon Overlord",
@@ -208,6 +211,12 @@
 			"order": 6,
 			"text": [
 				"Demon Overlord, Lords or Sorcerers can be given the Favour of the Gods. The character gains then +1 extra Attack and causes terror in its enemies as described in the Warmaster rulebook."
+			]
+		},
+		"Wizard": {
+			"order": 7,
+			"text": [
+				"With this upgrade the Daemon Overlord can be given a magic item restricted to a Wizard. Note that the Daemon Overlord is still a General and his command range extends over the whole battlefield as for other Generals."
 			]
 		}
 	},

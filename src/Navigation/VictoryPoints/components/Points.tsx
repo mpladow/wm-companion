@@ -72,7 +72,7 @@ const Points = ({ onAddVPPressed }: PointsProps) => {
 			</View>
 			<View style={{ flex: 1, margin: 4 }}>
 				<Button disabled={value == 0} onPress={() => onAddVpPress()} variant={"confirm"}>
-					<Text bold>Add VPs</Text>
+					<Text bold style={{color: theme.black}}>Add VPs</Text>
 				</Button>
 			</View>
 		</>

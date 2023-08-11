@@ -3,7 +3,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { useTheme } from "@hooks/useTheme";
 import { AntDesign } from "@expo/vector-icons";
-import { DropDownItemProps } from "@navigation/Home/screens/Home";
+import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
 import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
 import fonts from "@utils/fonts";
@@ -60,7 +60,7 @@ const UnitSelector = forwardRef(
 						data={ddFactions}
 						labelField='label'
 						valueField='value'
-						onChange={(item) => {
+						onChange={(item: any) => {
 							handleSetFactionSelection(item.value);
 						}}
 					/>
@@ -91,7 +91,7 @@ const UnitSelector = forwardRef(
 						data={ddMagicItems ? ddMagicItems : []}
 						labelField='label'
 						valueField='value'
-                        fontFamily={fonts.PTSansBold}
+						fontFamily={fonts.PTSansBold}
 						disable={unitSelection == null}
 						onChange={(item) => {
 							console.log(item, "MAGIC ITEM SELECTED");
@@ -109,15 +109,24 @@ const UnitSelector = forwardRef(
 						)}
 					/>
 				</View>
-				<View style={{ flexDirection: "row", marginTop: 4, justifyContent: "space-between", alignContent: "center" }}>
+				<View
+					style={{
+						flexDirection: "row",
+						marginTop: 4,
+						justifyContent: "space-between",
+						alignContent: "center",
+					}}
+				>
 					<View style={{ flex: 1, margin: 4 }}>
 						<Button variant={"default"} disabled={disableAddButton} onPress={() => addUnitPressed(true)}>
 							<Text>Add half VPs</Text>
 						</Button>
 					</View>
-					<View style={{ flex: 1,margin: 4 }}>
+					<View style={{ flex: 1, margin: 4 }}>
 						<Button disabled={disableAddButton} onPress={() => addUnitPressed(false)} variant={"confirm"}>
-							<Text bold>Add VPs</Text>
+							<Text bold style={{ color: theme.black }}>
+								Add VPs
+							</Text>
 						</Button>
 					</View>
 				</View>
@@ -158,7 +167,7 @@ const styles = StyleSheet.create({
 	textSelectedStyle: {
 		marginRight: 5,
 		fontSize: 12,
-        color: 'green'
+		color: "green",
 	},
 	selectedTextStyle: {
 		fontSize: 14,

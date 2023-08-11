@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import HomeStack from "./src/Navigation/Home/HomeStack";
+import HomeStack from "./src/Navigation/Stacks/TrackerStackNavigator";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContextProvider } from "@context/ThemeContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { VPContextProvider } from "@context/VPContext";
+import TabStackNavigator from "@navigation/Stacks/TabStackNavigator";
+import RootStack from "@navigation/Stacks/RootStack";
+import { BuilderContextProvider } from "@context/BuilderContext";
+import { MenuProvider } from "react-native-popup-menu";
 
 const darkTheme = {
 	dark: true,
@@ -36,7 +40,6 @@ const App = () => {
 	useEffect(() => {
 		async function prepare() {
 			if (fontsLoaded) {
-				console.log("loading ss");
 				await new Promise((resolve) => setTimeout(resolve, 2000));
 				await SplashScreen.hideAsync();
 			}
@@ -50,12 +53,16 @@ const App = () => {
 	}
 	return (
 		<ThemeContextProvider>
-			<VPContextProvider>
-				<NavigationContainer theme={darkTheme}>
-					<HomeStack />
-					<StatusBar hidden />
-				</NavigationContainer>
-			</VPContextProvider>
+			<MenuProvider>
+				<BuilderContextProvider>
+					<VPContextProvider>
+						<NavigationContainer theme={darkTheme}>
+							<RootStack />
+							<StatusBar translucent />
+						</NavigationContainer>
+					</VPContextProvider>
+				</BuilderContextProvider>
+			</MenuProvider>
 		</ThemeContextProvider>
 	);
 };

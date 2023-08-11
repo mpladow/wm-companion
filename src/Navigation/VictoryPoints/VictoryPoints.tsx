@@ -2,23 +2,6 @@ import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from "react-
 import React, { useEffect, useRef, useState } from "react";
 import ModalContainer from "@components/ModalContainer";
 import { useNavigation } from "@react-navigation/native";
-import { Picker } from "@react-native-picker/picker";
-import bretonnianList from "../../data/json/wmr/bretonnian.json";
-import orcList from "../../data/json/wmr/orks.json";
-import tombKingsList from "../../data/json/wmr/tombKings.json";
-import empireList from "../../data/json/wmr/empire.json";
-import skavenList from "../../data/json/wmr/skaven.json";
-import chaosList from "../../data/json/wmr/chaos.json";
-import woodElvesList from "../../data/json/wmr/woodElves.json";
-import vampireCountsList from "../../data/json/wmr/vampireCounts.json";
-import beastmenList from "../../data/json/wmr/beastmen.json";
-import cathayList from "../../data/json/wmr/cathay.json";
-import nightGoblinsList from "../../data/json/wmr/nightGoblins.json";
-import dwarvesList from "../../data/json/wmr/dwarves.json";
-import darkElvesList from "../../data/json/wmr/darkelves.json";
-import highElvesList from "../../data/json/wmr/highElves.json";
-import daemonsList from "../../data/json/wmr/daemons.json";
-
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 
 import playerTypes, { Factions } from "@utils/constants";
@@ -26,9 +9,11 @@ import { useTheme } from "@hooks/useTheme";
 import { Button, Text, TextBlock } from "@components/index";
 import UnitSelector from "./components/UnitSelector";
 import Points from "./components/Points";
-import { DropDownItemProps, PlayerDetailsProps } from "@navigation/Home/screens/Home";
+import { DropDownItemProps, PlayerDetailsProps } from "@navigation/Tracker/screens/Tracker";
 import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
 import { AntDesign } from "@expo/vector-icons";
+import { getFactions, getFactionUnits } from "@utils/factionHelpers";
+import uuid from "uuid-random";
 
 type VictoryPointsProps = {
 	player: playerTypes;
@@ -77,100 +62,17 @@ const VictoryPoints = () => {
 	const multiSelectRef = useRef(null);
 	useEffect(() => {
 		// get list of factions
-		const factions = Object.keys(Factions);
-
-		let ddList = [];
-		for (const [key, value] of Object.entries(Factions)) {
-			ddList.push({ label: key.replace("_", " "), value: value } as DropDownItemProps);
-		}
-		ddList = ddList.sort((a, b) => {
-			if (a.label < b.label) {
-				return -1;
-			}
-			if (a.label > b.label) {
-				return 1;
-			}
-			return 0;
-		});
-		setDdFactions(ddList);
+		const { ddFactionList } = getFactions();
+		setDdFactions(ddFactionList);
 	}, []);
 
 	useEffect(() => {
-		let list: any[] = [];
 		console.log(factionSelection, "factionSelection");
 		if (factionSelection) {
-			switch (factionSelection) {
-				case Factions.Bretonnians:
-					list = bretonnianList.units;
-					setFactionList(bretonnianList);
-					break;
-				case Factions.Orcs:
-					list = orcList.units;
-					setFactionList(orcList);
-					break;
-				case Factions.Tomb_Kings:
-					list = tombKingsList.units;
-					setFactionList(tombKingsList);
-					break;
-				case Factions.Empire:
-					list = empireList.units;
-					setFactionList(empireList);
-					break;
-				case Factions.Skaven:
-					list = skavenList.units;
-					setFactionList(skavenList);
-					break;
-				case Factions.Chaos:
-					list = chaosList.units;
-					setFactionList(chaosList);
-					break;
-				case Factions.Wood_Elves:
-					list = woodElvesList.units;
-					setFactionList(woodElvesList);
-					break;
-				case Factions.Vampire_Counts:
-					list = vampireCountsList.units;
-					setFactionList(vampireCountsList);
-					break;
-				case Factions.Beastmen:
-					list = beastmenList.units;
-					setFactionList(beastmenList);
-					break;
-				case Factions.Cathay:
-					list = cathayList.units;
-					setFactionList(cathayList);
-					break;
-				case Factions.Goblins:
-					list = nightGoblinsList.units;
-					setFactionList(nightGoblinsList);
-					break;
-				case Factions.Dwarves:
-					list = dwarvesList.units;
-					setFactionList(dwarvesList);
-					break;
-				case Factions.Dark_Elves:
-					list = darkElvesList.units;
-					setFactionList(darkElvesList);
-					break;
-				case Factions.High_Elves:
-					list = highElvesList.units;
-					setFactionList(highElvesList);
-					break;
-				case Factions.Daemons:
-					list = daemonsList.units;
-					setFactionList(daemonsList);
-					break;
-				default:
-					break;
-			}
-			const test = list?.map((x) => ({
-				label: `${x.name} - ${x.points}pts`,
-				value: x.name ? x.name : "",
-			}));
-			console.log(test, "test");
-			setDdUnits(test);
+			const { factionList, ddFactionUnits } = getFactionUnits(factionSelection);
+			setFactionList(factionList);
+			setDdUnits(ddFactionUnits);
 		}
-
 		// get all units for faction
 	}, [factionSelection]);
 
@@ -186,13 +88,13 @@ const VictoryPoints = () => {
 		if (unit != undefined) {
 			const itemsArray: any[] = magicItemsList.upgrades;
 			const factionUpgrades: any[] = factionList?.upgrades;
-            console.log(factionUpgrades, 'Faction upgrades')
+			console.log(factionUpgrades, "Faction upgrades");
 			let totalItems = [];
 			if (!factionUpgrades == undefined || factionUpgrades.length > 0) {
-                console.log(`faction upgrades added`)
+				console.log(`faction upgrades added`);
 				totalItems = itemsArray.concat(factionUpgrades);
 			} else {
-                console.log(`NO faction upgrades added`)
+				console.log(`NO faction upgrades added`);
 
 				totalItems = itemsArray;
 			}
@@ -246,7 +148,7 @@ const VictoryPoints = () => {
 	const handleAddVPs = (points: number) => {
 		//create a new VPScoreProps object
 		let vpObject: VPScoreProps = {
-			id: Math.random().toString(),
+			id: uuid(),
 			sourceName: "Additional Points",
 			sourcePoints: points,
 			isUnit: false,
@@ -259,7 +161,7 @@ const VictoryPoints = () => {
 	const handleAddUnit = (isHalfPoints: boolean) => {
 		//create a new VPScoreProps object
 		let vpObject: VPScoreProps = {
-			id: Math.random().toString(),
+			id: uuid(),
 			sourceName: unit?.name ? unit?.name : "",
 			sourcePoints: unit?.points ? unit.points : 0,
 			isUnit: true,
@@ -270,7 +172,7 @@ const VictoryPoints = () => {
 		if (magicItems) {
 			const mappedItems = magicItems.map((x) => {
 				return {
-					id: Math.random().toString(),
+					id: uuid(),
 					sourceName: x.name,
 					sourcePoints: x.points,
 					isUnit: false,
@@ -305,7 +207,7 @@ const VictoryPoints = () => {
 							const unitTotalScore = unitScore + unitUpgradesScore;
 							return (
 								<View
-                                key={`unit$_{index}`}
+									key={`unit$_{index}`}
 									style={[
 										styles.listItem,
 										{
@@ -323,7 +225,8 @@ const VictoryPoints = () => {
 										</Text>
 										{item.attachedItems?.map((item, index) => {
 											return (
-												<View key={`upgrade_${index}`}
+												<View
+													key={`upgrade_${index}`}
 													style={{
 														justifyContent: "center",
 														alignItems: "center",
@@ -351,7 +254,10 @@ const VictoryPoints = () => {
 											{item.sourceName != "Additional Points" ? (
 												<Button
 													onPress={() => vpContext.toggleHalfPoints(item.id)}
-													variant={"default"}
+													variant={"secondary"}
+													style={{
+														opacity: item.isHalfPoints ? 0.5 : 1,
+													}}
 												>
 													<Text italic={item.isHalfPoints}>{unitTotalScore}</Text>
 												</Button>

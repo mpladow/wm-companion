@@ -88,7 +88,8 @@
         "armour": "6+",
         "size": 3,
         "points": 65,
-        "max": 1
+        "max": 1,
+        "noMagic": true
       },
       {
         "name": "Vampire Lord",
@@ -158,8 +159,6 @@
     ],
     "magic": true,
     "armyRules": [
-      "Undead troops are quite beyond any feelings of revulsion, fear, trepidation or anything else for that matter. They are dead and as such nothing holds any real terror for them. Conversely the spells that bind them to life allow only the most rudimentary or specialised intelligence. The following rules apply to all units except for Ghouls. Ghouls are considered to be ordinary mortal troops and the following rules do not apply to them.",
-      "",
       "Undead units never act on initiative. An Undead unit only moves in the Command phase if given orders (aside from Fell Bats which can 'homeback' as noted below). Including an Undead unit cannot make a supporting charge to support an unit of Ghouls charging on initiative.",
       "",
       "Undead units are unaffected by the -1 Command penalty for enemy within 20cm.",

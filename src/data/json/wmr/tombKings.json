@@ -57,7 +57,8 @@
 			"armour": "6+",
 			"size": 3,
 			"points": 65,
-			"max": 1
+			"max": 1,
+			"noMagic": true
 		},
 		{
 			"name": "Bone Giant",
@@ -68,7 +69,8 @@
 			"armour": "4+",
 			"size": 1,
 			"points": 110,
-			"max": 1
+			"max": 1,
+			"noMagic": true
 		},
 		{
 			"name": "Sphinx",
@@ -79,7 +81,8 @@
 			"armour": "3+",
 			"size": 1,
 			"points": 135,
-			"max": 1
+			"max": 1,
+			"noMagic": true
 		},
 		{
 			"name": "Skull Chukka",
@@ -91,7 +94,8 @@
 			"size": 1,
 			"points": 85,
 			"max": 1,
-			"specialRules": ["Stone Thrower"]
+			"specialRules": ["Stone Thrower"],
+			"noMagic": true
 		},
 		{
 			"name": "Bone Thrower",
@@ -103,7 +107,8 @@
 			"size": 2,
 			"points": 65,
 			"max": 1,
-			"specialRules": ["Bolt Thrower"]
+			"specialRules": ["Bolt Thrower"],
+			"noMagic": true
 		},
 		{
 			"name": "Tomb King",

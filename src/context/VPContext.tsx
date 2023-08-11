@@ -58,12 +58,9 @@ export const VPContextProvider = ({ children }: any) => {
 			const p1UnitsScore = p1UnitsArr.reduce((partial, a) => partial + a, 0);
 			// get total score for magic items
 			let p1UnitUpgrades = p1VpScore.filter((x) => x.attachedItems && x.attachedItems?.length > 0);
-            console.log(p1UnitUpgrades, 'p1 unit upgrades')
             let p1TotalUpgradesArr: number[] = [];
 			p1UnitUpgrades.map(upgrade => upgrade.attachedItems?.map(x => p1TotalUpgradesArr.push(x.sourcePoints)));
-            console.log(p1TotalUpgradesArr,'upgrades arr')
 			const p1UnitUpgradesScore = p1TotalUpgradesArr.reduce((partial, a) => partial + a, 0);
-            console.log(p1UnitUpgradesScore, 'upgrades score')
 
 			res = p1UnitsScore + p1UnitUpgradesScore;
 		}
@@ -80,9 +77,7 @@ export const VPContextProvider = ({ children }: any) => {
 			let p2UnitUpgrades = p2VpScore.filter((x) => x.attachedItems && x.attachedItems?.length > 0);
             let p1TotalUpgradesArr: number[] = [];
 			p2UnitUpgrades.map(upgrade => upgrade.attachedItems?.map(x => p1TotalUpgradesArr.push(x.sourcePoints)));
-            console.log(p1TotalUpgradesArr,'upgrades arr')
 			const p1UnitUpgradesScore = p1TotalUpgradesArr.reduce((partial, a) => partial + a, 0);
-            console.log(p1UnitUpgradesScore, 'upgrades score')
 
 			res = p2UnitsScore + p1UnitUpgradesScore;
 		}
@@ -201,14 +196,11 @@ export const VPContextProvider = ({ children }: any) => {
 			const p2VpFactionObj: number = p2VpFaction && JSON.parse(p2VpFaction);
 
 			if (p1VpScoreObj != null) {
-				console.log(`${p1VpScore} SETTING P1`);
 				setP1VpScore(p1VpScoreObj);
 				setP1VpFaction(p1VpFactionObj);
 			}
 
 			if (p2VpScoreObj != null) {
-				console.log(`${p2VpScore} SETTING P2`);
-
 				setP2VpScore(p2VpScoreObj);
 				setP2VpFaction(p2VpFactionObj);
 			}

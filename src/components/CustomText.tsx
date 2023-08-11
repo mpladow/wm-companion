@@ -3,7 +3,7 @@ import React from "react";
 import { useTheme } from "@hooks/useTheme";
 import fonts from "@utils/fonts";
 
-export type TextVariant = "bold" | "heading1" | "heading2";
+export type TextVariant = "bold" | "heading1" | "heading2" | "heading3";
 interface CustomTypeProps extends TextProps {
 	variant?: TextVariant;
 	bold?: boolean;
@@ -20,12 +20,14 @@ const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypePro
 			case "heading2":
 				return fonts.PTSansBold;
 				break;
+			case "heading3":
+				return fonts.GaramondBold;
 			case "bold":
 				if (bold) return fonts.PTSansBold;
 				if (italic) return fonts.PTSansItalic;
 				else return fonts.PTSansRegular;
 			default:
-				if (italic) return fonts.PTSansItalic
+				if (italic) return fonts.PTSansItalic;
 				if (bold) return fonts.PTSansBold;
 				return fonts.PTSansRegular;
 		}
@@ -38,7 +40,7 @@ const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypePro
 				{
 					fontFamily: setTextFont(),
 					color: theme.text,
-					fontSize: 16,
+					fontSize: 14,
 				},
 				props.style,
 			]}

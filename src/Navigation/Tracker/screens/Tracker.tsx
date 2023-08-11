@@ -1,16 +1,15 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useMemo, useState } from "react";
-import { Alert, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert, FlatList, Modal, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import constants, { margin, Pages, playerTypes, results } from "@utils/constants";
 import { PlayerSection, ResultSection } from "./components";
 import CentreSection from "./components/CentreSection";
 import { ResultProps } from "@utils/types";
 import { useTheme } from "@hooks/useTheme";
-import { useNavigation } from "@react-navigation/native";
-import { HomeStackParamList } from "../HomeStack";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useVictoryPoints } from "@context/VPContext";
+import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
 
 export type PlayerDetailsProps = {
 	player: playerTypes;
@@ -30,8 +29,8 @@ export type DropDownItemProps = {
 	value: string | number;
 };
 
-export const Home = () => {
-	const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
+export const Tracker = () => {
+	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
 	const theme = useTheme();
 	const vpContext = useVictoryPoints();
 
@@ -102,7 +101,7 @@ export const Home = () => {
 		}
 	};
 	const onSettingsPress = () => {
-		navigation.navigate("Settings");
+		navigation.navigate("TrackerHome");
 		// setPage(Pages.Settings);
 		// setModalVisible(true);
 	};
@@ -123,6 +122,15 @@ export const Home = () => {
 		setP1CombatBonus(0);
 		setP2CombatBonus(0);
 	};
+	useFocusEffect(useCallback(() => {
+		// This will run when screen is `focused` or mounted.
+		StatusBar.setHidden(true);
+	  
+		// This will run when screen is `blured` or unmounted.
+		return () => {
+		  StatusBar.setHidden(false);
+		}
+	  }, []));
 
 	return (
 		<View style={{ flex: 1 }}>

@@ -202,35 +202,16 @@
 	"upgradeConstraints": [
 		{
 			"unitType": ["Infantry", "Cavalry", "Chariot"],
-			"upgrades": ["Battle Banner"],
-			"magic": true
-		},
-		{
-			"unitArmour": ["-", "6+", "5+", "4+"],
-			"unitType": ["Infantry", "Cavalry", "Chariot"],
-			"upgrades": ["Banner of Shielding"],
-			"magic": true
-		},
-		{
-			"unitHits": [2, 3, 4],
-			"unitType": ["Infantry", "Cavalry", "Chariot"],
-			"upgrades": ["Banner of Fortitude"],
-			"magic": true
-		},
-		{
-			"unitArmour": ["6+", "5+", "4+"],
-			"unitType": ["Infantry", "Cavalry", "Chariot"],
-			"upgrades": ["Banner of Steadfastness"],
-			"magic": true
-		},
-		{
-			"unitType": ["Infantry", "Cavalry", "Chariot"],
 			"upgrades": [
+				"Battle Banner",
 				"Banner of Fortune",
 				"Sword of Destruction",
 				"Sword of Fate",
 				"Sword of Cleaving",
-				"Sword of Might"
+				"Sword of Might",
+				"Banner of Shielding",
+				"Banner of Steadfastness",
+				"Banner of Fortitude"
 			],
 			"magic": true
 		},
