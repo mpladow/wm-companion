@@ -18,14 +18,12 @@ type UpgradePreviewProps = {
 	selectedUpgradeDetails?: UpgradesProps;
 };
 const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: UpgradePreviewProps) => {
+	
 	const { theme } = useTheme();
-	const builder = useBuilderContext();
-	const [headerTitle, setHeaderTitle] = useState(selectedUpgradeDetails?.name);
-	const [specialRules, setSpecialRules] = useState<UpgradesProps>();
 
 	useEffect(() => {
-		console.log(`specialRuless: ${JSON.stringify(specialRules)}`);
-	}, []);
+		console.log(`specialRuless: ${JSON.stringify(selectedUpgradeDetails)}`);
+	}, [selectedUpgradeDetails]);
 
 	return (
 		<CustomModal
@@ -39,19 +37,18 @@ const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: U
 				<View style={{ flexDirection: "column" }}>
 					<View style={{ flex: 1, marginBottom: 8 }}>
 						<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-							<UpgradeIcon
-								type={selectedUpgradeDetails?.type as UpgradeTypes}
-							/>
+							<UpgradeIcon type={selectedUpgradeDetails?.type as UpgradeTypes} />
 							<Text bold style={{ fontSize: 16 }}>
 								{selectedUpgradeDetails?.type}
 							</Text>
 						</View>
 					</View>
 
-					{selectedUpgradeDetails ? (
+					{selectedUpgradeDetails && selectedUpgradeDetails?.text?.length > 0 ? (
 						<View style={{ flex: 3, justifyContent: "center", flexDirection: "column" }}>
 							<View style={{ flex: 1, flexDirection: "column" }}>
 								{selectedUpgradeDetails?.text?.map((x) => {
+									console.log(x, 'upgrade in array')
 									if (x)
 										return (
 											<View style={{ marginBottom: 4, alignItems: "flex-start" }}>
