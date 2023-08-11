@@ -35,7 +35,7 @@ const CentreSection = ({
 			label: "Settings",
 			onPress: handleSettingsPress,
 			// icon: <Ionicons name='settings' size={24} color={theme.text} />,
-			icon: <AntDesign name="infocirlce" size={24} color={theme.text} />
+			icon: <Ionicons name='exit-outline' size={24} color={theme.text} />,
 		} as MenuOptions,
 		{
 			label: "Close",

@@ -103,7 +103,8 @@
 			"size": 1,
 			"points": 55,
 			"max": 1,
-			"specialRules": ["Stone Thrower"]
+			"specialRules": ["Stone Thrower"],
+			"noMagic": true
 		},
 		{
 			"name": "Triple Bows",
@@ -115,7 +116,8 @@
 			"size": 2,
 			"points": 65,
 			"max": 1,
-			"specialRules": ["Bolt Thrower"]
+			"specialRules": ["Bolt Thrower"],
+			"noMagic": true
 		},
 		{
 			"name": "General",

@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
-import { Text, TextBlock } from "@components/index";
+import { Button, Text, TextBlock } from "@components/index";
 import fontSize from "@utils/styling";
 import Settings from "@navigation/Settings/screens/Settings";
 import { Pages } from "@utils/constants";
@@ -36,7 +36,7 @@ const ModalContainer = ({
 	headerTitle,
 	footerLeft,
 	footerRight,
-    onPageModalClosePressed
+	onPageModalClosePressed,
 }: CustomModalProps) => {
 	const windowWidth = Dimensions.get("window").width;
 	const { theme } = useTheme();
@@ -68,7 +68,7 @@ const ModalContainer = ({
 					</View>
 				</View>
 				<View style={{ paddingHorizontal: 12, paddingVertical: 12, paddingBottom: 60, flex: 1 }}>
-					{ children}
+					{children}
 				</View>
 				<View
 					style={{
@@ -91,13 +91,11 @@ const ModalContainer = ({
 							justifyContent: "center",
 						}}
 					>
-						<TouchableOpacity hitSlop={40} onPress={onPageModalClosePressed}>
+						<Button circle variant={'danger'} onPress={onPageModalClosePressed}>
 							<AntDesign name='close' size={24} color={theme.text} />
-						</TouchableOpacity>
+						</Button>
 					</View>
-					<View style={{ position: "absolute", right: 0, padding: 18 }}>
-						{footerRight}
-					</View>
+					<View style={{ position: "absolute", right: 0, padding: 18 }}>{footerRight}</View>
 				</View>
 			</View>
 		</View>
@@ -124,7 +122,7 @@ const styles = StyleSheet.create({
 	modalView: {
 		flex: 1,
 		margin: 20,
-        marginBottom: 40,
+		marginBottom: 40,
 		backgroundColor: "white",
 		borderRadius: 20,
 		// paddingVertical: 40,

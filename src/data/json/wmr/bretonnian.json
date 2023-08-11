@@ -88,7 +88,8 @@
 			"size": 3,
 			"points": 80,
 			"max": 1,
-			"specialRules": ["Knights"]
+			"specialRules": ["Knights"],
+			"noMagic": true
 		},
 		{
 			"name": "Trebuchet",
@@ -100,7 +101,8 @@
 			"size": 1,
 			"points": 100,
 			"max": 1,
-			"noCount": true
+			"noCount": true,
+			"noMagic": true
 		},
 		{
 			"name": "General",
@@ -172,7 +174,7 @@
 	],
 	"magic": true,
 	"armyRules": [
-		"The Bretonnian army is essentially an army of Knights and it is the Knights’ contribution to the battle that counts - never mind the pot-washers and clod-breakers. To represent this, the Bretonnian army calculates when it must withdraw from the battle in a different way to other armies. Instead of counting all of its units at the start of the game, count only the number of units of Knights, Grail Knights and Pegasus Knights. Once the army has lost a half or more of its units of Knights/Grail Knights/Pegasus Knights it must withdraw."
+		"It is the Knights’ contribution to the battle that counts - never mind the pot-washers and clod-breakers. \n\nTo represent this, the Bretonnian army calculates when it must withdraw from the battle in a different way to other armies. Instead of counting all of its units at the start of the game, count only the number of units of Knights, Grail Knights and Pegasus Knights. \n\nOnce the army has lost a half or more of its units of Knights/Grail Knights/Pegasus Knights it must withdraw."
 	],
 	"specialRules": {
 		"Peasants": {
@@ -199,12 +201,15 @@
 		},
 		"Trebuchet": {
 			"order": 5,
+			"textFull": [
+
+			],
 			"text": [
 				"The Bretonnian Trebuchet is one of the mightiest and most excellent stone throwers that are built in the Old World. At first it was designed to help the noble knights with the sometimes coming up and messy sieges that had to be done but later was adjusted to be used in field battles too.",
 				"",
 				"As the Trebuchet is such a gigantic machine it is put on a 6x4cm base the short edge being the front.",
 				"",
-				"To represent that Trebuchet is such a bulky warmachine which takes time t assemble and disassemble, Trebuchet can move but cannot shoot in the turn it moved.",
+				"To represent that Trebuchet is such a bulky warmachine which takes time to assemble and disassemble, Trebuchet can move but cannot shoot in the turn it moved.",
 				"",
 				"If a Trebuchet is driven back more than 10cm by shooting it is destroyed (drive backs of less than 10cm are simply ignored). If it is forced to retreat from combat it is also destroyed like any other artillery. A Trebuchet is not affected by Gerroff spell.",
 				"",

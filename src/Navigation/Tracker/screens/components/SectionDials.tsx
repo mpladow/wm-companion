@@ -21,7 +21,7 @@ const SectionDials = ({ onLeftButtonPress, onRightButtonPress, textSize, value, 
 				<Button
 				circle
 					onPress={onLeftButtonPress}
-					variant={"default"}
+					variant={"secondary"}
 					children={<Text style={{ fontSize: Styling.xxl, color: theme.text }}>-</Text>}
 				/>
 			</View>
@@ -32,7 +32,7 @@ const SectionDials = ({ onLeftButtonPress, onRightButtonPress, textSize, value, 
 				<Button
 				circle
 					onPress={onRightButtonPress}
-					variant={"default"}
+					variant={"secondary"}
 					children={<Text style={{ fontSize: Styling.xxl, color: theme.text }}>+</Text>}
 				/>
 			</View>
