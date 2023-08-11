@@ -5,12 +5,12 @@ import { SpellsProps, UnitProps } from "@utils/types";
 import { Text } from "@components/index";
 import CollapsibleComponent from "./Collapsible";
 import { useTheme } from "@hooks/useTheme";
-import { Feather } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
 import { useBuilderContext } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
 import { getGenericSpecialRules } from "@utils/factionHelpers";
+import reactStringReplace from "react-string-replace";
+import { underscoreRegex } from "@utils/constants";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type UnitPreviewProps = {
 	handleSetVisible: (visible: boolean) => void;
@@ -22,6 +22,9 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 	const builder = useBuilderContext();
 	const [headerTitle, setHeaderTitle] = useState(selectedUnitDetails?.name);
 	const [specialRules, setSpecialRules] = useState<any>();
+
+	const underscoreRegex = /_(.*?)_/g;
+
 	useEffect(() => {
 		selectedUnitDetails && setHeaderTitle(selectedUnitDetails.name);
 		// get special rules
@@ -40,6 +43,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 	}, [selectedUnitDetails]);
 
 	const STAT_FONT_SIZE = 22;
+
 	return (
 		<CustomModal
 			setModalVisible={() => {
@@ -65,39 +69,50 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 						<View style={{ flex: 3, marginBottom: 8, justifyContent: "center", flexDirection: "row" }}>
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 								<Text style={{ fontSize: 20 }}>Command</Text>
-								<Text bold style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.command}</Text>
+								<Text bold style={{ fontSize: STAT_FONT_SIZE }}>
+									{selectedUnitDetails?.command}
+								</Text>
 							</View>
 							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 								<Text style={{ fontSize: 20 }}>Attack Bonus</Text>
-								<Text bold style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails.attack}</Text>
+								<Text bold style={{ fontSize: STAT_FONT_SIZE }}>
+									{selectedUnitDetails.attack}
+								</Text>
 							</View>
 						</View>
 					) : (
-						<View style={{ flex: 3, marginBottom: 8, justifyContent: "center", flexDirection: "row" }}>
-							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-								<Text>Attack</Text>
-								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.attack}</Text>
-							</View>
-							{selectedUnitDetails?.range ? (
+						<>
+							<View style={{ flex: 3, marginBottom: 8, justifyContent: "center", flexDirection: "row" }}>
 								<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-									<Text>Range</Text>
-									<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.range || "-"}</Text>
+									<Text>Attack</Text>
+									<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.attack}</Text>
 								</View>
-							) : null}
-
-							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-								<Text>Hits</Text>
-								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.hits}</Text>
+								{selectedUnitDetails?.range ? (
+									<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
+										<Text>Range</Text>
+										<Text style={{ fontSize: STAT_FONT_SIZE }}>
+											{selectedUnitDetails?.range || "-"}
+										</Text>
+									</View>
+								) : null}
+								<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
+									<Text>Hits</Text>
+									<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.hits}</Text>
+								</View>
 							</View>
-							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-								<Text>Armour</Text>
-								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.armour || "-"}</Text>
+							<View style={{ flexDirection: "row" }}>
+								<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
+									<Text>Armour</Text>
+									<Text style={{ fontSize: STAT_FONT_SIZE }}>
+										{selectedUnitDetails?.armour || "-"}
+									</Text>
+								</View>
+								<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
+									<Text>Size</Text>
+									<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.size}</Text>
+								</View>
 							</View>
-							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-								<Text>Size</Text>
-								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUnitDetails?.size}</Text>
-							</View>
-						</View>
+						</>
 					)}
 
 					{specialRules ? (
@@ -106,14 +121,24 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 								<Text bold style={{ fontSize: 16 }}>
 									Special Rules
 								</Text>
-								{specialRules?.text?.map((x) => {
-									if (x)
+								{specialRules &&
+									specialRules?.text.map((x) => {
+										// transform content to remove __
+										const sanitized = reactStringReplace(x, underscoreRegex, (match, i) => {
+											console.log(match, `${match} on ${i}`);
+											return (
+												<Text bold style={{ color: theme.text }} key={i}>
+													{match}
+												</Text>
+											);
+										});
+
 										return (
-											<View style={{ marginBottom: 4, alignItems: "flex-start" }}>
-												<Text>{x}</Text>
+											<View>
+												<Text style={{ color: theme.text }}>{sanitized}</Text>
 											</View>
 										);
-								})}
+									})}
 							</View>
 						</View>
 					) : null}

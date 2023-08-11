@@ -53,6 +53,7 @@ const BuilderEdit = () => {
 	const [showFactionInfo, setShowFactionInfo] = useState(false);
 	const [selectedUnit, setSelectedUnit] = useState<string>("");
 	const [selectedUnitDetails, setSelectedUnitDetails] = useState<UnitProps>();
+	const [currentUpgradeDetails, setCurrentUpgradeDetails] = useState<UpgradesProps | undefined>();
 
 	const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 	const [addingUnits, setAddingUnits] = useState(false);
@@ -81,7 +82,6 @@ const BuilderEdit = () => {
 
 			const factionListData = getFactionUnits(builder.selectedArmyList?.faction);
 			setFactionUnits(factionListData?.factionList?.units);
-			//setFactionDetails(factionListData?.factionList);
 		}
 	}, [builder.selectedArmyList]);
 
@@ -93,6 +93,7 @@ const BuilderEdit = () => {
 		if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
 		if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
 	}, [builder.calculateCurrentArmyPoints()]);
+
 	const handleAddUnitPress = (openUnits: boolean) => {
 		setAddingUnits(openUnits);
 		setModalVisible(true);
@@ -176,13 +177,6 @@ const BuilderEdit = () => {
 		return `${breakCount}/${unitCount}`;
 	};
 
-	const transformArmySpecialRules = () => {
-		if (builder.factionDetails && builder.factionDetails?.armyRules) {
-			const updatedArmyRules: string = builder.factionDetails?.armyRules[0];
-			return updatedArmyRules;
-		}
-		return null;
-	};
 	const handleRemoveUnit = (unitId: string, unitPoints: number) => {
 		builder.removeUnit(unitId, unitPoints);
 	};
@@ -200,8 +194,16 @@ const BuilderEdit = () => {
 	};
 	const handleOnUpgradePress = (upgradeName: string) => {
 		let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find((x) => x.name == upgradeName);
-		if (!_upgrades) {
+		if (!_upgrades?.text) {
 			_upgrades = builder.factionDetails?.upgrades?.find((x) => x.name == upgradeName);
+			if (_upgrades && _upgrades?.text == null){
+				// find upgrade text fromm special rules
+				const specialRules = builder.factionDetails?.specialRules[upgradeName];
+				console.log(specialRules, 'special rules')
+				if (specialRules){
+					_upgrades.text = specialRules.text
+				}
+			}
 		}
 		if (_upgrades) {
 			console.log("upgrade found");
@@ -211,7 +213,6 @@ const BuilderEdit = () => {
 			console.error("upgrade not found");
 		}
 	};
-	const [currentUpgradeDetails, setCurrentUpgradeDetails] = useState<UpgradesProps | undefined>();
 	// **ADD MAGICITEMS
 	// TODO: COMPRESS THIS FUNCTION AS THIS NEEDS REFACTORING
 	const handleAddMagicItemPress = (unitName: string, unitType: string) => {
@@ -225,9 +226,12 @@ const BuilderEdit = () => {
 		factionUpgrades?.map((x) => {
 			if (builder.factionDetails?.specialRules) {
 				const upgradeText = builder.factionDetails?.specialRules[x.name]?.text;
-				x.text = upgradeText;
+				if (upgradeText){
+					x.text = upgradeText;
+				}
 			}
 		});
+
 		const unitDetails = factionUnits?.find((x) => x.name == unitName);
 
 		const upgradesForUnitStrings = unitDetails?.upgrades;
@@ -238,12 +242,7 @@ const BuilderEdit = () => {
 				const _upgradeFound = factionUpgrades?.find((x) => x.name == upgrade);
 				_upgradeFound && specificUpgradesForUnitArr.push(_upgradeFound);
 			});
-		// get upgrades specific to this unit TYPE
-		// let permittedUpgrades = magicItemConstraints.map((unitConstraint) => {
-		// 	const upgradesPermitted = unitConstraint.unitType.some((x) => x.includes(unitType));
-		// 	if (upgradesPermitted) return unitConstraint.upgrades;
-		// 	else return false;
-		// });
+
 		//if given the upgrade of wizard, all the user to have wizard items
 		let permittedUpgrades = [];
 		const unitHasWizardUpgrade = selectedUnit?.attachedItems.find((x) => x.upgradeName == "Wizard");
