@@ -16,7 +16,12 @@ type ArmyListCardProps = {
 	handleDeleteArmyPress: (armyId: string) => void;
 	handleArmyNameChange: (armyId: string) => void;
 };
-const ArmyListCard = ({ armyList, handleArmyListPress, handleDeleteArmyPress, handleArmyNameChange }: ArmyListCardProps) => {
+const ArmyListCard = ({
+	armyList,
+	handleArmyListPress,
+	handleDeleteArmyPress,
+	handleArmyNameChange,
+}: ArmyListCardProps) => {
 	const menuRef = useRef(null);
 	const { theme } = useTheme();
 
@@ -44,7 +49,7 @@ const ArmyListCard = ({ armyList, handleArmyListPress, handleDeleteArmyPress, ha
 						</MenuTrigger>
 						<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 120, padding: 4 }}>
 							<MenuOption onSelect={() => handleDeleteArmyPress(armyList.armyId)}>
-								<View style={{ flexDirection: "row" }}>
+								<View style={{ flexDirection: "row", padding: 4 }}>
 									<AntDesign name='delete' size={18} color={theme.black} />
 									<View style={{ marginLeft: 8 }}>
 										<Text style={{ color: theme.black }}>Delete</Text>
@@ -52,7 +57,7 @@ const ArmyListCard = ({ armyList, handleArmyListPress, handleDeleteArmyPress, ha
 								</View>
 							</MenuOption>
 							<MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>
-								<View style={{ flexDirection: "row" }}>
+								<View style={{ flexDirection: "row", padding: 8 }}>
 									<FontAwesome name='pencil' size={18} color='black' />
 									<View style={{ marginLeft: 8 }}>
 										<Text style={{ color: theme.black }}>Edit Name</Text>

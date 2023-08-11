@@ -23,6 +23,15 @@ export enum UnitTypes {
 	Wizard="Wizard",
 	Machine="Machine"
 }
+export enum UpgradeTypes {
+	Device_of_Power = "Device of Power",
+	Magic_Weapon = "Magic Weapon",
+	Magic_Standard = "Magic Standard",
+	Special_Mount="Special Mount",
+	Monstrous_Mount="Monstrous Mount",
+	Chariot_Mount="Chariot Mount",
+	Special="Special"
+}
 export const Factions = {
 	Bretonnians: 1,
 	Orcs: 2,
