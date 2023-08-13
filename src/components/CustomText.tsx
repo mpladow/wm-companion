@@ -21,7 +21,7 @@ const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypePro
 				return fonts.PTSansBold;
 				break;
 			case "heading3":
-				return fonts.GaramondBold;
+				return fonts.BarlowCodensedBold;
 			case "bold":
 				if (bold) return fonts.PTSansBold;
 				if (italic) return fonts.PTSansItalic;

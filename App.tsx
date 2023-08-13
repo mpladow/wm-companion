@@ -36,6 +36,9 @@ const App = () => {
 		"PTSans-Bold": require("./assets/fonts/PTSans-Bold.ttf"),
 		"PTSans-Regular": require("./assets/fonts/PTSans-Regular.ttf"),
 		"PTSans-Italic": require("./assets/fonts/PTSans-Italic.ttf"),
+		"BarlowCondensed-Bold": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Bold.ttf"),
+		"BarlowCondensed-Regular": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Regular.ttf"),
+		"BarlowCondensed-Italic": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Italic.ttf"),
 	});
 	useEffect(() => {
 		async function prepare() {

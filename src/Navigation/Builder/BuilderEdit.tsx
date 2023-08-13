@@ -1,5 +1,6 @@
 import {
 	Animated,
+	Dimensions,
 	FlatList,
 	Modal,
 	SafeAreaView,
@@ -30,6 +31,7 @@ import SpellBookModal from "./components/SpellBookModal";
 import UnitPreview from "./components/UnitPreview";
 import UpgradePreview from "./components/UpgradePreview";
 import ArmyPointsCount from "./components/ArmyPointsCount";
+import { LinearGradient } from "expo-linear-gradient";
 
 type sectionListDataProps = {
 	title: string;
@@ -64,14 +66,17 @@ const BuilderEdit = () => {
 			navigation.setOptions({
 				headerTitle: (props: any) => (
 					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-						<View>
+						<View style={{ width: 250 }}>
 							<Text
+								numberOfLines={1}
 								variant='heading3'
 								style={{
-									fontSize: 24,
+									fontSize: 20,
 								}}
 							>
-								{builder.selectedArmyList?.name} -{" "}
+								{builder.selectedArmyList?.name}
+							</Text>
+							<Text>
 								{builder.selectedArmyList?.name &&
 									getKeyByValue(Factions, builder.selectedArmyList.faction)?.replace("_", " ")}
 							</Text>
@@ -196,12 +201,12 @@ const BuilderEdit = () => {
 		let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find((x) => x.name == upgradeName);
 		if (!_upgrades?.text) {
 			_upgrades = builder.factionDetails?.upgrades?.find((x) => x.name == upgradeName);
-			if (_upgrades && _upgrades?.text == null){
+			if (_upgrades && _upgrades?.text == null) {
 				// find upgrade text fromm special rules
 				const specialRules = builder.factionDetails?.specialRules[upgradeName];
-				console.log(specialRules, 'special rules')
-				if (specialRules){
-					_upgrades.text = specialRules.text
+				console.log(specialRules, "special rules");
+				if (specialRules) {
+					_upgrades.text = specialRules.text;
 				}
 			}
 		}
@@ -226,7 +231,7 @@ const BuilderEdit = () => {
 		factionUpgrades?.map((x) => {
 			if (builder.factionDetails?.specialRules) {
 				const upgradeText = builder.factionDetails?.specialRules[x.name]?.text;
-				if (upgradeText){
+				if (upgradeText) {
 					x.text = upgradeText;
 				}
 			}
@@ -333,8 +338,22 @@ const BuilderEdit = () => {
 				/>
 			) : null}
 			{/* Spell list, break point */}
+			<LinearGradient
+				colors={["rgba(31,46,39, 0.4)", "rgba(6,9,7, 0.9)"]}
+				start={{ y: 0, x: 0.5 }}
+				end={{ y: 0.5, x: 0 }}
+				style={{
+					position: "absolute",
+					left: 0,
+					right: 0,
+					bottom: -0,
+					height: Dimensions.get("screen").height,
+					zIndex: 9,
+				}}
+			></LinearGradient>
 			<View
 				style={{
+					zIndex: 9,
 					justifyContent: "space-between",
 					flexDirection: "row",
 					alignItems: "center",
@@ -359,6 +378,7 @@ const BuilderEdit = () => {
 				</View>
 			</View>
 			<SectionList
+				style={{ zIndex: 9 }}
 				ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
 				sections={sectionListData}
 				renderSectionHeader={({ section: { title } }) => (
@@ -371,7 +391,9 @@ const BuilderEdit = () => {
 							justifyContent: "space-between",
 						}}
 					>
-						<Text bold style={{ textTransform: "uppercase" }}>{title}</Text>
+						<Text variant='heading3' style={{ fontSize: 20, textTransform: "uppercase" }}>
+							{title}
+						</Text>
 						{/* //TODO: Extract into seperate button */}
 						<TouchableOpacity onPress={() => handleAddUnitPress(title != "Leaders")}>
 							<View style={{ backgroundColor: theme.accent, borderRadius: 4, padding: 4 }}>
@@ -388,16 +410,18 @@ const BuilderEdit = () => {
 						return (
 							<>
 								<UnitDetailsCard
-									key={item.id}
+									key={`unitDetails_${item.id}`}
 									existingUnits={item.currentCount}
 									unit={unitDetails}
 									unitUpgrades={item.attachedItems}
 									onShowUnitDetails={() => console.log("showUnitDetails")}
+									onAddUnit={handleAddUnitToArmyPress}
 									onDeleteUnit={() => handleRemoveUnit(item.id, unitDetails.points)}
 									onAddUpgrade={() => handleAddMagicItemPress(item.unitName, unitDetails.type)}
 									onRemoveUpgrade={handleRemoveUpgrade}
 									onUnitCardPress={handleOnUnitCardPress}
 									onUpgradePress={handleOnUpgradePress}
+									currentArmyCount={builder.calculateCurrentArmyPoints()}
 								/>
 							</>
 						);
@@ -407,7 +431,7 @@ const BuilderEdit = () => {
 				}}
 			/>
 			{/* // points verification container */}
-			<View style={{ position: "absolute", bottom: 10, left: 20, flexDirection: "row" }}>
+			<View style={{ zIndex: 9, position: "absolute", bottom: 10, left: 20, flexDirection: "row" }}>
 				{/* TODO extract out  */}
 				<ArmyPointsCount
 					armyErrorsCount={builder.armyErrors.length}
@@ -482,6 +506,7 @@ const BuilderEdit = () => {
 									onAddUnitPress={handleAddUnitToArmyPress}
 									currentCount={unitCount}
 									onUnitCardPress={handleOnUnitCardPress}
+									currentArmyCount={builder.calculateCurrentArmyPoints()}
 								/>
 							);
 						}}

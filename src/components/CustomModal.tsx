@@ -101,7 +101,7 @@ const CustomModal = ({
 						>
 							<View style={{ flex: 1, alignItems: "flex-start" }}></View>
 							<View style={{ flex: 3, alignItems: "center" }}>
-								<Text style={{ fontSize: fontSize.xl, textAlign: "center" }} variant={"heading1"} bold>
+								<Text style={{ fontSize: fontSize.xxl, textAlign: "center" }} variant={"heading3"} bold>
 									{modalHeader}
 								</Text>
 							</View>

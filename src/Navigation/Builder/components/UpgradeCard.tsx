@@ -68,8 +68,8 @@ const UpgradeCard = ({ upgrade, targetUnitName, key, onAddUpgradePress, currentC
 										upgrade.type,
 										upgrade.points as number,
 										upgrade.name,
-										upgrade.armyMax,
-										upgrade.max
+										upgrade.max,
+										upgrade.armyMax
 									)
 								}
 							>

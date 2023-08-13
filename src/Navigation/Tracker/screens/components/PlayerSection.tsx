@@ -92,7 +92,9 @@ const PlayerSection = ({
 
 			<View style={{ flex: 1, flexDirection: "column" }}>
 				<View style={{ justifyContent: "flex-end", alignItems: "center" }}>
-					<Text style={{ color: theme.text }}>Casualties Inflicted</Text>
+					<Text variant='heading3' style={{ color: theme.text, fontSize: 16 }}>
+						Casualties Inflicted
+					</Text>
 				</View>
 				<SectionDials
 					textSize={Styling.xxl}
@@ -104,7 +106,9 @@ const PlayerSection = ({
 			</View>
 			<View style={{ flex: 1, flexDirection: "column" }}>
 				<View style={{ justifyContent: "flex-end", alignItems: "center" }}>
-					<Text style={{ color: theme.text }}>Combat Bonuses</Text>
+					<Text variant='heading3' style={{ color: theme.text, fontSize: 16 }}>
+						Combat Bonuses
+					</Text>
 				</View>
 				<SectionDials
 					direction={"row"}

@@ -58,7 +58,7 @@ const ModalContainer = ({
 					>
 						<View style={{ flex: 1, alignItems: "flex-start" }}></View>
 						<View style={{ flex: 5, alignItems: "center" }}>
-							<Text style={{ fontSize: fontSize.xl }} variant={"heading1"} bold>
+							<Text style={{ fontSize: fontSize.xl }} variant={"heading3"} bold>
 								{headerTitle}
 							</Text>
 						</View>

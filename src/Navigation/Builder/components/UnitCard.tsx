@@ -6,6 +6,7 @@ import { useTheme } from "@hooks/useTheme";
 import PointsContainer from "@components/pointsContainer";
 import { Entypo } from "@expo/vector-icons";
 import UnitIcon from "@components/UnitCards/UnitIcon";
+import { get1000PointInterval } from "../utils/builderHelpers";
 
 type UnitCardProps = {
 	unit: UnitProps;
@@ -20,9 +21,24 @@ type UnitCardProps = {
 	) => void;
 	currentCount?: number; // get current count of units in army
 	onUnitCardPress?: (unitName: string) => void;
+	currentArmyCount: number;
 };
-const UnitCard = ({ unit, key, onAddUnitPress, currentCount, onUnitCardPress }: UnitCardProps) => {
+const UnitCard = ({ unit, key, onAddUnitPress, currentCount, currentArmyCount }: UnitCardProps) => {
 	const { theme } = useTheme();
+
+	const getUnitArmyMax = () => {
+		const interval = get1000PointInterval(currentArmyCount);
+		let currentMax: string | undefined = "";
+		if (unit.armyMax) {
+			currentMax = unit.armyMax.toString();
+		}
+		if (unit.max) {
+			currentMax = (unit.max * interval).toString();
+		} else {
+			currentMax = "-";
+		}
+		return currentMax;
+	};
 	return (
 		<View
 			key={key}
@@ -39,7 +55,7 @@ const UnitCard = ({ unit, key, onAddUnitPress, currentCount, onUnitCardPress }: 
 				<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
 			</View>
 			<View style={{ flex: 2 }}>
-				<Text bold>{unit.name}</Text>
+				<Text bold style={{fontSize: 16}}>{unit.name}</Text>
 
 				<View>
 					<Text>{currentCount} x units in force</Text>
@@ -57,7 +73,7 @@ const UnitCard = ({ unit, key, onAddUnitPress, currentCount, onUnitCardPress }: 
 				>
 					<View style={{ padding: 8, flexDirection: "row" }}>
 						<Text>
-							{unit.armyMin ? unit.armyMax : unit.min} / {unit.armyMax ? unit.armyMax : unit.max}
+							{unit.armyMin ? unit.armyMax : unit.min} / {getUnitArmyMax()}
 						</Text>
 					</View>
 					<View>

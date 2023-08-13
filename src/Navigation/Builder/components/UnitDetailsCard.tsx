@@ -8,12 +8,13 @@ import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
 import PointsContainer from "@components/pointsContainer";
 import { SelectedUpgradesProps } from "@context/BuilderContext";
-import Spears from "@components/SVGS/Spears";
-import Infantry from "@components/UnitCards/Infantry";
-import { UnitTypes } from "@utils/constants";
-import Cavalry from "@components/UnitCards/Cavalry";
 import UnitIcon from "@components/UnitCards/UnitIcon";
 import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
+import MenuOptionButton from "@components/MenuOptionButton";
+import MagicOrb from "@components/SVGS/MagicOrb";
+import { get1000PointInterval } from "../utils/builderHelpers";
+import { current } from "@reduxjs/toolkit";
+import UnitDetailsMenu from "./UnitDetailsMenu";
 
 type UnitCardDetailsProps = {
 	unit: UnitProps;
@@ -22,10 +23,19 @@ type UnitCardDetailsProps = {
 	key: string;
 	onShowUnitDetails: (unitName: string, points: number | undefined, isLeader: boolean) => void;
 	onDeleteUnit: (unitId: string) => void;
+	onAddUnit: (
+		unitName: string,
+		points: number | undefined,
+		isLeader: boolean,
+		maxCount?: number,
+		minCount?: number,
+		ignoreBreakPoint?: boolean
+	) => void;
 	onAddUpgrade: (unitId: string) => void;
 	onRemoveUpgrade: (unitName: string, id: string) => void;
 	onUnitCardPress: (unitName: string) => void;
 	onUpgradePress: (upgradeName: string) => void;
+	currentArmyCount: number;
 };
 const UnitDetailsCard = ({
 	unit,
@@ -33,16 +43,31 @@ const UnitDetailsCard = ({
 	existingUnits = 0,
 	key,
 	onShowUnitDetails,
+	onAddUnit,
 	onDeleteUnit,
 	onAddUpgrade,
 	onRemoveUpgrade,
 	onUnitCardPress,
 	onUpgradePress,
+	currentArmyCount,
 }: UnitCardDetailsProps) => {
 	const { theme } = useTheme();
 
+	const getUnitArmyMax = () => {
+		const interval = get1000PointInterval(currentArmyCount);
+		let currentMax: string | undefined = "";
+		if (unit.armyMax) {
+			currentMax = unit.armyMax.toString();
+		}
+		if (unit.max) {
+			currentMax = (unit.max * interval).toString();
+		} else {
+			currentMax = "-";
+		}
+		return currentMax;
+	};
 	return (
-		<View key={key} style={{ flexDirection: "column", padding: 12, backgroundColor: theme.blueGrey }}>
+		<View key={key} style={{ flexDirection: "column", padding: 12, backgroundColor: theme.background }}>
 			<>
 				<View style={{ flex: 1, flexDirection: "row" }}>
 					<TouchableOpacity onPress={() => onUnitCardPress(unit.name)}>
@@ -50,7 +75,7 @@ const UnitDetailsCard = ({
 							<View style={{ marginRight: 8 }}>
 								<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
 							</View>
-							<Text bold style={{ fontSize: 16 }}>
+							<Text bold variant="heading3" style={{ fontSize: 18 }}>
 								{`${existingUnits} x ${unit.name}`}
 							</Text>
 							<View style={{ alignItems: "flex-start", justifyContent: "center", marginLeft: 12 }}>
@@ -58,32 +83,28 @@ const UnitDetailsCard = ({
 							</View>
 						</View>
 					</TouchableOpacity>
-					<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-						<Menu>
-							<MenuTrigger>
-								<MaterialCommunityIcons name='dots-vertical' size={24} color={theme.text} />
-							</MenuTrigger>
-							<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 120, padding: 4 }}>
-								<MenuOption onSelect={() => onDeleteUnit(key)}>
-									<View style={{ flexDirection: "row", padding: 4 }}>
-										<AntDesign name='delete' size={18} color={theme.black} />
-										<View style={{ marginLeft: 8 }}>
-											<Text style={{ color: theme.black }}>Delete</Text>
-										</View>
-									</View>
-								</MenuOption>
-								{!unit.noMagic ? (
-									<MenuOption onSelect={() => onAddUpgrade(key)}>
-										<View style={{ flexDirection: "row", marginTop: 12, padding: 4 }}>
-											<AntDesign name='plus' size={18} color='black' />
-											<View style={{ marginLeft: 8 }}>
-												<Text style={{ color: theme.black }}>Add Item</Text>
-											</View>
-										</View>
-									</MenuOption>
-								) : null}
-							</MenuOptions>
-						</Menu>
+
+					<View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+						<View style={{ flex: 1, marginRight: 12, justifyContent: "flex-end", alignItems: "flex-end" }}>
+							<Text>
+								{unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
+							</Text>
+						</View>
+						<UnitDetailsMenu
+							noMagic={!unit.noMagic}
+							onAddUnit={() =>
+								onAddUnit(
+									unit.name,
+									unit.points,
+									unit.command ? true : false,
+									unit.armyMax ? unit.armyMax : unit.max,
+									unit.armyMin ? unit.armyMin : unit.min,
+									unit.noCount
+								)
+							}
+							onAddUpgrade={() => onAddUpgrade(key)}
+							onDeleteUnit={() => onDeleteUnit(key)}
+						/>
 					</View>
 				</View>
 				{/* // Display unit stats here
@@ -116,9 +137,15 @@ const UnitDetailsCard = ({
 									</View>
 									<Text>{item.currentCount} x </Text>
 									<Text bold>{item.upgradeName}</Text>
-									<View style={{ marginLeft: 8 }}>
-										<Text>{item.points} points</Text>
+									<View style={{marginLeft: 8, justifyContent: 'flex-start'}}>
+										<PointsContainer points={item.points} />
 									</View>
+									{/* <View style={{ marginLeft: 8, flexDirection: "row", alignItems: "center" }}>
+										<Text bold style={{ fontSize: 12 }}>
+											{item.points}
+										</Text>
+										<Text> points</Text>
+									</View> */}
 								</TouchableOpacity>
 								<TouchableOpacity onPress={() => onRemoveUpgrade(item.attachedToName, item.id)}>
 									<View

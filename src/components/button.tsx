@@ -2,7 +2,7 @@ import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, V
 import React, { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "@hooks/useTheme";
 
-type variant = "default" | "primary" | "secondary" | "confirm" | "warning" | "danger" | "text";
+type variant = "default" | "primary" | "secondary" | "confirm" | "warning" | "danger" | "text" | "outline";
 export type size = "sm" | "lg";
 type buttonProps = {
 	onPress: () => void;
@@ -23,15 +23,17 @@ const Button = ({ children, onPress, variant, circle, disabled, size, style }: b
 	const setVariant = () => {
 		switch (variant) {
 			case "confirm":
-				return { backgroundColor: theme.warning };
+				return { backgroundColor: theme.warning, color: theme.black };
 			case "danger":
 				return { backgroundColor: "red" };
 			case "warning":
 				return { backgroundColor: theme.warning };
 			case "secondary":
 				return { backgroundColor: theme.secondary };
-				case "text":
-					return {backgroundColor: 'transparent', border: 0}
+			case "outline":
+				return { backgroundColor: "transparent", borderColor: theme.blueGrey, borderWidth: 2 };
+			case "text":
+				return { backgroundColor: "transparent", border: 0 };
 			default:
 				return { backgroundColor: theme.secondary };
 		}
@@ -50,7 +52,7 @@ const Button = ({ children, onPress, variant, circle, disabled, size, style }: b
 				setVariant(),
 				disabled && styles.disabled,
 				size == "lg" && styles.large,
-				style
+				style,
 			]}
 		>
 			{children}
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
 		boxShadow: `0px 0px 18px 8px rgba(0, 0, 0, 0.80)`,
 		alignItems: "center",
 		justifyContent: "center",
+		zIndex: 999
 	},
 	large: {
 		paddingHorizontal: 48,

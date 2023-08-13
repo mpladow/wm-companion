@@ -38,7 +38,7 @@ const BuilderStackNavigator = () => {
 				headerBackTitleVisible: false,
 				headerTintColor: theme.warning,
 				headerShadowVisible: false,
-				headerStyle: { backgroundColor: theme.background },
+				headerStyle: { backgroundColor: theme.blueGrey },
 			}}
 		>
 			<Stack.Screen
