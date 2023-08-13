@@ -19,7 +19,7 @@ const SpecialRulesCollapsible = ({ visible, title, contents, toggleVisible }: Sp
 
 
 	return (
-		<View style={{ padding: 12, margin: 12, borderRadius: 12, backgroundColor: theme.white }}>
+		<View style={{ zIndex: 99, padding: 12, margin: 12, borderRadius: 12, backgroundColor: theme.white }}>
 			<TouchableOpacity onPress={() => toggleVisible()}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
 					<View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>

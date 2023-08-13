@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import { useTheme } from "@hooks/useTheme";
+import {Text} from '@components/index';
 
 type PointsContainerProps = {
 	points?: number | string ;
@@ -16,10 +17,11 @@ const pointsContainer = ({ points }: PointsContainerProps) => {
 				borderRadius: 4,
 				backgroundColor: theme.white,
 				alignItems: 'center',
-				justifyContent: 'center'
+				justifyContent: 'center',
+				flexDirection: 'row'
 			}}
 		>
-			<Text style={{ color: theme.black, fontSize: 12 }}>{points} points</Text>
+			<Text bold style={{ color: theme.black, fontSize: 12 }}>{points}</Text><Text style={{color: theme.black, fontSize: 12}}> points</Text>
 		</View>
 	);
 };

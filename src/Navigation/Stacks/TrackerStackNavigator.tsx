@@ -1,3 +1,4 @@
+import { useTheme } from "@hooks/useTheme";
 import BlunderChart from "@navigation/Charts/BlunderChart";
 import Home from "@navigation/Home/Home";
 import Settings from "@navigation/Settings/screens/Settings";
@@ -14,12 +15,17 @@ export type TrackerStackParamList = {
 	VictoryPoints: undefined;
 };
 
-
 const Stack = createNativeStackNavigator<TrackerStackParamList>();
 
 const TrackerStackNavigator = () => {
+	const {theme} = useTheme();
 	return (
-		<Stack.Navigator initialRouteName='Tracker'>
+		<Stack.Navigator
+			initialRouteName='Tracker'
+			screenOptions={{
+				headerStyle: { backgroundColor: theme.blueGrey },
+			}}
+		>
 			<Stack.Screen options={{ headerShown: false }} name='Tracker' component={Tracker} />
 			<Stack.Group screenOptions={{ presentation: "containedTransparentModal", headerShown: false }}>
 				<Stack.Screen name='Settings' component={Settings} options={{ headerTitle: "Information" }} />

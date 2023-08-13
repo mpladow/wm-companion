@@ -1,7 +1,9 @@
+import { get1000PointInterval } from "@navigation/Builder/utils/builderHelpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { current } from "@reduxjs/toolkit";
+import { UpgradeTypes } from "@utils/constants";
 import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
-import { FactionListProps, UpgradesProps } from "@utils/types";
+import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import uuid from "uuid-random";
 import magicItemsList from "./../data/json/wmr/magic-items.json";
@@ -263,7 +265,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const updatedArmy = Object.assign({}, prev);
 			const unitExists = updatedArmy.selectedUnits.find((x) => x.id == unitId);
 			const unitExistsIndex = updatedArmy.selectedUnits.findIndex((x) => x.id == unitId);
-			if (unitExists) {
+			if (unitExists && unitExistsIndex > -1) {
 				if (unitExists.currentCount && unitExists.currentCount > 1) {
 					console.log("removeUnit: unitCount greater than 0, removing 1 from currentCount");
 					unitExists.currentCount = unitExists.currentCount - 1;
@@ -315,7 +317,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				`addItem:: finding unit ${unit?.unitName} with an index of ${unitIndex} and an attached item count of ${unit?.attachedItems.length}`
 			);
 
-			if (unit != undefined && unitIndex != undefined) {
+			if (unit != undefined && unitIndex > -1) {
 				// find upgrade
 				const unitUpgrade = unit?.attachedItems.find((x) => x.upgradeName == itemName);
 				const unitUpgradeIndex = unit?.attachedItems.findIndex((x) => x.upgradeName == itemName);
@@ -402,11 +404,20 @@ export const BuilderContextProvider = ({ children }: any) => {
 			}
 			updatedArmy.points = calculateCurrentArmyPoints();
 			// this WON"T work because we do not have the id for these itesm@! just remove
-			if (updatedArmy.selectedUpgrades.length == 1) {
-				updatedArmy.selectedUpgrades = [];
-			} else {
-				updatedArmy.selectedUpgrades = updatedArmy.selectedUpgrades.splice(-1, 1);
-			}
+
+			console.log(unitUpgrade?.upgradeName, 'UPGRADE TO REMOVE')
+			const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
+				(x) => x.upgradeName == unitUpgrade?.upgradeName
+			);
+			console.log(updatedArmy?.selectedUpgrades?.map(x => x.upgradeName), 'ALL NAMES IN ARR 	')
+			// if (updatedArmy.selectedUpgrades.length == 1) {
+			// 	updatedArmy.selectedUpgrades = [];
+			// } else {
+				console.log(armyUpgradeIndex, 'INDEX')
+			if (armyUpgradeIndex > -1)
+				updatedArmy?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
+			// }
+
 			// update count
 			return updatedArmy;
 		});
@@ -443,18 +454,21 @@ export const BuilderContextProvider = ({ children }: any) => {
 
 	const calculateArmyErrors = () => {
 		// get the current army points for
-		let currentArmyPointsLimit = Math.floor(calculateCurrentArmyPoints() / 1000);
-		if (currentArmyPointsLimit == 0) currentArmyPointsLimit = 1;
+		let currentArmyPointsLimit = get1000PointInterval(calculateCurrentArmyPoints());
+
 		const errors: ArmyErrorsProps[] = [];
 		let currentUnits = factionDetails?.units;
 		// count all magic items in army
 		const itemCounts: any = {};
+		console.log(currentArmyList?.selectedUpgrades.length, "TOTAL UPGRADES FOR ARMY");
 		if (currentArmyList?.selectedUpgrades)
 			for (let i = 0; i < currentArmyList.selectedUpgrades.length; i++) {
 				const element = currentArmyList.selectedUpgrades[i];
+				console.log(element.upgradeName, "UPGRADE NAME");
 				itemCounts[element.upgradeName] = (itemCounts[element.upgradeName] || 0) + 1;
 			}
 		const itemEntries = Object.keys(itemCounts);
+
 		itemEntries.map((key) => {
 			let count = itemCounts[key];
 			const selectedUpgrade = currentArmyList?.selectedUpgrades.find((x) => x.upgradeName == key);
@@ -506,6 +520,30 @@ export const BuilderContextProvider = ({ children }: any) => {
 						source: "Unit",
 						sourceName: cu.unitName,
 						error: `Mount: ${cu.unitName} has too many mounts.`,
+					});
+				}
+			}
+		});
+		// check that allocated items don't exceed number of units
+		currentArmyList?.selectedUnits.map((x) => {
+			if (x.attachedItems.length > 0) {
+				const magicItems = [
+					UpgradeTypes.Magic_Weapon.toString(),
+					UpgradeTypes.Magic_Standard.toString(),
+					UpgradeTypes.Device_of_Power,
+				];
+				const currentUnitsItems = x.attachedItems
+					.filter((y) => magicItems.includes(y.type))
+					.map((x) => x.currentCount);
+				const currentUnitItemCounts = currentUnitsItems?.reduce((prev, curr) => prev + curr, 0);
+				// flatten num er
+				console.log(x.currentCount, "CURRENT COUNT");
+				console.log(currentUnitItemCounts, "current unit items filtered");
+				if (currentUnitItemCounts > x.currentCount) {
+					errors.push({
+						source: "Upgrade",
+						sourceName: x.unitName,
+						error: `Unit: ${x.currentCount} ${x.unitName} can have a maximum of ${x.currentCount} magic items.`,
 					});
 				}
 			}

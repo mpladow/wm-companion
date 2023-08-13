@@ -6,7 +6,7 @@ export const groupByKey = (list, key) => {
 
 export const removeDuplicates = (arr: any[], key: string) => {
 	// Create an array of objects
-// filter array by any units that have attached items, if any exist
+	// filter array by any units that have attached items, if any exist
 
 	// Declare a new array
 	let newArray = [];
@@ -21,7 +21,7 @@ export const removeDuplicates = (arr: any[], key: string) => {
 
 		// Use the title as the index
 		uniqueObject[objTitle] = arr[i];
-		console.log(arr[i],'magic item')
+		console.log(arr[i], "magic item");
 	}
 
 	// Loop to push unique object into array
@@ -44,5 +44,11 @@ export const getGroupedList = (arr: SelectedUnitProps[]) => {
 		u.currentCount = unitCount;
 	});
 	const removedDuplicatedUnits = removeDuplicates(arr, "unitName");
-    return removedDuplicatedUnits
+	return removedDuplicatedUnits;
+};
+
+export const get1000PointInterval = (currentArmyPoints: number) => {
+	let currentArmyPointsLimit = Math.floor(currentArmyPoints / 1000);
+	if (currentArmyPointsLimit == 0) currentArmyPointsLimit = 1;
+	return currentArmyPointsLimit;
 };

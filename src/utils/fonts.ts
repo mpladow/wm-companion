@@ -4,7 +4,8 @@ export const Fonts = {
     PTSansRegular: "PTSans-Regular",
     GaramondItalic: 'GaramondItalic',
     GaramondBold: 'GaramondBold',
-    GaramondRegular: 'GaramondRegular'
+    GaramondRegular: 'GaramondRegular',
+    BarlowCodensedBold: 'BarlowCondensed-Bold'
 }
 
 export default Fonts;

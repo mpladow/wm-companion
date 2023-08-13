@@ -91,7 +91,7 @@ const TabStackNavigator = () => {
 					tabBarLabel: "About",
 					title: "About",
 					headerShadowVisible: false,
-					headerStyle: { backgroundColor: theme.background },
+					headerStyle: { backgroundColor: theme.blueGrey },
 				}}
 			/>
 			<Tab.Screen
@@ -101,7 +101,7 @@ const TabStackNavigator = () => {
 					tabBarLabel: "Tracker",
 					title: "Tracker",
 					headerShadowVisible: false,
-					headerStyle: { backgroundColor: theme.background },
+					headerStyle: { backgroundColor: theme.blueGrey },
 				}}
 			/>
 			<Tab.Screen
