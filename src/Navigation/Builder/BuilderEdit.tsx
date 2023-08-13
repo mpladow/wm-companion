@@ -32,6 +32,7 @@ import UnitPreview from "./components/UnitPreview";
 import UpgradePreview from "./components/UpgradePreview";
 import ArmyPointsCount from "./components/ArmyPointsCount";
 import { LinearGradient } from "expo-linear-gradient";
+import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
 
 type sectionListDataProps = {
 	title: string;
@@ -48,6 +49,8 @@ const BuilderEdit = () => {
 	const [spellsVisible, setSpellsVisible] = useState(false);
 	const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
 	const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
+	const [allSelectedUpgradesVisible, setAllSelectedUpgradesVisible] = useState(false);
+
 	const [magicItems, setMagicItems] = useState<UpgradesProps[]>([]);
 	const [currentPoints, setCurrentPoints] = useState(0);
 	const [totalPoints, setTotalPoints] = useState(1000); // this state will update itself as the current points exceeds the previous value
@@ -92,8 +95,8 @@ const BuilderEdit = () => {
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();
-		if (_currentPoints > 1000 && _currentPoints < 2000) setTotalPoints(2000);
-		if (_currentPoints > 2000 && _currentPoints < 3000) setTotalPoints(3000);
+		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
+		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
 		if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
 		if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
 		if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
@@ -364,6 +367,12 @@ const BuilderEdit = () => {
 				<View>
 					<Text style={{ fontSize: 16 }}>{getUnitCounts()}</Text>
 				</View>
+				{/* <Button onPress={() => setAllSelectedUpgradesVisible(true)} variant={"text"}>
+					<Text>Show Upgrades</Text>
+				</Button>
+				<Button onPress={() => console.log("SHOW ALL SPECIAL RULES")} variant={"text"}>
+					<Text>Show Unit Rules</Text>
+				</Button> */}
 				<View>
 					{builder.factionDetails?.name !== "Dwarfs" && builder.factionDetails?.name !== "Nippon" ? (
 						<Button onPress={() => setSpellsVisible(!spellsVisible)} variant={"default"}>
@@ -422,6 +431,7 @@ const BuilderEdit = () => {
 									onUnitCardPress={handleOnUnitCardPress}
 									onUpgradePress={handleOnUpgradePress}
 									currentArmyCount={builder.calculateCurrentArmyPoints()}
+									hasError={builder.armyErrors.findIndex(x => x.sourceName == item.unitName) > -1}
 								/>
 							</>
 						);
@@ -442,6 +452,14 @@ const BuilderEdit = () => {
 			<View style={{ position: "absolute", bottom: 10, right: 20, flexDirection: "row" }}>
 				{/* TODO extract out  */}
 			</View>
+			{/* {All selected upgrades modal} */}
+			<AllSelectedUpgradesModal
+				setVisible={(vis) => setAllSelectedUpgradesVisible(vis)}
+				visible={allSelectedUpgradesVisible}
+				headerTitle={"Selected Upgrades"}
+				upgrades={magicItems}
+				selectedUpgrades={builder.selectedArmyList?.selectedUpgrades}
+			/>
 			{/* // add units/magic item modal */}
 			<CustomModal
 				setModalVisible={() => {

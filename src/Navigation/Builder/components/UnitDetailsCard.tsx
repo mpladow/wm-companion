@@ -36,6 +36,7 @@ type UnitCardDetailsProps = {
 	onUnitCardPress: (unitName: string) => void;
 	onUpgradePress: (upgradeName: string) => void;
 	currentArmyCount: number;
+	hasError: boolean;
 };
 const UnitDetailsCard = ({
 	unit,
@@ -50,6 +51,7 @@ const UnitDetailsCard = ({
 	onUnitCardPress,
 	onUpgradePress,
 	currentArmyCount,
+	hasError,
 }: UnitCardDetailsProps) => {
 	const { theme } = useTheme();
 
@@ -75,7 +77,8 @@ const UnitDetailsCard = ({
 							<View style={{ marginRight: 8 }}>
 								<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
 							</View>
-							<Text bold variant="heading3" style={{ fontSize: 18 }}>
+							<Text bold variant='heading3' style={{ fontSize: 18 }}>
+								{hasError && <Text style={{ color: theme.warning, fontSize: 18 }}>* </Text>}
 								{`${existingUnits} x ${unit.name}`}
 							</Text>
 							<View style={{ alignItems: "flex-start", justifyContent: "center", marginLeft: 12 }}>
@@ -137,7 +140,7 @@ const UnitDetailsCard = ({
 									</View>
 									<Text>{item.currentCount} x </Text>
 									<Text bold>{item.upgradeName}</Text>
-									<View style={{marginLeft: 8, justifyContent: 'flex-start'}}>
+									<View style={{ marginLeft: 8, justifyContent: "flex-start" }}>
 										<PointsContainer points={item.points} />
 									</View>
 									{/* <View style={{ marginLeft: 8, flexDirection: "row", alignItems: "center" }}>

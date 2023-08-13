@@ -2,7 +2,7 @@ import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, V
 import React, { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "@hooks/useTheme";
 
-type variant = "default" | "primary" | "secondary" | "confirm" | "warning" | "danger" | "text" | "outline";
+type variant = "default" | "primary" | "secondary" | "confirm" | "warning" | "danger" | "text" | "outline-dark" | "outline-light";
 export type size = "sm" | "lg";
 type buttonProps = {
 	onPress: () => void;
@@ -30,8 +30,10 @@ const Button = ({ children, onPress, variant, circle, disabled, size, style }: b
 				return { backgroundColor: theme.warning };
 			case "secondary":
 				return { backgroundColor: theme.secondary };
-			case "outline":
+			case "outline-dark":
 				return { backgroundColor: "transparent", borderColor: theme.blueGrey, borderWidth: 2 };
+				case "outline-light":
+					return { backgroundColor: "transparent", borderColor: theme.white, borderWidth: 2 };
 			case "text":
 				return { backgroundColor: "transparent", border: 0 };
 			default:
