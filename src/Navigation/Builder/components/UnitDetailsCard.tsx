@@ -1,5 +1,5 @@
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { UnitProps } from "@utils/types";
 import { Text } from "@components/index";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
@@ -15,6 +15,7 @@ import MagicOrb from "@components/SVGS/MagicOrb";
 import { get1000PointInterval } from "../utils/builderHelpers";
 import { current } from "@reduxjs/toolkit";
 import UnitDetailsMenu from "./UnitDetailsMenu";
+import AnimatedView from "@components/Animated/AnimatedView";
 
 type UnitCardDetailsProps = {
 	unit: UnitProps;
@@ -68,6 +69,18 @@ const UnitDetailsCard = ({
 		}
 		return currentMax;
 	};
+	const [triggerScale, setTriggerScale] = useState(false);
+	useEffect(() => {
+		console.log("triggerScale...");
+		if (triggerScale) {
+			console.log("SET TRIGGER SCALE TO FALSE");
+			setTriggerScale(false);
+		}
+	}, [triggerScale]);
+
+	useEffect(() => {
+		setTriggerScale(true);
+	}, [existingUnits]);
 	return (
 		<View key={key} style={{ flexDirection: "column", padding: 12, backgroundColor: theme.background }}>
 			<>
@@ -77,10 +90,12 @@ const UnitDetailsCard = ({
 							<View style={{ marginRight: 8 }}>
 								<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
 							</View>
-							<Text bold variant='heading3' style={{ fontSize: 18 }}>
-								{hasError && <Text style={{ color: theme.warning, fontSize: 18 }}>* </Text>}
-								{`${existingUnits} x ${unit.name}`}
-							</Text>
+							<AnimatedView animate={triggerScale}>
+								<Text bold variant='heading3' style={{ fontSize: 18 }}>
+									{hasError && <Text style={{ color: theme.warning, fontSize: 18 }}>* </Text>}
+									{`${existingUnits} x ${unit.name}`}
+								</Text>
+							</AnimatedView>
 							<View style={{ alignItems: "flex-start", justifyContent: "center", marginLeft: 12 }}>
 								<PointsContainer points={unit.points} />
 							</View>
@@ -138,8 +153,10 @@ const UnitDetailsCard = ({
 									<View style={{ marginRight: 8 }}>
 										<UpgradeIcon type={item.type} />
 									</View>
+
 									<Text>{item.currentCount} x </Text>
 									<Text bold>{item.upgradeName}</Text>
+
 									<View style={{ marginLeft: 8, justifyContent: "flex-start" }}>
 										<PointsContainer points={item.points} />
 									</View>

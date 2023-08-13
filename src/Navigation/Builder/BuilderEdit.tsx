@@ -367,10 +367,18 @@ const BuilderEdit = () => {
 				<View>
 					<Text style={{ fontSize: 16 }}>{getUnitCounts()}</Text>
 				</View>
-				{/* <Button onPress={() => setAllSelectedUpgradesVisible(true)} variant={"text"}>
-					<Text>Show Upgrades</Text>
+				<Button
+					disabled={!builder.selectedArmyList?.selectedUpgrades.length > 0}
+					onPress={() => setAllSelectedUpgradesVisible(true)}
+					variant={"text"}
+				>
+					<Text>Show Selected Upgrades</Text>
 				</Button>
-				<Button onPress={() => console.log("SHOW ALL SPECIAL RULES")} variant={"text"}>
+				{/* {builder.selectedArmyList?.selectedUpgrades.length > 0 ? (
+					<>
+					</>
+				) : null} */}
+				{/* <Button onPress={() => console.log("SHOW ALL SPECIAL RULES")} variant={"text"}>
 					<Text>Show Unit Rules</Text>
 				</Button> */}
 				<View>
@@ -431,7 +439,7 @@ const BuilderEdit = () => {
 									onUnitCardPress={handleOnUnitCardPress}
 									onUpgradePress={handleOnUpgradePress}
 									currentArmyCount={builder.calculateCurrentArmyPoints()}
-									hasError={builder.armyErrors.findIndex(x => x.sourceName == item.unitName) > -1}
+									hasError={builder.armyErrors.findIndex((x) => x.sourceName == item.unitName) > -1}
 								/>
 							</>
 						);
