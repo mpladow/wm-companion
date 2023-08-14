@@ -16,6 +16,8 @@ import highElvesList from "../data/json/wmr/highElves.json";
 import daemonsList from "../data/json/wmr/daemons.json";
 import nipponList from "../data/json/wmr/nippon.json";
 import chaosDwarvesList from "../data/json/wmr/chaosDwarves.json";
+import dogsOfWarList from "../data/json/wmr/dogsOfWar.json";
+import arabyList from "../data/json/wmr/araby.json";
 
 import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
 
@@ -24,7 +26,7 @@ import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 export const getFactions = () => {
 	let ddFactionList = [];
 	for (const [key, value] of Object.entries(Factions)) {
-		ddFactionList.push({ label: key.replace("_", " "), value: value } as DropDownItemProps);
+		ddFactionList.push({ label: key.replaceAll("_", " "), value: value } as DropDownItemProps);
 	}
 	ddFactionList = ddFactionList.sort((a, b) => {
 		if (a.label < b.label) {
@@ -114,6 +116,14 @@ export const getFactionUnits = (factionSelection: number) => {
 		case Factions.Chaos_Dwarves:
 			list = chaosDwarvesList.units;
 			factionList = chaosDwarvesList;
+			break;
+		case Factions.Dogs_Of_War:
+			list = dogsOfWarList.units;
+			factionList = dogsOfWarList;
+			break;
+		case Factions.Araby:
+			list = arabyList.units;
+			factionList = arabyList;
 			break;
 		default:
 			break;

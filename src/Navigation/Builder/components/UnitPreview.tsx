@@ -118,27 +118,29 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 					{specialRules ? (
 						<View style={{ flex: 3, justifyContent: "center", flexDirection: "column" }}>
 							<View style={{ flex: 1, flexDirection: "column" }}>
+								<View style={{marginTop: 8}}>
 								<Text bold style={{ fontSize: 16 }}>
 									Special Rules
 								</Text>
-								{specialRules &&
-									specialRules?.text.map((x) => {
-										// transform content to remove __
-										const sanitized = reactStringReplace(x, underscoreRegex, (match, i) => {
-											console.log(match, `${match} on ${i}`);
-											return (
-												<Text bold style={{ color: theme.text }} key={i}>
-													{match}
-												</Text>
-											);
-										});
+									{specialRules &&
+										specialRules?.text.map((x) => {
+											// transform content to remove __
+											const sanitized = reactStringReplace(x, underscoreRegex, (match, i) => {
+												console.log(match, `${match} on ${i}`);
+												return (
+													<Text bold style={{ color: theme.text }} key={i}>
+														{match}ß
+													</Text>
+												);
+											});
 
-										return (
-											<View>
-												<Text style={{ color: theme.text }}>{sanitized}</Text>
-											</View>
-										);
-									})}
+											return (
+												<View>
+													<Text style={{ color: theme.text }}>{sanitized}</Text>
+												</View>
+											);
+										})}
+								</View>
 							</View>
 						</View>
 					) : null}

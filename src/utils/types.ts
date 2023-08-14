@@ -53,6 +53,7 @@ export type UnitProps = {
 	armyMin?: number;
 	upgrades?: string[];
 	specialRules?: string[];
+	specialRulesExpanded?: any[];
 	noMagic?: boolean;
 	noCount?:boolean;
 };

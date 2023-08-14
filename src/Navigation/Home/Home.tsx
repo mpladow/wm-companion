@@ -89,6 +89,12 @@ const Home = () => {
 								</>
 							</TextBlock>
 						</View>
+
+						<View style={{ marginVertical: margin }}>
+							<TextBlock>
+								<Text>Thank you to the entire Warmaster Revolutions community for keeping this game alive!</Text>
+							</TextBlock>
+						</View>
 						<View style={{ marginVertical: margin }}>
 							<Text bold>
 								Disclaimer: This is a fan-made hobby project and I have no affiliation with Games

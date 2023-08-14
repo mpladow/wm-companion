@@ -15,15 +15,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { BuilderContextProvider, SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
-import { Button, Text, TextBlock } from "@components/index";
-import { getFactionUnits, getKeyByValue } from "@utils/factionHelpers";
+import { Button, CustomCheckbox, Text, TextBlock } from "@components/index";
+import { getFactionUnits, getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
 import CustomModal from "@components/CustomModal";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
 import UnitCard from "./components/UnitCard";
 import { Entypo } from "@expo/vector-icons";
 import UnitDetailsCard from "./components/UnitDetailsCard";
 import SpecialRulesCollapsible from "./components/SpecialRulesCollapsible";
-import { getGroupedList, groupByKey } from "./utils/builderHelpers";
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 import UpgradeCard from "./components/UpgradeCard";
 import { Factions } from "@utils/constants";
@@ -32,6 +31,7 @@ import UnitPreview from "./components/UnitPreview";
 import UpgradePreview from "./components/UpgradePreview";
 import ArmyPointsCount from "./components/ArmyPointsCount";
 import { LinearGradient } from "expo-linear-gradient";
+import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
 
 type sectionListDataProps = {
 	title: string;
@@ -48,6 +48,11 @@ const BuilderEdit = () => {
 	const [spellsVisible, setSpellsVisible] = useState(false);
 	const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
 	const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
+	const [allSelectedUpgradesVisible, setAllSelectedUpgradesVisible] = useState(false);
+
+	// show statline
+	const [showStatline, setShowStatline] = useState(false);
+
 	const [magicItems, setMagicItems] = useState<UpgradesProps[]>([]);
 	const [currentPoints, setCurrentPoints] = useState(0);
 	const [totalPoints, setTotalPoints] = useState(1000); // this state will update itself as the current points exceeds the previous value
@@ -78,7 +83,7 @@ const BuilderEdit = () => {
 							</Text>
 							<Text>
 								{builder.selectedArmyList?.name &&
-									getKeyByValue(Factions, builder.selectedArmyList.faction)?.replace("_", " ")}
+									getKeyByValue(Factions, builder.selectedArmyList.faction)?.replaceAll("_", " ")}
 							</Text>
 						</View>
 					</View>
@@ -92,8 +97,8 @@ const BuilderEdit = () => {
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();
-		if (_currentPoints > 1000 && _currentPoints < 2000) setTotalPoints(2000);
-		if (_currentPoints > 2000 && _currentPoints < 3000) setTotalPoints(3000);
+		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
+		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
 		if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
 		if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
 		if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
@@ -187,12 +192,75 @@ const BuilderEdit = () => {
 	};
 
 	const handleOnUnitCardPress = (unitName: string) => {
-		const _unit = factionUnits?.find((x) => x.name == unitName);
+		let _unit = factionUnits?.find((x) => x.name == unitName);
 		if (_unit) {
-			console.log(`UNIT FOUN D for ${unitName}`);
-
+			if (builder.factionDetails?.specialRules && _unit?.name) {
+				//@ts-ignore - TODO: need to check typing
+				const _specialRules = builder.factionDetails?.specialRules[selectedUnitDetails?.name];
+				const _allGenericSpecialRules = getGenericSpecialRules();
+				//@ts-ignore
+				const _genericSpecialRulesExist = _allGenericSpecialRules[_unit.name];
+				if (_specialRules?.text != undefined) {
+					console.log("SPECIAL RULES FOUND");
+					_unit.specialRules = _specialRules;
+					// setSpecialRules(_specialRules);
+				} else if (_genericSpecialRulesExist != undefined) {
+					console.log("SPECIAL RULES FOUND");
+					_unit.specialRules = _genericSpecialRulesExist;
+				} else {
+					_unit.specialRules = [];
+				} // else {
+				// 	setSpecialRules(null);
+				// }
+			}
 			setSelectedUnitDetails(_unit);
 			setUnitPreviewVisible(true);
+		} else {
+			console.error(`UNIT NOT FOUND for ${unitName}`);
+		}
+	};
+	const getUnitDetailsByUnitName = (unitName: string) => {
+		let _unit = factionUnits?.find((x) => x.name == unitName);
+		if (_unit) {
+			if (builder.factionDetails?.specialRules && _unit?.name) {
+				//@ts-ignore - TODO: need to check typing
+				const _specialRules = builder.factionDetails?.specialRules[unitName];
+				const _allGenericSpecialRules = getGenericSpecialRules();
+				//@ts-ignore
+				const _genericSpecialRulesExist = _allGenericSpecialRules[_unit.name];
+				//let rulesArray = [];
+
+				let _unitAdditionalDate = Object.assign({}, _unit);
+				_unitAdditionalDate["specialRulesExpanded"] = [];
+				// console.log(_unitAdditionalDate, 'NEW UNIT')
+				if (_specialRules?.text != undefined) {
+					//rulesArray.push(_specialRules);
+					_unitAdditionalDate["specialRulesExpanded"]?.push(_specialRules);
+
+					//_unit.specialRulesExpanded = _specialRules;
+					// setSpecialRules(_specialRules);
+				}
+				if (_genericSpecialRulesExist != undefined) {
+					//rulesArray.push(_genericSpecialRulesExist);
+					_unitAdditionalDate["specialRulesExpanded"]?.push(_genericSpecialRulesExist);
+
+					//_unit.specialRulesExpanded = _genericSpecialRulesExist;
+				}
+				console.log(_unitAdditionalDate.specialRulesExpanded, 'CURRENT ARRAY OF SPECIAL RULES')
+				// if
+				// else {
+				// 	rulesArray = [];
+				// 	console.log("NO RULES FOUND");
+				// 	_unit.specialRulesExpanded = [];
+
+				// 	//_unit.specialRulesExpanded = [];
+				// } // else {
+				// 	setSpecialRules(null);
+				// }
+				//console.log(rulesArray, 'RULES ARRAY')
+				//_unit.specialRulesExpanded = rulesArray;
+				return _unitAdditionalDate;
+			}
 		} else {
 			console.error(`UNIT NOT FOUND for ${unitName}`);
 		}
@@ -364,6 +432,26 @@ const BuilderEdit = () => {
 				<View>
 					<Text style={{ fontSize: 16 }}>{getUnitCounts()}</Text>
 				</View>
+				{/* <Button
+					disabled={!builder.selectedArmyList?.selectedUpgrades.length > 0}
+					onPress={() => setAllSelectedUpgradesVisible(true)}
+					variant={"text"}
+				>
+					<Text>Show Selected Upgrades</Text>
+				</Button> */}
+
+				{/* {builder.selectedArmyList?.selectedUpgrades.length > 0 ? (
+					<>
+					</>
+				) : null} */}
+				{/* <Button onPress={() => console.log("SHOW ALL SPECIAL RULES")} variant={"text"}>
+					<Text>Show Unit Rules</Text>
+				</Button> */}
+				<CustomCheckbox
+					onValueChange={(val) => setShowStatline(val)}
+					value={showStatline}
+					label={"Show Statline"}
+				/>
 				<View>
 					{builder.factionDetails?.name !== "Dwarfs" && builder.factionDetails?.name !== "Nippon" ? (
 						<Button onPress={() => setSpellsVisible(!spellsVisible)} variant={"default"}>
@@ -406,6 +494,7 @@ const BuilderEdit = () => {
 				renderItem={({ item, index }) => {
 					// get total unit count
 					const unitDetails = factionUnits?.find((x) => x.name == item.unitName);
+					console.log(unitDetails?.specialRules);
 					if (unitDetails) {
 						return (
 							<>
@@ -422,6 +511,9 @@ const BuilderEdit = () => {
 									onUnitCardPress={handleOnUnitCardPress}
 									onUpgradePress={handleOnUpgradePress}
 									currentArmyCount={builder.calculateCurrentArmyPoints()}
+									hasError={builder.armyErrors.findIndex((x) => x.sourceName == item.unitName) > -1}
+									unitDetailsExpanded={getUnitDetailsByUnitName(item.unitName)}
+									showStatline={showStatline}
 								/>
 							</>
 						);
@@ -442,6 +534,14 @@ const BuilderEdit = () => {
 			<View style={{ position: "absolute", bottom: 10, right: 20, flexDirection: "row" }}>
 				{/* TODO extract out  */}
 			</View>
+			{/* {All selected upgrades modal} */}
+			<AllSelectedUpgradesModal
+				setVisible={(vis) => setAllSelectedUpgradesVisible(vis)}
+				visible={allSelectedUpgradesVisible}
+				headerTitle={"Selected Upgrades"}
+				upgrades={magicItems}
+				selectedUpgrades={builder.selectedArmyList?.selectedUpgrades}
+			/>
 			{/* // add units/magic item modal */}
 			<CustomModal
 				setModalVisible={() => {

@@ -6,7 +6,6 @@ import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import uuid from "uuid-random";
-import magicItemsList from "./../data/json/wmr/magic-items.json";
 
 type ArmyErrorsProps = {
 	source?: "Unit" | "Upgrade";
@@ -47,7 +46,7 @@ export type ArmyListProps = {
 };
 interface BuilderContextInterface {
 	userArmyLists: ArmyListProps[];
-	addUserArmyList: (faction: number, name: string) => Promise<string>;
+	addUserArmyList: (faction: number, name: string, autopopulate: boolean) => Promise<string>;
 	deleteUserArmyList: (armyId: string) => void;
 	//duplicateArmyList: (armyId: number) => void;
 	setSelectedArmyList: (armyId: string) => void;
@@ -121,7 +120,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const getUserArmyList = () => {
 		return userArmyLists;
 	};
-	const addUserArmyList = async (faction: number, name: string) => {
+	const addUserArmyList = async (faction: number, name: string, autopopulate: boolean) => {
 		const newArmyList: ArmyListProps = {
 			armyId: uuid(),
 			faction: faction,
@@ -132,6 +131,47 @@ export const BuilderContextProvider = ({ children }: any) => {
 			selectedUpgrades: [],
 			points: 0,
 		};
+		// autopopulate if true
+		const _factionDetails = getFactionUnits(faction);
+		// set faction upgrade tails
+		factionDetails && setFactionDetails(_factionDetails.factionList);
+
+		if (autopopulate) {
+			// get unit details
+			const factionUnits = _factionDetails.factionList?.units.filter(
+				(x) => x["min"] != undefined || x["armyMin"] != undefined
+			);
+			console.log(factionUnits.length, "faction units");
+			// find min requirements
+			const defaultUnits: SelectedUnitProps[] = [];
+			factionUnits.forEach((x) => {
+				let max;
+				if (x.max) max = x.max;
+				if (x.armyMax) max = x.armyMax;
+				let min;
+				if (x.min) min = x.min;
+				if (x.armyMin) min = x.armyMin;
+
+				const _newUnit: SelectedUnitProps = {
+					id: uuid(),
+					unitName: x.name,
+					order: x.order ? x.order : 1,
+					attachedItems: [],
+					points: x.points,
+					isLeader: x.command ? true : false,
+					currentCount: min,
+					maxCount: max,
+					minCount: x.min ? x.min : x.armyMin,
+					ignoreBreakPoint: x.noCount,
+				};
+				defaultUnits.push(_newUnit);
+
+				// console.log(_newUnit, 'newUnitDetails')
+			});
+			newArmyList.selectedUnits = defaultUnits;
+		}
+		newArmyList.points = calculateCurrentArmyPoints(newArmyList);
+
 		setUserArmyLists([...userArmyLists, newArmyList]);
 		return newArmyList.armyId;
 	};
@@ -405,17 +445,19 @@ export const BuilderContextProvider = ({ children }: any) => {
 			updatedArmy.points = calculateCurrentArmyPoints();
 			// this WON"T work because we do not have the id for these itesm@! just remove
 
-			console.log(unitUpgrade?.upgradeName, 'UPGRADE TO REMOVE')
+			console.log(unitUpgrade?.upgradeName, "UPGRADE TO REMOVE");
 			const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
 				(x) => x.upgradeName == unitUpgrade?.upgradeName
 			);
-			console.log(updatedArmy?.selectedUpgrades?.map(x => x.upgradeName), 'ALL NAMES IN ARR 	')
+			console.log(
+				updatedArmy?.selectedUpgrades?.map((x) => x.upgradeName),
+				"ALL NAMES IN ARR 	"
+			);
 			// if (updatedArmy.selectedUpgrades.length == 1) {
 			// 	updatedArmy.selectedUpgrades = [];
 			// } else {
-				console.log(armyUpgradeIndex, 'INDEX')
-			if (armyUpgradeIndex > -1)
-				updatedArmy?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
+			console.log(armyUpgradeIndex, "INDEX");
+			if (armyUpgradeIndex > -1) updatedArmy?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
 			// }
 
 			// update count

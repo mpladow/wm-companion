@@ -1,5 +1,5 @@
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { UnitProps } from "@utils/types";
 import { Text } from "@components/index";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
@@ -15,6 +15,8 @@ import MagicOrb from "@components/SVGS/MagicOrb";
 import { get1000PointInterval } from "../utils/builderHelpers";
 import { current } from "@reduxjs/toolkit";
 import UnitDetailsMenu from "./UnitDetailsMenu";
+import AnimatedView from "@components/Animated/AnimatedView";
+import QuickviewProfileHeading from "./UnitDetailsCard/QuickviewProfileHeading";
 
 type UnitCardDetailsProps = {
 	unit: UnitProps;
@@ -36,6 +38,9 @@ type UnitCardDetailsProps = {
 	onUnitCardPress: (unitName: string) => void;
 	onUpgradePress: (upgradeName: string) => void;
 	currentArmyCount: number;
+	hasError: boolean;
+	unitDetailsExpanded: UnitProps | undefined;
+	showStatline: boolean;
 };
 const UnitDetailsCard = ({
 	unit,
@@ -50,6 +55,9 @@ const UnitDetailsCard = ({
 	onUnitCardPress,
 	onUpgradePress,
 	currentArmyCount,
+	hasError,
+	unitDetailsExpanded,
+	showStatline,
 }: UnitCardDetailsProps) => {
 	const { theme } = useTheme();
 
@@ -66,6 +74,17 @@ const UnitDetailsCard = ({
 		}
 		return currentMax;
 	};
+	const [triggerScale, setTriggerScale] = useState(false);
+	useEffect(() => {
+		if (triggerScale) {
+			setTriggerScale(false);
+		}
+	}, [triggerScale]);
+
+	useEffect(() => {
+		setTriggerScale(true);
+	}, [existingUnits]);
+
 	return (
 		<View key={key} style={{ flexDirection: "column", padding: 12, backgroundColor: theme.background }}>
 			<>
@@ -75,20 +94,41 @@ const UnitDetailsCard = ({
 							<View style={{ marginRight: 8 }}>
 								<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
 							</View>
-							<Text bold variant="heading3" style={{ fontSize: 18 }}>
-								{`${existingUnits} x ${unit.name}`}
-							</Text>
-							<View style={{ alignItems: "flex-start", justifyContent: "center", marginLeft: 12 }}>
-								<PointsContainer points={unit.points} />
-							</View>
+							<AnimatedView animate={triggerScale}>
+								<Text bold variant='heading3' style={{ fontSize: 18 }}>
+									{hasError && <Text style={{ color: theme.warning, fontSize: 18 }}>* </Text>}
+									{`${existingUnits} x ${unit.name}`}
+								</Text>
+							</AnimatedView>
 						</View>
 					</TouchableOpacity>
 
 					<View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-						<View style={{ flex: 1, marginRight: 12, justifyContent: "flex-end", alignItems: "flex-end" }}>
-							<Text>
-								{unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
-							</Text>
+						<View
+							style={{
+								flex: 1,
+								marginRight: 12,
+								justifyContent: "flex-end",
+								alignItems: "center",
+								flexDirection: "row",
+							}}
+						>
+							<View
+								style={{
+									flex: 1,
+									alignItems: "flex-end",
+									justifyContent: "flex-end",
+									marginLeft: 12,
+									marginRight: 12,
+								}}
+							>
+								<PointsContainer points={unit.points} />
+							</View>
+							<View style={{ justifyContent: "flex-end", alignItems: "flex-end", width: 30 }}>
+								<Text>
+									{unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
+								</Text>
+							</View>
 						</View>
 						<UnitDetailsMenu
 							noMagic={!unit.noMagic}
@@ -107,6 +147,122 @@ const UnitDetailsCard = ({
 						/>
 					</View>
 				</View>
+				{showStatline ? (
+					<TouchableOpacity onPress={() => onUnitCardPress(unit.name)}>
+						<View style={{ flex: 1, flexDirection: "row", marginVertical: 4 }}>
+							{unit.command ? (
+								<>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Command"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.command}</Text>
+										</View>
+									</View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Attack"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.attack}</Text>
+										</View>
+									</View>
+
+									<View style={{ flex: 1, flexDirection: "column" }}></View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										{unitDetailsExpanded?.specialRulesExpanded &&
+										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
+											<>
+												<View style={{ flex: 1 }}>
+													<QuickviewProfileHeading label={"Special Rules"} />
+												</View>
+												<View style={{ flex: 1 }}>
+													<Text>
+														{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
+													</Text>
+												</View>
+											</>
+										) : null}
+									</View>
+								</>
+							) : (
+								<>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Attack"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.attack}</Text>
+										</View>
+									</View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Armour"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.armour}</Text>
+										</View>
+									</View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Hits"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.hits}</Text>
+										</View>
+									</View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										{unit.range ? (
+											<>
+												<View style={{ flex: 1 }}>
+													<QuickviewProfileHeading label={"Range"} />
+												</View>
+												<View style={{ flex: 1 }}>
+													<Text>{unit.range}</Text>
+												</View>
+											</>
+										) : null}
+									</View>
+
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										{unitDetailsExpanded?.specialRulesExpanded &&
+										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
+											<>
+												<View style={{ flex: 1 }}>
+													<QuickviewProfileHeading label={"Special Rules"} />
+												</View>
+												<View style={{ flex: 1 }}>
+													<Text>
+														{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
+													</Text>
+												</View>
+											</>
+										) : null}
+									</View>
+									{/* <View style={{ flex: 1, flexDirection: "column" }}>
+									{unitDetailsExpanded?.specialRules &&
+									unitDetailsExpanded?.specialRules?.length > 0 ? (
+										<>
+											<View style={{ flex: 1 }}>
+												<QuickviewProfileHeading label={"Special Rules"} />
+											</View>
+											<View style={{ flex: 1 }}>
+												<Text>
+													{unitDetailsExpanded?.specialRules?.map(
+														(r) => r
+													)}
+												</Text>
+											</View>
+										</>
+									) : null}
+								</View> */}
+								</>
+							)}
+						</View>
+					</TouchableOpacity>
+				) : null}
+
 				{/* // Display unit stats here
 			<View style={{flex: 1, flexDirection: 'row'}}>
 			<View style={{backgroundColor: theme.black, padding: 4, paddingHorizontal: 8, borderRadius: 16, justifyContent: 'flex-start'}}>
@@ -135,9 +291,11 @@ const UnitDetailsCard = ({
 									<View style={{ marginRight: 8 }}>
 										<UpgradeIcon type={item.type} />
 									</View>
+
 									<Text>{item.currentCount} x </Text>
 									<Text bold>{item.upgradeName}</Text>
-									<View style={{marginLeft: 8, justifyContent: 'flex-start'}}>
+
+									<View style={{ marginLeft: 8, justifyContent: "flex-start" }}>
 										<PointsContainer points={item.points} />
 									</View>
 									{/* <View style={{ marginLeft: 8, flexDirection: "row", alignItems: "center" }}>
