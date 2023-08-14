@@ -64,7 +64,7 @@ const TrackerHome = () => {
 					<View style={{ marginBottom: 16 }}>
 						<>
 							<Text style={{ textAlign: "center" }}>
-								Use the cambat tracker to quickly calculate combat casualties and supports.{" "}
+								Use the combat tracker to quickly calculate combat casualties and supports.{" "}
 							</Text>
 						</>
 					</View>

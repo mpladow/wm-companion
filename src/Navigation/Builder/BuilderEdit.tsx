@@ -225,18 +225,15 @@ const BuilderEdit = () => {
 			if (builder.factionDetails?.specialRules && _unit?.name) {
 				//@ts-ignore - TODO: need to check typing
 				const _specialRules = builder.factionDetails?.specialRules[unitName];
-				console.log(_specialRules, "SPECIAL RYLES");
 				const _allGenericSpecialRules = getGenericSpecialRules();
 				//@ts-ignore
 				const _genericSpecialRulesExist = _allGenericSpecialRules[_unit.name];
 				//let rulesArray = [];
 
-				
 				let _unitAdditionalDate = Object.assign({}, _unit);
 				_unitAdditionalDate["specialRulesExpanded"] = [];
 				// console.log(_unitAdditionalDate, 'NEW UNIT')
 				if (_specialRules?.text != undefined) {
-					console.log(_specialRules, "FACTION SPECIAL RULES FOUND");
 					//rulesArray.push(_specialRules);
 					_unitAdditionalDate["specialRulesExpanded"]?.push(_specialRules);
 
@@ -244,7 +241,6 @@ const BuilderEdit = () => {
 					// setSpecialRules(_specialRules);
 				}
 				if (_genericSpecialRulesExist != undefined) {
-					console.log(_genericSpecialRulesExist, "ONLY GENERIC SPECIAL RULES FOUND");
 					//rulesArray.push(_genericSpecialRulesExist);
 					_unitAdditionalDate["specialRulesExpanded"]?.push(_genericSpecialRulesExist);
 
