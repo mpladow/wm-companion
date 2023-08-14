@@ -39,6 +39,7 @@ export type ArmyListProps = {
 	faction: number;
 	name: string;
 	isFavourite: boolean;
+	armyNotes?: string;
 	order: number;
 	selectedUnits: SelectedUnitProps[];
 	selectedUpgrades: SelectedUpgradesProps[];
@@ -54,6 +55,7 @@ interface BuilderContextInterface {
 	//armyName: string;
 	updateArmyName: (name: string, armyId: string) => void;
 	toggleFavourite: (armyId: string) => void;
+	updateArmyNotes: (armyId: string, notes: string) => void;
 	addUnit: (
 		unitName: string,
 		points: number,
@@ -78,6 +80,7 @@ interface BuilderContextInterface {
 	calculateCurrentArmyPoints: () => number;
 	factionDetails?: FactionListProps;
 	armyErrors: ArmyErrorsProps[];
+	getArmyByArmyId: (armyId: string) => ArmyListProps | undefined;
 }
 
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
@@ -89,6 +92,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
 	const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
 	useEffect(() => {
+		//AsyncStorage.removeItem(`userArmies`);
 		getScoresFromStorage();
 	}, []);
 	useEffect(() => {
@@ -117,6 +121,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 		} catch (e) {}
 	};
 
+	const getArmyByArmyId = (armyId: string) => {
+		return userArmyLists.find((x) => x.armyId == armyId);
+	};
 	const getUserArmyList = () => {
 		return userArmyLists;
 	};
@@ -247,10 +254,36 @@ export const BuilderContextProvider = ({ children }: any) => {
 	};
 
 	const toggleFavourite = (armyId: string) => {
-		setCurrentArmyList((prev) => {
-			const updatedArmy = Object.assign({}, prev);
-			updatedArmy.isFavourite = !updatedArmy.isFavourite;
-			return updatedArmy;
+		setUserArmyLists((prev) => {
+			const armyListToUpdateIndex = prev.findIndex((x) => x.armyId == armyId);
+			const _selectedArmyList = Object.assign(
+				{},
+				prev.find((x) => x.armyId == armyId)
+			);
+			_selectedArmyList.isFavourite = !_selectedArmyList.isFavourite;
+			const updatedSelectedUnits = [
+				...prev.slice(0, armyListToUpdateIndex),
+				_selectedArmyList,
+				...prev.slice(armyListToUpdateIndex + 1),
+			];
+			return updatedSelectedUnits;
+		});
+	};
+
+	const updateArmyNotes = (armyId: string, notes: string) => {
+		setUserArmyLists((prev) => {
+			const armyListToUpdateIndex = prev.findIndex((x) => x.armyId == armyId);
+			const _selectedArmyList = Object.assign(
+				{},
+				prev.find((x) => x.armyId == armyId)
+			);
+			_selectedArmyList.armyNotes = notes;
+			const updatedSelectedUnits = [
+				...prev.slice(0, armyListToUpdateIndex),
+				_selectedArmyList,
+				...prev.slice(armyListToUpdateIndex + 1),
+			];
+			return updatedSelectedUnits;
 		});
 	};
 	const addUnit = (
@@ -658,6 +691,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				selectedArmyList: currentArmyList,
 				updateArmyName,
 				toggleFavourite,
+				updateArmyNotes,
 				addUnit,
 				removeUnit,
 				updateUserArmyLists,
@@ -668,6 +702,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				calculateCurrentArmyPoints,
 				factionDetails,
 				armyErrors,
+				getArmyByArmyId,
 			}}
 		>
 			{children}
