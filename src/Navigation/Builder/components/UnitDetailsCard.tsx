@@ -84,9 +84,6 @@ const UnitDetailsCard = ({
 	useEffect(() => {
 		setTriggerScale(true);
 	}, [existingUnits]);
-	useEffect(() => {
-		console.log(unitDetailsExpanded, "unitDetailsCard::ExpandedUnits");
-	}, [unitDetailsExpanded]);
 
 	return (
 		<View key={key} style={{ flexDirection: "column", padding: 12, backgroundColor: theme.background }}>
@@ -103,119 +100,138 @@ const UnitDetailsCard = ({
 									{`${existingUnits} x ${unit.name}`}
 								</Text>
 							</AnimatedView>
-							<View style={{ alignItems: "flex-start", justifyContent: "center", marginLeft: 12 }}>
-								<PointsContainer points={unit.points} />
-							</View>
 						</View>
 					</TouchableOpacity>
 
 					<View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-						<View style={{ flex: 1, marginRight: 12, justifyContent: "flex-end", alignItems: "flex-end" }}>
-							<Text>
-								{unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
-							</Text>
+						<View
+							style={{
+								flex: 1,
+								marginRight: 12,
+								justifyContent: "flex-end",
+								alignItems: "center",
+								flexDirection: "row",
+							}}
+						>
+							<View
+								style={{
+									flex: 1,
+									alignItems: "flex-end",
+									justifyContent: "flex-end",
+									marginLeft: 12,
+									marginRight: 12,
+								}}
+							>
+								<PointsContainer points={unit.points} />
+							</View>
+							<View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', width: 30, }}>
+								<Text>
+									{unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
+								</Text>
+							</View>
 						</View>
-						<UnitDetailsMenu
-							noMagic={!unit.noMagic}
-							onAddUnit={() =>
-								onAddUnit(
-									unit.name,
-									unit.points,
-									unit.command ? true : false,
-									unit.armyMax ? unit.armyMax : unit.max,
-									unit.armyMin ? unit.armyMin : unit.min,
-									unit.noCount
-								)
-							}
-							onAddUpgrade={() => onAddUpgrade(key)}
-							onDeleteUnit={() => onDeleteUnit(key)}
-						/>
+							<UnitDetailsMenu
+								noMagic={!unit.noMagic}
+								onAddUnit={() =>
+									onAddUnit(
+										unit.name,
+										unit.points,
+										unit.command ? true : false,
+										unit.armyMax ? unit.armyMax : unit.max,
+										unit.armyMin ? unit.armyMin : unit.min,
+										unit.noCount
+									)
+								}
+								onAddUpgrade={() => onAddUpgrade(key)}
+								onDeleteUnit={() => onDeleteUnit(key)}
+							/>
 					</View>
 				</View>
 				{showStatline ? (
-					<View style={{ flex: 1, flexDirection: "row", marginVertical: 4 }}>
-						{unit.command ? (
-							<>
-								<View style={{ flex: 1, flexDirection: "column" }}>
-									<View style={{ flex: 1 }}>
-										<QuickviewProfileHeading label={"Command"} />
+					<TouchableOpacity onPress={() => onUnitCardPress(unit.name)}>
+						<View style={{ flex: 1, flexDirection: "row", marginVertical: 4 }}>
+							{unit.command ? (
+								<>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Command"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.command}</Text>
+										</View>
 									</View>
-									<View style={{ flex: 1 }}>
-										<Text>{unit.command}</Text>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Attack"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.attack}</Text>
+										</View>
 									</View>
-								</View>
-								<View style={{ flex: 1, flexDirection: "column" }}>
-									<View style={{ flex: 1 }}>
-										<QuickviewProfileHeading label={"Attack"} />
+									<View style={{ flex: 1, flexDirection: "column" }}></View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										{unitDetailsExpanded?.specialRulesExpanded &&
+										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
+											<>
+												<View style={{ flex: 1 }}>
+													<QuickviewProfileHeading label={"Special Rules"} />
+												</View>
+												<View style={{ flex: 1 }}>
+													<Text>
+														{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
+													</Text>
+												</View>
+											</>
+										) : null}
 									</View>
-									<View style={{ flex: 1 }}>
-										<Text>{unit.attack}</Text>
+								</>
+							) : (
+								<>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Attack"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.attack}</Text>
+										</View>
 									</View>
-								</View>
-								<View style={{ flex: 1, flexDirection: "column" }}></View>
-								<View style={{ flex: 1, flexDirection: "column" }}>
-									{unitDetailsExpanded?.specialRulesExpanded &&
-									unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
-										<>
-											<View style={{ flex: 1 }}>
-												<QuickviewProfileHeading label={"Special Rules"} />
-											</View>
-											<View style={{ flex: 1 }}>
-												<Text>
-													{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
-												</Text>
-											</View>
-										</>
-									) : null}
-								</View>
-							</>
-						) : (
-							<>
-								<View style={{ flex: 1, flexDirection: "column" }}>
-									<View style={{ flex: 1 }}>
-										<QuickviewProfileHeading label={"Attack"} />
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Hits"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.hits}</Text>
+										</View>
 									</View>
-									<View style={{ flex: 1 }}>
-										<Text>{unit.attack}</Text>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										{unit.range ? (
+											<>
+												<View style={{ flex: 1 }}>
+													<QuickviewProfileHeading label={"Range"} />
+												</View>
+												<View style={{ flex: 1 }}>
+													<Text>{unit.range}</Text>
+												</View>
+											</>
+										) : null}
 									</View>
-								</View>
-								<View style={{ flex: 1, flexDirection: "column" }}>
-									<View style={{ flex: 1 }}>
-										<QuickviewProfileHeading label={"Hits"} />
-									</View>
-									<View style={{ flex: 1 }}>
-										<Text>{unit.hits}</Text>
-									</View>
-								</View>
-								<View style={{ flex: 1, flexDirection: "column" }}>
-									{unit.range ? (
-										<>
-											<View style={{ flex: 1 }}>
-												<QuickviewProfileHeading label={"Range"} />
-											</View>
-											<View style={{ flex: 1 }}>
-												<Text>{unit.range}</Text>
-											</View>
-										</>
-									) : null}
-								</View>
 
-								<View style={{ flex: 1, flexDirection: "column" }}>
-									{unitDetailsExpanded?.specialRulesExpanded &&
-									unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
-										<>
-											<View style={{ flex: 1 }}>
-												<QuickviewProfileHeading label={"Special Rules"} />
-											</View>
-											<View style={{ flex: 1 }}>
-												<Text>
-													{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
-												</Text>
-											</View>
-										</>
-									) : null}
-								</View>
-								{/* <View style={{ flex: 1, flexDirection: "column" }}>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										{unitDetailsExpanded?.specialRulesExpanded &&
+										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
+											<>
+												<View style={{ flex: 1 }}>
+													<QuickviewProfileHeading label={"Special Rules"} />
+												</View>
+												<View style={{ flex: 1 }}>
+													<Text>
+														{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
+													</Text>
+												</View>
+											</>
+										) : null}
+									</View>
+									{/* <View style={{ flex: 1, flexDirection: "column" }}>
 									{unitDetailsExpanded?.specialRules &&
 									unitDetailsExpanded?.specialRules?.length > 0 ? (
 										<>
@@ -232,9 +248,10 @@ const UnitDetailsCard = ({
 										</>
 									) : null}
 								</View> */}
-							</>
-						)}
-					</View>
+								</>
+							)}
+						</View>
+					</TouchableOpacity>
 				) : null}
 
 				{/* // Display unit stats here

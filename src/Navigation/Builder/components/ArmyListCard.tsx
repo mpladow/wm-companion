@@ -60,7 +60,7 @@ const ArmyListCard = ({
 					</View>
 
 					<View style={{ marginBottom: 4 }}>
-						<Text>{Object.keys(Factions)[armyList.faction - 1]?.replace("_", " ")}</Text>
+						<Text>{Object.keys(Factions)[armyList.faction - 1]?.replaceAll("_", " ")}</Text>
 					</View>
 					<View style={{ alignItems: "flex-start" }}>
 						<PointsContainer points={armyList.points} />
