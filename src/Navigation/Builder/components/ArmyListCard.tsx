@@ -11,18 +11,22 @@ import PointsContainer from "@components/pointsContainer";
 import { FontAwesome } from "@expo/vector-icons";
 import MenuOptionButton from "@components/MenuOptionButton";
 import { LinearGradient } from "expo-linear-gradient";
-
+import { Foundation } from "@expo/vector-icons";
 type ArmyListCardProps = {
 	armyList: ArmyListProps;
 	handleArmyListPress: (armyId: string) => void;
 	handleDeleteArmyPress: (armyId: string) => void;
 	handleArmyNameChange: (armyId: string) => void;
+	handleToggleFavourite: (armyId: string) => void;
+	handleOpenArmyNotes: () => void;
 };
 const ArmyListCard = ({
 	armyList,
 	handleArmyListPress,
 	handleDeleteArmyPress,
 	handleArmyNameChange,
+	handleToggleFavourite,
+	handleOpenArmyNotes,
 }: ArmyListCardProps) => {
 	const menuRef = useRef(null);
 	const { theme } = useTheme();
@@ -62,8 +66,15 @@ const ArmyListCard = ({
 					<View style={{ marginBottom: 4 }}>
 						<Text>{Object.keys(Factions)[armyList.faction - 1]?.replaceAll("_", " ")}</Text>
 					</View>
-					<View style={{ alignItems: "flex-start" }}>
-						<PointsContainer points={armyList.points} />
+					<View style={{ alignItems: "flex-start", flexDirection: "row" }}>
+						<View>
+							<PointsContainer points={armyList.points} />
+						</View>
+						{armyList.armyNotes !== "" && armyList.armyNotes !== undefined ? (
+							<TouchableOpacity style={{ marginLeft: 12 }} onPress={() => handleOpenArmyNotes()}>
+								<Foundation name='clipboard-notes' size={24} color={theme.white} />
+							</TouchableOpacity>
+						) : null}
 					</View>
 				</View>
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
@@ -92,12 +103,19 @@ const ArmyListCard = ({
 						<MenuTrigger>
 							<MaterialCommunityIcons name='dots-vertical' size={24} color={theme.text} />
 						</MenuTrigger>
-						<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 150 }}>
+						<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 170 }}>
+							<MenuOption onSelect={() => handleToggleFavourite(armyList.armyId)}>
+								<MenuOptionButton
+									icon={<AntDesign name='star' size={18} color={theme.warning} />}
+									variant={"outline"}
+									ButtonText={armyList.isFavourite ? "Remove Favourite" : "Set Favourite"}
+								/>
+							</MenuOption>
 							<MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>
 								<View style={{ flexDirection: "row", padding: 8 }}>
 									<FontAwesome name='pencil' size={18} color='black' />
 									<View style={{ marginLeft: 8 }}>
-										<Text style={{ color: theme.black }}>Edit Name</Text>
+										<Text style={{ color: theme.black }}>Edit</Text>
 									</View>
 								</View>
 							</MenuOption>

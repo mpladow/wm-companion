@@ -33,7 +33,7 @@ import ArmyPointsCount from "./components/ArmyPointsCount";
 import { LinearGradient } from "expo-linear-gradient";
 import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
 
-type sectionListDataProps = {
+export type sectionListDataProps = {
 	title: string;
 	data: SelectedUnitProps[];
 };
@@ -246,19 +246,7 @@ const BuilderEdit = () => {
 
 					//_unit.specialRulesExpanded = _genericSpecialRulesExist;
 				}
-				console.log(_unitAdditionalDate.specialRulesExpanded, 'CURRENT ARRAY OF SPECIAL RULES')
-				// if
-				// else {
-				// 	rulesArray = [];
-				// 	console.log("NO RULES FOUND");
-				// 	_unit.specialRulesExpanded = [];
 
-				// 	//_unit.specialRulesExpanded = [];
-				// } // else {
-				// 	setSpecialRules(null);
-				// }
-				//console.log(rulesArray, 'RULES ARRAY')
-				//_unit.specialRulesExpanded = rulesArray;
 				return _unitAdditionalDate;
 			}
 		} else {

@@ -3,6 +3,7 @@ import {
 	FlatList,
 	ImageBackground,
 	Modal,
+	SectionList,
 	StyleSheet,
 	TextInput,
 	TouchableOpacity,
@@ -12,7 +13,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@hooks/useTheme";
 import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
-import { useBuilderContext } from "@context/BuilderContext";
+import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import CustomModal from "@components/CustomModal";
 import fonts from "@utils/fonts";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
@@ -23,6 +24,10 @@ import ArmyListCard from "./components/ArmyListCard";
 import PopupConfirm from "@components/PopupConfirm";
 import { LinearGradient } from "expo-linear-gradient";
 
+export type armySectionListDataProps = {
+	title: string;
+	data: ArmyListProps[];
+};
 const BuilderHome = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation();
@@ -32,17 +37,23 @@ const BuilderHome = () => {
 	const [factionName, setFactionName] = useState<string>("");
 	const [factionNameError, setFactionNameError] = useState(false);
 	const [factionSelection, setFactionSelection] = useState<number>();
+	const [factionNotes, setFactionNotes] = useState<string>("");
 
 	const [confirmDialog, setConfirmDialog] = useState(false);
 	const [editingArmy, setEditingArmy] = useState(false);
 	const [focusedArmyId, setFocusedArmyId] = useState<string>();
+	const [focusedArmy, setFocusedArmy] = useState<ArmyListProps>();
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
 
+	const [showArmyNotes, setShowArmyNotes] = useState(false);
 	const handleAddArmyPress = () => {
+		setFactionName("");
+		setFactionSelection(undefined);
 		setShowCreateArmy(!showCreateArmy);
 	};
 	const handleEditArmyPress = (armyId: string) => {
 		setFocusedArmyId(armyId);
+		setFocusedArmy(builder.getArmyByArmyId(armyId));
 		setEditingArmy(true);
 		setShowCreateArmy(!showCreateArmy);
 	};
@@ -58,7 +69,9 @@ const BuilderHome = () => {
 	const onArmyNameChange = () => {
 		if (factionName !== "" && focusedArmyId) {
 			builder.updateArmyName(factionName, focusedArmyId);
+			builder.updateArmyNotes(focusedArmyId, factionNotes);
 			setFocusedArmyId(undefined);
+			setFocusedArmy(undefined);
 			setEditingArmy(false);
 			setShowCreateArmy(!showCreateArmy);
 		}
@@ -66,6 +79,12 @@ const BuilderHome = () => {
 	useEffect(() => {
 		if (factionName != "") setFactionNameError(false);
 	}, [factionName]);
+	useEffect(() => {
+		if (focusedArmy) {
+			setFactionNotes(focusedArmy?.armyNotes);
+			setFactionName(focusedArmy?.name);
+		}
+	}, [focusedArmy]);
 	const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
 		if (factionName == "") {
 			setFactionNameError(true);
@@ -95,6 +114,25 @@ const BuilderHome = () => {
 		setConfirmDialog(true);
 	};
 	const nameRef = useRef<TextInput>(null);
+
+	const [sectionListData, setSectionListData] = useState<armySectionListDataProps[]>([]);
+	useEffect(() => {
+		const favourited = builder.userArmyLists.filter((x) => x.isFavourite);
+		const notFavourited = builder.userArmyLists.filter((x) => !x.isFavourite);
+		const sLData: armySectionListDataProps = {
+			data: favourited,
+			title: "Favourited",
+		};
+		const notFavouritedSLData: armySectionListDataProps = {
+			data: notFavourited,
+			title: "Armies",
+		};
+		const arr: armySectionListDataProps[] = [];
+		arr.push(sLData);
+		arr.push(notFavouritedSLData);
+		setSectionListData(arr);
+	}, [builder.userArmyLists]);
+
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
@@ -116,7 +154,41 @@ const BuilderHome = () => {
 					}}
 				></LinearGradient>
 				<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
-					<FlatList
+					<SectionList
+						style={{ zIndex: 9, marginBottom: 200 }}
+						ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
+						sections={sectionListData}
+						renderSectionHeader={({ section: { title } }) => (
+							<View
+								style={{
+									alignItems: "center",
+									padding: 12,
+									backgroundColor: theme.backgroundVariant2,
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}
+							>
+								<Text variant='heading3' style={{ fontSize: 20, textTransform: "uppercase" }}>
+									{title}
+								</Text>
+							</View>
+						)}
+						ItemSeparatorComponent={() => <View style={{ height: 2, backgroundColor: "black" }}></View>}
+						renderItem={({ item, index }) => {
+							// get total unit count
+							return (
+								<ArmyListCard
+									armyList={item}
+									handleOpenArmyNotes={() => setShowArmyNotes(true)}
+									handleArmyListPress={onArmyListPress}
+									handleDeleteArmyPress={onArmyListDeletePress}
+									handleArmyNameChange={handleEditArmyPress}
+									handleToggleFavourite={(armyId) => builder.toggleFavourite(armyId)}
+								/>
+							);
+						}}
+					/>
+					{/* <FlatList
 						ListFooterComponent={() => <View style={{ padding: 140 }}></View>}
 						data={builder.userArmyLists}
 						ItemSeparatorComponent={() => <View style={{ padding: 4 }}></View>}
@@ -131,13 +203,13 @@ const BuilderHome = () => {
 								/>
 							);
 						}}
-					/>
+					/> */}
 				</View>
 
 				<CustomModal
 					onDismiss={() => {
-						console.log("onDISMISS");
 						setFocusedArmyId(undefined);
+						setFocusedArmy(undefined);
 						setEditingArmy(false);
 					}}
 					setModalVisible={handleAddArmyPress}
@@ -171,22 +243,46 @@ const BuilderHome = () => {
 								</Text>
 							)}
 							{!editingArmy ? (
+								<>
+									<View style={{ marginTop: 12 }}>
+										<Text>Faction</Text>
+										<CustomDropdown
+											value={factionSelection}
+											style={[styles.dropdown, { backgroundColor: theme.white }]}
+											placeholder='Select Faction'
+											placeholderStyle={{ color: "#ddd" }}
+											data={ddFactions}
+											labelField='label'
+											valueField='value'
+											onChange={(item) => {
+												handleFactionSelection(item.value);
+											}}
+										/>
+									</View>
+								</>
+							) : (
 								<View style={{ marginTop: 12 }}>
-									<Text>Faction</Text>
-									<CustomDropdown
-										value={factionSelection}
-										style={[styles.dropdown, { backgroundColor: theme.white }]}
-										placeholder='Select Faction'
-										placeholderStyle={{ color: "#ddd" }}
-										data={ddFactions}
-										labelField='label'
-										valueField='value'
-										onChange={(item) => {
-											handleFactionSelection(item.value);
-										}}
+									<Text>Notes</Text>
+									<TextInput
+										multiline
+										value={factionNotes}
+										onChangeText={(val) => setFactionNotes(val)}
+										style={[
+											{
+												color: theme.black,
+												fontFamily: fonts.PTSansBold,
+												fontSize: 16,
+												backgroundColor: theme.white,
+												borderRadius: 16,
+												padding: 16,
+												paddingTop: 16,
+												height: 100,
+											},
+											// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+										]}
 									/>
 								</View>
-							) : null}
+							)}
 						</View>
 						<Button
 							onPress={() => (editingArmy ? onArmyNameChange() : onConfirmCreateArmyPress(true))}
@@ -206,6 +302,7 @@ const BuilderHome = () => {
 					}}
 					onCancel={() => {
 						setFocusedArmyId(undefined);
+						setFocusedArmy(undefined);
 						setConfirmDialog(false);
 					}}
 					text={<Text style={{ color: theme.text, fontSize: 16 }}>Do you want to delete this army?</Text>}
@@ -226,6 +323,42 @@ const BuilderHome = () => {
 					</View>
 				</Button>
 			</View>
+			<Modal animationType='fade' visible={showArmyNotes} transparent={true}>
+				<View style={styles.modalOverlay} onTouchStart={() => setShowArmyNotes(!showArmyNotes)}>
+					<View
+						style={{
+							marginTop: Dimensions.get("screen").height/3,
+							alignItems: "center",
+							justifyContent: "center",
+							backgroundColor: theme.blueGrey,
+							padding: 16,
+							margin: 12,
+							borderRadius: 20,
+						}}
+					>
+						<Text style={{color: theme.text}}>Army Notes</Text>
+						<TextInput
+							multiline
+							value={factionNotes}
+							maxLength={10}
+							max
+							onChangeText={(val) => setFactionNotes(val)}
+							style={[
+								{
+									color: theme.text,
+									fontFamily: fonts.PTSansBold,
+									fontSize: 16,
+									borderRadius: 16,
+									padding: 16,
+									paddingTop: 16,
+									height: 100,
+								},
+								// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+							]}
+						/>
+					</View>
+				</View>
+			</Modal>
 		</SafeAreaView>
 	);
 };
@@ -241,5 +374,14 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 0,
 		width: Dimensions.get("screen").width,
+	},
+	modalOverlay: {
+		position: "absolute",
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		//backgroundColor: 'blue',
+		backgroundColor: "rgba(0,0,0,0.1)",
 	},
 });
