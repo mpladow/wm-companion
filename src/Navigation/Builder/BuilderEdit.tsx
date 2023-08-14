@@ -83,7 +83,7 @@ const BuilderEdit = () => {
 							</Text>
 							<Text>
 								{builder.selectedArmyList?.name &&
-									getKeyByValue(Factions, builder.selectedArmyList.faction)?.replace("_", " ")}
+									getKeyByValue(Factions, builder.selectedArmyList.faction)?.replaceAll("_", " ")}
 							</Text>
 						</View>
 					</View>

@@ -19,7 +19,6 @@ import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { getFactions, getFactionUnits } from "@utils/factionHelpers";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import uuid from "uuid-random";
 import ArmyListCard from "./components/ArmyListCard";
 import PopupConfirm from "@components/PopupConfirm";
 import { LinearGradient } from "expo-linear-gradient";
@@ -67,8 +66,7 @@ const BuilderHome = () => {
 	useEffect(() => {
 		if (factionName != "") setFactionNameError(false);
 	}, [factionName]);
-	const onConfirmCreateArmyPress = async () => {
-		console.log("onCnfirmCreateArmyPress:: FACTION SELECTION:");
+	const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
 		if (factionName == "") {
 			setFactionNameError(true);
 		} else {
@@ -76,7 +74,7 @@ const BuilderHome = () => {
 		}
 		if (factionSelection && factionName != "") {
 			builder
-				.addUserArmyList(factionSelection, factionName)
+				.addUserArmyList(factionSelection, factionName, autopopulate)
 				.then((result) => {
 					console.log(result, "ARMY ID");
 					builder.setSelectedArmyList(result);
@@ -117,7 +115,7 @@ const BuilderHome = () => {
 						zIndex: 9,
 					}}
 				></LinearGradient>
-				<View style={{ zIndex: 999, flex: 1, padding: 16,}}>
+				<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
 					<FlatList
 						ListFooterComponent={() => <View style={{ padding: 140 }}></View>}
 						data={builder.userArmyLists}
@@ -191,7 +189,7 @@ const BuilderHome = () => {
 							) : null}
 						</View>
 						<Button
-							onPress={() => (editingArmy ? onArmyNameChange() : onConfirmCreateArmyPress())}
+							onPress={() => (editingArmy ? onArmyNameChange() : onConfirmCreateArmyPress(true))}
 							variant={"confirm"}
 						>
 							<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
@@ -220,9 +218,11 @@ const BuilderHome = () => {
 							<AntDesign name='plus' size={24} color='black' />
 						</Button> */}
 				<Button onPress={handleAddArmyPress} variant={"confirm"}>
-					<View style={{flexDirection: 'row', alignItems: 'center'}}>
+					<View style={{ flexDirection: "row", alignItems: "center" }}>
 						<AntDesign name='plus' size={20} color='black' />
-						<Text bold style={{ marginLeft: 4,color: theme.black }}>Add Army</Text>
+						<Text bold style={{ marginLeft: 4, color: theme.black }}>
+							Add Army
+						</Text>
 					</View>
 				</Button>
 			</View>
@@ -233,7 +233,7 @@ const BuilderHome = () => {
 export default BuilderHome;
 
 const styles = StyleSheet.create({
-	dropdown: { padding: 8, borderRadius: 16 },
+	dropdown: { paddingHorizontal: 16, padding: 8, borderRadius: 16 },
 	image: {
 		flex: 1,
 		justifyContent: "center",

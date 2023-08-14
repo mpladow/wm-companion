@@ -17,6 +17,7 @@ import daemonsList from "../data/json/wmr/daemons.json";
 import nipponList from "../data/json/wmr/nippon.json";
 import chaosDwarvesList from "../data/json/wmr/chaosDwarves.json";
 import dogsOfWarList from "../data/json/wmr/dogsOfWar.json";
+import arabyList from "../data/json/wmr/araby.json";
 
 import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
 
@@ -119,6 +120,10 @@ export const getFactionUnits = (factionSelection: number) => {
 		case Factions.Dogs_Of_War:
 			list = dogsOfWarList.units;
 			factionList = dogsOfWarList;
+			break;
+		case Factions.Araby:
+			list = arabyList.units;
+			factionList = arabyList;
 			break;
 		default:
 			break;

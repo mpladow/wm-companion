@@ -50,7 +50,8 @@ export const Factions = {
 	Daemons: 15,
 	Nippon: 16,
 	Chaos_Dwarves: 17,
-	Dogs_Of_War: 18
+	Dogs_Of_War: 18,
+	Araby: 19
 };
 
 //export const underscoreRegex = /_(.*?)_/g;

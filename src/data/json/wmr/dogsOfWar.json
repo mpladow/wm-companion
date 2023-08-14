@@ -117,6 +117,7 @@
         "size": 2,
         "points": 85,
         "max": 1,
+        "noMagic": true,
         "specialRules": [
           "Cannon"
         ]
@@ -130,7 +131,8 @@
         "armour": "5+",
         "size": 1,
         "points": 135,
-        "max": 1
+        "max": 1,
+        "noMagic": true
       },
       {
         "name": "Birdmen",

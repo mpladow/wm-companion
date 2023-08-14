@@ -124,27 +124,27 @@ const UnitDetailsCard = ({
 							>
 								<PointsContainer points={unit.points} />
 							</View>
-							<View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', width: 30, }}>
+							<View style={{ justifyContent: "flex-end", alignItems: "flex-end", width: 30 }}>
 								<Text>
 									{unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
 								</Text>
 							</View>
 						</View>
-							<UnitDetailsMenu
-								noMagic={!unit.noMagic}
-								onAddUnit={() =>
-									onAddUnit(
-										unit.name,
-										unit.points,
-										unit.command ? true : false,
-										unit.armyMax ? unit.armyMax : unit.max,
-										unit.armyMin ? unit.armyMin : unit.min,
-										unit.noCount
-									)
-								}
-								onAddUpgrade={() => onAddUpgrade(key)}
-								onDeleteUnit={() => onDeleteUnit(key)}
-							/>
+						<UnitDetailsMenu
+							noMagic={!unit.noMagic}
+							onAddUnit={() =>
+								onAddUnit(
+									unit.name,
+									unit.points,
+									unit.command ? true : false,
+									unit.armyMax ? unit.armyMax : unit.max,
+									unit.armyMin ? unit.armyMin : unit.min,
+									unit.noCount
+								)
+							}
+							onAddUpgrade={() => onAddUpgrade(key)}
+							onDeleteUnit={() => onDeleteUnit(key)}
+						/>
 					</View>
 				</View>
 				{showStatline ? (
@@ -168,6 +168,7 @@ const UnitDetailsCard = ({
 											<Text>{unit.attack}</Text>
 										</View>
 									</View>
+
 									<View style={{ flex: 1, flexDirection: "column" }}></View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										{unitDetailsExpanded?.specialRulesExpanded &&
@@ -193,6 +194,14 @@ const UnitDetailsCard = ({
 										</View>
 										<View style={{ flex: 1 }}>
 											<Text>{unit.attack}</Text>
+										</View>
+									</View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={"Armour"} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.armour}</Text>
 										</View>
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
