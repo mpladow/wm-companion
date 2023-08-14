@@ -6,7 +6,6 @@ import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import uuid from "uuid-random";
-import magicItemsList from "./../data/json/wmr/magic-items.json";
 
 type ArmyErrorsProps = {
 	source?: "Unit" | "Upgrade";

@@ -10,7 +10,6 @@ const AnimatedView = ({ children, animate }: AnimatedViewProps) => {
 	const scaleAnim = useRef(new Animated.Value(1)).current;
 
 	useEffect(() => {
-		console.log("SCALE UP");
 		scaleUp();
 	}, [animate]);
 	const scaleUp = () => {

@@ -16,6 +16,7 @@ import { get1000PointInterval } from "../utils/builderHelpers";
 import { current } from "@reduxjs/toolkit";
 import UnitDetailsMenu from "./UnitDetailsMenu";
 import AnimatedView from "@components/Animated/AnimatedView";
+import QuickviewProfileHeading from "./UnitDetailsCard/QuickviewProfileHeading";
 
 type UnitCardDetailsProps = {
 	unit: UnitProps;
@@ -38,6 +39,8 @@ type UnitCardDetailsProps = {
 	onUpgradePress: (upgradeName: string) => void;
 	currentArmyCount: number;
 	hasError: boolean;
+	unitDetailsExpanded: UnitProps | undefined;
+	showStatline: boolean;
 };
 const UnitDetailsCard = ({
 	unit,
@@ -53,6 +56,8 @@ const UnitDetailsCard = ({
 	onUpgradePress,
 	currentArmyCount,
 	hasError,
+	unitDetailsExpanded,
+	showStatline,
 }: UnitCardDetailsProps) => {
 	const { theme } = useTheme();
 
@@ -71,9 +76,7 @@ const UnitDetailsCard = ({
 	};
 	const [triggerScale, setTriggerScale] = useState(false);
 	useEffect(() => {
-		console.log("triggerScale...");
 		if (triggerScale) {
-			console.log("SET TRIGGER SCALE TO FALSE");
 			setTriggerScale(false);
 		}
 	}, [triggerScale]);
@@ -81,6 +84,10 @@ const UnitDetailsCard = ({
 	useEffect(() => {
 		setTriggerScale(true);
 	}, [existingUnits]);
+	useEffect(() => {
+		console.log(unitDetailsExpanded, "unitDetailsCard::ExpandedUnits");
+	}, [unitDetailsExpanded]);
+
 	return (
 		<View key={key} style={{ flexDirection: "column", padding: 12, backgroundColor: theme.background }}>
 			<>
@@ -125,6 +132,111 @@ const UnitDetailsCard = ({
 						/>
 					</View>
 				</View>
+				{showStatline ? (
+					<View style={{ flex: 1, flexDirection: "row", marginVertical: 4 }}>
+						{unit.command ? (
+							<>
+								<View style={{ flex: 1, flexDirection: "column" }}>
+									<View style={{ flex: 1 }}>
+										<QuickviewProfileHeading label={"Command"} />
+									</View>
+									<View style={{ flex: 1 }}>
+										<Text>{unit.command}</Text>
+									</View>
+								</View>
+								<View style={{ flex: 1, flexDirection: "column" }}>
+									<View style={{ flex: 1 }}>
+										<QuickviewProfileHeading label={"Attack"} />
+									</View>
+									<View style={{ flex: 1 }}>
+										<Text>{unit.attack}</Text>
+									</View>
+								</View>
+								<View style={{ flex: 1, flexDirection: "column" }}></View>
+								<View style={{ flex: 1, flexDirection: "column" }}>
+									{unitDetailsExpanded?.specialRulesExpanded &&
+									unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
+										<>
+											<View style={{ flex: 1 }}>
+												<QuickviewProfileHeading label={"Special Rules"} />
+											</View>
+											<View style={{ flex: 1 }}>
+												<Text>
+													{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
+												</Text>
+											</View>
+										</>
+									) : null}
+								</View>
+							</>
+						) : (
+							<>
+								<View style={{ flex: 1, flexDirection: "column" }}>
+									<View style={{ flex: 1 }}>
+										<QuickviewProfileHeading label={"Attack"} />
+									</View>
+									<View style={{ flex: 1 }}>
+										<Text>{unit.attack}</Text>
+									</View>
+								</View>
+								<View style={{ flex: 1, flexDirection: "column" }}>
+									<View style={{ flex: 1 }}>
+										<QuickviewProfileHeading label={"Hits"} />
+									</View>
+									<View style={{ flex: 1 }}>
+										<Text>{unit.hits}</Text>
+									</View>
+								</View>
+								<View style={{ flex: 1, flexDirection: "column" }}>
+									{unit.range ? (
+										<>
+											<View style={{ flex: 1 }}>
+												<QuickviewProfileHeading label={"Range"} />
+											</View>
+											<View style={{ flex: 1 }}>
+												<Text>{unit.range}</Text>
+											</View>
+										</>
+									) : null}
+								</View>
+
+								<View style={{ flex: 1, flexDirection: "column" }}>
+									{unitDetailsExpanded?.specialRulesExpanded &&
+									unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
+										<>
+											<View style={{ flex: 1 }}>
+												<QuickviewProfileHeading label={"Special Rules"} />
+											</View>
+											<View style={{ flex: 1 }}>
+												<Text>
+													{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
+												</Text>
+											</View>
+										</>
+									) : null}
+								</View>
+								{/* <View style={{ flex: 1, flexDirection: "column" }}>
+									{unitDetailsExpanded?.specialRules &&
+									unitDetailsExpanded?.specialRules?.length > 0 ? (
+										<>
+											<View style={{ flex: 1 }}>
+												<QuickviewProfileHeading label={"Special Rules"} />
+											</View>
+											<View style={{ flex: 1 }}>
+												<Text>
+													{unitDetailsExpanded?.specialRules?.map(
+														(r) => r
+													)}
+												</Text>
+											</View>
+										</>
+									) : null}
+								</View> */}
+							</>
+						)}
+					</View>
+				) : null}
+
 				{/* // Display unit stats here
 			<View style={{flex: 1, flexDirection: 'row'}}>
 			<View style={{backgroundColor: theme.black, padding: 4, paddingHorizontal: 8, borderRadius: 16, justifyContent: 'flex-start'}}>

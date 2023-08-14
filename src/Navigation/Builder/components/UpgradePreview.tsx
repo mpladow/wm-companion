@@ -48,7 +48,6 @@ const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: U
 						<View style={{ flex: 3, justifyContent: "center", flexDirection: "column" }}>
 							<View style={{ flex: 1, flexDirection: "column" }}>
 								{selectedUpgradeDetails?.text?.map((x) => {
-									console.log(x, 'upgrade in array')
 									if (x)
 										return (
 											<View style={{ marginBottom: 4, alignItems: "flex-start" }}>

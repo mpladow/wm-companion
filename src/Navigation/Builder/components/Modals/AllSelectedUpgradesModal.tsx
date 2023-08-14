@@ -27,7 +27,6 @@ const AllSelectedUpgradesModal = ({
 
 	useEffect(() => {
 		if (selectedUpgrades) {
-			console.log(selectedUpgrades, "updating selected Upgrades");
 			const uniqueItems: SelectedUpgradesProps[] = [];
 			selectedUpgrades?.map((up) => {
 				const findItem = uniqueItems.find((x) => x.upgradeName === up.upgradeName);
@@ -41,7 +40,6 @@ const AllSelectedUpgradesModal = ({
 
 	const getCondensedUpgrades = () => {
 		if (selectedUpgrades) {
-			console.log(selectedUpgrades, "updating selected Upgrades");
 			const uniqueItems: SelectedUpgradesProps[] = [];
 			selectedUpgrades?.map((up) => {
 				const findItem = uniqueItems.find((x) => x.upgradeName === up.upgradeName);

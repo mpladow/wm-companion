@@ -4,11 +4,11 @@ import { useTheme } from "@hooks/useTheme";
 import fonts from "@utils/fonts";
 
 export type TextVariant = "bold" | "heading1" | "heading2" | "heading3";
-interface CustomTypeProps extends TextProps {
+type CustomTypeProps = {
 	variant?: TextVariant;
 	bold?: boolean;
 	italic?: boolean;
-}
+} & TextProps
 const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypeProps) => {
 	const { theme } = useTheme();
 
