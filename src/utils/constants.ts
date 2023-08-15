@@ -56,5 +56,7 @@ export const Factions = {
 
 //export const underscoreRegex = /_(.*?)_/g;
 export const underscoreRegex = /__(.*?)__/g;
+export const additionalSpaceRegex = /|(.*?)|/g;
+
 //const underscoreRegex = /\__(\S*)\__(.*)/
 export default playerTypes;

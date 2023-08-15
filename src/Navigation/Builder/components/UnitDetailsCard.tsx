@@ -124,7 +124,7 @@ const UnitDetailsCard = ({
 							>
 								<PointsContainer points={unit.points} />
 							</View>
-							<View style={{ justifyContent: "flex-end", alignItems: "flex-end", width: 30 }}>
+							<View style={{ justifyContent: "flex-end", alignItems: "flex-end", width: 40 }}>
 								<Text>
 									{unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
 								</Text>
@@ -161,10 +161,10 @@ const UnitDetailsCard = ({
 										</View>
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
-										<View style={{ flex: 1 }}>
+										<View style={{ flex: 2 }}>
 											<QuickviewProfileHeading label={"Attack"} />
 										</View>
-										<View style={{ flex: 1 }}>
+										<View style={{ flex: 2 }}>
 											<Text>{unit.attack}</Text>
 										</View>
 									</View>
@@ -175,7 +175,7 @@ const UnitDetailsCard = ({
 										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
 											<>
 												<View style={{ flex: 1 }}>
-													<QuickviewProfileHeading label={"Special Rules"} />
+													<QuickviewProfileHeading label={"Special"} />
 												</View>
 												<View style={{ flex: 1 }}>
 													<Text>
@@ -188,11 +188,11 @@ const UnitDetailsCard = ({
 								</>
 							) : (
 								<>
-									<View style={{ flex: 1, flexDirection: "column" }}>
-										<View style={{ flex: 1 }}>
+									<View style={{ flex: 1.4, flexDirection: "column" }}>
+										<View style={{ flex: 2 }}>
 											<QuickviewProfileHeading label={"Attack"} />
 										</View>
-										<View style={{ flex: 1 }}>
+										<View style={{ flex: 2 }}>
 											<Text>{unit.attack}</Text>
 										</View>
 									</View>
@@ -201,7 +201,7 @@ const UnitDetailsCard = ({
 											<QuickviewProfileHeading label={"Armour"} />
 										</View>
 										<View style={{ flex: 1 }}>
-											<Text>{unit.armour}</Text>
+											<Text>{unit.armour? unit.armour : "-"}</Text>
 										</View>
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
@@ -230,7 +230,7 @@ const UnitDetailsCard = ({
 										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
 											<>
 												<View style={{ flex: 1 }}>
-													<QuickviewProfileHeading label={"Special Rules"} />
+													<QuickviewProfileHeading label={"Special"} />
 												</View>
 												<View style={{ flex: 1 }}>
 													<Text>

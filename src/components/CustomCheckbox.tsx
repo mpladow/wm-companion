@@ -25,6 +25,7 @@ const CustomCheckbox = ({ onValueChange, disabled, value, label }: CustomCheckbo
 				color={theme.accent}
 				disabled={disabled}
 				value={value}
+				style={{borderRadius: 20}}
 				onValueChange={(newValue) => onValueChange(newValue)}
 			/>
 		</View>

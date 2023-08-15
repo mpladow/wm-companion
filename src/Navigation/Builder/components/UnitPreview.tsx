@@ -9,7 +9,7 @@ import { useBuilderContext } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
 import { getGenericSpecialRules } from "@utils/factionHelpers";
 import reactStringReplace from "react-string-replace";
-import { underscoreRegex } from "@utils/constants";
+import { additionalSpaceRegex, underscoreRegex } from "@utils/constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type UnitPreviewProps = {
@@ -23,7 +23,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 	const [headerTitle, setHeaderTitle] = useState(selectedUnitDetails?.name);
 	const [specialRules, setSpecialRules] = useState<any>();
 
-	const underscoreRegex = /_(.*?)_/g;
+	// const underscoreRegex = /_(.*?)_/g;
 
 	useEffect(() => {
 		selectedUnitDetails && setHeaderTitle(selectedUnitDetails.name);
@@ -118,21 +118,33 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 					{specialRules ? (
 						<View style={{ flex: 3, justifyContent: "center", flexDirection: "column" }}>
 							<View style={{ flex: 1, flexDirection: "column" }}>
-								<View style={{marginTop: 8}}>
-								<Text bold style={{ fontSize: 16 }}>
-									Special Rules
-								</Text>
+								<View style={{ marginTop: 8 }}>
+									<Text bold style={{ fontSize: 16 }}>
+										Special Rules
+									</Text>
 									{specialRules &&
 										specialRules?.text.map((x) => {
 											// transform content to remove __
-											const sanitized = reactStringReplace(x, underscoreRegex, (match, i) => {
+											let sanitized = reactStringReplace(x, underscoreRegex, (match, i) => {
 												console.log(match, `${match} on ${i}`);
 												return (
 													<Text bold style={{ color: theme.text }} key={i}>
-														{match}ß
+														{match}
 													</Text>
 												);
 											});
+											// sanitized = reactStringReplace(
+											// 	sanitized,
+											// 	additionalSpaceRegex,
+											// 	(match, i) => {
+											// 		console.log(match, `${match} on ${i}`);
+											// 		return (
+											// 			<Text bold style={{ color: theme.text }} key={i}>
+											// 				{match}{"  "}
+											// 			</Text>
+											// 		);
+											// 	}
+											// );
 
 											return (
 												<View>
