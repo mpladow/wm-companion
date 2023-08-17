@@ -341,7 +341,6 @@ const BuilderHome = () => {
 							multiline
 							value={factionNotes}
 							maxLength={10}
-							max
 							onChangeText={(val) => setFactionNotes(val)}
 							style={[
 								{

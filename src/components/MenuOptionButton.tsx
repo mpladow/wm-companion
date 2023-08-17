@@ -24,7 +24,7 @@ const MenuOptionButton = ({ icon, variant, ButtonText }: MenuOptionButton) => {
 			case "outline":
 				return {
 					backgroundColor: "transparent",
-					textColor: theme.blueGrey,
+					textColor: theme.text,
 					borderColor: theme.blueGrey,
 					borderWidth: 2,
 				};
@@ -44,8 +44,10 @@ const MenuOptionButton = ({ icon, variant, ButtonText }: MenuOptionButton) => {
                 alignItems: 'center'
 			}}
 		>
+			<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
 			{icon}
-			<View style={{ marginLeft: 8 }}>
+			</View>
+			<View style={{ flex: 4, marginLeft: 8 }}>
 				<Text style={{ color: renderVariantStyle().textColor }}>{ButtonText}</Text>
 			</View>
 		</View>

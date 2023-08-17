@@ -2,18 +2,13 @@ import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-nativ
 import React, { useEffect, useMemo, useState } from "react";
 import { UnitProps } from "@utils/types";
 import { Text } from "@components/index";
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
 import PointsContainer from "@components/pointsContainer";
 import { SelectedUpgradesProps } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
 import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
-import MenuOptionButton from "@components/MenuOptionButton";
-import MagicOrb from "@components/SVGS/MagicOrb";
 import { get1000PointInterval } from "../utils/builderHelpers";
-import { current } from "@reduxjs/toolkit";
 import UnitDetailsMenu from "./UnitDetailsMenu";
 import AnimatedView from "@components/Animated/AnimatedView";
 import QuickviewProfileHeading from "./UnitDetailsCard/QuickviewProfileHeading";

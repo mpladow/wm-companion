@@ -116,21 +116,26 @@ export const Tracker = () => {
 		vpContext.setPlayer("playerOne");
 		navigation.navigate("VictoryPoints");
 	};
+	const handleOnSavePress = () => {
+		// open save popup
+	};
 	const handleReset = () => {
 		setP1CasualtyScore(0);
 		setP2CasualtyScore(0);
 		setP1CombatBonus(0);
 		setP2CombatBonus(0);
 	};
-	useFocusEffect(useCallback(() => {
-		// This will run when screen is `focused` or mounted.
-		StatusBar.setHidden(true);
-	  
-		// This will run when screen is `blured` or unmounted.
-		return () => {
-		  StatusBar.setHidden(false);
-		}
-	  }, []));
+	useFocusEffect(
+		useCallback(() => {
+			// This will run when screen is `focused` or mounted.
+			StatusBar.setHidden(true);
+
+			// This will run when screen is `blured` or unmounted.
+			return () => {
+				StatusBar.setHidden(false);
+			};
+		}, [])
+	);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -138,7 +143,7 @@ export const Tracker = () => {
 				style={[
 					styles.container,
 					{
-						transform: [{ rotate: "180deg" }],
+						transform: [{ rotate: vpContext.useOnePlayerMode ? "0deg" : "180deg" }],
 						justifyContent: "space-between",
 						flexDirection: "row",
 						backgroundColor: theme.theme.backgroundVariant,
@@ -146,6 +151,7 @@ export const Tracker = () => {
 				]}
 			>
 				<PlayerSection
+					useOnePlayerMode={vpContext.useOnePlayerMode}
 					player={"playerTwo"}
 					playerScore={playerTwoScore}
 					handleSetPlayerScore={(player, score) => handleSetPlayerScore(player, score)}
@@ -169,9 +175,11 @@ export const Tracker = () => {
 					handleSettingsPress={onSettingsPress}
 					handleBlunderPress={onBlunderPress}
 					handleVictoryPointsPress={onVictoryPointsPress}
+					handleToggleOnePlayerMode={() => vpContext.toggleOnePlayerMode()}
 					handleReset={handleReset}
 					topResultValue={combatResultTop}
 					bottomResultValue={combatResultBottom}
+					handleOnSavePress={() => console.log("SAVE")}
 					// add plauyer one score object
 					//add player two score object
 				/>
@@ -188,6 +196,7 @@ export const Tracker = () => {
 				]}
 			>
 				<PlayerSection
+				useOnePlayerMode={false}
 					player={"playerOne"}
 					playerScore={playerOneScore}
 					playerCasualty={p1CasualtyScore}

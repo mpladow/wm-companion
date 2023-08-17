@@ -32,6 +32,8 @@ type VPContextInterface = {
 	getP1TotalPoints: number;
 	getP2TotalPoints: number;
 	toggleHalfPoints: (id: string) => void;
+	useOnePlayerMode: boolean;
+	toggleOnePlayerMode: () => void;
 };
 const VPContext = createContext<VPContextInterface>({} as VPContextInterface);
 
@@ -46,7 +48,7 @@ export const VPContextProvider = ({ children }: any) => {
 	const [p2VpScore, setP2VpScore] = useState<VPScoreProps[]>([] as VPScoreProps[]);
 	const [p1VpFaction, setP1VpFaction] = useState<number | undefined>();
 	const [p2VpFaction, setP2VpFaction] = useState<number | undefined>();
-
+	const [useOnePlayerMode, setUseOnePlayerMode] = useState(false);
 	const [selectedPlayer, setSelectedPlayer] = useState<playerTypes>("playerOne");
 	const setPlayer = (player: playerTypes) => {
 		setSelectedPlayer(player);
@@ -58,14 +60,14 @@ export const VPContextProvider = ({ children }: any) => {
 			const p1UnitsScore = p1UnitsArr.reduce((partial, a) => partial + a, 0);
 			// get total score for magic items
 			let p1UnitUpgrades = p1VpScore.filter((x) => x.attachedItems && x.attachedItems?.length > 0);
-            let p1TotalUpgradesArr: number[] = [];
-			p1UnitUpgrades.map(upgrade => upgrade.attachedItems?.map(x => p1TotalUpgradesArr.push(x.sourcePoints)));
+			let p1TotalUpgradesArr: number[] = [];
+			p1UnitUpgrades.map((upgrade) => upgrade.attachedItems?.map((x) => p1TotalUpgradesArr.push(x.sourcePoints)));
 			const p1UnitUpgradesScore = p1TotalUpgradesArr.reduce((partial, a) => partial + a, 0);
 
 			res = p1UnitsScore + p1UnitUpgradesScore;
 		}
 		return res; // + variable scores
-	}, [p1VpScore]); 
+	}, [p1VpScore]);
 
 	const getP2TotalPoints = useMemo(() => {
 		// PLAYER TWO
@@ -75,8 +77,8 @@ export const VPContextProvider = ({ children }: any) => {
 			const p2UnitsScore = p2UnitsArr.reduce((partial, a) => partial + a, 0);
 			// get total score for magic items
 			let p2UnitUpgrades = p2VpScore.filter((x) => x.attachedItems && x.attachedItems?.length > 0);
-            let p1TotalUpgradesArr: number[] = [];
-			p2UnitUpgrades.map(upgrade => upgrade.attachedItems?.map(x => p1TotalUpgradesArr.push(x.sourcePoints)));
+			let p1TotalUpgradesArr: number[] = [];
+			p2UnitUpgrades.map((upgrade) => upgrade.attachedItems?.map((x) => p1TotalUpgradesArr.push(x.sourcePoints)));
 			const p1UnitUpgradesScore = p1TotalUpgradesArr.reduce((partial, a) => partial + a, 0);
 
 			res = p2UnitsScore + p1UnitUpgradesScore;
@@ -206,6 +208,9 @@ export const VPContextProvider = ({ children }: any) => {
 			}
 		} catch (e) {}
 	};
+	const toggleOnePlayerMode = () => {
+		setUseOnePlayerMode(!useOnePlayerMode);
+	}
 	return (
 		<VPContext.Provider
 			value={{
@@ -222,6 +227,8 @@ export const VPContextProvider = ({ children }: any) => {
 				getP1TotalPoints,
 				getP2TotalPoints,
 				toggleHalfPoints,
+				useOnePlayerMode,
+				toggleOnePlayerMode
 			}}
 		>
 			{children}

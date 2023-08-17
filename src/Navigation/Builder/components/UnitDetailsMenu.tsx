@@ -24,7 +24,7 @@ const UnitDetailsMenu = ({ noMagic, onAddUnit, onAddUpgrade, onDeleteUnit }: uni
 		}
 	};
 	return (
-		<Menu opened={opened} onBackdropPress={() => setOpened(!opened)}>
+		<Menu style={{marginTop: -50}} opened={opened} onBackdropPress={() => setOpened(!opened)}>
 			<MenuTrigger onPress={() => setOpened(!opened)}>
 				<MaterialCommunityIcons name='dots-vertical' size={24} color={theme.text} />
 			</MenuTrigger>

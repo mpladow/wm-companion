@@ -25,6 +25,7 @@ type CustomModalProps = {
 	footerLeft?: JSX.Element;
 	footerRight?: JSX.Element;
 	page?: string;
+	rotateContainer:boolean
 };
 
 export type ModalMetaContentType = {
@@ -37,13 +38,14 @@ const ModalContainer = ({
 	footerLeft,
 	footerRight,
 	onPageModalClosePressed,
+	rotateContainer
 }: CustomModalProps) => {
 	const windowWidth = Dimensions.get("window").width;
 	const { theme } = useTheme();
 	const [modalMetaContent, setModalMetaContent] = useState<ModalMetaContentType>();
 
 	return (
-		<View style={styles.centeredView}>
+		<View style={[styles.centeredView,rotateContainer && {transform: [{rotate: '180deg'}]} ]}>
 			<View style={[styles.modalView, { width: windowWidth - 20, 
 				backgroundColor: theme.black 
 				}]}>

@@ -30,7 +30,7 @@ const TrackerStackNavigator = () => {
 			<Stack.Group screenOptions={{ presentation: "containedTransparentModal", headerShown: false }}>
 				<Stack.Screen name='Settings' component={Settings} options={{ headerTitle: "Information" }} />
 				<Stack.Screen name='Blunders' component={BlunderChart} />
-				<Stack.Screen name='VictoryPoints' component={VictoryPoints} />
+				<Stack.Screen name='VictoryPoints' component={VictoryPoints}/>
 			</Stack.Group>
 		</Stack.Navigator>
 	);

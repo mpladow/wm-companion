@@ -18,6 +18,7 @@ type PlayerSectionProps = {
 	handleSetPlayerScore: (player: playerTypes, score: number) => void;
 	handleSetCasualty: (player: playerTypes, score: number) => void;
 	handleSetCR: (player: playerTypes, score: number) => void;
+	useOnePlayerMode: boolean;
 };
 const PlayerSection = ({
 	player,
@@ -26,6 +27,7 @@ const PlayerSection = ({
 	playerCombatBonus: playerCombatResult,
 	handleSetCasualty,
 	handleSetCR,
+	useOnePlayerMode
 }: PlayerSectionProps) => {
 	const { theme } = useTheme();
 	const vpContext = useVictoryPoints();

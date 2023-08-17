@@ -5,7 +5,7 @@ import { useTheme } from "@hooks/useTheme";
 
 export type MenuOptions = {
 	label: string;
-	onPress?: () => void;
+	onPress: () => void;
 	icon: ReactElement;
 };
 type MenuModalProps = {
