@@ -189,7 +189,7 @@ const VictoryPoints = () => {
 
 	return (
 		<ModalContainer
-		rotateContainer={vpContext.selectedPlayer == "playerTwo" && !vpContext.useOnePlayerMode}
+			rotateContainer={vpContext.selectedPlayer == "playerTwo" && !vpContext.useOnePlayerMode}
 			onPageModalClosePressed={() => navigation.goBack()}
 			headerTitle={`Victory Points: ${
 				vpContext.selectedPlayer == "playerOne" ? vpContext.getP1TotalPoints : vpContext.getP2TotalPoints
@@ -290,6 +290,7 @@ const VictoryPoints = () => {
 					</View>
 					{bottomSection == "units" ? (
 						<UnitSelector
+							useOnePlayer={vpContext.selectedPlayer == "playerTwo" ? vpContext.useOnePlayerMode : true}
 							ddFactions={ddFactions}
 							ddUnits={ddUnits}
 							ddMagicItems={ddMagicItems}

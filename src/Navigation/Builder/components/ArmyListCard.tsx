@@ -18,7 +18,7 @@ type ArmyListCardProps = {
 	handleDeleteArmyPress: (armyId: string) => void;
 	handleArmyNameChange: (armyId: string) => void;
 	handleToggleFavourite: (armyId: string) => void;
-	handleOpenArmyNotes: () => void;
+	handleOpenArmyNotes: (armyId: string) => void;
 };
 const ArmyListCard = ({
 	armyList,
@@ -71,7 +71,10 @@ const ArmyListCard = ({
 							<PointsContainer points={armyList.points} />
 						</View>
 						{armyList.armyNotes !== "" && armyList.armyNotes !== undefined ? (
-							<TouchableOpacity style={{ marginLeft: 12 }} onPress={() => handleOpenArmyNotes()}>
+							<TouchableOpacity
+								style={{ marginLeft: 12 }}
+								onPress={() => handleOpenArmyNotes(armyList.armyId)}
+							>
 								<Foundation name='clipboard-notes' size={24} color={theme.white} />
 							</TouchableOpacity>
 						) : null}
@@ -103,7 +106,9 @@ const ArmyListCard = ({
 						<MenuTrigger>
 							<MaterialCommunityIcons name='dots-vertical' size={24} color={theme.text} />
 						</MenuTrigger>
-						<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 170 }}>
+						<MenuOptions
+							optionsContainerStyle={{ borderRadius: 8, maxWidth: 170, backgroundColor: theme.blueGrey }}
+						>
 							<MenuOption onSelect={() => handleToggleFavourite(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<AntDesign name='star' size={18} color={theme.warning} />}
@@ -112,12 +117,11 @@ const ArmyListCard = ({
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>
-								<View style={{ flexDirection: "row", padding: 8 }}>
-									<FontAwesome name='pencil' size={18} color='black' />
-									<View style={{ marginLeft: 8 }}>
-										<Text style={{ color: theme.black }}>Edit</Text>
-									</View>
-								</View>
+								<MenuOptionButton
+									icon={<FontAwesome name='pencil' size={18} color={theme.text} />}
+									variant={"outline"}
+									ButtonText={"Edit"}
+								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleDeleteArmyPress(armyList.armyId)}>
 								<MenuOptionButton

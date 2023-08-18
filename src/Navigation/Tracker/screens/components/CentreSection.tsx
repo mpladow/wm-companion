@@ -59,15 +59,15 @@ const CentreSection = ({
 			),
 		} as MenuOptionsType,
 		{
-			label: "Blunder",
+			label: "Blunder Chart",
 			onPress: handleBlunderPress,
 			icon: <Ionicons name='warning' size={24} color={theme.text} />,
 		},
-		{
-			label: "Save Game",
-			onPress: handleOnSavePress,
-			icon: <FontAwesome name='save' size={20} color={theme.text} />,
-		},
+		// {
+		// 	label: "Save Game",
+		// 	onPress: handleOnSavePress,
+		// 	icon: <FontAwesome name='save' size={20} color={theme.text} />,
+		// },
 	];
 	return (
 		<>

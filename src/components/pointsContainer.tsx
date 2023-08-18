@@ -21,7 +21,7 @@ const pointsContainer = ({ points }: PointsContainerProps) => {
 				flexDirection: 'row'
 			}}
 		>
-			<Text bold style={{ color: theme.black, fontSize: 12 }}>{points}</Text><Text style={{color: theme.black, fontSize: 12}}> points</Text>
+			<Text bold style={{ color: theme.black, fontSize: 12 }}>{points}</Text><Text style={{color: theme.black, fontSize: 12}}> pts</Text>
 		</View>
 	);
 };

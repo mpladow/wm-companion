@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useEffect, useState } from "react";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { useTheme } from "@hooks/useTheme";
@@ -20,6 +20,7 @@ type UnitSelectorProps = {
 	handleSetMagicItemsSelection: (item: any) => void;
 	multiSelectRef: any;
 	addUnitPressed: (isHalfPoints: boolean) => void;
+	useOnePlayer: boolean;
 };
 const UnitSelector = forwardRef(
 	({
@@ -34,6 +35,7 @@ const UnitSelector = forwardRef(
 		magicItemsSelections,
 		multiSelectRef,
 		addUnitPressed,
+		useOnePlayer,
 	}: UnitSelectorProps) => {
 		const { theme } = useTheme();
 		const [defaultFaction, setDefaultFaction] = useState<DropDownItemProps>();
@@ -51,10 +53,16 @@ const UnitSelector = forwardRef(
 		}, [factionSelection, unitSelection]);
 		return (
 			<View>
-				<View style={{ marginBottom: 4 }}>
+				<View style={[{ marginBottom: 4 }]}>
 					<CustomDropdown
 						value={defaultFaction}
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
+						containerStyle={[
+							!useOnePlayer && { transform: [{ rotate: "180deg" }] },
+							!useOnePlayer && Platform.OS == "android" && { left: 24, bottom: 80 },
+						]}
+						dropdownPosition={!useOnePlayer ? "top" : "bottom"}
+						transformOrigin={"center"}
 						placeholder='Select Faction'
 						placeholderStyle={{ color: "#ddd" }}
 						data={ddFactions}
@@ -71,6 +79,12 @@ const UnitSelector = forwardRef(
 						placeholderStyle={{ color: "#ddd" }}
 						disable={factionSelection == undefined}
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
+						containerStyle={[
+							!useOnePlayer && { transform: [{ rotate: "180deg" }], height: 200 },
+							!useOnePlayer && Platform.OS == "android" && { left: 24, bottom: 80 },
+						]}
+						transformOrigin={"center"}
+						dropdownPosition={!useOnePlayer ? "top" : "bottom"}
 						data={ddUnits ? ddUnits : []}
 						labelField='label'
 						valueField='value'
@@ -85,7 +99,11 @@ const UnitSelector = forwardRef(
 						placeholderStyle={{ color: "#ddd" }}
 						selectedTextStyle={styles.selectedTextStyle}
 						selectedStyle={{ backgroundColor: "blue" }}
-						search
+						containerStyle={[
+							!useOnePlayer && { transform: [{ rotate: "180deg" }], height: 200 },
+							!useOnePlayer && Platform.OS == "android" && { left: 24, bottom: 80 },
+						]}
+						dropdownPosition={!useOnePlayer ? "top" : "bottom"}
 						searchPlaceholder='Search...'
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
 						data={ddMagicItems ? ddMagicItems : []}

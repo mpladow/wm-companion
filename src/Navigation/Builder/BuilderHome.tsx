@@ -132,7 +132,10 @@ const BuilderHome = () => {
 		arr.push(notFavouritedSLData);
 		setSectionListData(arr);
 	}, [builder.userArmyLists]);
-
+	const handleShowArmyNotesModal = (armyId: string) => {
+		setFocusedArmy(builder.getArmyByArmyId(armyId));
+		setShowArmyNotes(true)
+	}
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
@@ -179,7 +182,7 @@ const BuilderHome = () => {
 							return (
 								<ArmyListCard
 									armyList={item}
-									handleOpenArmyNotes={() => setShowArmyNotes(true)}
+									handleOpenArmyNotes={(armyId) => handleShowArmyNotesModal(armyId)}
 									handleArmyListPress={onArmyListPress}
 									handleDeleteArmyPress={onArmyListDeletePress}
 									handleArmyNameChange={handleEditArmyPress}
