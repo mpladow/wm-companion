@@ -580,7 +580,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 		});
 
 		// check no mounts exceed total count per character
-		currentArmyList?.selectedUnits.forEach((cu) => {
+		currentArmyList?.selectedUnits.filter(x => x.isLeader).forEach((cu) => {
 			const unitHasMount = cu.attachedItems
 				.filter((ai) => ai.type?.includes("Mount"))
 				.map((x) => {
@@ -590,7 +590,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				const mountCount = unitHasMount.reduce((prev, curr) => {
 					if (curr != undefined && prev != undefined) return prev + curr;
 				}, 0);
-				if (mountCount && mountCount > 1) {
+				if (mountCount && mountCount > cu.currentCount) {
 					errors.push({
 						source: "Unit",
 						sourceName: cu.unitName,

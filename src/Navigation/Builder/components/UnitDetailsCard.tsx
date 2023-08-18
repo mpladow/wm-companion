@@ -9,6 +9,7 @@ import { SelectedUpgradesProps } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
 import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
 import { get1000PointInterval } from "../utils/builderHelpers";
+import { current } from "@reduxjs/toolkit";
 import UnitDetailsMenu from "./UnitDetailsMenu";
 import AnimatedView from "@components/Animated/AnimatedView";
 import QuickviewProfileHeading from "./UnitDetailsCard/QuickviewProfileHeading";
