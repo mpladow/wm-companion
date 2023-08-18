@@ -58,7 +58,7 @@ const UnitSelector = forwardRef(
 						value={defaultFaction}
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
 						containerStyle={[
-							!useOnePlayer && { transform: [{ rotate: "180deg" }] },
+							!useOnePlayer && { transform: [{ rotate: "180deg" }], height: 200 },
 							!useOnePlayer && Platform.OS == "android" && { left: 24, bottom: 80 },
 						]}
 						dropdownPosition={!useOnePlayer ? "top" : "bottom"}

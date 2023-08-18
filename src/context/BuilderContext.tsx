@@ -145,7 +145,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 
 		if (autopopulate) {
 			// get unit details
-			const factionUnits = _factionDetails.factionList?.units.filter(
+			const factionUnits = _factionDetails.factionList?.units?.filter(
 				(x) => x["min"] != undefined || x["armyMin"] != undefined
 			);
 			console.log(factionUnits.length, "faction units");
@@ -165,7 +165,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 					order: x.order ? x.order : 1,
 					attachedItems: [],
 					points: x.points,
-					isLeader: x.command ? true : false,
+					isLeader: x.command || x.command == 0 ? true : false,
 					currentCount: min,
 					maxCount: max,
 					minCount: x.min ? x.min : x.armyMin,

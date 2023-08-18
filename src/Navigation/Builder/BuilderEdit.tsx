@@ -578,8 +578,8 @@ const BuilderEdit = () => {
 					<FlatList
 						data={
 							addingUnits
-								? factionUnits?.filter((x) => !x.command)
-								: factionUnits?.filter((x) => x.command)
+								? factionUnits?.filter((x) => !x.command && x.command != 0)
+								: factionUnits?.filter((x) => x.command || x.command == 0)
 						}
 						renderItem={({ item, index }) => {
 							const units = addingUnits

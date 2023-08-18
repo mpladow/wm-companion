@@ -58,7 +58,7 @@ const ArmyListCard = ({
 			>
 				<View style={{ flex: 3, margin: 20 }}>
 					<View style={{ marginBottom: 4 }}>
-						<Text variant='heading3' style={{ fontSize: 24 }}>
+						<Text variant='heading3' ellipsizeMode='tail' style={{ fontSize: 24 }}>
 							{armyList.name}
 						</Text>
 					</View>
