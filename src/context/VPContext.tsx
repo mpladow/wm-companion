@@ -60,6 +60,7 @@ export const VPContextProvider = ({ children }: any) => {
 	const [curentSaveGameId, setCurentSaveGameId] = useState<string>("1");
 	const [allSaves, setAllSaves] = useState<SaveGameProps[]>([]);
 
+
 	const setPlayer = (player: playerTypes) => {
 		setSelectedPlayer(player);
 	};

@@ -44,6 +44,54 @@ const ArmyListCard = ({
 		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
 		// 		</View>
 		// 	);
+		if (armyList.faction == Factions.Daemons)
+		return (
+			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-daemons.jpg")} />
+			</View>
+		);
+		if (armyList.faction == Factions.Dwarves)
+		return (
+			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-dwarves.jpg")} />
+			</View>
+		);
+		if (armyList.faction == Factions.Goblins)
+		return (
+			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-goblins.jpg")} />
+			</View>
+		);
+		if (armyList.faction == Factions.Empire)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Orcs)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-orcs.jpg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Vampire_Counts)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-vampcounts.jpeg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Chaos)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-chaos.jpeg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Bretonnians)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-bretonnian.jpg")} />
+				</View>
+			);
 		return (
 			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
 				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-genericarmy-2.png")} />

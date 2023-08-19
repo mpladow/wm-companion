@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, FlatList, Modal, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, FlatList, Modal, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import constants, { margin, Pages, playerTypes, results } from "@utils/constants";
 import { PlayerSection, ResultSection } from "./components";
@@ -86,6 +86,25 @@ export const Tracker = () => {
 		setPlayerTwoScore(p2CasualtyScore + p2CombatBonus);
 	}, [p2CasualtyScore, p2CombatBonus]);
 
+	const calculatePositionOfTrackerBar = () => {
+		const p1S = vpContext.getP1TotalPoints > 0 ? vpContext.getP1TotalPoints : 1;
+		const p2S = vpContext.getP2TotalPoints > 0 ? vpContext.getP2TotalPoints : 1;
+		const pos = p1S / p2S;
+		if (pos > 0) {
+			// a avalue can be beteet
+			return (pos*100)/2;
+		}
+		else{
+			return (pos*100)*2;
+
+		}
+		console.log(pos, "pos");
+	};
+	useEffect(() => {
+		calculatePositionOfTrackerBar();
+		console.log(calculatePositionOfTrackerBar());
+	}, [vpContext.p1VpScore, vpContext.p2VpScore]);
+
 	const handleSetPlayerCasualty = (player: playerTypes, score: number) => {
 		if (player == "playerOne") {
 			setP1CasualtyScore(score);
@@ -169,6 +188,7 @@ export const Tracker = () => {
 					paddingHorizontal: margin * 3,
 					backgroundColor: theme.theme.backgroundVariant2,
 					overflow: "visible",
+					zIndex: 9999,
 				}}
 			>
 				<CentreSection
@@ -183,6 +203,27 @@ export const Tracker = () => {
 					// add plauyer one score object
 					//add player two score object
 				/>
+				{/* <View
+				// 	style={{
+				// 		position: "absolute",
+				// 		zIndex: -999999,
+				// 		left: 0,
+				// 		top: -30,
+				// 		height: 100,
+				// 		width: Dimensions.get("screen").width,
+				// 		paddingHorizontal: 48,
+				// 	}}
+				// >
+				// 	<View
+				// 		style={{
+				// 			width: 40,
+				// 			height: 130,
+				// 			top: 0,
+				// 			left: `${calculatePositionOfTrackerBar()}%`,
+				// 			backgroundColor: theme.theme.backgroundVariant2,
+				// 		}}
+				// 	></View>
+				// </View> */}
 			</View>
 			<View
 				style={[
@@ -196,7 +237,7 @@ export const Tracker = () => {
 				]}
 			>
 				<PlayerSection
-				useOnePlayerMode={false}
+					useOnePlayerMode={false}
 					player={"playerOne"}
 					playerScore={playerOneScore}
 					playerCasualty={p1CasualtyScore}
