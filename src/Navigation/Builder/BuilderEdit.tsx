@@ -76,17 +76,18 @@ const BuilderEdit = () => {
 							<Entypo name='dots-three-vertical' size={20} color={theme.text} />
 						</MenuTrigger>
 						<MenuOptions>
-							<MenuOption onSelect={() => alert(`Save`)} text='Save' />
-							<MenuOption onSelect={() => alert(`Delete`)}>
-								<Text style={{ color: "red" }}>Delete</Text>
+							<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
+								<View style={{padding: 4, paddingVertical: 8}}>
+								<Text style={{color: theme.black}}>Export List</Text>
+
+								</View>
 							</MenuOption>
-							<MenuOption onSelect={() => alert(`Not called`)} disabled={true} text='Disabled' />
 						</MenuOptions>
 					</Menu>
 				),
 				headerTitle: (props: any) => (
 					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-						<View style={{ width: 250 }}>
+						<View style={{ width: 250 }}>	
 							<Text
 								numberOfLines={1}
 								variant='heading3'
@@ -183,24 +184,7 @@ const BuilderEdit = () => {
 			setSectionListData(_sectionListData);
 		}
 	}, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
-	const getUnitCounts = () => {
-		// ARMY SPECIAL RULE: special rule for bretonnians
-		let units = builder.selectedArmyList?.selectedUnits.filter((x) => !x.isLeader);
-		// filter out noBreak units
-		units = units?.filter((x) => !x.ignoreBreakPoint);
-		// get total counts
-		const totalCounts = units?.map((x) => x.currentCount);
-		const sumOfPoints = totalCounts?.reduce((accumulator, currentValue) => {
-			return accumulator + currentValue;
-		}, 0);
-		let breakCount = sumOfPoints ? Math.round(sumOfPoints / 2) : 0;
-		// ARMY SPECIAL RULES
-		if (builder.factionDetails?.name == "Nippon") {
-			breakCount = breakCount + 1;
-		}
-		const unitCount = sumOfPoints;
-		return `${breakCount}/${unitCount}`;
-	};
+
 
 	const handleRemoveUnit = (unitId: string, unitPoints: number) => {
 		builder.removeUnit(unitId, unitPoints);
@@ -433,7 +417,7 @@ const BuilderEdit = () => {
 				}}
 			>
 				<View>
-					<Text style={{ fontSize: 16 }}>{getUnitCounts()}</Text>
+					<Text style={{ fontSize: 16 }}>{builder.getUnitCounts()}</Text>
 				</View>
 				{/* <Button
 					disabled={!builder.selectedArmyList?.selectedUpgrades.length > 0}

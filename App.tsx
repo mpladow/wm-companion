@@ -10,6 +10,7 @@ import TabStackNavigator from "@navigation/Stacks/TabStackNavigator";
 import RootStack from "@navigation/Stacks/RootStack";
 import { BuilderContextProvider } from "@context/BuilderContext";
 import { MenuProvider } from "react-native-popup-menu";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 const darkTheme = {
 	dark: true,
@@ -56,16 +57,18 @@ const App = () => {
 	}
 	return (
 		<ThemeContextProvider>
-			<MenuProvider>
-				<BuilderContextProvider>
-					<VPContextProvider>
-						<NavigationContainer theme={darkTheme}>
-							<RootStack />
-							<StatusBar translucent />
-						</NavigationContainer>
-					</VPContextProvider>
-				</BuilderContextProvider>
-			</MenuProvider>
+			<RootSiblingParent>
+				<MenuProvider>
+					<BuilderContextProvider>
+						<VPContextProvider>
+							<NavigationContainer theme={darkTheme}>
+								<RootStack />
+								<StatusBar translucent />
+							</NavigationContainer>
+						</VPContextProvider>
+					</BuilderContextProvider>
+				</MenuProvider>
+			</RootSiblingParent>
 		</ThemeContextProvider>
 	);
 };

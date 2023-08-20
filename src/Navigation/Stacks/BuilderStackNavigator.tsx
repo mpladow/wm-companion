@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native";
 import { Text, TextBlock } from "@components/index";
 import LogoWmr from "@components/SVGS/LogoWmr";
+import BuilderQuickView from "@navigation/Builder/BuilderQuickView";
 
 export type BuilderStackParamList = {
 	BuilderHome: undefined;
@@ -12,6 +13,7 @@ export type BuilderStackParamList = {
 	Settings: undefined;
 	Blunders: undefined;
 	VictoryPoints: undefined;
+	BuilderQuickView: undefined;
 };
 
 const Stack = createNativeStackNavigator<BuilderStackParamList>();
@@ -52,6 +54,14 @@ const BuilderStackNavigator = () => {
 			<Stack.Screen
 				name='BuilderEdit'
 				component={BuilderEdit}
+				options={{
+					headerShown: true,
+					title: "Builder",
+				}}
+			/>
+			<Stack.Screen
+				name='BuilderQuickView'
+				component={BuilderQuickView}
 				options={{
 					headerShown: true,
 					title: "Builder",

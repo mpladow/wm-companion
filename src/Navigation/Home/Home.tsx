@@ -83,8 +83,11 @@ const Home = () => {
 										<AntDesign name='check' size={20} color='green' />
 										<Text> -- Initial Creator complete</Text>
 									</View>
+									<View style={{ flexDirection: "row" }}>
+										<AntDesign name='check' size={20} color='green' />
+										<Text> -- Export Army Feature</Text>
+									</View>
 									<Text style={{ paddingLeft: 20 }}> -- All factions added</Text>
-									<Text style={{ paddingLeft: 20 }}> -- Export Army Feature</Text>
 									<Text style={{ paddingLeft: 20 }}> -- Update Faction assets</Text>
 								</>
 							</TextBlock>

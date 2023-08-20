@@ -81,6 +81,7 @@ interface BuilderContextInterface {
 	factionDetails?: FactionListProps;
 	armyErrors: ArmyErrorsProps[];
 	getArmyByArmyId: (armyId: string) => ArmyListProps | undefined;
+	getUnitCounts: () => string;
 }
 
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
@@ -680,6 +681,24 @@ export const BuilderContextProvider = ({ children }: any) => {
 
 		return errors;
 	};
+	const getUnitCounts = () => {
+		// ARMY SPECIAL RULE: special rule for bretonnians
+		let units = currentArmyList?.selectedUnits.filter((x) => !x.isLeader);
+		// filter out noBreak units
+		units = units?.filter((x) => !x.ignoreBreakPoint);
+		// get total counts
+		const totalCounts = units?.map((x) => x.currentCount);
+		const sumOfPoints = totalCounts?.reduce((accumulator, currentValue) => {
+			return accumulator + currentValue;
+		}, 0);
+		let breakCount = sumOfPoints ? Math.round(sumOfPoints / 2) : 0;
+		// ARMY SPECIAL RULES
+		if (factionDetails?.name == "Nippon") {
+			breakCount = breakCount + 1;
+		}
+		const unitCount = sumOfPoints;
+		return `${breakCount}/${unitCount}`;
+	};
 
 	return (
 		<BuilderContext.Provider
@@ -703,6 +722,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				factionDetails,
 				armyErrors,
 				getArmyByArmyId,
+				getUnitCounts
 			}}
 		>
 			{children}
