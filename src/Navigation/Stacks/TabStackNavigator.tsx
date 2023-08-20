@@ -18,7 +18,7 @@ const TabStackNavigator = () => {
 	const { theme } = useTheme();
 	return (
 		<Tab.Navigator
-			initialRouteName='TrackerHome'
+			initialRouteName='About'
 			screenOptions={(screenProps) => ({
 				headerTitle: (props) => (
 					<View style={{ flexDirection: "row", alignItems: "center" }}>

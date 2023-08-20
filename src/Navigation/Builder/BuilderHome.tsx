@@ -23,6 +23,7 @@ import { AntDesign } from "@expo/vector-icons";
 import ArmyListCard from "./components/ArmyListCard";
 import PopupConfirm from "@components/PopupConfirm";
 import { LinearGradient } from "expo-linear-gradient";
+import FormLabel from "@components/forms/FormLabel";
 
 export type armySectionListDataProps = {
 	title: string;
@@ -132,7 +133,10 @@ const BuilderHome = () => {
 		arr.push(notFavouritedSLData);
 		setSectionListData(arr);
 	}, [builder.userArmyLists]);
-
+	const handleShowArmyNotesModal = (armyId: string) => {
+		setFocusedArmy(builder.getArmyByArmyId(armyId));
+		setShowArmyNotes(true);
+	};
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
@@ -156,6 +160,7 @@ const BuilderHome = () => {
 				<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
 					<SectionList
 						style={{ zIndex: 9, marginBottom: 200 }}
+						stickySectionHeadersEnabled
 						ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
 						sections={sectionListData}
 						renderSectionHeader={({ section: { title } }) => (
@@ -173,13 +178,15 @@ const BuilderHome = () => {
 								</Text>
 							</View>
 						)}
-						ItemSeparatorComponent={() => <View style={{ height: 2, backgroundColor: "black" }}></View>}
+						ItemSeparatorComponent={() => (
+							<View style={{ height: 8, backgroundColor: "transparent" }}></View>
+						)}
 						renderItem={({ item, index }) => {
 							// get total unit count
 							return (
 								<ArmyListCard
 									armyList={item}
-									handleOpenArmyNotes={() => setShowArmyNotes(true)}
+									handleOpenArmyNotes={(armyId) => handleShowArmyNotesModal(armyId)}
 									handleArmyListPress={onArmyListPress}
 									handleDeleteArmyPress={onArmyListDeletePress}
 									handleArmyNameChange={handleEditArmyPress}
@@ -213,12 +220,12 @@ const BuilderHome = () => {
 						setEditingArmy(false);
 					}}
 					setModalVisible={handleAddArmyPress}
-					headerTitle='Create Army'
+					headerTitle={editingArmy ? "Edit Army" : "Create Army"}
 					modalVisible={showCreateArmy}
 				>
 					<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
 						<View style={{ flex: 1, marginBottom: 12 }}>
-							<Text>Army Name</Text>
+							<FormLabel label={"Army Name"} />
 							<TextInput
 								ref={nameRef}
 								placeholder='Enter Army Name'
@@ -245,13 +252,15 @@ const BuilderHome = () => {
 							{!editingArmy ? (
 								<>
 									<View style={{ marginTop: 12 }}>
-										<Text>Faction</Text>
+										<FormLabel label={"Faction"} />
 										<CustomDropdown
 											value={factionSelection}
 											style={[styles.dropdown, { backgroundColor: theme.white }]}
 											placeholder='Select Faction'
 											placeholderStyle={{ color: "#ddd" }}
 											data={ddFactions}
+											search
+											searchPlaceholder='Search...'
 											labelField='label'
 											valueField='value'
 											onChange={(item) => {
@@ -262,7 +271,7 @@ const BuilderHome = () => {
 								</>
 							) : (
 								<View style={{ marginTop: 12 }}>
-									<Text>Notes</Text>
+									<FormLabel label={"Notes"} />
 									<TextInput
 										multiline
 										value={factionNotes}
@@ -308,6 +317,7 @@ const BuilderHome = () => {
 					text={<Text style={{ color: theme.text, fontSize: 16 }}>Do you want to delete this army?</Text>}
 					confirmText={"Delete Army"}
 					cancelText={"Cancel"}
+					headerText={"Delete Army"}
 				/>
 			</ImageBackground>
 			<View style={{ zIndex: 99999, position: "absolute", bottom: 30, right: 24 }}>
@@ -327,7 +337,7 @@ const BuilderHome = () => {
 				<View style={styles.modalOverlay} onTouchStart={() => setShowArmyNotes(!showArmyNotes)}>
 					<View
 						style={{
-							marginTop: Dimensions.get("screen").height/3,
+							marginTop: Dimensions.get("screen").height / 3,
 							alignItems: "center",
 							justifyContent: "center",
 							backgroundColor: theme.blueGrey,
@@ -336,7 +346,9 @@ const BuilderHome = () => {
 							borderRadius: 20,
 						}}
 					>
-						<Text style={{color: theme.text}}>Army Notes</Text>
+						<Text variant='heading3' style={{ color: theme.text, fontSize: 28 }}>
+							Army Notes
+						</Text>
 						<TextInput
 							multiline
 							value={factionNotes}

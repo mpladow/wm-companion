@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Image, Dimensions } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
 import React, { useRef, useState } from "react";
 import { ArmyListProps, BuilderContextProvider } from "@context/BuilderContext";
 import { Text } from "@components/index";
@@ -18,7 +18,7 @@ type ArmyListCardProps = {
 	handleDeleteArmyPress: (armyId: string) => void;
 	handleArmyNameChange: (armyId: string) => void;
 	handleToggleFavourite: (armyId: string) => void;
-	handleOpenArmyNotes: () => void;
+	handleOpenArmyNotes: (armyId: string) => void;
 };
 const ArmyListCard = ({
 	armyList,
@@ -44,6 +44,54 @@ const ArmyListCard = ({
 		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
 		// 		</View>
 		// 	);
+		if (armyList.faction == Factions.Daemons)
+		return (
+			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-daemons.jpg")} />
+			</View>
+		);
+		if (armyList.faction == Factions.Dwarves)
+		return (
+			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-dwarves.jpg")} />
+			</View>
+		);
+		if (armyList.faction == Factions.Goblins)
+		return (
+			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-goblins.jpg")} />
+			</View>
+		);
+		if (armyList.faction == Factions.Empire)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Orcs)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-orcs.jpg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Vampire_Counts)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-vampcounts.jpeg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Chaos)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-chaos.jpeg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Bretonnians)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-bretonnian.jpg")} />
+				</View>
+			);
 		return (
 			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
 				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-genericarmy-2.png")} />
@@ -56,9 +104,10 @@ const ArmyListCard = ({
 			<View
 				style={{ overflow: "hidden", backgroundColor: theme.background, borderRadius: 8, flexDirection: "row" }}
 			>
+				<Image source={require('../../../../assets/images/card-texture.png')} resizeMode="contain" style={{opacity: 0.2, position: 'absolute'}}/>
 				<View style={{ flex: 3, margin: 20 }}>
 					<View style={{ marginBottom: 4 }}>
-						<Text variant='heading3' style={{ fontSize: 24 }}>
+						<Text variant='heading3' ellipsizeMode='tail' style={{ fontSize: 24 }}>
 							{armyList.name}
 						</Text>
 					</View>
@@ -71,7 +120,10 @@ const ArmyListCard = ({
 							<PointsContainer points={armyList.points} />
 						</View>
 						{armyList.armyNotes !== "" && armyList.armyNotes !== undefined ? (
-							<TouchableOpacity style={{ marginLeft: 12 }} onPress={() => handleOpenArmyNotes()}>
+							<TouchableOpacity
+								style={{ marginLeft: 12 }}
+								onPress={() => handleOpenArmyNotes(armyList.armyId)}
+							>
 								<Foundation name='clipboard-notes' size={24} color={theme.white} />
 							</TouchableOpacity>
 						) : null}
@@ -103,7 +155,9 @@ const ArmyListCard = ({
 						<MenuTrigger>
 							<MaterialCommunityIcons name='dots-vertical' size={24} color={theme.text} />
 						</MenuTrigger>
-						<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 170 }}>
+						<MenuOptions
+							optionsContainerStyle={{ borderRadius: 8, maxWidth: 170, backgroundColor: theme.blueGrey }}
+						>
 							<MenuOption onSelect={() => handleToggleFavourite(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<AntDesign name='star' size={18} color={theme.warning} />}
@@ -112,12 +166,11 @@ const ArmyListCard = ({
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>
-								<View style={{ flexDirection: "row", padding: 8 }}>
-									<FontAwesome name='pencil' size={18} color='black' />
-									<View style={{ marginLeft: 8 }}>
-										<Text style={{ color: theme.black }}>Edit</Text>
-									</View>
-								</View>
+								<MenuOptionButton
+									icon={<FontAwesome name='pencil' size={18} color={theme.text} />}
+									variant={"outline"}
+									ButtonText={"Edit"}
+								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleDeleteArmyPress(armyList.armyId)}>
 								<MenuOptionButton

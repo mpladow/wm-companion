@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ResultProps } from "@utils/types";
 import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 type ResultSectionProps = {
 	resultOne?: ResultProps;
@@ -77,10 +78,15 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 			<View style={{ alignItems: "center", justifyContent: "center" }}>
 				<Animated.View
 					style={[
-						{ justifyContent: "center", alignItems: "center" },
-						{ transform: [{ rotate: "180deg" },{ scaleX: scaleOne }, { scaleY: scaleOne }] },
+						{ justifyContent: "center", alignItems: "center", flexDirection: "row" },
+						{ transform: [{ rotate: "180deg" }, { scaleX: scaleOne }, { scaleY: scaleOne }] },
 					]}
 				>
+					{resultOne?.result === "Victory" ? (
+						<View style={{ paddingRight: 4 }}>
+							<FontAwesome5 name='fist-raised' size={24} color={theme.success} />
+						</View>
+					) : null}
 					<Text style={{ fontSize: 24, color: resultOneStyle }}>
 						{resultOne?.result} by {resultOne?.diff}
 					</Text>
@@ -88,9 +94,14 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 				<Animated.View
 					style={[
 						{ transform: [{ scaleX: scaleTwo }, { scaleY: scaleTwo }] },
-						{ justifyContent: "center", alignItems: "center" },
+						{ justifyContent: "center", alignItems: "center", flexDirection: "row" },
 					]}
 				>
+					{resultTwo?.result === "Victory" ? (
+						<View style={{ paddingRight: 4 }}>
+							<FontAwesome5 name='fist-raised' size={24} color={theme.success} />
+						</View>
+					) : null}
 					<Text
 						bold={resultTwo?.result == "Victory" && true}
 						style={[{ fontSize: 24, color: resultTwoStyle }]}

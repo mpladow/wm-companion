@@ -187,9 +187,14 @@ const VictoryPoints = () => {
 	};
 	const [bottomSection, setBottomSection] = useState<"units" | "vps">("units");
 
+	const calculateTotalUnits = () => {
+		const currentScore = vpContext.selectedPlayer == "playerOne" ? vpContext.p1VpScore : vpContext.p2VpScore;
+		const count = currentScore.filter((x) => x.isUnit).filter((x) => !x.isHalfPoints).length;
+		return count;
+	};
 	return (
 		<ModalContainer
-		rotateContainer={vpContext.selectedPlayer == "playerTwo" && !vpContext.useOnePlayerMode}
+			rotateContainer={vpContext.selectedPlayer == "playerTwo" && !vpContext.useOnePlayerMode}
 			onPageModalClosePressed={() => navigation.goBack()}
 			headerTitle={`Victory Points: ${
 				vpContext.selectedPlayer == "playerOne" ? vpContext.getP1TotalPoints : vpContext.getP2TotalPoints
@@ -197,6 +202,13 @@ const VictoryPoints = () => {
 		>
 			<View style={{ flex: 1, flexDirection: "column" }}>
 				<View style={[styles.topContainer]}>
+					<View style={{ paddingBottom: 12, alignItems: "center" }}>
+						{calculateTotalUnits() > 0 ? (
+							<Text style={{ color: theme.danger, fontSize: 20 }} variant={"heading3"}>
+								Enemy Units Defeated: {`${calculateTotalUnits()}`}
+							</Text>
+						) : null}
+					</View>
 					<FlatList
 						data={vpContext.selectedPlayer == "playerOne" ? vpContext.p1VpScore : vpContext.p2VpScore}
 						renderItem={({ item, index }) => {
@@ -290,6 +302,7 @@ const VictoryPoints = () => {
 					</View>
 					{bottomSection == "units" ? (
 						<UnitSelector
+							useOnePlayer={vpContext.selectedPlayer == "playerTwo" ? vpContext.useOnePlayerMode : true}
 							ddFactions={ddFactions}
 							ddUnits={ddUnits}
 							ddMagicItems={ddMagicItems}

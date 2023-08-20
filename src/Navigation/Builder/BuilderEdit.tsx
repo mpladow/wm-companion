@@ -32,6 +32,7 @@ import UpgradePreview from "./components/UpgradePreview";
 import ArmyPointsCount from "./components/ArmyPointsCount";
 import { LinearGradient } from "expo-linear-gradient";
 import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 
 export type sectionListDataProps = {
 	title: string;
@@ -69,6 +70,20 @@ const BuilderEdit = () => {
 		// get all units for selected army list
 		if (builder.selectedArmyList) {
 			navigation.setOptions({
+				headerRight: () => (
+					<Menu>
+						<MenuTrigger>
+							<Entypo name='dots-three-vertical' size={20} color={theme.text} />
+						</MenuTrigger>
+						<MenuOptions>
+							<MenuOption onSelect={() => alert(`Save`)} text='Save' />
+							<MenuOption onSelect={() => alert(`Delete`)}>
+								<Text style={{ color: "red" }}>Delete</Text>
+							</MenuOption>
+							<MenuOption onSelect={() => alert(`Not called`)} disabled={true} text='Disabled' />
+						</MenuOptions>
+					</Menu>
+				),
 				headerTitle: (props: any) => (
 					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
 						<View style={{ width: 250 }}>
@@ -578,8 +593,8 @@ const BuilderEdit = () => {
 					<FlatList
 						data={
 							addingUnits
-								? factionUnits?.filter((x) => !x.command)
-								: factionUnits?.filter((x) => x.command)
+								? factionUnits?.filter((x) => !x.command && x.command != 0)
+								: factionUnits?.filter((x) => x.command || x.command == 0)
 						}
 						renderItem={({ item, index }) => {
 							const units = addingUnits

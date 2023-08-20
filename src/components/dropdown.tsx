@@ -9,6 +9,7 @@ type DropdownProps = {
 const dropdown = (props: any) => {
 	return (<Dropdown
 		{...props}
+
 		// itemTextStyle={{ fontFamily: fonts.PTSansBold }}
         fontFamily={fonts.PTSansBold}
 	/>)

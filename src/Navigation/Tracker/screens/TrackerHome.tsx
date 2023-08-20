@@ -8,10 +8,13 @@ import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
 import LogoWmr from "@components/SVGS/LogoWmr";
 import { LinearGradient } from "expo-linear-gradient";
+import VictoryPoints from "@navigation/VictoryPoints/VictoryPoints";
+import { useVictoryPoints, VPContextProvider } from "@context/VPContext";
 
 const TrackerHome = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+	const vpContext = useVictoryPoints();
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
@@ -85,6 +88,11 @@ const TrackerHome = () => {
 								New Battle!
 							</Text>
 						</Button>
+						<View>
+							{vpContext?.allSaves?.map((s) => {
+								return <Text style={theme.text}>{s.saveGameId}</Text>;
+							})}
+						</View>
 					</View>
 				</View>
 			</ImageBackground>

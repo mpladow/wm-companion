@@ -145,7 +145,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 
 		if (autopopulate) {
 			// get unit details
-			const factionUnits = _factionDetails.factionList?.units.filter(
+			const factionUnits = _factionDetails.factionList?.units?.filter(
 				(x) => x["min"] != undefined || x["armyMin"] != undefined
 			);
 			console.log(factionUnits.length, "faction units");
@@ -165,7 +165,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 					order: x.order ? x.order : 1,
 					attachedItems: [],
 					points: x.points,
-					isLeader: x.command ? true : false,
+					isLeader: x.command || x.command == 0 ? true : false,
 					currentCount: min,
 					maxCount: max,
 					minCount: x.min ? x.min : x.armyMin,
@@ -580,7 +580,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 		});
 
 		// check no mounts exceed total count per character
-		currentArmyList?.selectedUnits.forEach((cu) => {
+		currentArmyList?.selectedUnits.filter(x => x.isLeader).forEach((cu) => {
 			const unitHasMount = cu.attachedItems
 				.filter((ai) => ai.type?.includes("Mount"))
 				.map((x) => {
@@ -590,7 +590,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				const mountCount = unitHasMount.reduce((prev, curr) => {
 					if (curr != undefined && prev != undefined) return prev + curr;
 				}, 0);
-				if (mountCount && mountCount > 1) {
+				if (mountCount && mountCount > cu.currentCount) {
 					errors.push({
 						source: "Unit",
 						sourceName: cu.unitName,

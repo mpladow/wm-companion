@@ -2,7 +2,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import playerTypes, { Factions } from "@utils/constants";
 import React, { useEffect, useMemo } from "react";
 import { createContext, useContext, useState } from "react";
+import uuid from "uuid-random";
 
+export type SaveGameProps = {
+	saveGameId?: string;
+	playerDetailScores: PlayerDetailsProps[];
+	dateSaved: string;
+};
 export type PlayerDetailsProps = {
 	player: playerTypes;
 	score: VPScoreProps[];
@@ -34,6 +40,7 @@ type VPContextInterface = {
 	toggleHalfPoints: (id: string) => void;
 	useOnePlayerMode: boolean;
 	toggleOnePlayerMode: () => void;
+	allSaves: SaveGameProps[];
 };
 const VPContext = createContext<VPContextInterface>({} as VPContextInterface);
 
@@ -50,6 +57,10 @@ export const VPContextProvider = ({ children }: any) => {
 	const [p2VpFaction, setP2VpFaction] = useState<number | undefined>();
 	const [useOnePlayerMode, setUseOnePlayerMode] = useState(false);
 	const [selectedPlayer, setSelectedPlayer] = useState<playerTypes>("playerOne");
+	const [curentSaveGameId, setCurentSaveGameId] = useState<string>("1");
+	const [allSaves, setAllSaves] = useState<SaveGameProps[]>([]);
+
+
 	const setPlayer = (player: playerTypes) => {
 		setSelectedPlayer(player);
 	};
@@ -92,10 +103,6 @@ export const VPContextProvider = ({ children }: any) => {
 		} else {
 			setP2VpFaction(faction);
 		}
-	};
-	const resetScore = () => {
-		const newScoreP1Obj: PlayerDetailsProps = { player: "playerOne", score: [] as VPScoreProps[], faction: 0 };
-		const newScorep2Obj: PlayerDetailsProps = { player: "playerTwo", score: [] as VPScoreProps[], faction: 0 };
 	};
 	const updateScore = (score: VPScoreProps) => {
 		// update a unit to half or full points. change magic items, etc
@@ -144,8 +151,11 @@ export const VPContextProvider = ({ children }: any) => {
 		selectedPlayer == "playerOne" ? setP1VpScore([...p1VpScore, score]) : setP2VpScore([...p2VpScore, score]);
 	};
 	useEffect(() => {
-		getScoresFromStorage();
+		//getAllSavesFromStorage();
 	}, []);
+	useEffect(() => {
+		getScoresForSaveGameId();
+	}, [curentSaveGameId]);
 
 	useEffect(() => {
 		if (p1VpScore && p1VpFaction) {
@@ -169,48 +179,85 @@ export const VPContextProvider = ({ children }: any) => {
 		}
 	}, [p2VpScore, p2VpFaction]);
 
+	// updat storage
 	const updateStorage = async (score: PlayerDetailsProps) => {
-		try {
-			if (selectedPlayer == "playerOne") {
-				await AsyncStorage.setItem(`${VP_KYS.p1VpScore}`, JSON.stringify(score.score));
-				await AsyncStorage.setItem(`${VP_KYS.p1DefaultFaction}`, JSON.stringify(score.faction));
-			}
-			if (selectedPlayer == "playerTwo") {
-				await AsyncStorage.setItem(`${VP_KYS.p2VpScore}`, JSON.stringify(score.score));
-				await AsyncStorage.setItem(`${VP_KYS.p2DefaultFaction}`, JSON.stringify(score.faction));
-			}
-		} catch (e) {}
+		if (selectedPlayer == "playerOne") {
+			const p2Score: PlayerDetailsProps = {
+				player: "playerTwo",
+				score: p2VpScore,
+				faction: p2VpFaction,
+			};
+			const saveState: SaveGameProps = {
+				saveGameId: curentSaveGameId,
+				playerDetailScores: [score, p2Score],
+				dateSaved: new Date().toISOString(),
+			};
+			await AsyncStorage.setItem(`SAVEGAME-${curentSaveGameId}`, JSON.stringify(saveState));
+		}
+		if (selectedPlayer == "playerTwo") {
+			const p1Score: PlayerDetailsProps = {
+				player: "playerOne",
+				score: p1VpScore,
+				faction: p1VpFaction,
+			};
+			const saveState: SaveGameProps = {
+				saveGameId: curentSaveGameId,
+				playerDetailScores: [p1Score, score],
+				dateSaved: new Date().toISOString(),
+			};
+			await AsyncStorage.setItem(`SAVEGAME-${curentSaveGameId}`, JSON.stringify(saveState));
+
+			// update array
+		}
 	};
 
-	const getScoresFromStorage = async () => {
+	const getAllSavesFromStorage = async () => {
 		try {
-			//await AsyncStorage.clear();
-
-			const p1VpScore = await AsyncStorage.getItem(`${VP_KYS.p1VpScore}`);
-			const p2VpScore = await AsyncStorage.getItem(`${VP_KYS.p2VpScore}`);
-			const p1VpFaction = await AsyncStorage.getItem(`${VP_KYS.p1DefaultFaction}`);
-			const p2VpFaction = await AsyncStorage.getItem(`${VP_KYS.p2DefaultFaction}`);
-
-			const p1VpScoreObj: VPScoreProps[] = p1VpScore && JSON.parse(p1VpScore);
-			const p2VpScoreObj: VPScoreProps[] = p2VpScore && JSON.parse(p2VpScore);
-
-			const p1VpFactionObj: number = p1VpFaction && JSON.parse(p1VpFaction);
-			const p2VpFactionObj: number = p2VpFaction && JSON.parse(p2VpFaction);
-
-			if (p1VpScoreObj != null) {
-				setP1VpScore(p1VpScoreObj);
-				setP1VpFaction(p1VpFactionObj);
+			const keys = await AsyncStorage.getAllKeys();
+			let filteredKeys = keys && keys.filter((x) => x.includes("SAVE"));
+			console.log(filteredKeys, "filtered keys");
+			if (keys) {
+				const result = await AsyncStorage.multiGet(keys);
+				if (result) {
+					const saveGames: SaveGameProps[] = result.map((req) => {
+						if (req[1]) return JSON.parse(req[1]);
+					});
+					console.log(result, "RESULT FROM ALL SAVES");
+					// const res = saveGames.map((x) => {
+					// 	return { id: x.saveGameId, date: x.dateSaved };
+					// });
+					setAllSaves(saveGames);
+				}
 			}
+		} catch (e) {
+			console.log("VPContext:: getAllSavesFromStorage:: error ", e);
+		}
+	};
 
-			if (p2VpScoreObj != null) {
-				setP2VpScore(p2VpScoreObj);
-				setP2VpFaction(p2VpFactionObj);
+	const getScoresForSaveGameId = async () => {
+		// getting saves for saveGameId
+		try {
+			const scoreFromStorage = await AsyncStorage.getItem(`SAVEGAME-${curentSaveGameId}`);
+			const currentScoreObj: SaveGameProps = scoreFromStorage && JSON.parse(scoreFromStorage);
+
+			const p1VpScore = currentScoreObj.playerDetailScores?.find((x) => x.player == "playerOne");
+			const p2VpScore = currentScoreObj.playerDetailScores?.find((x) => x.player == "playerTwo");
+
+			if (p1VpScore) {
+				setP1VpScore(p1VpScore.score);
+				setP1VpFaction(p1VpScore.faction);
 			}
-		} catch (e) {}
+			if (p2VpScore) {
+				setP2VpScore(p2VpScore.score);
+				setP2VpFaction(p2VpScore.faction);
+			}
+		} catch (e) {
+			console.log(e, "VPContext -- not found");
+		}
 	};
 	const toggleOnePlayerMode = () => {
 		setUseOnePlayerMode(!useOnePlayerMode);
-	}
+	};
 	return (
 		<VPContext.Provider
 			value={{
@@ -228,7 +275,8 @@ export const VPContextProvider = ({ children }: any) => {
 				getP2TotalPoints,
 				toggleHalfPoints,
 				useOnePlayerMode,
-				toggleOnePlayerMode
+				toggleOnePlayerMode,
+				allSaves,
 			}}
 		>
 			{children}

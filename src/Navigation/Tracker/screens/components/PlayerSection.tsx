@@ -1,4 +1,4 @@
-import { Button, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Factions, playerTypes } from "@utils/constants";
 import SectionDials from "./SectionDials";
@@ -10,6 +10,7 @@ import { Foundation } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
+import { useBuilderContext } from "@context/BuilderContext";
 type PlayerSectionProps = {
 	player: playerTypes;
 	playerScore: number;
@@ -27,10 +28,11 @@ const PlayerSection = ({
 	playerCombatBonus: playerCombatResult,
 	handleSetCasualty,
 	handleSetCR,
-	useOnePlayerMode
+	useOnePlayerMode,
 }: PlayerSectionProps) => {
 	const { theme } = useTheme();
 	const vpContext = useVictoryPoints();
+	const builder = useBuilderContext();
 	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
 	// const [faction, setFaction] = useState<DropDownItemProps>();
 
@@ -52,8 +54,20 @@ const PlayerSection = ({
 		navigation.navigate("VictoryPoints");
 	};
 	// get faction names and set that here
+
+	// const handleNavigateToArmyList = () => {
+	// 	const selectedArmyId = builder.userArmyLists[0].armyId;
+	// 	builder.setSelectedArmyList(selectedArmyId);
+	// 	navigation.navigate("MainTabs", {
+	// 		screen: "ArmyBuilder",
+	// 		params: {
+	// 			screen: "BuilderEdit",
+	// 		},
+	// 	});
+	// };
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
+
 			<View
 				style={{
 					flex: 1,
@@ -63,9 +77,28 @@ const PlayerSection = ({
 					backgroundColor: "#eaeae",
 				}}
 			>
-				<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-					<TouchableOpacity></TouchableOpacity>
+				<View
+					style={{
+						flex: 1,
+						position: "relative",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					{/* <View style={{ borderRadius: 200, backgroundColor: theme.secondary, height: 70, width: 70 }}>
+						<TouchableOpacity onPress={() => handleNavigateToArmyList()}>
+							<View style={{ position: "absolute", top: "-10%", left: "28%" }}>
+								<Foundation name='trophy' size={80} color='black' />
+							</View>
+							<Text style={{ fontSize: 28 }}>
+								{player == "playerTwo" ? vpContext.getP2TotalPoints : vpContext.getP1TotalPoints}
+							</Text>
+						</TouchableOpacity>
+					</View> */}
 				</View>
+				{/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+					<TouchableOpacity></TouchableOpacity>
+				</View> */}
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 					<Text variant='heading1' style={{ fontSize: 70, color: theme.text }}>
 						{playerScore}

@@ -1,8 +1,8 @@
-import { Modal, StyleSheet, View } from "react-native";
+import { Dimensions, Modal, StyleSheet, View } from "react-native";
 import React from "react";
 import { useTheme } from "@hooks/useTheme";
 import Button from "./button";
-import {Text} from '@components/index'
+import { Text } from "@components/index";
 
 type PopupConfirmProps = {
 	visible: boolean;
@@ -11,15 +11,24 @@ type PopupConfirmProps = {
 	text: JSX.Element;
 	confirmText: string;
 	cancelText: string;
+	headerText: string;
 };
-const PopupConfirm = ({ onConfirm, onCancel, text, confirmText, cancelText, visible }: PopupConfirmProps) => {
+const PopupConfirm = ({
+	onConfirm,
+	onCancel,
+	text,
+	confirmText,
+	cancelText,
+	visible,
+	headerText,
+}: PopupConfirmProps) => {
 	const { theme } = useTheme();
 	return (
-		<Modal animationType='fade' visible={visible} transparent={true}>
+		<Modal animationType='fade' visible={visible} transparent={true} style={{ elevation: 20 }}>
 			<View style={styles.modalOverlay} onTouchStart={() => onCancel()}></View>
 			<View
 				style={{
-					marginTop: 400,
+					marginTop: Dimensions.get("screen").height / 3,
 					alignItems: "center",
 					justifyContent: "center",
 					backgroundColor: theme.blueGrey,
@@ -28,8 +37,20 @@ const PopupConfirm = ({ onConfirm, onCancel, text, confirmText, cancelText, visi
 					borderRadius: 20,
 				}}
 			>
-				<View style={{padding: 20}}>{text}</View>
-				<View style={{ flexDirection: "column" }}>
+				<Text variant='heading3' style={{ color: theme.text, fontSize: 28 }}>
+					{headerText}
+				</Text>
+
+				<View style={{ padding: 20 }}>{text}</View>
+				<View
+					style={{
+						//flex: 1,
+						flexDirection: "column", // set elements horizontally`.
+						justifyContent: "center",
+						alignItems: "stretch",
+						width: Dimensions.get("screen").width-32-24
+					}}
+				>
 					<Button onPress={() => onConfirm()} variant={"danger"}>
 						<Text bold>{confirmText}</Text>
 					</Button>

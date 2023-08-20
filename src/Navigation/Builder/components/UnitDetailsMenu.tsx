@@ -24,11 +24,11 @@ const UnitDetailsMenu = ({ noMagic, onAddUnit, onAddUpgrade, onDeleteUnit }: uni
 		}
 	};
 	return (
-		<Menu style={{marginTop: -50}} opened={opened} onBackdropPress={() => setOpened(!opened)}>
+		<Menu opened={opened} onBackdropPress={() => setOpened(!opened)}>
 			<MenuTrigger onPress={() => setOpened(!opened)}>
 				<MaterialCommunityIcons name='dots-vertical' size={24} color={theme.text} />
 			</MenuTrigger>
-			<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 150, marginTop: -50 }}>
+			<MenuOptions optionsContainerStyle={{ borderRadius: 8, maxWidth: 150, marginTop: -50, backgroundColor: theme.blueGrey }}>
 				<MenuOption onSelect={() => onAddUnit()}>
 					<MenuOptionButton
 						icon={<Entypo name='plus' size={24} color='black' />}
@@ -44,7 +44,7 @@ const UnitDetailsMenu = ({ noMagic, onAddUnit, onAddUpgrade, onDeleteUnit }: uni
 						}}
 					>
 						<MenuOptionButton
-							icon={<MaterialCommunityIcons name='sack' size={20} color='black' />}
+							icon={<MaterialCommunityIcons name='sack' size={20} color={theme.white} />}
 							variant={"outline"}
 							ButtonText={"Add Item"}
 						/>
@@ -58,14 +58,13 @@ const UnitDetailsMenu = ({ noMagic, onAddUnit, onAddUpgrade, onDeleteUnit }: uni
 						<View
 							style={{
 								flexDirection: "row",
-								backgroundColor: theme.white,
 								padding: 8,
 								paddingHorizontal: 4,
 								opacity: 0.6,
 							}}
 						>
 							<View style={{ marginLeft: 8 }}>
-								<Text italic style={{ color: theme.grey }}>
+								<Text italic style={{ color: theme.white }}>
 									No Items Available
 								</Text>
 							</View>

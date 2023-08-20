@@ -12,13 +12,17 @@ const Settings = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation();
 	const onPress = () => {
-		console.log("onPress");
+		navigation.goBack();
+
 	};
-	const settings = ["About"];
-	const version = Constants?.manifest?.version;
+	const version = Constants?.manifest?.version
 
 	return (
-		<ModalContainer onPageModalClosePressed={() => navigation.goBack()} headerTitle={"Information"}>
+		<ModalContainer
+			rotateContainer={false}
+			onPageModalClosePressed={() => navigation.goBack()}
+			headerTitle={"Information"}
+		>
 			<View style={{ display: "flex", flex: 1, backgroundColor: theme.black, padding: 8 }}>
 				<View style={{ justifyContent: "space-evenly" }}>
 					<View style={{ marginVertical: margin }}>
@@ -60,6 +64,7 @@ const Settings = () => {
 							or its affiliates.
 						</Text>
 					</View>
+
 				</View>
 			</View>
 		</ModalContainer>
