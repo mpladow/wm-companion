@@ -220,7 +220,7 @@ const BuilderHome = () => {
 						setEditingArmy(false);
 					}}
 					setModalVisible={handleAddArmyPress}
-					headerTitle='Create Army'
+					headerTitle={editingArmy ? "Edit Army" : "Create Army"}
 					modalVisible={showCreateArmy}
 				>
 					<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>

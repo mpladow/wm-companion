@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Image, Dimensions } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
 import React, { useRef, useState } from "react";
 import { ArmyListProps, BuilderContextProvider } from "@context/BuilderContext";
 import { Text } from "@components/index";
@@ -104,6 +104,7 @@ const ArmyListCard = ({
 			<View
 				style={{ overflow: "hidden", backgroundColor: theme.background, borderRadius: 8, flexDirection: "row" }}
 			>
+				<Image source={require('../../../../assets/images/card-texture.png')} resizeMode="contain" style={{opacity: 0.2, position: 'absolute'}}/>
 				<View style={{ flex: 3, margin: 20 }}>
 					<View style={{ marginBottom: 4 }}>
 						<Text variant='heading3' ellipsizeMode='tail' style={{ fontSize: 24 }}>

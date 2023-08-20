@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Dimensions, FlatList, Modal, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, FlatList, Modal, StatusBar, StyleSheet, Image, View } from "react-native";
 
 import constants, { margin, Pages, playerTypes, results } from "@utils/constants";
 import { PlayerSection, ResultSection } from "./components";
@@ -92,11 +92,9 @@ export const Tracker = () => {
 		const pos = p1S / p2S;
 		if (pos > 0) {
 			// a avalue can be beteet
-			return (pos*100)/2;
-		}
-		else{
-			return (pos*100)*2;
-
+			return (pos * 100) / 2;
+		} else {
+			return pos * 100 * 2;
 		}
 		console.log(pos, "pos");
 	};
@@ -166,9 +164,15 @@ export const Tracker = () => {
 						justifyContent: "space-between",
 						flexDirection: "row",
 						backgroundColor: theme.theme.backgroundVariant,
+						overflow: "hidden",
 					},
 				]}
 			>
+				<Image
+					source={require("../../../../assets/images/card-texture.png")}
+					resizeMode='contain'
+					style={{ opacity: 0.2, position: "absolute" }}
+				/>
 				<PlayerSection
 					useOnePlayerMode={vpContext.useOnePlayerMode}
 					player={"playerTwo"}
@@ -236,6 +240,11 @@ export const Tracker = () => {
 					},
 				]}
 			>
+				<Image
+					source={require("../../../../assets/images/card-texture.png")}
+					resizeMode='contain'
+					style={{ opacity: 0.2, position: "absolute" }}
+				/>
 				<PlayerSection
 					useOnePlayerMode={false}
 					player={"playerOne"}

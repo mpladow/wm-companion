@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { UnitProps } from "@utils/types";
 import { Text } from "@components/index";
@@ -82,8 +82,13 @@ const UnitDetailsCard = ({
 	}, [existingUnits]);
 
 	return (
-		<View key={key} style={{ flexDirection: "column", padding: 12, backgroundColor: theme.background }}>
+		<View key={key} style={{ flexDirection: "column", overflow: 'hidden', padding: 12, backgroundColor: theme.background }}>
 			<>
+				<Image
+					source={require("../../../../assets/images/card-texture.png")}
+					resizeMode='contain'
+					style={{ opacity: 0.2, position: "absolute" }}
+				/>
 				<View style={{ flex: 1, flexDirection: "row" }}>
 					<TouchableOpacity onPress={() => onUnitCardPress(unit.name)}>
 						<View style={{ flex: 3, flexDirection: "row", alignItems: "center" }}>
@@ -197,7 +202,7 @@ const UnitDetailsCard = ({
 											<QuickviewProfileHeading label={"Armour"} />
 										</View>
 										<View style={{ flex: 1 }}>
-											<Text>{unit.armour? unit.armour : "-"}</Text>
+											<Text>{unit.armour ? unit.armour : "-"}</Text>
 										</View>
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
