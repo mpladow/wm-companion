@@ -44,6 +44,12 @@ const ArmyListCard = ({
 		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
 		// 		</View>
 		// 	);
+		if (armyList.faction == Factions.High_Elves)
+		return (
+			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-highElves.jpg")} />
+			</View>
+		);
 		if (armyList.faction == Factions.Daemons)
 		return (
 			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>

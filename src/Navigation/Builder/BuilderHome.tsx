@@ -2,11 +2,13 @@ import {
 	Dimensions,
 	FlatList,
 	ImageBackground,
+	Keyboard,
 	Modal,
 	SectionList,
 	StyleSheet,
 	TextInput,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	View,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
@@ -223,59 +225,15 @@ const BuilderHome = () => {
 					headerTitle={editingArmy ? "Edit Army" : "Create Army"}
 					modalVisible={showCreateArmy}
 				>
-					<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
-						<View style={{ flex: 1, marginBottom: 12 }}>
-							<FormLabel label={"Army Name"} />
-							<TextInput
-								ref={nameRef}
-								placeholder='Enter Army Name'
-								onChangeText={(val) => setFactionName(val)}
-								style={[
-									{
-										color: theme.black,
-										fontFamily: fonts.PTSansBold,
-										fontSize: 16,
-										backgroundColor: theme.white,
-										borderRadius: 16,
-										padding: 16,
-									},
-									factionNameError && { borderColor: theme.danger, borderWidth: 4 },
-								]}
-							>
-								{factionName}
-							</TextInput>
-							{factionNameError && (
-								<Text italic style={{ color: theme.danger }}>
-									An army name is required
-								</Text>
-							)}
-							{!editingArmy ? (
-								<>
-									<View style={{ marginTop: 12 }}>
-										<FormLabel label={"Faction"} />
-										<CustomDropdown
-											value={factionSelection}
-											style={[styles.dropdown, { backgroundColor: theme.white }]}
-											placeholder='Select Faction'
-											placeholderStyle={{ color: "#ddd" }}
-											data={ddFactions}
-											search
-											searchPlaceholder='Search...'
-											labelField='label'
-											valueField='value'
-											onChange={(item) => {
-												handleFactionSelection(item.value);
-											}}
-										/>
-									</View>
-								</>
-							) : (
-								<View style={{ marginTop: 12 }}>
-									<FormLabel label={"Notes"} />
+					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+						<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
+							<>
+								<View style={{ flex: 1, marginBottom: 12 }}>
+									<FormLabel label={"Army Name"} />
 									<TextInput
-										multiline
-										value={factionNotes}
-										onChangeText={(val) => setFactionNotes(val)}
+										ref={nameRef}
+										placeholder='Enter Army Name'
+										onChangeText={(val) => setFactionName(val)}
 										style={[
 											{
 												color: theme.black,
@@ -284,24 +242,72 @@ const BuilderHome = () => {
 												backgroundColor: theme.white,
 												borderRadius: 16,
 												padding: 16,
-												paddingTop: 16,
-												height: 100,
 											},
-											// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+											factionNameError && { borderColor: theme.danger, borderWidth: 4 },
 										]}
-									/>
+									>
+										{factionName}
+									</TextInput>
+									{factionNameError && (
+										<Text italic style={{ color: theme.danger }}>
+											An army name is required
+										</Text>
+									)}
+									{!editingArmy ? (
+										<>
+											<View style={{ marginTop: 12 }}>
+												<FormLabel label={"Faction"} />
+												<CustomDropdown
+													value={factionSelection}
+													style={[styles.dropdown, { backgroundColor: theme.white }]}
+													placeholder='Select Faction'
+													placeholderStyle={{ color: "#ddd" }}
+													data={ddFactions}
+													search
+													searchPlaceholder='Search...'
+													labelField='label'
+													valueField='value'
+													onChange={(item) => {
+														handleFactionSelection(item.value);
+													}}
+												/>
+											</View>
+										</>
+									) : (
+										<View style={{ marginTop: 12 }}>
+											<FormLabel label={"Notes"} />
+											<TextInput
+												multiline
+												value={factionNotes}
+												onChangeText={(val) => setFactionNotes(val)}
+												style={[
+													{
+														color: theme.black,
+														fontFamily: fonts.PTSansBold,
+														fontSize: 16,
+														backgroundColor: theme.white,
+														borderRadius: 16,
+														padding: 16,
+														paddingTop: 16,
+														height: 100,
+													},
+													// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+												]}
+											/>
+										</View>
+									)}
 								</View>
-							)}
+								<Button
+									onPress={() => (editingArmy ? onArmyNameChange() : onConfirmCreateArmyPress(true))}
+									variant={"confirm"}
+								>
+									<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
+										{editingArmy ? "confirm" : "create"}
+									</Text>
+								</Button>
+							</>
 						</View>
-						<Button
-							onPress={() => (editingArmy ? onArmyNameChange() : onConfirmCreateArmyPress(true))}
-							variant={"confirm"}
-						>
-							<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
-								{editingArmy ? "confirm" : "create"}
-							</Text>
-						</Button>
-					</View>
+					</TouchableWithoutFeedback>
 				</CustomModal>
 				<PopupConfirm
 					visible={confirmDialog}

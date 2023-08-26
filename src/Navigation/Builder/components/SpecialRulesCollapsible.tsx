@@ -6,7 +6,8 @@ import { AntDesign } from "@expo/vector-icons";
 import Collapsible from "react-native-collapsible";
 import { Text } from "@components/index";
 import reactStringReplace from "react-string-replace";
-import { underscoreRegex } from "@utils/constants";
+import { asterixRegex, asterixSingleRegex, underscoreRegex } from "@utils/constants";
+import { sanitizeText } from "../utils/builderHelpers";
 
 type SpecialRulesCollapsibleProps = {
 	toggleVisible: () => void;
@@ -16,7 +17,6 @@ type SpecialRulesCollapsibleProps = {
 };
 const SpecialRulesCollapsible = ({ visible, title, contents, toggleVisible }: SpecialRulesCollapsibleProps) => {
 	const { theme } = useTheme();
-
 
 	return (
 		<View style={{ zIndex: 99, padding: 12, margin: 12, borderRadius: 12, backgroundColor: theme.white }}>
@@ -42,19 +42,11 @@ const SpecialRulesCollapsible = ({ visible, title, contents, toggleVisible }: Sp
 			</TouchableOpacity>
 
 			<Collapsible collapsed={visible} align='center'>
-				<View style={{ paddingVertical: 4, paddingTop: 8, marginTop: 8}}>
+				<View style={{ paddingVertical: 4, paddingTop: 8, marginTop: 8 }}>
 					{contents &&
 						contents?.map((x) => {
-							// transform content to remove __
-							const sanitized = reactStringReplace(x, underscoreRegex, (match, i) => {
-								console.log(match, `${match} on ${i}`);
-								return (
-									<Text bold style={{ color: theme.black }} key={i}>
-										{match}
-									</Text>
-								);
-							});
-
+							// remove double commas and add extra line
+							let sanitized = sanitizeText(x, theme.black)
 							return (
 								<View>
 									<Text style={{ color: theme.black }}>{sanitized}</Text>

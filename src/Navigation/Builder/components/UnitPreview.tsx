@@ -9,8 +9,9 @@ import { useBuilderContext } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
 import { getGenericSpecialRules } from "@utils/factionHelpers";
 import reactStringReplace from "react-string-replace";
-import { additionalSpaceRegex, underscoreRegex } from "@utils/constants";
+import { additionalSpaceRegex, asterixRegex, asterixSingleRegex, underscoreRegex } from "@utils/constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { sanitizeText } from "../utils/builderHelpers";
 
 type UnitPreviewProps = {
 	handleSetVisible: (visible: boolean) => void;
@@ -125,27 +126,8 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 									{specialRules &&
 										specialRules?.text.map((x) => {
 											// transform content to remove __
-											let sanitized = reactStringReplace(x, underscoreRegex, (match, i) => {
-												console.log(match, `${match} on ${i}`);
-												return (
-													<Text bold style={{ color: theme.text }} key={i}>
-														{match}
-													</Text>
-												);
-											});
-											// sanitized = reactStringReplace(
-											// 	sanitized,
-											// 	additionalSpaceRegex,
-											// 	(match, i) => {
-											// 		console.log(match, `${match} on ${i}`);
-											// 		return (
-											// 			<Text bold style={{ color: theme.text }} key={i}>
-											// 				{match}{"  "}
-											// 			</Text>
-											// 		);
-											// 	}
-											// );
-
+											let sanitized = sanitizeText(x, theme.text)
+											
 											return (
 												<View>
 													<Text style={{ color: theme.text }}>{sanitized}</Text>

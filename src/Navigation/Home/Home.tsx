@@ -96,7 +96,7 @@ const Home = () => {
 						<View style={{ marginVertical: margin }}>
 							<TextBlock>
 								<Text>Thank you to the entire Warmaster Revolutions community for keeping this game alive!</Text>
-								<Text>Credits: Forest Dragon Miniatures, Onmioji, K Rauff </Text>
+								<Text>Credits: Forest Dragon Miniatures, Onmioji, K Rauff, Paintera Przemas Bak </Text>
 							</TextBlock>
 						</View>
 						<View style={{ marginVertical: margin }}>
