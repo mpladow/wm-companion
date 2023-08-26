@@ -52,6 +52,7 @@ export type UnitProps = {
 	armyMax?: number;
 	armyMin?: number;
 	upgrades?: string[];
+	upgradesExpanded?: any[];
 	specialRules?: string[];
 	specialRulesExpanded?: any[];
 	noMagic?: boolean;

@@ -33,6 +33,7 @@ import ArmyPointsCount from "./components/ArmyPointsCount";
 import { LinearGradient } from "expo-linear-gradient";
 import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
+import { getUpgradeDetailsByName } from "./utils/builderHelpers";
 
 export type sectionListDataProps = {
 	title: string;
@@ -77,9 +78,16 @@ const BuilderEdit = () => {
 						</MenuTrigger>
 						<MenuOptions>
 							<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
-								<View style={{padding: 4, paddingVertical: 8}}>
-								<Text style={{color: theme.black}}>Export List</Text>
-
+								<View style={{ flexDirection: "row", alignItems: "center" }}>
+									<View style={{ flex: 1 }}>
+										<Entypo name='export' size={20} color='black' />
+									</View>
+									<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
+										<Text style={{ color: theme.black }}>Export List</Text>
+									</View>
+									<View style={{ paddingRight: 8 }}>
+										<Entypo name='warning' size={20} color={theme.warning} />
+									</View>
 								</View>
 							</MenuOption>
 						</MenuOptions>
@@ -87,7 +95,7 @@ const BuilderEdit = () => {
 				),
 				headerTitle: (props: any) => (
 					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-						<View style={{ width: 250 }}>	
+						<View style={{ width: 250 }}>
 							<Text
 								numberOfLines={1}
 								variant='heading3'
@@ -185,7 +193,6 @@ const BuilderEdit = () => {
 		}
 	}, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
 
-
 	const handleRemoveUnit = (unitId: string, unitPoints: number) => {
 		builder.removeUnit(unitId, unitPoints);
 	};
@@ -253,9 +260,11 @@ const BuilderEdit = () => {
 		}
 	};
 	const handleOnUpgradePress = (upgradeName: string) => {
-		let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find((x) => x.name == upgradeName);
-		if (!_upgrades?.text) {
-			_upgrades = builder.factionDetails?.upgrades?.find((x) => x.name == upgradeName);
+		if (builder.factionDetails) {
+			const _upgrades = getUpgradeDetailsByName(upgradeName, builder.factionDetails);
+			// let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find((x) => x.name == upgradeName);
+			// if (!_upgrades?.text) {
+			// 	_upgrades = builder.factionDetails?.upgrades?.find((x) => x.name == upgradeName);
 			if (_upgrades && _upgrades?.text == null) {
 				// find upgrade text fromm special rules
 				const specialRules = builder.factionDetails?.specialRules[upgradeName];
@@ -264,13 +273,14 @@ const BuilderEdit = () => {
 					_upgrades.text = specialRules.text;
 				}
 			}
-		}
-		if (_upgrades) {
-			console.log("upgrade found");
-			setCurrentUpgradeDetails(_upgrades);
-			setUpgradePreviewVisible(true);
-		} else {
-			console.error("upgrade not found");
+			// }
+			if (_upgrades) {
+				console.log("upgrade found");
+				setCurrentUpgradeDetails(_upgrades);
+				setUpgradePreviewVisible(true);
+			} else {
+				console.error("upgrade not found");
+			}
 		}
 	};
 	// **ADD MAGICITEMS
@@ -335,27 +345,32 @@ const BuilderEdit = () => {
 		// find upgrades from this permittedUpgrades list
 
 		let upgadesToRemove: string[] = [];
+		// console.log(specificUpgradesForUnitArr, "specific upgrades");
 		specificUpgradesForUnitArr.forEach((up) => {
-			const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : null;
+			const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : "0";
 			const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
+			console.log(unitHasArmour, "unitHasArmour");
 
 			let pointsCost;
 			if (up.points == undefined) {
 				console.error(up.name, "UPGRAADE WITH UNDEFINED");
 			}
 			if (up.name == "Banner of Shielding") {
-				if (unitHasArmour) {
-					pointsCost = up.points[unitHasArmour];
-					console.log(pointsCost, "pointsCost");
-					if (pointsCost) up.points = pointsCost;
-				}
+				pointsCost = up.points[unitHasArmour];
+				console.log(pointsCost, "pointsCost for banner of shielding");
+				if (pointsCost) up.points = pointsCost;
 			}
 			if (up.name == "Banner of Steadfastness") {
-				if (unitHasArmour && unitDetails?.armour !== "-") {
+				if (unitHasArmour !== "0") {
 					pointsCost = up.points[unitHasArmour];
-					console.log(pointsCost, "pointsCost");
+					console.log(pointsCost, "pointsCost for baner of steadfastness");
 
-					if (pointsCost) up.points = pointsCost;
+					if (pointsCost !== undefined) {
+						up.points = pointsCost;
+					}
+					else{
+						console.log(up.points, 'up.points')
+					}
 				} else {
 					upgadesToRemove.push(up.name);
 				}

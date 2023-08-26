@@ -8,6 +8,7 @@ import { useTheme } from "@hooks/useTheme";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { sanitizeText } from "../utils/builderHelpers";
 
 type SpellBookModalProps = {
 	handleSetVisible: (visible: boolean) => void;
@@ -86,7 +87,9 @@ const SpellBookModal = ({ handleSetVisible, visible, spells }: SpellBookModalPro
 								collapsableContent={
 									<View style={{ flexDirection: "column", marginVertical: 12 }}>
 										{item.text?.map((x) => {
-											return <Text style={{ color: theme.black }}>{x}</Text>;
+											let _item = x;
+											const sanitized = sanitizeText(_item,theme.black)
+											return <Text style={{ color: theme.black }}>{sanitized}</Text>;
 										})}
 									</View>
 								}

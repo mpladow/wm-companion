@@ -57,6 +57,10 @@ export const Factions = {
 
 //export const underscoreRegex = /_(.*?)_/g;
 export const underscoreRegex = /__(.*?)__/g;
+export const asterixRegex = /\*\*(.*?)\*\*/g;
+export const asterixSingleRegex = /\*(.*?)\*/g;
+export const newLineRegex = /,,(.*?),,/g
+
 export const additionalSpaceRegex = /|(.*?)|/g;
 
 //const underscoreRegex = /\__(\S*)\__(.*)/
