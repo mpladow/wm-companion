@@ -1,22 +1,37 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useTheme } from "@hooks/useTheme";
-import {Text} from '@components/index';
+import { Text } from "@components/index";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 type ArmyPointsCount = {
-    armyErrorsCount: number;
-    setVisibility: (visibility: boolean) => void;
-    armyCount: string;
-    disableButton?: boolean;
+	armyErrorsCount: number;
+	setVisibility: (visibility: boolean) => void;
+	armyCount: string;
+	disableButton?: boolean;
 };
-const ArmyPointsCount = ({armyErrorsCount, setVisibility, armyCount, disableButton}: ArmyPointsCount) => {
-    const {theme} = useTheme();
+const ArmyPointsCount = ({ armyErrorsCount, setVisibility, armyCount, disableButton }: ArmyPointsCount) => {
+	const { theme } = useTheme();
 	return (
-		<View style={{flexDirection: 'row'}}>
+		<View
+			style={{
+				flexDirection: "row",
+				shadowColor: "#000",
+				shadowOffset: {
+					width: 0,
+					height: 2,
+				},
+				shadowOpacity: 0.50,
+				shadowRadius: 3.84,
+				elevation: 5,
+			}}
+		>
 			{/* TODO extract out  */}
-			<TouchableOpacity disabled={disableButton} onPress={() => armyErrorsCount > 0 && !disableButton&& setVisibility(true)}>
+			<TouchableOpacity
+				disabled={disableButton}
+				onPress={() => armyErrorsCount > 0 && !disableButton && setVisibility(true)}
+			>
 				<View style={{ width: 40, height: 40 }}>
 					<View
 						style={{

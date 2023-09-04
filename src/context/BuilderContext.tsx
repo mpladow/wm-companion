@@ -149,7 +149,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const factionUnits = _factionDetails.factionList?.units?.filter(
 				(x) => x["min"] != undefined || x["armyMin"] != undefined
 			);
-			console.log(factionUnits.length, "faction units");
 			// find min requirements
 			const defaultUnits: SelectedUnitProps[] = [];
 			factionUnits.forEach((x) => {
@@ -174,7 +173,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 				};
 				defaultUnits.push(_newUnit);
 
-				// console.log(_newUnit, 'newUnitDetails')
 			});
 			newArmyList.selectedUnits = defaultUnits;
 		}
@@ -208,13 +206,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			setArmyErrors(calculateArmyErrors());
 		}
 	}, [currentArmyList]);
-	// useEffect(() => {
-	// 	if (currentArmyList) {
-	// 		console.log("BUILDERCONTEXT:: calculating army points");
-	// 		const currentCount = calculateCurrentArmyPoints();
-	// 		currentArmyList.points = currentCount;
-	// 	}
-	// }, [currentArmyList?.selectedUnits]);
+
 	const updateUserArmyLists = (armyIdUpdated?: string) => {
 		const armyListToUpdateIndex = userArmyLists.findIndex((x) => x.armyId == currentArmyList?.armyId);
 		if (currentArmyList) {
@@ -341,7 +333,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const unitExistsIndex = updatedArmy.selectedUnits.findIndex((x) => x.id == unitId);
 			if (unitExists && unitExistsIndex > -1) {
 				if (unitExists.currentCount && unitExists.currentCount > 1) {
-					console.log("removeUnit: unitCount greater than 0, removing 1 from currentCount");
 					unitExists.currentCount = unitExists.currentCount - 1;
 					const updatedSelected = [
 						...updatedArmy.selectedUnits.slice(0, unitExistsIndex),
@@ -350,7 +341,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 					];
 					updatedArmy.selectedUnits = updatedSelected;
 				} else {
-					console.log("removeUnit: unit <1 - removing from arrays");
 					updatedArmy.selectedUnits = updatedArmy.selectedUnits.filter((x) => x.id != unitId);
 				}
 			}
@@ -369,7 +359,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 		maxCount?: number,
 		armyLimitMaxCount?: number
 	) => {
-		console.log(`addItem:: ADDING ITEM ${itemName} to ${unitName}`);
 		const newUpgrade: SelectedUpgradesProps = {
 			id: uuid(),
 			upgradeName: itemName,
@@ -613,7 +602,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 					.map((x) => x.currentCount);
 				const currentUnitItemCounts = currentUnitsItems?.reduce((prev, curr) => prev + curr, 0);
 				// flatten num er
-				console.log(x.currentCount, "CURRENT COUNT");
 				console.log(currentUnitItemCounts, "current unit items filtered");
 				if (currentUnitItemCounts > x.currentCount) {
 					errors.push({
@@ -630,12 +618,12 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const unitExists = currentArmyList?.selectedUnits?.find((x) => x.unitName == u.name);
 			if (unitExists) {
 				// if count > == u count
-				const isValid = unitExists.currentCount >= u.armyMin || unitExists.currentCount >= u.min;
+				const isValid = unitExists.currentCount >= u.armyMin || unitExists.currentCount >= (currentArmyPointsLimit * u.min);
 				if (!isValid) {
 					errors.push({
 						source: "Unit",
 						sourceName: unitExists.unitName,
-						error: `Unit: A minimum of ${u.armyMin ? u.armyMin : u.min} ${
+						error: `Unit: A minimum of ${u.armyMin ? u.armyMin : (currentArmyPointsLimit * u.min)} ${
 							unitExists.unitName
 						}/s in the army is required.`,
 					});
@@ -643,7 +631,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			} else {
 				errors.push({
 					sourceName: u.name,
-					error: `Unit: A minimum of ${u.armyMin ? u.armyMin : u.min} ${u.name}/s in the army is required.`,
+					error: `Unit: A minimum of ${u.armyMin ? u.armyMin : (currentArmyPointsLimit * u.min)} ${u.name}/s in the army is required.`,
 				});
 			}
 		});
