@@ -361,9 +361,8 @@ const BuilderEdit = () => {
 				if (pointsCost) up.points = pointsCost;
 			}
 			if (up.name == "Banner of Steadfastness") {
-				if (unitHasArmour !== "0") {
+				if (unitHasArmour !== "0" && unitHasArmour !== "-") {
 					pointsCost = up.points[unitHasArmour];
-					console.log(pointsCost, "pointsCost for baner of steadfastness");
 
 					if (pointsCost !== undefined) {
 						up.points = pointsCost;
