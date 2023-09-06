@@ -292,6 +292,8 @@ const BuilderEdit = () => {
 		// TODO: extract all this into a seperate use effect.
 		const itemsArray: any = magicItemsList.upgrades;
 		const magicItemConstraints = magicItemsList.upgradeConstraints;
+		// faction unit types can override the above constraints
+
 		const factionUpgrades = builder.factionDetails?.upgrades;
 		factionUpgrades?.map((x) => {
 			if (builder.factionDetails?.specialRules) {
@@ -366,9 +368,8 @@ const BuilderEdit = () => {
 
 					if (pointsCost !== undefined) {
 						up.points = pointsCost;
-					}
-					else{
-						console.log(up.points, 'up.points')
+					} else {
+						console.log(up.points, "up.points");
 					}
 				} else {
 					upgadesToRemove.push(up.name);
@@ -384,6 +385,16 @@ const BuilderEdit = () => {
 				up.points = pointsCost;
 			}
 		});
+		// check unit upgrades and add additional items to generic magic items
+		if (unitDetails?.upgrades?.length > 0) {
+			console.log(unitDetails?.upgrades, "upgrades");
+			unitDetails?.upgrades?.map((unitUpgrade) => {
+				const magicItemToAdd = itemsArray.find((u) => u.name == unitUpgrade);
+				console.log(magicItemToAdd, "magicItemToAdd");
+				const upgradeAlreadyExists = specificUpgradesForUnitArr.find((exUp) => exUp.name == unitUpgrade);
+				if (!upgradeAlreadyExists) specificUpgradesForUnitArr.push(magicItemToAdd);
+			});
+		}
 		specificUpgradesForUnitArr = specificUpgradesForUnitArr.filter((x) => {
 			return !upgadesToRemove.includes(x.name);
 		});
