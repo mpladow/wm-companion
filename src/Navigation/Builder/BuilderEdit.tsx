@@ -349,7 +349,7 @@ const BuilderEdit = () => {
 		let upgadesToRemove: string[] = [];
 		// console.log(specificUpgradesForUnitArr, "specific upgrades");
 		specificUpgradesForUnitArr.forEach((up) => {
-			const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : "0";
+			const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : "-";
 			const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
 			console.log(unitHasArmour, "unitHasArmour");
 

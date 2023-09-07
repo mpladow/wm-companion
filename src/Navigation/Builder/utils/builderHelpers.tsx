@@ -95,7 +95,6 @@ export const sanitizeText = (text: string, textColor: any) => {
 			</Text>
 		);
 	});
-	console.log(sanitized, 'conducting sanitixzation');
 
 	return sanitized;
 };
