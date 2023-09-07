@@ -26,13 +26,14 @@ export type SelectedUnitProps = {
 	id: string;
 	unitName: string;
 	order: number;
-	points: number;
+	points?: number;
 	isLeader?: boolean;
 	currentCount: number;
 	maxCount?: number;
 	minCount?: number;
 	ignoreBreakPoint?: boolean;
 	attachedItems: SelectedUpgradesProps[];
+	requiredUnits?: string[];
 };
 export type ArmyListProps = {
 	armyId: string;
@@ -58,8 +59,8 @@ interface BuilderContextInterface {
 	updateArmyNotes: (armyId: string, notes: string) => void;
 	addUnit: (
 		unitName: string,
-		points: number,
-		isLeader: boolean,
+		points?: number,
+		isLeader?: boolean,
 		maxCount?: number,
 		minCount?: number,
 		ignoreBreakPoint?: boolean
@@ -172,7 +173,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 					ignoreBreakPoint: x.noCount,
 				};
 				defaultUnits.push(_newUnit);
-
 			});
 			newArmyList.selectedUnits = defaultUnits;
 		}
@@ -281,8 +281,8 @@ export const BuilderContextProvider = ({ children }: any) => {
 	};
 	const addUnit = (
 		unitName: string,
-		unitPoints: number,
-		isLeader: boolean,
+		unitPoints?: number,
+		isLeader?: boolean,
 		maxCount?: number,
 		minCount?: number,
 		ignoreBreakPoint?: boolean
@@ -299,7 +299,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 			maxCount: maxCount,
 			minCount: minCount,
 			ignoreBreakPoint: ignoreBreakPoint,
+			requiredUnits: currentUnit.requiredUnits,
 		};
+		console.log(newUnit, "newUnitadded");
 
 		setCurrentArmyList((prev) => {
 			// find if unit exists in selected units
@@ -570,25 +572,45 @@ export const BuilderContextProvider = ({ children }: any) => {
 		});
 
 		// check no mounts exceed total count per character
-		currentArmyList?.selectedUnits.filter(x => x.isLeader).forEach((cu) => {
-			const unitHasMount = cu.attachedItems
-				.filter((ai) => ai.type?.includes("Mount"))
-				.map((x) => {
-					if (x.currentCount) return x.currentCount;
-				});
-			if (unitHasMount.length > 0 && unitHasMount != null) {
-				const mountCount = unitHasMount.reduce((prev, curr) => {
-					if (curr != undefined && prev != undefined) return prev + curr;
-				}, 0);
-				if (mountCount && mountCount > cu.currentCount) {
-					errors.push({
-						source: "Unit",
-						sourceName: cu.unitName,
-						error: `Mount: ${cu.unitName} has too many mounts.`,
+		currentArmyList?.selectedUnits
+			.filter((x) => x.isLeader)
+			.forEach((cu) => {
+				const unitHasMount = cu.attachedItems
+					.filter((ai) => ai.type?.includes("Mount"))
+					.map((x) => {
+						if (x.currentCount) return x.currentCount;
 					});
+				if (unitHasMount.length > 0 && unitHasMount != null) {
+					const mountCount = unitHasMount.reduce((prev, curr) => {
+						if (curr != undefined && prev != undefined) return prev + curr;
+					}, 0);
+					if (mountCount && mountCount > cu.currentCount) {
+						errors.push({
+							source: "Unit",
+							sourceName: cu.unitName,
+							error: `Mount: ${cu.unitName} has too many mounts.`,
+						});
+					}
 				}
+			});
+		// check if any unit has any required units
+		const unitWithRequiredUnits = currentArmyList?.selectedUnits.find(
+			(x) => x.requiredUnits !== undefined && x.requiredUnits.length > 0
+		);
+
+		if (unitWithRequiredUnits && unitWithRequiredUnits.requiredUnits !== undefined) {
+			const requiredUnitsExists = currentArmyList?.selectedUnits.find(
+				(x) => x.unitName == unitWithRequiredUnits.requiredUnits[0]
+			);
+			if (!requiredUnitsExists) {
+				errors.push({
+					source: "Unit",
+					sourceName: unitWithRequiredUnits.unitName,
+					error: `Required Unit: ${unitWithRequiredUnits.requiredUnits[0]} is required to be fielded with ${unitWithRequiredUnits.unitName}.`,
+				});
 			}
-		});
+		}
+
 		// check that allocated items don't exceed number of units
 		currentArmyList?.selectedUnits.map((x) => {
 			if (x.attachedItems.length > 0) {
@@ -618,12 +640,13 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const unitExists = currentArmyList?.selectedUnits?.find((x) => x.unitName == u.name);
 			if (unitExists) {
 				// if count > == u count
-				const isValid = unitExists.currentCount >= u.armyMin || unitExists.currentCount >= (currentArmyPointsLimit * u.min);
+				const isValid =
+					unitExists.currentCount >= u.armyMin || unitExists.currentCount >= currentArmyPointsLimit * u.min;
 				if (!isValid) {
 					errors.push({
 						source: "Unit",
 						sourceName: unitExists.unitName,
-						error: `Unit: A minimum of ${u.armyMin ? u.armyMin : (currentArmyPointsLimit * u.min)} ${
+						error: `Unit: A minimum of ${u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min} ${
 							unitExists.unitName
 						}/s in the army is required.`,
 					});
@@ -631,7 +654,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 			} else {
 				errors.push({
 					sourceName: u.name,
-					error: `Unit: A minimum of ${u.armyMin ? u.armyMin : (currentArmyPointsLimit * u.min)} ${u.name}/s in the army is required.`,
+					error: `Unit: A minimum of ${u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min} ${
+						u.name
+					}/s in the army is required.`,
 				});
 			}
 		});
@@ -710,7 +735,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				factionDetails,
 				armyErrors,
 				getArmyByArmyId,
-				getUnitCounts
+				getUnitCounts,
 			}}
 		>
 			{children}
