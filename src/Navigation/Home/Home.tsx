@@ -1,14 +1,13 @@
-import { Dimensions, ImageBackground, StyleSheet, View } from "react-native";
+import { Dimensions, ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { margin } from "@utils/constants";
 import Constants from "expo-constants";
-import Logo from "@components/SVGS/Logo";
 import LogoWmr from "@components/SVGS/LogoWmr";
-import { AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Clipboard from "expo-clipboard";
 
 const Home = () => {
 	const { theme } = useTheme();
@@ -55,48 +54,38 @@ const Home = () => {
 										</View>
 									</View>
 									<Text bold>{version}</Text>
-									<Text bold style={{ textAlign: "center" }}>
-										This is an alpha build with additional functionality being added over time.
-									</Text>
 								</>
 							</TextBlock>
+							<View style={{ marginVertical: margin }}>
+								<TextBlock>
+									<Text>
+										A companion app to assist in Warmaster and Warmaster Revolution wargaming.
+									</Text>
+								</TextBlock>
+							</View>
+
+							<View style={{ marginVertical: margin }}>
+								<TextBlock>
+									<Text>
+										Thank you to the entire Warmaster Revolutions community for keeping this game
+										alive!
+									</Text>
+									<Text>
+										Credits: Forest Dragon Miniatures, Onmioji, K Rauff, Paintera Przemas Bak{" "}
+									</Text>
+								</TextBlock>
+							</View>
 							<TextBlock>
 								<>
 									<Text>If any bugs are found, please report them to: </Text>
-									<Text>ml.development.2022@gmail.com</Text>
+									<TouchableOpacity
+										onPress={async () =>
+											await Clipboard.setStringAsync("ml.development.2022@gmail.com")
+										}
+									>
+										<Text style={{ color: theme.white }}>ml.development.2022@gmail.com</Text>
+									</TouchableOpacity>
 								</>
-							</TextBlock>
-						</View>
-						<View style={{ marginVertical: margin }}>
-							<TextBlock>
-								<Text>A companion app to assist in Warmaster and Warmaster Revolution wargaming.</Text>
-							</TextBlock>
-							<TextBlock>
-								<Text bold>Future features:</Text>
-							</TextBlock>
-							<TextBlock>
-								<>
-									<Text>- Tournament Progress Management</Text>
-									<Text>- Ability to save game results</Text>
-									<Text>- Army List creator</Text>
-									<View style={{ flexDirection: "row" }}>
-										<AntDesign name='check' size={20} color='green' />
-										<Text> -- Initial Creator complete</Text>
-									</View>
-									<View style={{ flexDirection: "row" }}>
-										<AntDesign name='check' size={20} color='green' />
-										<Text> -- Export Army Feature</Text>
-									</View>
-									<Text style={{ paddingLeft: 20 }}> -- All factions added</Text>
-									<Text style={{ paddingLeft: 20 }}> -- Update Faction assets</Text>
-								</>
-							</TextBlock>
-						</View>
-
-						<View style={{ marginVertical: margin }}>
-							<TextBlock>
-								<Text>Thank you to the entire Warmaster Revolutions community for keeping this game alive!</Text>
-								<Text>Credits: Forest Dragon Miniatures, Onmioji, K Rauff, Paintera Przemas Bak </Text>
 							</TextBlock>
 						</View>
 						<View style={{ marginVertical: margin }}>
