@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "@navigation/Home/Home";
@@ -21,7 +21,7 @@ const TabStackNavigator = () => {
 			initialRouteName='About'
 			screenOptions={(screenProps) => ({
 				headerTitle: (props) => (
-					<View style={{ flexDirection: "row", alignItems: "center" }}>
+					<View style={{ flexDirection: "row", alignItems: "center"}}>
 						<Text
 							variant='heading3'
 							style={{
@@ -69,7 +69,7 @@ const TabStackNavigator = () => {
 							break;
 					}
 					return (
-						<View style={{ alignItems: "center", justifyContent: "center" }}>
+						<View style={{ alignItems: "center", width: Dimensions.get('screen').width/3, justifyContent: "center" }}>
 							{icon}
 							<Text style={{ color: focused ? theme.warning : theme.text, fontSize: 12 }}>{label}</Text>
 						</View>

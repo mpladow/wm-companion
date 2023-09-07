@@ -238,12 +238,6 @@ const BuilderQuickView = () => {
 					borderColor: "#FcF5E5",
 				}}
 			>
-				<Text italic style={{ color: theme.black }}>
-					This is a work in progress. Please report any bugs with roster generation to:
-				</Text>
-				<TouchableOpacity onPress={async () => await Clipboard.setStringAsync("ml.development.2022@gmail.com")}>
-					<Text style={{ color: theme.blueGrey }}>ml.development.2022@gmail.com</Text>
-				</TouchableOpacity>
 			</View>
 			{/* {Platform.OS === "ios" && (
 				<>

@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mldevelopment.wmcompanion",
-      "buildNumber": "0.1"
+      "buildNumber": "0.3"
     },
     "android": {
       "adaptiveIcon": {
