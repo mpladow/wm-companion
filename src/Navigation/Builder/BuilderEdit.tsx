@@ -143,7 +143,7 @@ const BuilderEdit = () => {
 	) => {
 		console.log(`BuilderEdit: Adding ${unitName} with a max count of ${maxCount} and a min req of ${minCount} `);
 
-		points && builder.addUnit(unitName, points, isLeader, maxCount, minCount, ignoreBreakPoint);
+		builder.addUnit(unitName, points, isLeader, maxCount, minCount, ignoreBreakPoint);
 	};
 	const handleAddUpgradeToUnitPress = (
 		unitName: string,
