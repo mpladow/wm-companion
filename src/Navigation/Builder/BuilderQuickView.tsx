@@ -187,7 +187,6 @@ const BuilderQuickView = () => {
 					8
 				);
 				const { uri } = await Print.printToFileAsync({ html });
-				console.log(uri, "URI");
 				if (Platform.OS == "ios") {
 					await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
 				} else {
@@ -228,23 +227,12 @@ const BuilderQuickView = () => {
 			</Text>
 
 			<Text style={{ color: theme.black }}>{generateUnitPoints()}</Text>
-			<View
-				style={{
-					marginVertical: 12,
-					backgroundColor: theme.warning,
-					padding: 12,
-					borderRadius: 12,
-					borderWidth: 2,
-					borderColor: "#FcF5E5",
-				}}
-			>
-			</View>
 			{/* {Platform.OS === "ios" && (
 				<>
 					<View />
 					<Button onPress={selectPrinter} variant='default'>
 						Select Printer
-					</Button>
+							</Button>
 					<View />
 					{printer ? <Text>{`Selected printer: ${printer.name}`}</Text> : undefined}
 				</>

@@ -215,22 +215,17 @@ export const VPContextProvider = ({ children }: any) => {
 		try {
 			const keys = await AsyncStorage.getAllKeys();
 			let filteredKeys = keys && keys.filter((x) => x.includes("SAVE"));
-			console.log(filteredKeys, "filtered keys");
 			if (keys) {
 				const result = await AsyncStorage.multiGet(keys);
 				if (result) {
 					const saveGames: SaveGameProps[] = result.map((req) => {
 						if (req[1]) return JSON.parse(req[1]);
 					});
-					console.log(result, "RESULT FROM ALL SAVES");
-					// const res = saveGames.map((x) => {
-					// 	return { id: x.saveGameId, date: x.dateSaved };
-					// });
 					setAllSaves(saveGames);
 				}
 			}
 		} catch (e) {
-			console.log("VPContext:: getAllSavesFromStorage:: error ", e);
+			console.log("VPContext :: getAllSavesFromStorage :: error ", e);
 		}
 	};
 
@@ -252,7 +247,7 @@ export const VPContextProvider = ({ children }: any) => {
 				setP2VpFaction(p2VpScore.faction);
 			}
 		} catch (e) {
-			console.log(e, "VPContext -- not found");
+			console.error(e, "VPContext :: getScoresForSaveGameId :: not found");
 		}
 	};
 	const toggleOnePlayerMode = () => {
