@@ -301,7 +301,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 			ignoreBreakPoint: ignoreBreakPoint,
 			requiredUnits: currentUnit.requiredUnits,
 		};
-		console.log(newUnit, "newUnitadded");
 
 		setCurrentArmyList((prev) => {
 			// find if unit exists in selected units
@@ -378,21 +377,13 @@ export const BuilderContextProvider = ({ children }: any) => {
 			// find unit
 			const unit = updatedArmy.selectedUnits.find((x) => x.unitName == unitName);
 			const unitIndex = updatedArmy.selectedUnits.findIndex((x) => x.unitName == unitName);
-			console.log(
-				`addItem:: finding unit ${unit?.unitName} with an index of ${unitIndex} and an attached item count of ${unit?.attachedItems.length}`
-			);
 
 			if (unit != undefined && unitIndex > -1) {
 				// find upgrade
 				const unitUpgrade = unit?.attachedItems.find((x) => x.upgradeName == itemName);
 				const unitUpgradeIndex = unit?.attachedItems.findIndex((x) => x.upgradeName == itemName);
-				console.log(
-					`addItem:: finding upgrade ${unitUpgrade?.upgradeName} with an index of ${unitUpgradeIndex} and a count of ${unitUpgrade?.currentCount}`
-				);
-
 				if (unitUpgrade != undefined && unitUpgradeIndex != undefined && unitUpgrade.currentCount > 0) {
 					// update
-					console.log("addItem:: add item");
 					unitUpgrade.currentCount = unitUpgrade.currentCount + 1;
 					// update upgrades
 					const updatedUpgrades = [
@@ -408,7 +399,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 					];
 					updatedArmy.selectedUnits = updatedUnit;
 				} else {
-					console.log("addItem:: add item since it does not exist");
 					updatedArmy.selectedUnits.find((x) => x.unitName == unitName)?.attachedItems.push(newUpgrade); // push upgrade
 					const updatedUnit = [
 						...updatedArmy.selectedUnits.slice(0, unitIndex),
@@ -437,11 +427,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const unitUpgrade = unit?.attachedItems.find((x) => x.id == upgradeId);
 			const unitUpgradeIndex = unit?.attachedItems.findIndex((x) => x.id == upgradeId);
 			if (!unit) {
-				console.error("NO UNIT FOUND");
+				console.error("BuilderContext :: removeItem :: NO UNIT FOUND");
 				return;
 			}
 			if (unitUpgrade != undefined && unitUpgradeIndex != undefined && unitUpgrade?.currentCount > 1) {
-				console.log("removeUnit: unitCount greater than 0, removing 1 from currentCount");
 				unitUpgrade.currentCount = unitUpgrade.currentCount - 1;
 				//update upgrades array
 				const updatedUpgrades = [
@@ -457,7 +446,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 				];
 				updatedArmy.selectedUnits = updatedUnit;
 			} else {
-				console.log("removeUnit: unit <1 - removing from arrays");
 				const updatedArray = unit.attachedItems.filter((x) => x.id != upgradeId);
 				unit.attachedItems = updatedArray;
 				const updatedUnit = [
@@ -470,20 +458,11 @@ export const BuilderContextProvider = ({ children }: any) => {
 			updatedArmy.points = calculateCurrentArmyPoints();
 			// this WON"T work because we do not have the id for these itesm@! just remove
 
-			console.log(unitUpgrade?.upgradeName, "UPGRADE TO REMOVE");
 			const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
 				(x) => x.upgradeName == unitUpgrade?.upgradeName
 			);
-			console.log(
-				updatedArmy?.selectedUpgrades?.map((x) => x.upgradeName),
-				"ALL NAMES IN ARR 	"
-			);
-			// if (updatedArmy.selectedUpgrades.length == 1) {
-			// 	updatedArmy.selectedUpgrades = [];
-			// } else {
-			console.log(armyUpgradeIndex, "INDEX");
+
 			if (armyUpgradeIndex > -1) updatedArmy?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
-			// }
 
 			// update count
 			return updatedArmy;
@@ -527,11 +506,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 		let currentUnits = factionDetails?.units;
 		// count all magic items in army
 		const itemCounts: any = {};
-		console.log(currentArmyList?.selectedUpgrades.length, "TOTAL UPGRADES FOR ARMY");
 		if (currentArmyList?.selectedUpgrades)
 			for (let i = 0; i < currentArmyList.selectedUpgrades.length; i++) {
 				const element = currentArmyList.selectedUpgrades[i];
-				console.log(element.upgradeName, "UPGRADE NAME");
 				itemCounts[element.upgradeName] = (itemCounts[element.upgradeName] || 0) + 1;
 			}
 		const itemEntries = Object.keys(itemCounts);
@@ -624,7 +601,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 					.map((x) => x.currentCount);
 				const currentUnitItemCounts = currentUnitsItems?.reduce((prev, curr) => prev + curr, 0);
 				// flatten num er
-				console.log(currentUnitItemCounts, "current unit items filtered");
 				if (currentUnitItemCounts > x.currentCount) {
 					errors.push({
 						source: "Upgrade",
