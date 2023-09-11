@@ -141,8 +141,6 @@ const BuilderEdit = () => {
 		minCount?: number,
 		ignoreBreakPoint?: boolean
 	) => {
-		console.log(`BuilderEdit: Adding ${unitName} with a max count of ${maxCount} and a min req of ${minCount} `);
-
 		builder.addUnit(unitName, points, isLeader, maxCount, minCount, ignoreBreakPoint);
 	};
 	const handleAddUpgradeToUnitPress = (
@@ -153,7 +151,6 @@ const BuilderEdit = () => {
 		maxCount?: number,
 		armyLimitMaxCount?: number
 	) => {
-		console.log(`BuilderEdit: Adding ${upgradeName} to ${unitName} with a max count of ${maxCount} `);
 		builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount);
 	};
 	const handleRemoveUpgrade = (unitName: string, id: string) => {
@@ -387,10 +384,8 @@ const BuilderEdit = () => {
 		});
 		// check unit upgrades and add additional items to generic magic items
 		if (unitDetails?.upgrades?.length > 0) {
-			console.log(unitDetails?.upgrades, "upgrades");
 			unitDetails?.upgrades?.map((unitUpgrade) => {
 				const magicItemToAdd = itemsArray.find((u) => u.name == unitUpgrade);
-				console.log(magicItemToAdd, "magicItemToAdd");
 				const upgradeAlreadyExists = specificUpgradesForUnitArr.find((exUp) => exUp.name == unitUpgrade);
 				if (!upgradeAlreadyExists) specificUpgradesForUnitArr.push(magicItemToAdd);
 			});
@@ -506,7 +501,6 @@ const BuilderEdit = () => {
 				renderItem={({ item, index }) => {
 					// get total unit count
 					const unitDetails = factionUnits?.find((x) => x.name == item.unitName);
-					console.log(unitDetails?.specialRules);
 					if (unitDetails) {
 						return (
 							<>
