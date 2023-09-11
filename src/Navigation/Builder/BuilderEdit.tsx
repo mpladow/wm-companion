@@ -141,8 +141,6 @@ const BuilderEdit = () => {
 		minCount?: number,
 		ignoreBreakPoint?: boolean
 	) => {
-		console.log(`BuilderEdit: Adding ${unitName} with a max count of ${maxCount} and a min req of ${minCount} `);
-
 		builder.addUnit(unitName, points, isLeader, maxCount, minCount, ignoreBreakPoint);
 	};
 	const handleAddUpgradeToUnitPress = (
@@ -153,7 +151,6 @@ const BuilderEdit = () => {
 		maxCount?: number,
 		armyLimitMaxCount?: number
 	) => {
-		console.log(`BuilderEdit: Adding ${upgradeName} to ${unitName} with a max count of ${maxCount} `);
 		builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount);
 	};
 	const handleRemoveUpgrade = (unitName: string, id: string) => {
@@ -174,14 +171,15 @@ const BuilderEdit = () => {
 	}, [factionUnits, builder.selectedArmyList]);
 
 	useEffect(() => {
+		console.log("updated army list");
 		if (builder?.selectedArmyList) {
 			// set leaders
 			const _leaders = builder?.selectedArmyList?.selectedUnits
 				.filter((x) => x.isLeader)
-				.sort(({ order: a }, { order: b }) => b + a);
+				.sort((a, b) => (a.order > b.order ? 1 : -1));
 			const _frontLineUnits = builder?.selectedArmyList?.selectedUnits
 				?.filter((x) => !x.isLeader)
-				.sort(({ order: a }, { order: b }) => b + a);
+				.sort((a, b) => (a.order > b.order ? 1 : -1));
 
 			// set frontline
 			const _sectionListData: sectionListDataProps[] = [
@@ -234,23 +232,14 @@ const BuilderEdit = () => {
 				const _allGenericSpecialRules = getGenericSpecialRules();
 				//@ts-ignore
 				const _genericSpecialRulesExist = _allGenericSpecialRules[_unit.name];
-				//let rulesArray = [];
 
 				let _unitAdditionalDate = Object.assign({}, _unit);
 				_unitAdditionalDate["specialRulesExpanded"] = [];
-				// console.log(_unitAdditionalDate, 'NEW UNIT')
 				if (_specialRules?.text != undefined) {
-					//rulesArray.push(_specialRules);
 					_unitAdditionalDate["specialRulesExpanded"]?.push(_specialRules);
-
-					//_unit.specialRulesExpanded = _specialRules;
-					// setSpecialRules(_specialRules);
 				}
 				if (_genericSpecialRulesExist != undefined) {
-					//rulesArray.push(_genericSpecialRulesExist);
 					_unitAdditionalDate["specialRulesExpanded"]?.push(_genericSpecialRulesExist);
-
-					//_unit.specialRulesExpanded = _genericSpecialRulesExist;
 				}
 
 				return _unitAdditionalDate;
@@ -387,10 +376,8 @@ const BuilderEdit = () => {
 		});
 		// check unit upgrades and add additional items to generic magic items
 		if (unitDetails?.upgrades?.length > 0) {
-			console.log(unitDetails?.upgrades, "upgrades");
 			unitDetails?.upgrades?.map((unitUpgrade) => {
 				const magicItemToAdd = itemsArray.find((u) => u.name == unitUpgrade);
-				console.log(magicItemToAdd, "magicItemToAdd");
 				const upgradeAlreadyExists = specificUpgradesForUnitArr.find((exUp) => exUp.name == unitUpgrade);
 				if (!upgradeAlreadyExists) specificUpgradesForUnitArr.push(magicItemToAdd);
 			});
@@ -444,21 +431,6 @@ const BuilderEdit = () => {
 				<View>
 					<Text style={{ fontSize: 16 }}>{builder.getUnitCounts()}</Text>
 				</View>
-				{/* <Button
-					disabled={!builder.selectedArmyList?.selectedUpgrades.length > 0}
-					onPress={() => setAllSelectedUpgradesVisible(true)}
-					variant={"text"}
-				>
-					<Text>Show Selected Upgrades</Text>
-				</Button> */}
-
-				{/* {builder.selectedArmyList?.selectedUpgrades.length > 0 ? (
-					<>
-					</>
-				) : null} */}
-				{/* <Button onPress={() => console.log("SHOW ALL SPECIAL RULES")} variant={"text"}>
-					<Text>Show Unit Rules</Text>
-				</Button> */}
 				<CustomCheckbox
 					onValueChange={(val) => setShowStatline(val)}
 					value={showStatline}
@@ -506,7 +478,6 @@ const BuilderEdit = () => {
 				renderItem={({ item, index }) => {
 					// get total unit count
 					const unitDetails = factionUnits?.find((x) => x.name == item.unitName);
-					console.log(unitDetails?.specialRules);
 					if (unitDetails) {
 						return (
 							<>

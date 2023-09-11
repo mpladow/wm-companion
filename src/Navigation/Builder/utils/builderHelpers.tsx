@@ -25,7 +25,6 @@ export const removeDuplicates = (arr: any[], key: string) => {
 
 		// Use the title as the index
 		uniqueObject[objTitle] = arr[i];
-		console.log(arr[i], "magic item");
 	}
 
 	// Loop to push unique object into array
@@ -35,7 +34,6 @@ export const removeDuplicates = (arr: any[], key: string) => {
 
 	return newArray;
 	// Display the unique objects
-	console.log(newArray);
 };
 
 export const getGroupedList = (arr: SelectedUnitProps[]) => {
@@ -44,7 +42,6 @@ export const getGroupedList = (arr: SelectedUnitProps[]) => {
 	arr.forEach((u) => {
 		// return the unit that holds the attached items array
 		const unitCount = unitsGrouped[u.unitName].length;
-		console.log(`${u.unitName} count: ${unitCount}`);
 		u.currentCount = unitCount;
 	});
 	const removedDuplicatedUnits = removeDuplicates(arr, "unitName");
@@ -59,7 +56,6 @@ export const get1000PointInterval = (currentArmyPoints: number) => {
 
 export const getUpgradeDetailsByName = (upgradeName: string, factionDetails: FactionListProps) => {
 	let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find((gUp) => gUp.name == upgradeName);
-	console.log(_upgrades, '_upgrades')
 	if (!_upgrades) {
 		_upgrades = factionDetails?.upgrades?.find((fUp) => fUp.name == upgradeName);
 	}
@@ -68,13 +64,11 @@ export const getUpgradeDetailsByName = (upgradeName: string, factionDetails: Fac
 
 export const sanitizeText = (text: string, textColor: any) => {
 	let cleanText = text;
-	console.log(cleanText, 'sanitizeText:: CLEAN TEXXT')
 	cleanText = cleanText.replaceAll(",,", '\n');
 	cleanText = cleanText.replaceAll("-|-", "<br>")
 	cleanText = cleanText.replaceAll("|", '\t')
 	// transform content to remove __
 	let sanitized = reactStringReplace(cleanText, underscoreRegex, (match, i) => {
-		console.log(match, `${match} on ${i}`);
 		return (
 			<Text bold style={{ color: textColor }} key={i}>
 				{match}

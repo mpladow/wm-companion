@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import HomeStack from "./src/Navigation/Stacks/TrackerStackNavigator";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContextProvider } from "@context/ThemeContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { VPContextProvider } from "@context/VPContext";
-import TabStackNavigator from "@navigation/Stacks/TabStackNavigator";
 import RootStack from "@navigation/Stacks/RootStack";
 import { BuilderContextProvider } from "@context/BuilderContext";
 import { MenuProvider } from "react-native-popup-menu";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const darkTheme = {
 	dark: true,
@@ -57,18 +56,20 @@ const App = () => {
 	}
 	return (
 		<ThemeContextProvider>
-			<RootSiblingParent>
-				<MenuProvider>
-					<BuilderContextProvider>
-						<VPContextProvider>
-							<NavigationContainer theme={darkTheme}>
-								<RootStack />
-								<StatusBar translucent />
-							</NavigationContainer>
-						</VPContextProvider>
-					</BuilderContextProvider>
-				</MenuProvider>
-			</RootSiblingParent>
+			<ToastProvider>
+				<RootSiblingParent>
+					<MenuProvider>
+						<BuilderContextProvider>
+							<VPContextProvider>
+								<NavigationContainer theme={darkTheme}>
+									<RootStack />
+									<StatusBar translucent />
+								</NavigationContainer>
+							</VPContextProvider>
+						</BuilderContextProvider>
+					</MenuProvider>
+				</RootSiblingParent>
+			</ToastProvider>
 		</ThemeContextProvider>
 	);
 };
