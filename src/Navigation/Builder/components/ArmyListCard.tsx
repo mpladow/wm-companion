@@ -17,6 +17,7 @@ type ArmyListCardProps = {
 	handleArmyListPress: (armyId: string) => void;
 	handleDeleteArmyPress: (armyId: string) => void;
 	handleArmyNameChange: (armyId: string) => void;
+	handleDuplicateArmyPress: (armyId: string) => void;
 	handleToggleFavourite: (armyId: string) => void;
 	handleOpenArmyNotes: (armyId: string) => void;
 };
@@ -25,6 +26,7 @@ const ArmyListCard = ({
 	handleArmyListPress,
 	handleDeleteArmyPress,
 	handleArmyNameChange,
+	handleDuplicateArmyPress, 
 	handleToggleFavourite,
 	handleOpenArmyNotes,
 }: ArmyListCardProps) => {
@@ -45,35 +47,35 @@ const ArmyListCard = ({
 		// 		</View>
 		// 	);
 		if (armyList.faction == Factions.Dark_Elves)
-		return (
-			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-darkElves.jpeg")} />
-			</View>
-		);
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-darkElves.jpeg")} />
+				</View>
+			);
 		if (armyList.faction == Factions.High_Elves)
-		return (
-			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-highElves.jpg")} />
-			</View>
-		);
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-highElves.jpg")} />
+				</View>
+			);
 		if (armyList.faction == Factions.Daemons)
-		return (
-			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-daemons.jpg")} />
-			</View>
-		);
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-daemons.jpg")} />
+				</View>
+			);
 		if (armyList.faction == Factions.Dwarves)
-		return (
-			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-dwarves.jpg")} />
-			</View>
-		);
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-dwarves.jpg")} />
+				</View>
+			);
 		if (armyList.faction == Factions.Goblins)
-		return (
-			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-goblins.jpg")} />
-			</View>
-		);
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-goblins.jpg")} />
+				</View>
+			);
 		if (armyList.faction == Factions.Empire)
 			return (
 				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
@@ -116,7 +118,11 @@ const ArmyListCard = ({
 			<View
 				style={{ overflow: "hidden", backgroundColor: theme.background, borderRadius: 8, flexDirection: "row" }}
 			>
-				<Image source={require('../../../../assets/images/card-texture.png')} resizeMode="contain" style={{opacity: 0.2, position: 'absolute'}}/>
+				<Image
+					source={require("../../../../assets/images/card-texture.png")}
+					resizeMode='contain'
+					style={{ opacity: 0.2, position: "absolute" }}
+				/>
 				<View style={{ flex: 3, margin: 20 }}>
 					<View style={{ marginBottom: 4 }}>
 						<Text variant='heading3' ellipsizeMode='tail' style={{ fontSize: 24 }}>
@@ -175,6 +181,13 @@ const ArmyListCard = ({
 									icon={<AntDesign name='star' size={18} color={theme.warning} />}
 									variant={"outline"}
 									ButtonText={armyList.isFavourite ? "Remove Favourite" : "Set Favourite"}
+								/>
+							</MenuOption>
+							<MenuOption onSelect={() => handleDuplicateArmyPress(armyList.armyId)}>
+								<MenuOptionButton
+									icon={<FontAwesome name='copy' size={18} color={theme.text} />}
+									variant={"outline"}
+									ButtonText={"Duplicate"}
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>

@@ -50,7 +50,7 @@ interface BuilderContextInterface {
 	userArmyLists: ArmyListProps[];
 	addUserArmyList: (faction: number, name: string, autopopulate: boolean) => Promise<string>;
 	deleteUserArmyList: (armyId: string) => void;
-	//duplicateArmyList: (armyId: number) => void;
+	duplicateArmyList: (armyId: string) => void;
 	setSelectedArmyList: (armyId: string) => void;
 	selectedArmyList?: ArmyListProps;
 	//armyName: string;
@@ -128,6 +128,28 @@ export const BuilderContextProvider = ({ children }: any) => {
 	};
 	const getUserArmyList = () => {
 		return userArmyLists;
+	};
+	const duplicateArmyList = (armyId: string) => {
+		const armyToDuplicate = userArmyLists.find((x) => x.armyId == armyId);
+		if (armyToDuplicate) {
+			const newArmyList: any = {};
+			Object.assign(newArmyList, armyToDuplicate);
+			newArmyList.armyId = uuid();
+			newArmyList.name = `${armyToDuplicate.name} (copy)`
+			// const newArmyList: ArmyListProps = {
+			// 	armyId: uuid(),
+			// 	faction: faction,
+			// 	name: name,
+			// 	isFavourite: false,
+			// 	order: getUserArmyList.length + 1,
+			// 	selectedUnits: [],
+			// 	selectedUpgrades: [],
+			// 	points: 0,
+			// };
+			newArmyList.points = calculateCurrentArmyPoints(newArmyList);
+			setUserArmyLists([...userArmyLists, newArmyList]);
+			return newArmyList.armyId;
+		}
 	};
 	const addUserArmyList = async (faction: number, name: string, autopopulate: boolean) => {
 		const newArmyList: ArmyListProps = {
@@ -499,6 +521,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 	};
 
 	const calculateArmyErrors = () => {
+		const POINTS_LEEWAY = 5;
 		// get the current army points for
 		let currentArmyPointsLimit = get1000PointInterval(calculateCurrentArmyPoints());
 
@@ -694,6 +717,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			value={{
 				userArmyLists,
 				addUserArmyList,
+				duplicateArmyList,
 				deleteUserArmyList,
 				setSelectedArmyList,
 				selectedArmyList: currentArmyList,
