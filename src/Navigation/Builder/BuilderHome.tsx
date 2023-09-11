@@ -26,6 +26,7 @@ import ArmyListCard from "./components/ArmyListCard";
 import PopupConfirm from "@components/PopupConfirm";
 import { LinearGradient } from "expo-linear-gradient";
 import FormLabel from "@components/forms/FormLabel";
+import { useToast } from "react-native-toast-notifications";
 
 export type armySectionListDataProps = {
 	title: string;
@@ -49,6 +50,7 @@ const BuilderHome = () => {
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
 
 	const [showArmyNotes, setShowArmyNotes] = useState(false);
+	const toast = useToast();
 	const handleAddArmyPress = () => {
 		setFactionName("");
 		setFactionSelection(undefined);
@@ -111,6 +113,13 @@ const BuilderHome = () => {
 	const onArmyListPress = (armyId: string) => {
 		builder.setSelectedArmyList(armyId);
 		navigation.navigate("BuilderEdit");
+	};
+	const onDuplicateArmyPress = (armyId: string) => {
+		builder.duplicateArmyList(armyId);
+		toast.show("Army List duplicated!", {
+			type: "success",
+			duration: 4000,
+		});
 	};
 	const onArmyListDeletePress = (armyId: string) => {
 		setFocusedArmyId(armyId);
@@ -189,6 +198,7 @@ const BuilderHome = () => {
 								<ArmyListCard
 									armyList={item}
 									handleOpenArmyNotes={(armyId) => handleShowArmyNotesModal(armyId)}
+									handleDuplicateArmyPress={onDuplicateArmyPress}
 									handleArmyListPress={onArmyListPress}
 									handleDeleteArmyPress={onArmyListDeletePress}
 									handleArmyNameChange={handleEditArmyPress}

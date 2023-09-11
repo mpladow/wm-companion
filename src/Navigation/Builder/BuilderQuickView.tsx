@@ -266,7 +266,7 @@ const BuilderQuickView = () => {
 		if (html) {
 			await Clipboard.setStringAsync(html);
 			toast.show("List copied to clipboard!", {
-				type: "normal | success | warning | danger | custom",
+				type: "normal",
 				duration: 4000,
 			});
 		}
