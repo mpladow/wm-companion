@@ -16,15 +16,15 @@ import { generateHtml } from "./utils/exporterHelpers";
 import * as Print from "expo-print";
 import { shareAsync } from "expo-sharing";
 import { Text } from "@components/index";
-import * as MediaLibrary from "expo-media-library";
-import * as FileSystem from "expo-file-system";
-import fontSize from "@utils/styling";
+import { useToast } from "react-native-toast-notifications";
+import UnitCard from "./components/UnitCard";
 
 const BuilderQuickView = () => {
 	const navigation = useNavigation();
 	const { theme } = useTheme();
 	const [html, setHtml] = useState<string>();
 	const builder = useBuilderContext();
+	const toast = useToast();
 
 	const handleShare = async () => {
 		if (html) {
@@ -112,7 +112,8 @@ const BuilderQuickView = () => {
 
 	const generateHeader = () => {
 		let _html = `${generateArmyNameAndPoints()} points \n`;
-		_html += `${generateFaction()}`;
+		_html += `${generateFaction()}\n`;
+		_html += `${builder.getUnitCounts()}\n`;
 		return _html;
 	};
 	const generateArmyNameAndPoints = () => {
@@ -138,6 +139,96 @@ const BuilderQuickView = () => {
 		_html += `${generateBreakPoints()}`;
 		setHtml(_html);
 	};
+	const generateLeaderPointsForUi = () => {
+		let leadersComponents: JSX.Element[] = [];
+		builder.selectedArmyList?.selectedUnits
+			.filter((u) => u.isLeader)
+			.map((x) => {
+				leadersComponents.push(
+					<View style={{ flexDirection: "row", paddingVertical: 4 }}>
+						<View style={{ flex: 1 }}>
+							<Text style={{ color: theme.black }}>{x.currentCount}</Text>
+						</View>
+						<View style={{ flex: 3 }}>
+							<Text style={{ color: theme.black }}>{x.unitName}</Text>
+						</View>
+						<View style={{ flex: 1, alignItems: "flex-end" }}>
+							<Text style={{ color: theme.black }}>{x.points}</Text>
+						</View>
+					</View>
+				);
+
+				if (x.attachedItems) {
+					x.attachedItems.map((item) => {
+						leadersComponents.push(
+							<View style={{ flexDirection: "row", paddingVertical: 4 }}>
+								<View style={{ flex: 1 }}>
+									<Text italic style={{ color: theme.black }}>
+										&lt; {x.currentCount} &amp;
+									</Text>
+								</View>
+								<View style={{ flex: 3 }}>
+									<Text italic style={{ color: theme.black }}>
+										{item.upgradeName}
+									</Text>
+								</View>
+								<View style={{ flex: 1, alignItems: "flex-end" }}>
+									<Text italic style={{ color: theme.black }}>
+										{x.points}
+									</Text>
+								</View>
+							</View>
+						);
+					});
+				}
+			});
+		return leadersComponents;
+	};
+	const generateUnitPointsForUi = () => {
+		let unitsComponents: JSX.Element[] = [];
+		builder.selectedArmyList?.selectedUnits
+			.filter((u) => !u.isLeader)
+			.map((x) => {
+				unitsComponents.push(
+					<View style={{ flexDirection: "row", paddingVertical: 4 }}>
+						<View style={{ flex: 1 }}>
+							<Text style={{ color: theme.black }}>{x.currentCount}</Text>
+						</View>
+						<View style={{ flex: 3 }}>
+							<Text style={{ color: theme.black }}>{x.unitName}</Text>
+						</View>
+						<View style={{ flex: 1, alignItems: "flex-end" }}>
+							<Text style={{ color: theme.black }}>{x.points}</Text>
+						</View>
+					</View>
+				);
+
+				if (x.attachedItems) {
+					x.attachedItems.map((item) => {
+						unitsComponents.push(
+							<View style={{ flexDirection: "row", paddingVertical: 4 }}>
+								<View style={{ flex: 1 }}>
+									<Text italic style={{ color: theme.black }}>
+										(+ {x.currentCount})
+									</Text>
+								</View>
+								<View style={{ flex: 3 }}>
+									<Text italic style={{ color: theme.black }}>
+										{item.upgradeName}
+									</Text>
+								</View>
+								<View style={{ flex: 1, alignItems: "flex-end" }}>
+									<Text italic style={{ color: theme.black }}>
+										+{x.points}
+									</Text>
+								</View>
+							</View>
+						);
+					});
+				}
+			});
+		return unitsComponents;
+	};
 	const generateUnitPoints = () => {
 		let _html = "";
 		let leaders = "";
@@ -149,7 +240,7 @@ const BuilderQuickView = () => {
 				} x ${x.unitName} \n`;
 				if (x.attachedItems) {
 					x.attachedItems.map((item) => {
-						leaders += `\t\t\ + ${item.currentCount} x ${item.upgradeName} (${item.points})\n`;
+						leaders += `\t + ${item.currentCount} x ${item.upgradeName} (${item.points})\n`;
 					});
 				}
 			});
@@ -163,7 +254,7 @@ const BuilderQuickView = () => {
 				} x ${x.unitName} \n`;
 				if (x.attachedItems) {
 					x.attachedItems.map((item) => {
-						units += `\t\t\ + ${item.currentCount} x ${item.upgradeName} (${item.points})\n`;
+						units += `\t + ${item.currentCount} x ${item.upgradeName} (${item.points})\n`;
 					});
 				}
 			});
@@ -174,6 +265,10 @@ const BuilderQuickView = () => {
 	const handleCopy = async () => {
 		if (html) {
 			await Clipboard.setStringAsync(html);
+			toast.show("List copied to clipboard!", {
+				type: "normal | success | warning | danger | custom",
+				duration: 4000,
+			});
 		}
 	};
 	const handleGenerateExport = async () => {
@@ -219,24 +314,37 @@ const BuilderQuickView = () => {
 			/>
 			{/* <StyledText style={{ fontSize: 16 }}>{html}</StyledText> */}
 
-			<Text bold variant="heading3" style={{ color: theme.black, fontSize: 20 }}>
-				{generateArmyNameAndPoints()}
+			<Text bold variant='heading3' style={{ color: theme.black, fontSize: 20 }}>
+				{builder.selectedArmyList?.name}
 			</Text>
 			<Text italic style={{ color: theme.black }}>
 				{generateFaction()}
 			</Text>
 
-			<Text style={{ color: theme.black }}>{generateUnitPoints()}</Text>
-			{/* {Platform.OS === "ios" && (
-				<>
-					<View />
-					<Button onPress={selectPrinter} variant='default'>
-						Select Printer
-							</Button>
-					<View />
-					{printer ? <Text>{`Selected printer: ${printer.name}`}</Text> : undefined}
-				</>
-			)} */}
+			<View
+				style={{
+					borderTopWidth: 1,
+					paddingTop: 8,
+					paddingBottom: 8,
+					borderBottomWidth: 1,
+					borderColor: theme.black,
+					marginBottom: 12,
+					paddingHorizontal: 4,
+				}}
+			>
+				{generateLeaderPointsForUi()}
+				{generateUnitPointsForUi()}
+			</View>
+			<View style={{ flexDirection: "row" }}>
+				<View style={{ flex: 1 }}>
+					<Text style={{ color: theme.black }}>{builder.getUnitCounts()}</Text>
+				</View>
+				<View style={{ flex: 1, alignItems: "flex-end" }}>
+					<Text bold style={{ color: theme.black }}>
+						{builder.calculateCurrentArmyPoints()}
+					</Text>
+				</View>
+			</View>
 		</View>
 	);
 };
