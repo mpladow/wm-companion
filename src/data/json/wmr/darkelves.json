@@ -185,7 +185,13 @@
     ],
     "magic": true,
     "specialRules": {
-      "Crossbowmen and Dark Riders": {
+      "Dark Riders": {
+        "order": 1,
+        "text": [
+          "These units are equipped with the repeating crossbow. These units shoot once at ranges up to 30cm and twice at ranges up to 15cm. A unit of three stands would therefore shoot 6 Attacks at a target within 15cm and 3 Attacks at a target at greater ranges. Units may shoot at enemies that charge them - in which case they shoot 1 Attack per stand regardless of range."
+        ]
+      },
+      "Crossbowmen": {
         "order": 1,
         "text": [
           "These units are equipped with the repeating crossbow. These units shoot once at ranges up to 30cm and twice at ranges up to 15cm. A unit of three stands would therefore shoot 6 Attacks at a target within 15cm and 3 Attacks at a target at greater ranges. Units may shoot at enemies that charge them - in which case they shoot 1 Attack per stand regardless of range."
