@@ -136,7 +136,7 @@ const BuilderQuickView = () => {
 		_html += "-----------------------------\n";
 		_html += generateUnitPoints();
 		_html += "-----------------------------\n";
-		_html += `${generateBreakPoints()}`;
+		// _html += `${generateBreakPoints()}`;
 		setHtml(_html);
 	};
 	const generateLeaderPointsForUi = () => {
@@ -164,7 +164,7 @@ const BuilderQuickView = () => {
 							<View style={{ flexDirection: "row", paddingVertical: 4 }}>
 								<View style={{ flex: 1 }}>
 									<Text italic style={{ color: theme.black }}>
-										&lt; {x.currentCount} &amp;
+										(+ {x.currentCount})
 									</Text>
 								</View>
 								<View style={{ flex: 3 }}>
@@ -174,7 +174,7 @@ const BuilderQuickView = () => {
 								</View>
 								<View style={{ flex: 1, alignItems: "flex-end" }}>
 									<Text italic style={{ color: theme.black }}>
-										{x.points}
+										{item.points}
 									</Text>
 								</View>
 							</View>
@@ -219,7 +219,7 @@ const BuilderQuickView = () => {
 								</View>
 								<View style={{ flex: 1, alignItems: "flex-end" }}>
 									<Text italic style={{ color: theme.black }}>
-										+{x.points}
+										{item.points}
 									</Text>
 								</View>
 							</View>
