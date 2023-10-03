@@ -20,6 +20,7 @@ import dogsOfWarList from "../data/json/wmr/dogsOfWar.json";
 import arabyList from "../data/json/wmr/araby.json";
 import lizardmenList from "../data/json/wmr/lizardmen.json";
 import albionList from "../data/json/wmr/albion.json";
+import ogresList from "../data/json/wmr/ogres.json";
 
 import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
 
@@ -134,6 +135,10 @@ export const getFactionUnits = (factionSelection: number) => {
 		case Factions.Albion:
 			list = albionList.units;
 			factionList = albionList;
+			break;
+		case Factions.Ogres:
+			list = ogresList.units;
+			factionList = ogresList;
 			break;
 		default:
 			break;
