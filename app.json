@@ -5,7 +5,7 @@
     },
     "name": "wm-companion",
     "slug": "wm-companion",
-    "version": "1.2.23",
+    "version": "1.2.25",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mldevelopment.wmcompanion",
-      "buildNumber": "0.3"
+      "buildNumber": "0.4"
     },
     "android": {
       "adaptiveIcon": {
