@@ -29,6 +29,7 @@ export type UpgradesProps = {
 	armyMax?: number; // generic item
 	pointsValue?: string | undefined;
 	text: string[];
+	addOnUpgrades: string[];
 };
 export type SpellsProps = {
 	name?: string;

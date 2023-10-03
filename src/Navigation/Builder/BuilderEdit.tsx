@@ -149,9 +149,10 @@ const BuilderEdit = () => {
 		points: number,
 		upgradeName: string,
 		maxCount?: number,
-		armyLimitMaxCount?: number
+		armyLimitMaxCount?: number,
+		addOnUpgrades?: string[]
 	) => {
-		builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount);
+		builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount, addOnUpgrades);
 	};
 	const handleRemoveUpgrade = (unitName: string, id: string) => {
 		console.log(`handleRemoveUpgrade:: removing ${id} from ${unitName} `);
@@ -305,17 +306,32 @@ const BuilderEdit = () => {
 			});
 
 		//if given the upgrade of wizard, all the user to have wizard items
-		let permittedUpgrades = [];
-		const unitHasWizardUpgrade = selectedUnit?.attachedItems.find((x) => x.upgradeName == "Wizard");
+		let permittedUpgrades: any[] = [];
+		const unitHasWizardUpgrade = selectedUnit?.attachedItems.find((x) =>x.addOnUpgrades && x.addOnUpgrades?.length > 0);
 		if (unitHasWizardUpgrade) {
 			permittedUpgrades = magicItemConstraints.map((ui) => {
-				const upgradePermitted = ui.unitType.some((x) => x.includes(unitType) || x.includes("Wizard"));
+				const upgradePermitted = ui.unitType.some((x) => x.includes(unitType));
 				if (upgradePermitted) {
 					return ui.upgrades;
 				} else {
 					return;
 				}
 			});
+			unitHasWizardUpgrade?.addOnUpgrades?.map(y => {
+				const upgradeToAdd = magicItemsList.upgrades.find(x => x.name == y)
+				if (upgradeToAdd){
+					permittedUpgrades.push(upgradeToAdd.name)
+				}
+				// add usualy upgrades
+			})
+			// permittedUpgrades = magicItemConstraints.map((ui) => {
+			// 	const upgradePermitted = ui.unitType.some((x) => x.includes(unitType) || x.includes("Wizard"));
+			// 	if (upgradePermitted) {
+			// 		return ui.upgrades;
+			// 	} else {
+			// 		return;
+			// 	}
+			// });
 		} else {
 			permittedUpgrades = magicItemConstraints.map((ui) => {
 				const upgradePermitted = ui.unitType.some((x) => x.includes(unitType));
@@ -340,7 +356,6 @@ const BuilderEdit = () => {
 		specificUpgradesForUnitArr.forEach((up) => {
 			const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : "-";
 			const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
-			console.log(unitHasArmour, "unitHasArmour");
 
 			let pointsCost;
 			if (up.points == undefined) {
@@ -348,7 +363,6 @@ const BuilderEdit = () => {
 			}
 			if (up.name == "Banner of Shielding") {
 				pointsCost = up.points[unitHasArmour];
-				console.log(pointsCost, "pointsCost for banner of shielding");
 				if (pointsCost) up.points = pointsCost;
 			}
 			if (up.name == "Banner of Steadfastness") {
