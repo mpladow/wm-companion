@@ -21,6 +21,7 @@ export type SelectedUpgradesProps = {
 	currentCount: number;
 	maxCount?: number;
 	armyLimitMaxCount?: number; // hard limit
+	addOnUpgrades?: string[];
 };
 export type SelectedUnitProps = {
 	id: string;
@@ -72,7 +73,8 @@ interface BuilderContextInterface {
 		points: number,
 		magicItemName: string,
 		maxCount?: number,
-		armyLimitMaxCount?: number
+		armyLimitMaxCount?: number,
+		addOnUpgrades?: string[]
 	) => void;
 	removeItem: (unitName: string, upgradeId: string) => void;
 	updateUserArmyLists: () => void;
@@ -135,7 +137,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const newArmyList: any = {};
 			Object.assign(newArmyList, armyToDuplicate);
 			newArmyList.armyId = uuid();
-			newArmyList.name = `${armyToDuplicate.name} (copy)`
+			newArmyList.name = `${armyToDuplicate.name} (copy)`;
 			// const newArmyList: ArmyListProps = {
 			// 	armyId: uuid(),
 			// 	faction: faction,
@@ -368,7 +370,17 @@ export const BuilderContextProvider = ({ children }: any) => {
 				}
 			}
 			updatedArmy.points = calculateCurrentArmyPoints();
-			// update count
+			// update count for upgrades
+			const unitItems = unitExists?.attachedItems;
+			if (unitItems && unitItems?.length > 0) {
+				unitItems?.map((ui) => {
+					const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
+						(x) => x.upgradeName == ui?.upgradeName
+					);
+					if (armyUpgradeIndex > -1) updatedArmy?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
+				});
+			}
+
 			return updatedArmy;
 		});
 	};
@@ -380,7 +392,8 @@ export const BuilderContextProvider = ({ children }: any) => {
 		points: number,
 		itemName: string,
 		maxCount?: number,
-		armyLimitMaxCount?: number
+		armyLimitMaxCount?: number,
+		addOnUpgrades?: string[]
 	) => {
 		const newUpgrade: SelectedUpgradesProps = {
 			id: uuid(),
@@ -391,6 +404,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			points: points,
 			maxCount: maxCount,
 			armyLimitMaxCount: armyLimitMaxCount,
+			addOnUpgrades: addOnUpgrades,
 		};
 
 		setCurrentArmyList((prev) => {
@@ -477,8 +491,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 				];
 				updatedArmy.selectedUnits = updatedUnit;
 			}
+			// if this upgrade had add on items that are no longer applicable, remove these items
+	
 			updatedArmy.points = calculateCurrentArmyPoints();
-			// this WON"T work because we do not have the id for these itesm@! just remove
 
 			const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
 				(x) => x.upgradeName == unitUpgrade?.upgradeName

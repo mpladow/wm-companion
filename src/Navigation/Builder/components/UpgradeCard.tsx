@@ -18,7 +18,8 @@ type UpgradeCardProps = {
 		points: number,
 		upgradeName: string,
 		maxCount?: number,
-		armyLimitMaxCount?: number
+		armyLimitMaxCount?: number,
+		addOnUpgrades?: string[]
 	) => void;
 	currentCount?: number; // get current count of units in army
 };
@@ -69,7 +70,8 @@ const UpgradeCard = ({ upgrade, targetUnitName, key, onAddUpgradePress, currentC
 										upgrade.points as number,
 										upgrade.name,
 										upgrade.max,
-										upgrade.armyMax
+										upgrade.armyMax,
+										upgrade.addOnUpgrades
 									)
 								}
 							>

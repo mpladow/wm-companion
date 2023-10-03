@@ -54,7 +54,8 @@ export const Factions = {
 	Araby: 19, 
 	Lizardmen: 20,
 	Albion: 21,
-	Ogres: 22
+	Ogres: 22,
+	Kislev: 23
 };
 
 //export const underscoreRegex = /_(.*?)_/g;
