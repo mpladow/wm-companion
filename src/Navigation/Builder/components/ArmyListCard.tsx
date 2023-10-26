@@ -26,7 +26,7 @@ const ArmyListCard = ({
 	handleArmyListPress,
 	handleDeleteArmyPress,
 	handleArmyNameChange,
-	handleDuplicateArmyPress, 
+	handleDuplicateArmyPress,
 	handleToggleFavourite,
 	handleOpenArmyNotes,
 }: ArmyListCardProps) => {
@@ -104,6 +104,24 @@ const ArmyListCard = ({
 			return (
 				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
 					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-bretonnian.jpg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Ogres)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-ogres.jpg")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Araby)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-araby.png")} />
+				</View>
+			);
+		if (armyList.faction == Factions.Lizardmen)
+			return (
+				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-lizardmen.png")} />
 				</View>
 			);
 		return (
