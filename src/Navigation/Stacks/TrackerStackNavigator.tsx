@@ -6,6 +6,8 @@ import TrackerHome from "@navigation/Tracker/screens/TrackerHome";
 import VictoryPoints from "@navigation/VictoryPoints/VictoryPoints";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Tracker } from "../Tracker/screens/Tracker";
+import { View } from "react-native";
+import { Text } from "@components/index";
 
 export type TrackerStackParamList = {
 	TrackerHome: undefined;
@@ -18,19 +20,38 @@ export type TrackerStackParamList = {
 const Stack = createNativeStackNavigator<TrackerStackParamList>();
 
 const TrackerStackNavigator = () => {
-	const {theme} = useTheme();
+	const { theme } = useTheme();
 	return (
 		<Stack.Navigator
-			initialRouteName='Tracker'
+			initialRouteName='TrackerHome'
 			screenOptions={{
 				headerStyle: { backgroundColor: theme.blueGrey },
 			}}
 		>
-			<Stack.Screen options={{ headerShown: false }} name='Tracker' component={Tracker} />
+			<Stack.Screen
+				options={{
+					headerStyle: { backgroundColor: theme.blueGrey },
+					headerTitle: (props) => (
+						<View style={{ flexDirection: "row", alignItems: "center" }}>
+							<Text
+								variant='heading3'
+								style={{
+									fontSize: 28,
+								}}
+							>
+								Tracker
+							</Text>
+						</View>
+					),
+				}}
+				name='TrackerHome'
+				component={TrackerHome}
+			/>
+			<Stack.Screen options={{headerShown: false}} name='Tracker' component={Tracker} />
 			<Stack.Group screenOptions={{ presentation: "containedTransparentModal", headerShown: false }}>
 				<Stack.Screen name='Settings' component={Settings} options={{ headerTitle: "Information" }} />
 				<Stack.Screen name='Blunders' component={BlunderChart} />
-				<Stack.Screen name='VictoryPoints' component={VictoryPoints}/>
+				<Stack.Screen name='VictoryPoints' component={VictoryPoints} />
 			</Stack.Group>
 		</Stack.Navigator>
 	);

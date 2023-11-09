@@ -10,10 +10,11 @@ import LogoWmr from "@components/SVGS/LogoWmr";
 import { LinearGradient } from "expo-linear-gradient";
 import VictoryPoints from "@navigation/VictoryPoints/VictoryPoints";
 import { useVictoryPoints, VPContextProvider } from "@context/VPContext";
+import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
 
 const TrackerHome = () => {
 	const { theme } = useTheme();
-	const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
 	const vpContext = useVictoryPoints();
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
@@ -81,7 +82,7 @@ const TrackerHome = () => {
 					<View style={{ marginTop: 20 }}>
 						<Button
 							size={"lg"}
-							onPress={() => navigation.navigate("TrackerStackNavigator")}
+							onPress={() => navigation.navigate("Tracker")}
 							variant={"confirm"}
 						>
 							<Text bold style={{ color: theme.black }}>
