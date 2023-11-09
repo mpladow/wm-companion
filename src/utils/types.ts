@@ -37,6 +37,28 @@ export type SpellsProps = {
 	range?: string;
 	text?: string[];
 };
+export type UnitDetailsProps = {
+	name: string;
+	order: number;
+	type: string;
+	armour?: string;
+	command?: number;
+	attack?: number | string;
+	hits?: number | string;
+	size?: number | string;
+	points: number;
+	min?: number;
+	max?: number;
+	range: string;
+	armyMax?: number;
+	armyMin?: number;
+	upgrades?: string[];
+	upgradesExpanded?: any[];
+	specialRules?: any[];
+	specialRulesExpanded?: any[];
+	noMagic?: boolean;
+	noCount?:boolean;
+}
 export type UnitProps = {
 	name: string;
 	order: number;
@@ -54,7 +76,7 @@ export type UnitProps = {
 	armyMin?: number;
 	upgrades?: string[];
 	upgradesExpanded?: any[];
-	specialRules?: string[];
+	specialRules?: any[];
 	specialRulesExpanded?: any[];
 	noMagic?: boolean;
 	noCount?:boolean;

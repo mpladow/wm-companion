@@ -65,12 +65,12 @@ export const getUpgradeDetailsByName = (upgradeName: string, factionDetails: Fac
 export const sanitizeText = (text: string, textColor: any) => {
 	let cleanText = text;
 	cleanText = cleanText.replaceAll(",,", '\n');
-	cleanText = cleanText.replaceAll("-|-", "<br>")
+	cleanText = cleanText.replaceAll("-|-", "-----")
 	cleanText = cleanText.replaceAll("|", '\t')
 	// transform content to remove __
 	let sanitized = reactStringReplace(cleanText, underscoreRegex, (match, i) => {
 		return (
-			<Text bold style={{ color: textColor }} key={i}>
+			<Text bold style={{ color: textColor, fontSize: 16 }} key={i}>
 				{match}
 			</Text>
 		);

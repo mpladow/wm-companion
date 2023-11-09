@@ -84,7 +84,7 @@ export const generateSpecialRules = (army: ArmyListProps, factionDetails: Factio
 			rules = rules?.map((t: string) => {
 				return t.replaceAll(underscoreRegex, (match) => {
 					const res = match.replaceAll("__", "");
-					return `<span style="font-weight: bold">${res}</span>`;
+					return `<span style="font-weight: bold, font-size: 1.2em">${res}</span>`;
 				});
 			});
 			rules = rules?.map((x) => {

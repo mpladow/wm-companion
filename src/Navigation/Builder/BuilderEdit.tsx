@@ -197,27 +197,43 @@ const BuilderEdit = () => {
 	};
 
 	const handleOnUnitCardPress = (unitName: string) => {
-		let _unit = factionUnits?.find((x) => x.name == unitName);
+		console.log(unitName, "UNIT NAME");
+		const rawUnitData = factionUnits?.find((x) => x.name == unitName);
+		let _unit = Object.assign({}, rawUnitData);
+		_unit.specialRules = [];
 		if (_unit) {
 			if (builder.factionDetails?.specialRules && _unit?.name) {
 				//@ts-ignore - TODO: need to check typing
-				const _specialRules = builder.factionDetails?.specialRules[selectedUnitDetails?.name];
+				const _specialRulesForUnit = builder.factionDetails?.specialRules[unitName];
 				const _allGenericSpecialRules = getGenericSpecialRules();
 				//@ts-ignore
-				const _genericSpecialRulesExist = _allGenericSpecialRules[_unit.name];
-				if (_specialRules?.text != undefined) {
-					console.log("SPECIAL RULES FOUND");
-					_unit.specialRules = _specialRules;
+				const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
+				if (_specialRulesForUnit) {
+					console.log("handleOnUnitCardPress:: special rule for UNIT NAME");
+					if (_specialRulesForUnit.text) _unit.specialRules.push(_specialRulesForUnit);
 					// setSpecialRules(_specialRules);
-				} else if (_genericSpecialRulesExist != undefined) {
-					console.log("SPECIAL RULES FOUND");
-					_unit.specialRules = _genericSpecialRulesExist;
-				} else {
-					_unit.specialRules = [];
-				} // else {
-				// 	setSpecialRules(null);
-				// }
+				}
+				if (_genericSpecialRulesExist != undefined) {
+					console.log("handleOnUnitCardPress:: generic special rule found");
+					_unit.specialRules.push(_genericSpecialRulesExist);
+				}
+				console.log(rawUnitData?.specialRules, "special rules found");
+				if (rawUnitData?.specialRules && rawUnitData.specialRules?.length > 0) {
+					console.log("handleOnUnitCardPress:: special rule for UNIT UPGRADE");
+
+					rawUnitData.specialRules?.map((x) => {
+						if (builder.factionDetails?.specialRules) {
+							const specialRule = builder.factionDetails?.specialRules[x];
+							_unit.specialRules?.push(specialRule);
+						}
+						const genericSpecialRuleFound = _allGenericSpecialRules[x];
+						if (genericSpecialRuleFound) {
+							_unit.specialRules?.push(genericSpecialRuleFound);
+						}
+					});
+				}
 			}
+
 			setSelectedUnitDetails(_unit);
 			setUnitPreviewVisible(true);
 		} else {
@@ -225,7 +241,9 @@ const BuilderEdit = () => {
 		}
 	};
 	const getUnitDetailsByUnitName = (unitName: string) => {
-		let _unit = factionUnits?.find((x) => x.name == unitName);
+		const rawUnitData = factionUnits?.find((x) => x.name == unitName);
+		let _unit = Object.assign({}, rawUnitData);
+
 		if (_unit) {
 			if (builder.factionDetails?.specialRules && _unit?.name) {
 				//@ts-ignore - TODO: need to check typing
@@ -241,6 +259,14 @@ const BuilderEdit = () => {
 				}
 				if (_genericSpecialRulesExist != undefined) {
 					_unitAdditionalDate["specialRulesExpanded"]?.push(_genericSpecialRulesExist);
+				}
+				if (rawUnitData?.specialRules && rawUnitData.specialRules?.length > 0) {
+					rawUnitData.specialRules?.map((x) => {
+						if (builder.factionDetails?.specialRules) {
+							const specialRule = builder.factionDetails?.specialRules[x];
+							_unitAdditionalDate["specialRulesExpanded"].push(specialRule);
+						}
+					});
 				}
 
 				return _unitAdditionalDate;
@@ -258,7 +284,6 @@ const BuilderEdit = () => {
 			if (_upgrades && _upgrades?.text == null) {
 				// find upgrade text fromm special rules
 				const specialRules = builder.factionDetails?.specialRules[upgradeName];
-				console.log(specialRules, "special rules");
 				if (specialRules) {
 					_upgrades.text = specialRules.text;
 				}
@@ -307,7 +332,9 @@ const BuilderEdit = () => {
 
 		//if given the upgrade of wizard, all the user to have wizard items
 		let permittedUpgrades: any[] = [];
-		const unitHasWizardUpgrade = selectedUnit?.attachedItems.find((x) =>x.addOnUpgrades && x.addOnUpgrades?.length > 0);
+		const unitHasWizardUpgrade = selectedUnit?.attachedItems.find(
+			(x) => x.addOnUpgrades && x.addOnUpgrades?.length > 0
+		);
 		if (unitHasWizardUpgrade) {
 			permittedUpgrades = magicItemConstraints.map((ui) => {
 				const upgradePermitted = ui.unitType.some((x) => x.includes(unitType));
@@ -317,13 +344,13 @@ const BuilderEdit = () => {
 					return;
 				}
 			});
-			unitHasWizardUpgrade?.addOnUpgrades?.map(y => {
-				const upgradeToAdd = magicItemsList.upgrades.find(x => x.name == y)
-				if (upgradeToAdd){
-					permittedUpgrades.push(upgradeToAdd.name)
+			unitHasWizardUpgrade?.addOnUpgrades?.map((y) => {
+				const upgradeToAdd = magicItemsList.upgrades.find((x) => x.name == y);
+				if (upgradeToAdd) {
+					permittedUpgrades.push(upgradeToAdd.name);
 				}
 				// add usualy upgrades
-			})
+			});
 			// permittedUpgrades = magicItemConstraints.map((ui) => {
 			// 	const upgradePermitted = ui.unitType.some((x) => x.includes(unitType) || x.includes("Wizard"));
 			// 	if (upgradePermitted) {
@@ -615,11 +642,13 @@ const BuilderEdit = () => {
 				visible={upgradePreviewVisible}
 				selectedUpgradeDetails={currentUpgradeDetails}
 			/>
-			<UnitPreview
-				handleSetVisible={(visibility) => setUnitPreviewVisible(visibility)}
-				visible={unitPreviewVisible}
-				selectedUnitDetails={selectedUnitDetails}
-			/>
+			{selectedUnitDetails ? (
+				<UnitPreview
+					handleSetVisible={(visibility) => setUnitPreviewVisible(visibility)}
+					visible={unitPreviewVisible}
+					selectedUnitDetails={selectedUnitDetails}
+				/>
+			) : null}
 			{builder.factionDetails?.spells ? (
 				<SpellBookModal
 					handleSetVisible={(visibility) => setSpellsVisible(visibility)}
