@@ -22,7 +22,8 @@ import lizardmenList from "../data/json/wmr/lizardmen.json";
 import albionList from "../data/json/wmr/albion.json";
 import ogresList from "../data/json/wmr/ogres.json";
 import kislevList from "../data/json/wmr/kislev.json";
-
+import norseList from "../data/json/wmr/norse.json";
+import witchHunterList from "../data/json/wmr/witchHunters.json";
 
 import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
 
@@ -143,8 +144,16 @@ export const getFactionUnits = (factionSelection: number) => {
 			factionList = ogresList;
 			break;
 		case Factions.Kislev:
-			list = ogresList.units;
+			list = kislevList.units;
 			factionList = kislevList;
+			break;
+		case Factions.Norse:
+			list = norseList.units;
+			factionList = norseList;
+			break;
+		case Factions.Witch_Hunters:
+			list = witchHunterList.units;
+			factionList = witchHunterList;
 			break;
 		default:
 			break;
