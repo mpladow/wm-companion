@@ -115,13 +115,13 @@ const ArmyListCard = ({
 		if (armyList.faction == Factions.Araby)
 			return (
 				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-araby.png")} />
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm_araby.png")} />
 				</View>
 			);
 		if (armyList.faction == Factions.Lizardmen)
 			return (
 				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-lizardmen.png")} />
+					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm_lizardmen.png")} />
 				</View>
 			);
 		return (
