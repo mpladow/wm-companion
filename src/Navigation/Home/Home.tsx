@@ -71,7 +71,7 @@ const Home = () => {
 										alive!
 									</Text>
 									<Text>
-										Credits: Forest Dragon Miniatures, Onmioji, K Rauff, Paintera Przemas Bak{" "}
+										Credits: Forest Dragon Miniatures, Onmioji, K Rauff, Paintera Przemas Bak{" "}, M Hobbes, Hardy
 									</Text>
 								</TextBlock>
 							</View>

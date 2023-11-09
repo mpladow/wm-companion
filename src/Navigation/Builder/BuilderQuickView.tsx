@@ -52,18 +52,6 @@ const BuilderQuickView = () => {
 			navigation.setOptions({
 				title: "Export",
 				headerRight: () => (
-					// <>
-					// 	<View style={{ marginRight: 28 }}>
-					// 		<TouchableOpacity onPress={handleShare}>
-					// 			<Entypo name='share' size={24} color={theme.text} />
-					// 		</TouchableOpacity>
-					// 	</View>
-					// 	<View style={{}}>
-					// 		<TouchableOpacity onPress={handleCopy}>
-					// 			<Foundation name='page-copy' size={24} color={theme.text} />
-					// 		</TouchableOpacity>
-					// 	</View>
-					// </>
 					<Menu>
 						<MenuTrigger>
 							<Entypo name='dots-three-vertical' size={20} color={theme.text} />
@@ -209,7 +197,7 @@ const BuilderQuickView = () => {
 							<View style={{ flexDirection: "row", paddingVertical: 4 }}>
 								<View style={{ flex: 1 }}>
 									<Text italic style={{ color: theme.black }}>
-										(+ {x.currentCount})
+										(+ {item.currentCount})
 									</Text>
 								</View>
 								<View style={{ flex: 3 }}>

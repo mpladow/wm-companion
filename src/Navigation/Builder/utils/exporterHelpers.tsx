@@ -1,20 +1,16 @@
 import { ArmyListProps } from "@context/BuilderContext";
-import { asterixRegex, asterixSingleRegex, Factions, newLineRegex, underscoreRegex } from "@utils/constants";
+import { asterixSingleRegex, Factions, newLineRegex, underscoreRegex } from "@utils/constants";
 import { getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
-import TemplateComponent from "react-mustache-template-component";
-import ArmyPointsCount from "../components/ArmyPointsCount";
 const Mustache = require("mustache");
 import magicItemsList from "../../../data/json/wmr/magic-items.json";
 import { getUpgradeDetailsByName } from "./builderHelpers";
-import reactStringReplace from "react-string-replace";
 
 export const generateHtml = (
 	army: ArmyListProps,
 	factionDetails: FactionListProps,
 	armyPoints: number,
 	breakPoints: string,
-	fontSize: 8
 ) => {
 	let template: string = `<html>
     <head>

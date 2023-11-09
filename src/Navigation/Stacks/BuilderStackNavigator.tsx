@@ -4,7 +4,6 @@ import BuilderHome from "@navigation/Builder/BuilderHome";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native";
 import { Text, TextBlock } from "@components/index";
-import LogoWmr from "@components/SVGS/LogoWmr";
 import BuilderQuickView from "@navigation/Builder/BuilderQuickView";
 
 export type BuilderStackParamList = {
