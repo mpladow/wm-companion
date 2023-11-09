@@ -1,16 +1,10 @@
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import React from "react";
 import CustomModal from "@components/CustomModal";
-import { SpellsProps, UnitProps } from "@utils/types";
+import { UnitProps } from "@utils/types";
 import { Text } from "@components/index";
-import CollapsibleComponent from "./Collapsible";
 import { useTheme } from "@hooks/useTheme";
-import { useBuilderContext } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
-import { getGenericSpecialRules } from "@utils/factionHelpers";
-import reactStringReplace from "react-string-replace";
-import { additionalSpaceRegex, asterixRegex, asterixSingleRegex, underscoreRegex } from "@utils/constants";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { sanitizeText } from "../utils/builderHelpers";
 
 type UnitPreviewProps = {
@@ -20,28 +14,6 @@ type UnitPreviewProps = {
 };
 const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPreviewProps) => {
 	const { theme } = useTheme();
-	const builder = useBuilderContext();
-	const [headerTitle, setHeaderTitle] = useState(selectedUnitDetails?.name);
-	const [specialRules, setSpecialRules] = useState<any>();
-
-	// const underscoreRegex = /_(.*?)_/g;
-
-	useEffect(() => {
-		selectedUnitDetails && setHeaderTitle(selectedUnitDetails.name);
-		// get special rules
-		if (builder.factionDetails?.specialRules && selectedUnitDetails?.name) {
-			//@ts-ignore - TODO: need to check typing
-			const _specialRules = builder.factionDetails?.specialRules[selectedUnitDetails?.name];
-			const _genericSpecialRules = getGenericSpecialRules();
-			const specialRulesExist = _genericSpecialRules[selectedUnitDetails?.name];
-			if (_specialRules?.text != undefined) {
-				setSpecialRules(_specialRules);
-			} else if (specialRulesExist != undefined) setSpecialRules(specialRulesExist);
-			else {
-				setSpecialRules(null);
-			}
-		}
-	}, [selectedUnitDetails]);
 
 	const STAT_FONT_SIZE = 22;
 
@@ -116,24 +88,23 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 						</>
 					)}
 
-					{specialRules ? (
+					{selectedUnitDetails.specialRules && selectedUnitDetails.specialRules.length > 0 ? (
 						<View style={{ flex: 3, justifyContent: "center", flexDirection: "column" }}>
 							<View style={{ flex: 1, flexDirection: "column" }}>
 								<View style={{ marginTop: 8 }}>
-									<Text bold style={{ fontSize: 16 }}>
+									<Text bold style={{ fontSize: 20, marginBottom: 8 }}>
 										Special Rules
 									</Text>
-									{specialRules &&
-										specialRules?.text.map((x) => {
-											// transform content to remove __
-											let sanitized = sanitizeText(x, theme.text)
-											
+									{selectedUnitDetails.specialRules?.map((x) => {
+										return x.text?.map((rule, index) => {
+											let sanitized = sanitizeText(rule, theme.text);
 											return (
-												<View>
+												<View key={index} style={{marginBottom: 8}}>
 													<Text style={{ color: theme.text }}>{sanitized}</Text>
 												</View>
 											);
-										})}
+										});
+									})}
 								</View>
 							</View>
 						</View>
@@ -145,5 +116,3 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 };
 
 export default UnitPreview;
-
-const styles = StyleSheet.create({});

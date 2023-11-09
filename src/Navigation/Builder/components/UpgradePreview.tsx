@@ -19,12 +19,6 @@ type UpgradePreviewProps = {
 };
 const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: UpgradePreviewProps) => {
 	
-	const { theme } = useTheme();
-
-	useEffect(() => {
-		console.log(`specialRuless: ${JSON.stringify(selectedUpgradeDetails)}`);
-	}, [selectedUpgradeDetails]);
-
 	return (
 		<CustomModal
 			setModalVisible={() => {
@@ -50,7 +44,7 @@ const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: U
 								{selectedUpgradeDetails?.text?.map((x) => {
 									if (x)
 										return (
-											<View style={{ marginBottom: 4, alignItems: "flex-start" }}>
+											<View style={{ marginBottom: 8, alignItems: "flex-start" }}>
 												<Text>{x}</Text>
 											</View>
 										);
