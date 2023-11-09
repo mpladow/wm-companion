@@ -39,7 +39,7 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 	}, [resultTwo]);
 
 	const ANIMATION_DURATION = 500;
-	const ANIMATION_SCALE_MAX = 1.1;
+	const ANIMATION_SCALE_MAX = 1.2;
 	const [scaleOne] = useState(new Animated.Value(1));
 	useEffect(() => {
 		let toValue = 1;
@@ -87,7 +87,7 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 							<FontAwesome5 name='fist-raised' size={24} color={theme.success} />
 						</View>
 					) : null}
-					<Text style={{ fontSize: 24, color: resultOneStyle }}>
+					<Text style={{ fontSize: 20, color: resultOneStyle }}>
 						{resultOne?.result} by {resultOne?.diff}
 					</Text>
 				</Animated.View>
@@ -104,7 +104,7 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 					) : null}
 					<Text
 						bold={resultTwo?.result == "Victory" && true}
-						style={[{ fontSize: 24, color: resultTwoStyle }]}
+						style={[{ fontSize: 20, color: resultTwoStyle }]}
 					>
 						{resultTwo?.result} by {resultTwo?.diff}
 					</Text>

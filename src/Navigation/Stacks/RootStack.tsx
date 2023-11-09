@@ -22,7 +22,7 @@ const RootStack = () => {
 		>
 			<Root.Group screenOptions={{ headerShown: false }}>
 				<Root.Screen component={TabStackNavigator} name='MainTabs' />
-				<Root.Screen component={TrackerStackNavigator} name='TrackerStackNavigator' />
+				{/* <Root.Screen component={TrackerStackNavigator} name='TrackerStackNavigator' /> */}
 			</Root.Group>
 		</Root.Navigator>
 	);

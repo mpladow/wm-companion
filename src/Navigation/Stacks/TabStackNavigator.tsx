@@ -11,6 +11,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LogoWmr from "@components/SVGS/LogoWmr";
 import BuilderHome from "@navigation/Builder/BuilderHome";
 import BuilderStackNavigator from "./BuilderStackNavigator";
+import TrackerStackNavigator from "./TrackerStackNavigator";
 
 const Tab = createBottomTabNavigator();
 export const navigatorOptions = {};
@@ -20,13 +21,13 @@ const TabStackNavigator = () => {
 		<Tab.Navigator
 			initialRouteName='About'
 			screenOptions={(screenProps) => ({
+				headerShown: screenProps.route.name == "Tracker" ? false : true,
 				headerTitle: (props) => (
-					<View style={{ flexDirection: "row", alignItems: "center"}}>
+					<View style={{ flexDirection: "row", alignItems: "center" }}>
 						<Text
 							variant='heading3'
 							style={{
 								fontSize: 28,
-					
 							}}
 						>
 							{props.children}
@@ -69,7 +70,13 @@ const TabStackNavigator = () => {
 							break;
 					}
 					return (
-						<View style={{ alignItems: "center", width: Dimensions.get('screen').width/3, justifyContent: "center" }}>
+						<View
+							style={{
+								alignItems: "center",
+								width: Dimensions.get("screen").width / 3,
+								justifyContent: "center",
+							}}
+						>
 							{icon}
 							<Text style={{ color: focused ? theme.warning : theme.text, fontSize: 12 }}>{label}</Text>
 						</View>
@@ -96,14 +103,16 @@ const TabStackNavigator = () => {
 			/>
 			<Tab.Screen
 				name='TrackerHome'
-				component={TrackerHome}
+				component={TrackerStackNavigator}
 				options={{
 					tabBarLabel: "Tracker",
 					title: "Tracker",
 					headerShadowVisible: false,
+					headerShown: false,
 					headerStyle: { backgroundColor: theme.blueGrey },
 				}}
 			/>
+
 			<Tab.Screen
 				name='ArmyBuilder'
 				component={BuilderStackNavigator}
