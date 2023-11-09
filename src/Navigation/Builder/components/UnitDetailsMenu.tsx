@@ -9,7 +9,7 @@ import { Text } from "@components/index";
 import { Entypo } from "@expo/vector-icons";
 
 type unitDetailsMenuProps = {
-	noMagic: boolean;
+	noMagic?: boolean;
 	onAddUnit: () => void;
 	onAddUpgrade: () => void;
 	onDeleteUnit: () => void;
@@ -17,12 +17,6 @@ type unitDetailsMenuProps = {
 const UnitDetailsMenu = ({ noMagic, onAddUnit, onAddUpgrade, onDeleteUnit }: unitDetailsMenuProps) => {
 	const { theme } = useTheme();
 	const [opened, setOpened] = useState(false);
-	const onOptionSelected = (functionPressed: string) => {
-		switch (functionPressed) {
-			case "add":
-				return onAddUnit();
-		}
-	};
 	return (
 		<Menu opened={opened} onBackdropPress={() => setOpened(!opened)}>
 			<MenuTrigger onPress={() => setOpened(!opened)}>
@@ -36,7 +30,7 @@ const UnitDetailsMenu = ({ noMagic, onAddUnit, onAddUpgrade, onDeleteUnit }: uni
 						ButtonText={"Add Unit"}
 					/>
 				</MenuOption>
-				{noMagic ? (
+				{!noMagic || noMagic == undefined ? (
 					<MenuOption
 						onSelect={() => {
 							setOpened(true);

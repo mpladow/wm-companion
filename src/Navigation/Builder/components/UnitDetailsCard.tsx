@@ -132,7 +132,7 @@ const UnitDetailsCard = ({
 							</View>
 						</View>
 						<UnitDetailsMenu
-							noMagic={!unit.noMagic}
+							noMagic={unit.noMagic}
 							onAddUnit={() =>
 								onAddUnit(
 									unit.name,
