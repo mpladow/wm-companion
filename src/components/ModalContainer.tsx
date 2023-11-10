@@ -25,7 +25,7 @@ type CustomModalProps = {
 	footerLeft?: JSX.Element;
 	footerRight?: JSX.Element;
 	page?: string;
-	rotateContainer:boolean
+	rotateContainer?:boolean
 };
 
 export type ModalMetaContentType = {

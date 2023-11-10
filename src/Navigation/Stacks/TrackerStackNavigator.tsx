@@ -8,12 +8,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Tracker } from "../Tracker/screens/Tracker";
 import { View } from "react-native";
 import { Text } from "@components/index";
+import ScoutingChart from "@navigation/Charts/ScoutingChart";
 
 export type TrackerStackParamList = {
 	TrackerHome: undefined;
 	Tracker: undefined;
 	Settings: undefined;
 	Blunders: undefined;
+	Scouting: undefined;
 	VictoryPoints: undefined;
 };
 
@@ -51,6 +53,7 @@ const TrackerStackNavigator = () => {
 			<Stack.Group screenOptions={{ presentation: "containedTransparentModal", headerShown: false }}>
 				<Stack.Screen name='Settings' component={Settings} options={{ headerTitle: "Information" }} />
 				<Stack.Screen name='Blunders' component={BlunderChart} />
+				<Stack.Screen name='Scouting' component={ScoutingChart} />
 				<Stack.Screen name='VictoryPoints' component={VictoryPoints} />
 			</Stack.Group>
 		</Stack.Navigator>
