@@ -17,6 +17,7 @@ type CentreSectionProps = {
 	handleReset: () => void;
 	handleSettingsPress: () => void;
 	handleBlunderPress: () => void;
+	handleScoutingPress: () => void;
 	handleOnSavePress: () => void;
 	handleVictoryPointsPress: () => void;
 	handleToggleOnePlayerMode: () => void;
@@ -27,6 +28,7 @@ const CentreSection = ({
 	handleReset,
 	handleSettingsPress,
 	handleBlunderPress,
+	handleScoutingPress,
 	handleToggleOnePlayerMode,
 	handleVictoryPointsPress,
 	topResultValue,
@@ -64,6 +66,11 @@ const CentreSection = ({
 			onPress: handleBlunderPress,
 			icon: <Ionicons name='warning' size={24} color={theme.text} />,
 		},
+		{
+			label: "Scouting Chart",
+			onPress: handleScoutingPress,
+			icon: <FontAwesome name="binoculars" size={20} color={theme.text}  />,
+		},
 		// {
 		// 	label: "Save Game",
 		// 	onPress: handleOnSavePress,
@@ -94,8 +101,8 @@ const CentreSection = ({
 					handleMenuPress={onExpandedPress}
 				/> */}
 				<Menu style={{ zIndex: 99 }}>
-					<MenuTrigger>
-						<MaterialCommunityIcons name='dots-vertical' size={24} color={theme.text} />
+					<MenuTrigger style={{padding: 12, paddingRight: 4}}>
+						<MaterialCommunityIcons name='dots-vertical' size={32} color={theme.text} />
 					</MenuTrigger>
 					<MO
 						optionsContainerStyle={{

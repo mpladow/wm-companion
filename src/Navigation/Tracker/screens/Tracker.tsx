@@ -124,10 +124,10 @@ export const Tracker = () => {
 	};
 	const onBlunderPress = () => {
 		navigation.navigate("Blunders");
-
-		// setPage(Pages.Blunders);
-		// setModalVisible(true);
 	};
+	const onScoutingPress = () => {
+		navigation.navigate("Scouting");
+	}
 	const onVictoryPointsPress = (player?: playerTypes) => {
 		// this needs to be udpates to
 		vpContext.setPlayer("playerOne");
@@ -198,36 +198,15 @@ export const Tracker = () => {
 				<CentreSection
 					handleSettingsPress={onSettingsPress}
 					handleBlunderPress={onBlunderPress}
+					handleScoutingPress={onScoutingPress}
 					handleVictoryPointsPress={onVictoryPointsPress}
 					handleToggleOnePlayerMode={() => vpContext.toggleOnePlayerMode()}
 					handleReset={handleReset}
 					topResultValue={combatResultTop}
 					bottomResultValue={combatResultBottom}
 					handleOnSavePress={() => console.log("SAVE")}
-					// add plauyer one score object
-					//add player two score object
 				/>
-				{/* <View
-				// 	style={{
-				// 		position: "absolute",
-				// 		zIndex: -999999,
-				// 		left: 0,
-				// 		top: -30,
-				// 		height: 100,
-				// 		width: Dimensions.get("screen").width,
-				// 		paddingHorizontal: 48,
-				// 	}}
-				// >
-				// 	<View
-				// 		style={{
-				// 			width: 40,
-				// 			height: 130,
-				// 			top: 0,
-				// 			left: `${calculatePositionOfTrackerBar()}%`,
-				// 			backgroundColor: theme.theme.backgroundVariant2,
-				// 		}}
-				// 	></View>
-				// </View> */}
+
 			</View>
 			<View
 				style={[

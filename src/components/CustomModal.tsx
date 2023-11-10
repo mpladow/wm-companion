@@ -16,6 +16,7 @@ import fontSize from "@utils/styling";
 import Settings from "@navigation/Settings/screens/Settings";
 import { Pages } from "@utils/constants";
 import BlunderChart from "@navigation/Charts/BlunderChart";
+import ScoutingChart from "@navigation/Charts/ScoutingChart";
 
 type CustomModalProps = {
 	setModalVisible: () => void;
@@ -66,6 +67,11 @@ const CustomModal = ({
 				setModalContent(<BlunderChart />);
 				setModalHeader(Pages.Blunders);
 				setModalMetaContent({ pageNumber: "pg 61" } as ModalMetaContentType);
+			}
+			if (page == Pages.Scouting) {
+				setModalContent(<ScoutingChart />);
+				setModalHeader(Pages.Scouting);
+				setModalMetaContent({ pageNumber: "pg 82" } as ModalMetaContentType);
 			}
 			setLoading(false);
 		} else {

@@ -10,6 +10,7 @@ export const Pages = {
 	Settings: "Settings",
 	Blunders: "Blunders",
 	Monster: "Monster",
+	Scouting: "Scouting"
 };
 
 export enum UnitTypes {
