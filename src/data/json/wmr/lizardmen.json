@@ -236,7 +236,7 @@
 		"Carnosaur": {
 			"order": 8,
 			"text": [
-				"A Saurus Hero can ride a Carnosaur. If a character rides a Carnosaur then any unit he joins will cause terror. No other character can ride a Carnosaur."
+				"A Saurus Hero can ride a Carnosaur. If a character rides a Carnosaur then any unit he joins will cause terror and the character will gain +2 attacks. No other character can ride a Carnosaur."
 			]
 		}
 	},

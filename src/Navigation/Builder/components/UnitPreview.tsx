@@ -96,7 +96,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 										Special Rules
 									</Text>
 									{selectedUnitDetails.specialRules?.map((x) => {
-										return x.text?.map((rule, index) => {
+										return x?.text?.map((rule, index) => {
 											let sanitized = sanitizeText(rule, theme.text);
 											return (
 												<View key={index} style={{marginBottom: 8}}>
