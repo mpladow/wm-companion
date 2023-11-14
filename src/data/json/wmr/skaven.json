@@ -83,7 +83,7 @@
         "max": 2
       },
       {
-        "name": "Warp Ligtning Cannon",
+        "name": "Warp Lightning Cannon",
         "order": 7,
         "type": "Artillery",
         "attack": "1/3",

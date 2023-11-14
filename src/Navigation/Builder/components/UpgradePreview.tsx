@@ -18,7 +18,8 @@ type UpgradePreviewProps = {
 	selectedUpgradeDetails?: UpgradesProps;
 };
 const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: UpgradePreviewProps) => {
-	
+	const STAT_FONT_SIZE = 22;
+
 	return (
 		<CustomModal
 			setModalVisible={() => {
@@ -37,6 +38,14 @@ const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: U
 							</Text>
 						</View>
 					</View>
+					{selectedUpgradeDetails?.attack ? (
+						<View style={{ flex: 3, marginBottom: 8, justifyContent: "center", flexDirection: "row" }}>
+							<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
+								<Text>Attack</Text>
+								<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUpgradeDetails?.attack}</Text>
+							</View>
+						</View>
+					) : null}
 
 					{selectedUpgradeDetails && selectedUpgradeDetails?.text?.length > 0 ? (
 						<View style={{ flex: 3, justifyContent: "center", flexDirection: "column" }}>

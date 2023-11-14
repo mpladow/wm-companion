@@ -1,4 +1,4 @@
-import { Dimensions, ImageBackground, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, ImageBackground, Platform, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useTheme } from "@hooks/useTheme";
 import { Button, Text, TextBlock } from "@components/index";
@@ -101,16 +101,18 @@ const Home = () => {
 								with Games Workshop or its affiliates.
 							</Text>
 						</View>
-						<View style={{ marginVertical: margin * 3 }}>
-							<Button onPress={handlePressSupport} variant={"primary"}>
-								<View style={{ flexDirection: "row", alignItems: 'center' }}>
-									<View style={{marginRight: 8}}>
-										<Entypo name='paypal' size={24} color={theme.text} />
+						{Platform.OS == "android" ? (
+							<View style={{ marginVertical: margin * 3 }}>
+								<Button onPress={handlePressSupport} variant={"primary"}>
+									<View style={{ flexDirection: "row", alignItems: "center" }}>
+										<View style={{ marginRight: 8 }}>
+											<Entypo name='paypal' size={24} color={theme.text} />
+										</View>
+										<Text>Support Development</Text>
 									</View>
-									<Text>Support Development</Text>
-								</View>
-							</Button>
-						</View>
+								</Button>
+							</View>
+						) : null}
 					</View>
 				</View>
 			</ImageBackground>
