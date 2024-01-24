@@ -5,7 +5,7 @@
     },
     "name": "wm-companion",
     "slug": "wm-companion",
-    "version": "1.2.31",
+    "version": "1.2.32",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

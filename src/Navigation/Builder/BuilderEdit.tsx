@@ -34,6 +34,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { getUpgradeDetailsByName } from "./utils/builderHelpers";
+import _ from 'lodash';
 
 export type sectionListDataProps = {
 	title: string;
@@ -305,7 +306,7 @@ const BuilderEdit = () => {
 		setSelectedUnit(unitName);
 		const selectedUnit = builder.selectedArmyList?.selectedUnits.find((x) => x.unitName == unitName);
 		// TODO: extract all this into a seperate use effect.
-		const itemsArray: any = magicItemsList.upgrades;
+		const itemsArray: any = _.cloneDeep(magicItemsList.upgrades);
 		const magicItemConstraints = magicItemsList.upgradeConstraints;
 		// faction unit types can override the above constraints
 
@@ -318,7 +319,6 @@ const BuilderEdit = () => {
 				}
 			}
 		});
-
 		const unitDetails = factionUnits?.find((x) => x.name == unitName);
 
 		const upgradesForUnitStrings = unitDetails?.upgrades;
@@ -327,9 +327,9 @@ const BuilderEdit = () => {
 		upgradesForUnitStrings &&
 			upgradesForUnitStrings.map((upgrade) => {
 				const _upgradeFound = factionUpgrades?.find((x) => x.name == upgrade);
+				console.log(factionUpgrades, "faction upgrades");
 				_upgradeFound && specificUpgradesForUnitArr.push(_upgradeFound);
 			});
-
 		//if given the upgrade of wizard, all the user to have wizard items
 		let permittedUpgrades: any[] = [];
 		const unitHasWizardUpgrade = selectedUnit?.attachedItems.find(
@@ -380,27 +380,20 @@ const BuilderEdit = () => {
 
 		let upgadesToRemove: string[] = [];
 		// console.log(specificUpgradesForUnitArr, "specific upgrades");
-		specificUpgradesForUnitArr.forEach((up) => {
-			const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : "-";
-			const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
+		const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : "-";
+		const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
 
+		specificUpgradesForUnitArr.forEach((up) => {
 			let pointsCost;
 			if (up.points == undefined) {
 				console.error(up.name, "UPGRAADE WITH UNDEFINED");
 			}
 			if (up.name == "Banner of Shielding") {
 				pointsCost = up.points[unitHasArmour];
-				if (pointsCost) up.points = pointsCost;
 			}
 			if (up.name == "Banner of Steadfastness") {
 				if (unitHasArmour !== "0" && unitHasArmour !== "-") {
 					pointsCost = up.points[unitHasArmour];
-
-					if (pointsCost !== undefined) {
-						up.points = pointsCost;
-					} else {
-						console.log(up.points, "up.points");
-					}
 				} else {
 					upgadesToRemove.push(up.name);
 				}
@@ -571,6 +564,7 @@ const BuilderEdit = () => {
 				setModalVisible={() => {
 					setMagicItemModalVisible(!magicItemModalVisible);
 				}}
+				onDismiss={() => setMagicItems([])}
 				modalVisible={magicItemModalVisible}
 				headerTitle={"Select Upgrades"}
 			>
