@@ -12,6 +12,7 @@ import VictoryPoints from "@navigation/VictoryPoints/VictoryPoints";
 import { useVictoryPoints, VPContextProvider } from "@context/VPContext";
 import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
 import { useTranslation } from "react-i18next";
+import MainContainerWithImage from "@components/MainContainerWithImage";
 
 const TrackerHome = () => {
 	const { theme } = useTheme();
@@ -20,24 +21,7 @@ const TrackerHome = () => {
 	const { t } = useTranslation(["tracker", "home"]);
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
-			<ImageBackground
-				source={require("../../../../assets/images/wmr_bg.png")}
-				resizeMode='cover'
-				style={[styles.image]}
-			>
-				<LinearGradient
-					colors={["rgba(31,46,39, 0.4)", "rgba(6,9,7, 0.9)"]}
-					start={{ y: 0, x: 0.5 }}
-					end={{ y: 0.5, x: 0 }}
-					style={{
-						position: "absolute",
-						left: 0,
-						right: 0,
-						bottom: -0,
-						height: Dimensions.get("screen").height,
-						zIndex: 9,
-					}}
-				></LinearGradient>
+			<MainContainerWithImage>
 				<View style={{ zIndex: 9, flex: 1, alignItems: "center", justifyContent: "center", padding: 8 }}>
 					<View
 						style={{
@@ -94,7 +78,7 @@ const TrackerHome = () => {
 						</View> */}
 					</View>
 				</View>
-			</ImageBackground>
+			</MainContainerWithImage>
 		</SafeAreaView>
 	);
 };

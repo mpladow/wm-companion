@@ -13,6 +13,12 @@ export default {
 	Duplicate: "Duplicate",
 	About: "About",
 	Settings: "Settings",
-	Tracker: "Tracker", 
+	Tracker: "Battle Tracker", 
 	ArmyBuilder: "Army Builder",
+	BattleTracker: "Battle Tracker",
+	Language: "Language",
+	Preferences: "Preferences",
+	Credits: "Credits",
+	ReportBug: "Report a bug",
+	AppVersion: "App Version",
 };

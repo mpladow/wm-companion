@@ -1,6 +1,9 @@
-import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native";
+import { StyleProp, StyleSheet, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native";
 import React, { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "@hooks/useTheme";
+import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
+import { AntDesign } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type variant =
 	| "default"
@@ -18,40 +21,22 @@ type buttonProps = {
 	onPress: () => void;
 	style?: any;
 	variant: variant;
-	children: ReactNode;
+	children?: ReactNode;
 	disabled?: boolean;
 	circle?: boolean;
 	size?: size;
+	title: string;
+	icon: JSX.Element;
+	isStackNavigation?: boolean;
+	isNewWindow?: boolean;
 };
-const Button = ({ children, onPress, variant, circle, disabled, size, style }: buttonProps) => {
+const IconButton = ({ onPress, circle, disabled, size, style, title, isStackNavigation, isNewWindow, icon }: buttonProps) => {
 	const [pressing, setPressing] = useState(false);
 	const { theme } = useTheme();
 	useEffect(() => {
 		// setPressing(pressing);
 		if (pressing) onPress();
 	}, [pressing]);
-	const setVariant = () => {
-		switch (variant) {
-			case "confirm":
-				return { backgroundColor: theme.warning, color: theme.black };
-			case "danger":
-				return { backgroundColor: "red" };
-			case "warning":
-				return { backgroundColor: theme.warning };
-			case "secondary":
-				return { backgroundColor: theme.secondary };
-			case "outline-dark":
-				return { backgroundColor: "transparent", borderColor: theme.blueGrey, borderWidth: 2 };
-			case "outline-light":
-				return { backgroundColor: "transparent", borderColor: theme.white, borderWidth: 2 };
-			case "navigation-button":
-				return { backgroundColor: theme.white };
-			case "text":
-				return { backgroundColor: "transparent", border: 0 };
-			default:
-				return { backgroundColor: theme.secondary };
-		}
-	};
 	return (
 		<TouchableOpacity
 			disabled={disabled}
@@ -63,18 +48,27 @@ const Button = ({ children, onPress, variant, circle, disabled, size, style }: b
 				styles.button,
 				circle && styles.buttonRound,
 				{ alignItems: "center", elevation: pressing ? 0 : 8 },
-				setVariant(),
+				{ backgroundColor: theme.white },
 				disabled && styles.disabled,
 				size == "lg" && styles.large,
 				style,
 			]}
 		>
-			{children}
+			<View style={{ flexDirection: "row", alignItems: "center" }}>
+				<View style={{ flex: 1 }}>{icon}</View>
+				<View style={{ flex: 10 }}>
+					<Text style={{ color: theme.black }}>{title}</Text>
+				</View>
+				<View style={{ flex: 1 }}>
+					{isNewWindow && <MaterialCommunityIcons name="open-in-new" size={24} color="black" />}
+					{isStackNavigation && <AntDesign name='right' size={20} color='black' />}
+				</View>
+			</View>
 		</TouchableOpacity>
 	);
 };
 
-export default Button;
+export default IconButton;
 
 const styles = StyleSheet.create({
 	button: {

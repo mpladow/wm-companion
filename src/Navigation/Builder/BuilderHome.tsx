@@ -244,7 +244,7 @@ const BuilderHome = () => {
 									<FormLabel label={t("ArmyName")} />
 									<TextInput
 										ref={nameRef}
-										placeholder={t("PlaceholderEnterArmyName", {ns: "forms"})}
+										placeholder={t("PlaceholderEnterArmyName", { ns: "forms" })}
 										onChangeText={(val) => setFactionName(val)}
 										style={[
 											{
@@ -272,11 +272,11 @@ const BuilderHome = () => {
 												<CustomDropdown
 													value={factionSelection}
 													style={[styles.dropdown, { backgroundColor: theme.white }]}
-													placeholder={t("PlaceholderSelectFaction", {ns: "forms"})}
+													placeholder={t("PlaceholderSelectFaction", { ns: "forms" })}
 													placeholderStyle={{ color: "#ddd" }}
 													data={ddFactions}
 													search
-													searchPlaceholder={`${t('Search', {ns: "common"})}...`}
+													searchPlaceholder={`${t("Search", { ns: "common" })}...`}
 													labelField='label'
 													valueField='value'
 													onChange={(item) => {
