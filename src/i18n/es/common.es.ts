@@ -1,0 +1,18 @@
+export default {
+	Additional: "Additional",
+	Companion: "Compañeros",
+	Confirm: "Confirm",
+	Create: "Crear",
+	Exit: "Exit",
+	Edit: "Edit",
+	Flyers: "Voladores",
+	Delete: "Delete",
+	Search: "Search",
+	Units: "Units",
+	Notes: "Notes",
+	Duplicate: "Duplicate",
+	About: "About",
+	Settings: "Settings",
+	Tracker: "Tracker",
+	ArmyBuilder: "Army Builder",
+};

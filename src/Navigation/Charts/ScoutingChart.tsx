@@ -6,9 +6,11 @@ import { ModalContainer, Text, TextBlock } from "@components/index";
 import { margin } from "@utils/constants";
 import fontSize from "@utils/styling";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const ScoutingChart = () => {
 	const { theme } = useTheme();
+	const { t } = useTranslation(["charts", "common", "units"]);
 	const navigation = useNavigation();
 	return (
 		<ModalContainer
@@ -19,36 +21,33 @@ const ScoutingChart = () => {
 			<>
 				<View style={{ marginBottom: 12 }}>
 					<TextBlock>
-						<Text>
-							Before the game starts, indicate which units an/or characters you wish to commit to
-							scouting.
-						</Text>
+						<Text>{t("scoutingGeneralDescription1")}</Text>
 					</TextBlock>
 					<TextBlock>
-						<Text>Roll 2D6 and add this to the number of committed scouting points.</Text>
+						<Text>{t("scoutingGeneralDescription2")}</Text>
 					</TextBlock>
 					<TextBlock>
-						<Text>Highest value chooses table side, then places all their committed scouting units.</Text>
+						<Text>{t("scoutingGeneralDescription3")}</Text>
 					</TextBlock>
 					<TextBlock>
-						<Text>Opponent places all their units.</Text>
+						<Text>{t("scoutingGeneralDescription4")}</Text>
 					</TextBlock>
 					<TextBlock>
-						<Text bold>The winner MUST move SECOND in the first turn.</Text>
+						<Text bold>{t("scoutingGeneralDescription5")}</Text>
 					</TextBlock>
 				</View>
 				<View style={{ flexDirection: "row", paddingBottom: 4 }}>
 					<View style={{ flex: 1 }}>
 						<TextBlock>
 							<Text bold style={{ fontSize: fontSize.lg }}>
-								Role
+								{t("Role")}
 							</Text>
 						</TextBlock>
 					</View>
 					<View style={{ flex: 1 }}>
 						<TextBlock>
 							<Text bold style={{ fontSize: fontSize.lg }}>
-								Scouting Points
+								{t("ScoutingPoints")}
 							</Text>
 						</TextBlock>
 					</View>
@@ -59,7 +58,7 @@ const ScoutingChart = () => {
 							<View style={{ flex: 1 }}>
 								<TextBlock>
 									<Text bold style={{ fontSize: fontSize.md }}>
-										Flyers
+										{t("Flyers", { ns: "common" })}
 									</Text>
 								</TextBlock>
 							</View>
@@ -74,10 +73,15 @@ const ScoutingChart = () => {
 						<View style={{ flexDirection: "row", paddingBottom: 8 }}>
 							<View style={{ flex: 1 }}>
 								<TextBlock>
-									<Text style={{ fontSize: fontSize.md }}>
-										flying units or flying chracter or character on flying mount:
+									<Text style={{ fontSize: fontSize.md }}>{t("FlyingUnitsDesc1")}</Text>
+									<Text italic>
+										{t("FlyingUnitExamples", {
+											example1: t("Dwarves.Rangers", { ns: "units" }),
+											example2: t("Ratmen.GutterRunners", { ns: "units" }),
+											example3: t("Ogres.Gorgers", { ns: "units" }),
+											example4: t("WoodElves.Waywatchers", { ns: "units" }),
+										})}
 									</Text>
-									<Text italic>Rangers; Guter Runners; Gorgers; Waywatchers</Text>
 								</TextBlock>
 							</View>
 						</View>
@@ -87,7 +91,7 @@ const ScoutingChart = () => {
 							<View style={{ flex: 1 }}>
 								<TextBlock>
 									<Text bold style={{ fontSize: fontSize.md }}>
-										Scouts
+										{t("Scouts")}
 									</Text>
 								</TextBlock>
 							</View>
@@ -103,12 +107,16 @@ const ScoutingChart = () => {
 							<View style={{ flex: 1 }}>
 								<TextBlock>
 									<>
-										<Text style={{ fontSize: fontSize.md }}>
-											Any unit of cavalry with 6+ armour
-										</Text>
+										<Text style={{ fontSize: fontSize.md }}>{t("ScoutsDesc1")}</Text>
 										<Text italic>
-											Ethereal Host; Centigors, Warhounds; Hunstmen; Beastherd/Herdkin deployed as
-											ambushers; Skirmishers; non-flying General
+											{t("ScoutsExamples", {
+												example1: t("Undead.EtherealHost", { ns: "units" }),
+												example2: t("Beastmen.Centigors", { ns: "units" }),
+												example3: t("Chaos.Warhounds", { ns: "units" }),
+												example4: t("Beastmen.Beastherd", { ns: "units" }),
+												example5: t("Beastmen.Herdkin", { ns: "units" }),
+												example6: t("Empire.Skirmishers", { ns: "units" }),
+											})}
 										</Text>
 									</>
 								</TextBlock>
@@ -121,7 +129,7 @@ const ScoutingChart = () => {
 							<View style={{ flex: 1 }}>
 								<TextBlock>
 									<Text bold style={{ fontSize: fontSize.md }}>
-										Patrols
+										{t("Patrols")}
 									</Text>
 								</TextBlock>
 							</View>
@@ -136,10 +144,13 @@ const ScoutingChart = () => {
 						<View style={{ flexDirection: "row", paddingBottom: 4 }}>
 							<View style={{ flex: 1 }}>
 								<TextBlock>
-									<Text style={{ fontSize: fontSize.md }}>
-										any unit of cavalry with zero or 5+ armour
+									<Text style={{ fontSize: fontSize.md }}>{t("PatrolsDesc1")}</Text>
+									<Text italic>
+										{t("PatrolsExamples", {
+											example1: t("Ratmen.RatSwarms", { ns: "units" }),
+											example2: t("Lizardmen.Skinks", { ns: "units" }),
+										})}
 									</Text>
-									<Text italic>Rat Swarms; Skinks; non-flying command 8 character</Text>
 								</TextBlock>
 							</View>
 						</View>

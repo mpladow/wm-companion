@@ -6,8 +6,10 @@ import { ModalContainer, Text, TextBlock } from "@components/index";
 import { margin } from "@utils/constants";
 import fontSize from "@utils/styling";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const BlunderChart = () => {
+	const { t } = useTranslation(["charts", "common"]);
 	const { theme } = useTheme();
 	const navigation = useNavigation();
 	return (
@@ -28,23 +30,17 @@ const BlunderChart = () => {
 					<View style={{ flex: 5 }}>
 						<TextBlock>
 							<Text bold italic style={{ fontSize: fontSize.lg }}>
-								You must be crazy!
+								{t("blunder1Title")}
 							</Text>
 						</TextBlock>
 						<TextBlock>
-							<Text>
-								The unit may not move and -1 Command Penalty to <Text bold>unit</Text> for the rest of
-								the battle.
-							</Text>
+							<Text>{t("blunder1Description1")}</Text>
 						</TextBlock>
 						<TextBlock variant='small'>
-							<Text>
-								If a brigade has blundered then this penalty applies to one unit of the player's
-								choosing.
-							</Text>
+							<Text>{t("blunder1Description2")}</Text>
 						</TextBlock>
 						<TextBlock variant='small'>
-							<Text>This penalty is cumulative.</Text>
+							<Text> {t("blunder1Description3")}</Text>
 						</TextBlock>
 					</View>
 				</View>
@@ -59,21 +55,17 @@ const BlunderChart = () => {
 					<View style={{ flex: 5 }}>
 						<TextBlock>
 							<Text bold italic style={{ fontSize: fontSize.lg }}>
-								Blimey Sir! There's thousands of 'em!
+								{t("blunder2Title")}
 							</Text>
 						</TextBlock>
 						<TextBlock>
-							<Text>
-								If there are no visible units within a full pace move of the unit or brigade then the unit/brigade halts.
-							</Text>
+							<Text>{t("blunder2Description1")}</Text>
 						</TextBlock>
 						<TextBlock variant='small'>
-							<Text>
-								If there are visible enemy units within a full pace move of the unit/brigade, then the blundering unit/brigade must move the shortest route to get outside a full pace move from all enemy units.
-							</Text>
+							<Text>{t("blunder2Description2")}</Text>
 						</TextBlock>
 						<TextBlock variant='small'>
-							<Text>If unable to comply, the unit/brigade moves as far away from all enemy units as possible instead.</Text>
+							<Text>{t("blunder2Description1")}</Text>
 						</TextBlock>
 					</View>
 				</View>
@@ -88,11 +80,11 @@ const BlunderChart = () => {
 					<View style={{ flex: 5 }}>
 						<TextBlock>
 							<Text bold italic style={{ fontSize: fontSize.lg }}>
-								No sense in getting killed sir!
+								{t("blunder3Title")}
 							</Text>
 						</TextBlock>
 						<TextBlock>
-							<Text>The unit may not move this turn</Text>
+							<Text>{t("blunder3Description1")}</Text>
 						</TextBlock>
 					</View>
 				</View>
@@ -107,20 +99,14 @@ const BlunderChart = () => {
 					<View style={{ flex: 5 }}>
 						<TextBlock>
 							<Text bold italic style={{ fontSize: fontSize.lg }}>
-								Up and at 'em, men!'
+								{t("blunder4Title")}
 							</Text>
 						</TextBlock>
 						<TextBlock>
-							<Text>
-								The unit must move at its maximum pace towards the nearest visible enemy unit, and will
-								charge if possible.
-							</Text>
+							<Text>{t("blunder4Description1")}</Text>
 						</TextBlock>
 						<TextBlock>
-							<Text>
-								If a brigade order is given, move each unit individually. The unit may not receive any
-								futher orders this turn.{" "}
-							</Text>
+							<Text>{t("blunder4Description2")}</Text>
 						</TextBlock>
 					</View>
 				</View>

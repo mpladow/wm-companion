@@ -35,12 +35,14 @@ import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesMod
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { getUpgradeDetailsByName } from "./utils/builderHelpers";
 import _ from 'lodash';
+import { useTranslation } from "react-i18next";
 
 export type sectionListDataProps = {
 	title: string;
 	data: SelectedUnitProps[];
 };
 const BuilderEdit = () => {
+	const {t} = useTranslation(["builder", "common", "forms"])
 	const builder = useBuilderContext();
 	const navigation = useNavigation();
 	const { theme } = useTheme();
@@ -84,7 +86,7 @@ const BuilderEdit = () => {
 										<Entypo name='export' size={20} color='black' />
 									</View>
 									<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
-										<Text style={{ color: theme.black }}>Export List</Text>
+										<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
 									</View>
 									<View style={{ paddingRight: 8 }}>
 										<Entypo name='warning' size={20} color={theme.warning} />
@@ -434,7 +436,7 @@ const BuilderEdit = () => {
 				<SpecialRulesCollapsible
 					toggleVisible={() => setShowFactionInfo(!showFactionInfo)}
 					visible={!showFactionInfo}
-					title={"Army Special Rules"}
+					title={t("ArmySpecialRules")}
 					contents={builder.factionDetails.armyRules}
 				/>
 			) : null}
@@ -468,7 +470,7 @@ const BuilderEdit = () => {
 				<CustomCheckbox
 					onValueChange={(val) => setShowStatline(val)}
 					value={showStatline}
-					label={"Show Statline"}
+					label={t("ShowStatline")}
 				/>
 				<View>
 					{builder.factionDetails?.name !== "Dwarfs" && builder.factionDetails?.name !== "Nippon" ? (
@@ -477,7 +479,7 @@ const BuilderEdit = () => {
 								<View style={{ marginRight: 8 }}>
 									<Entypo name='open-book' size={20} color={theme.white} />
 								</View>
-								<Text bold>Spells</Text>
+								<Text bold>{t("Spells")}</Text>
 							</View>
 						</Button>
 					) : null}

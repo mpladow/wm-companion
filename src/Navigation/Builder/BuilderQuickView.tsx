@@ -18,8 +18,10 @@ import { shareAsync } from "expo-sharing";
 import { Text } from "@components/index";
 import { useToast } from "react-native-toast-notifications";
 import UnitCard from "./components/UnitCard";
+import { useTranslation } from "react-i18next";
 
 const BuilderQuickView = () => {
+	const {t} = useTranslation(["builder", "common"])
 	const navigation = useNavigation();
 	const { theme } = useTheme();
 	const [html, setHtml] = useState<string>();
@@ -63,7 +65,7 @@ const BuilderQuickView = () => {
 										<Foundation name='page-copy' size={20} color={theme.black} />
 									</View>
 									<View style={{ flex: 5 }}>
-										<Text style={{ color: theme.black }}>Copy Text</Text>
+										<Text style={{ color: theme.black }}>{t("CopyText")}</Text>
 									</View>
 								</View>
 							</MenuOption>
@@ -73,7 +75,7 @@ const BuilderQuickView = () => {
 										<Foundation name='page-export-pdf' size={20} color='black' />
 									</View>
 									<View style={{ flex: 5 }}>
-										<Text style={{ color: theme.black }}>Generate PDF</Text>
+										<Text style={{ color: theme.black }}>{t("GeneratePdf")}</Text>
 									</View>
 								</View>
 							</MenuOption>
@@ -83,7 +85,7 @@ const BuilderQuickView = () => {
 										<Entypo name='share' size={20} color={theme.black} />
 									</View>
 									<View style={{ flex: 5 }}>
-										<Text style={{ color: theme.black }}>Share</Text>
+										<Text style={{ color: theme.black }}>{t("Share")}</Text>
 									</View>
 								</View>
 							</MenuOption>

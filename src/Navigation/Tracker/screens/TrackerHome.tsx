@@ -11,11 +11,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import VictoryPoints from "@navigation/VictoryPoints/VictoryPoints";
 import { useVictoryPoints, VPContextProvider } from "@context/VPContext";
 import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
+import { useTranslation } from "react-i18next";
 
 const TrackerHome = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
 	const vpContext = useVictoryPoints();
+	const { t } = useTranslation(["tracker", "home"]);
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
@@ -50,50 +52,46 @@ const TrackerHome = () => {
 						<LogoWmr height={80} width={200} />
 						<View style={{ marginTop: -12 }}>
 							<Text variant='heading3' style={{ fontSize: 24 }}>
-								Battle Tracker
+								{t("BattleTracker")}
 							</Text>
 						</View>
 					</View>
-					<Text style={{ textTransform: "uppercase", textAlign: "center" }}>Track victory points</Text>
-					<View style={{ marginBottom: 16 }}>
-						<>
-							<Text style={{ textAlign: "center" }}>
-								Record victory points by selecting your opponents faction units/magic items.{" "}
-							</Text>
-						</>
-					</View>
 					<Text style={{ textTransform: "uppercase", textAlign: "center" }}>
-						Calculate Combat resolutions
+						{t("TrackVictoryPointsHeader")}
 					</Text>
 					<View style={{ marginBottom: 16 }}>
 						<>
-							<Text style={{ textAlign: "center" }}>
-								Use the combat tracker to quickly calculate combat casualties and supports.{" "}
-							</Text>
+							<Text style={{ textAlign: "center" }}>{t("TrackVictoryPointsDescription")}</Text>
 						</>
 					</View>
-					<Text style={{ textTransform: "uppercase", textAlign: "center" }}>Access lookup charts</Text>
+					<Text style={{ textTransform: "uppercase", textAlign: "center" }}>
+						{t("CalculateCombatResolutionsHeader")}
+					</Text>
+					<View style={{ marginBottom: 16 }}>
+						<>
+							<Text style={{ textAlign: "center" }}>{t("CalculateCombatResolutionDescription")}</Text>
+						</>
+					</View>
+					<Text style={{ textTransform: "uppercase", textAlign: "center" }}>
+						{t("AccessLookupChartsHeader")}
+					</Text>
 
 					<View style={{ marginBottom: 16 }}>
 						<>
-							<Text style={{ textAlign: "center" }}>View lookup charts with ease</Text>
+							<Text style={{ textAlign: "center" }}>{t("AccessLookupChartsDescription")}</Text>
 						</>
 					</View>
 					<View style={{ marginTop: 20 }}>
-						<Button
-							size={"lg"}
-							onPress={() => navigation.navigate("Tracker")}
-							variant={"confirm"}
-						>
+						<Button size={"lg"} onPress={() => navigation.navigate("Tracker")} variant={"confirm"}>
 							<Text bold style={{ color: theme.black }}>
-								New Battle!
+								{t("NewBattle")}
 							</Text>
 						</Button>
-						<View>
+						{/* <View>
 							{vpContext?.allSaves?.map((s) => {
 								return <Text style={theme.text}>{s.saveGameId}</Text>;
 							})}
-						</View>
+						</View> */}
 					</View>
 				</View>
 			</ImageBackground>

@@ -4,12 +4,15 @@ import { ResultProps } from "@utils/types";
 import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useSettingsContext } from "@context/SettingsContext";
 
 type ResultSectionProps = {
+	isTwoPlayerMode: boolean;
 	resultOne?: ResultProps;
 	resultTwo?: ResultProps;
 };
 const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
+	const {settings} = useSettingsContext()
 	const { theme } = useTheme();
 
 	const resultOneStyle = useMemo(() => {
@@ -79,7 +82,13 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 				<Animated.View
 					style={[
 						{ justifyContent: "center", alignItems: "center", flexDirection: "row" },
-						{ transform: [{ rotate: "180deg" }, { scaleX: scaleOne }, { scaleY: scaleOne }] },
+						{
+							transform: [
+								{ rotate: settings.trackerTwoPlayerMode ? "0deg" : "180deg" },
+								{ scaleX: scaleOne },
+								{ scaleY: scaleOne },
+							],
+						},
 					]}
 				>
 					{resultOne?.result === "Victory" ? (

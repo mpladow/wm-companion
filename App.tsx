@@ -10,6 +10,8 @@ import { BuilderContextProvider } from "@context/BuilderContext";
 import { MenuProvider } from "react-native-popup-menu";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { ToastProvider } from "react-native-toast-notifications";
+import "./src/i18n/i18n";
+import { SettingsContextProvider } from "@context/SettingsContext";
 
 const darkTheme = {
 	dark: true,
@@ -57,18 +59,20 @@ const App = () => {
 	return (
 		<ThemeContextProvider>
 			<ToastProvider>
-				<RootSiblingParent>
-					<MenuProvider>
-						<BuilderContextProvider>
-							<VPContextProvider>
-								<NavigationContainer theme={darkTheme}>
-									<RootStack />
-									<StatusBar translucent />
-								</NavigationContainer>
-							</VPContextProvider>
-						</BuilderContextProvider>
-					</MenuProvider>
-				</RootSiblingParent>
+				<SettingsContextProvider>
+					<RootSiblingParent>
+						<MenuProvider>
+							<BuilderContextProvider>
+								<VPContextProvider>
+									<NavigationContainer theme={darkTheme}>
+										<RootStack />
+										<StatusBar translucent />
+									</NavigationContainer>
+								</VPContextProvider>
+							</BuilderContextProvider>
+						</MenuProvider>
+					</RootSiblingParent>
+				</SettingsContextProvider>
 			</ToastProvider>
 		</ThemeContextProvider>
 	);

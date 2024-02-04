@@ -11,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
 import { useBuilderContext } from "@context/BuilderContext";
+import { useTranslation } from "react-i18next";
+
 type PlayerSectionProps = {
 	player: playerTypes;
 	playerScore: number;
@@ -19,7 +21,7 @@ type PlayerSectionProps = {
 	handleSetPlayerScore: (player: playerTypes, score: number) => void;
 	handleSetCasualty: (player: playerTypes, score: number) => void;
 	handleSetCR: (player: playerTypes, score: number) => void;
-	useOnePlayerMode: boolean;
+	useOnePlayerMode?: boolean;
 };
 const PlayerSection = ({
 	player,
@@ -30,9 +32,10 @@ const PlayerSection = ({
 	handleSetCR,
 	useOnePlayerMode,
 }: PlayerSectionProps) => {
+	const { t } = useTranslation(["tracker", "home", "common"]);
+
 	const { theme } = useTheme();
 	const vpContext = useVictoryPoints();
-	const builder = useBuilderContext();
 	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
 	// const [faction, setFaction] = useState<DropDownItemProps>();
 
@@ -128,7 +131,7 @@ const PlayerSection = ({
 			<View style={{ flex: 1, flexDirection: "column" }}>
 				<View style={{ justifyContent: "flex-end", alignItems: "center" }}>
 					<Text variant='heading3' style={{ color: theme.text, fontSize: 16 }}>
-						Casualties Inflicted
+						{t("CasualtiesInflicted")}
 					</Text>
 				</View>
 				<SectionDials
@@ -142,7 +145,7 @@ const PlayerSection = ({
 			<View style={{ flex: 1, flexDirection: "column" }}>
 				<View style={{ justifyContent: "flex-end", alignItems: "center" }}>
 					<Text variant='heading3' style={{ color: theme.text, fontSize: 16 }}>
-						Combat Bonuses
+						{t("CombatBonuses")}
 					</Text>
 				</View>
 				<SectionDials

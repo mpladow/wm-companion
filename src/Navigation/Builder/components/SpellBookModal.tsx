@@ -9,6 +9,7 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { sanitizeText } from "../utils/builderHelpers";
+import { useTranslation } from "react-i18next";
 
 type SpellBookModalProps = {
 	handleSetVisible: (visible: boolean) => void;
@@ -16,6 +17,7 @@ type SpellBookModalProps = {
 	spells: SpellsProps[];
 };
 const SpellBookModal = ({ handleSetVisible, visible, spells }: SpellBookModalProps) => {
+	const {t} = useTranslation(["builder"])
 	const { theme } = useTheme();
 	const renderDiceIcon = (value?: number) => {
 		switch (value) {
@@ -40,7 +42,7 @@ const SpellBookModal = ({ handleSetVisible, visible, spells }: SpellBookModalPro
 				handleSetVisible(!visible);
 			}}
 			modalVisible={visible}
-			headerTitle={"Spell Book"}
+			headerTitle={t("SpellBook")}
 		>
 			<View>
 				<FlatList

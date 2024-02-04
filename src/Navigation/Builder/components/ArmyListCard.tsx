@@ -12,6 +12,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import MenuOptionButton from "@components/MenuOptionButton";
 import { LinearGradient } from "expo-linear-gradient";
 import { Foundation } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 type ArmyListCardProps = {
 	armyList: ArmyListProps;
 	handleArmyListPress: (armyId: string) => void;
@@ -30,7 +31,7 @@ const ArmyListCard = ({
 	handleToggleFavourite,
 	handleOpenArmyNotes,
 }: ArmyListCardProps) => {
-	const menuRef = useRef(null);
+	const { t } = useTranslation(["builder", "common"]);
 	const { theme } = useTheme();
 
 	const setImage = () => {
@@ -198,28 +199,30 @@ const ArmyListCard = ({
 								<MenuOptionButton
 									icon={<AntDesign name='star' size={18} color={theme.warning} />}
 									variant={"outline"}
-									ButtonText={armyList.isFavourite ? "Remove Favourite" : "Set Favourite"}
+									ButtonText={
+										armyList.isFavourite ? `${t("RemoveFavourite")}` : `${t("SetFavourite")}`
+									}
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleDuplicateArmyPress(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<FontAwesome name='copy' size={18} color={theme.text} />}
 									variant={"outline"}
-									ButtonText={"Duplicate"}
+									ButtonText={t("Duplicate", { ns: "common" })}
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<FontAwesome name='pencil' size={18} color={theme.text} />}
 									variant={"outline"}
-									ButtonText={"Edit"}
+									ButtonText={t("Edit", { ns: "common" })}
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleDeleteArmyPress(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<AntDesign name='delete' size={18} color={theme.white} />}
 									variant={"danger"}
-									ButtonText={"Delete"}
+									ButtonText={t("Delete", { ns: "common" })}
 								/>
 							</MenuOption>
 						</MenuOptions>

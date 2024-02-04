@@ -11,6 +11,8 @@ import * as Clipboard from "expo-clipboard";
 import * as Linking from "expo-linking";
 import { useToast } from "react-native-toast-notifications";
 import { Entypo } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
+import { useSettingsContext } from "@context/SettingsContext";
 
 const Home = () => {
 	const { theme } = useTheme();
@@ -25,6 +27,10 @@ const Home = () => {
 		toast.show("Email Copied!");
 		await Clipboard.setStringAsync("ml.development.2022@gmail.com");
 	};
+	// const { t } = useTranslation("translation", { keyPrefix: "common" });
+	const { t } = useTranslation(["home", "common"]);
+
+	const settings = useSettingsContext();
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
@@ -61,7 +67,7 @@ const Home = () => {
 										<LogoWmr height={80} width={200} />
 										<View style={{ marginTop: -12 }}>
 											<Text variant='heading3' style={{ fontSize: 24 }}>
-												Companion
+												{t("Companion", {ns: "common"})}
 											</Text>
 										</View>
 									</View>
@@ -69,26 +75,23 @@ const Home = () => {
 								</>
 							</TextBlock>
 							<TextBlock variant='large'>
-								<Text>A companion app to assist in Warmaster and Warmaster Revolution wargaming.</Text>
+								<Text>{t("Tagline")}</Text>
 							</TextBlock>
 
 							<TextBlock variant='large'>
 								<>
 									<Text variant='heading2'>Credits</Text>
+									<Text>{t("GeneralThanks")}</Text>
 									<Text>
-										Thank you to the entire Warmaster Revolutions community for keeping this game
-										alive!
-									</Text>
-									<Text>
-										Special mentions to Forest Dragon Miniatures, Onmioji, K Rauff, Paintera Przemas
-										Bak, M Hobbes, Hardy
+										{t("SpecialMentions")}: Forest Dragon Miniatures, Onmioji, K Rauff, Paintera
+										Przemas Bak, M Hobbes, Hardy
 									</Text>
 								</>
 							</TextBlock>
 							<TextBlock variant='large'>
 								<>
 									<Text variant='heading2'>Feedback</Text>
-									<Text>If any bugs are found, please report them to: </Text>
+									<Text>{t("BugFeedback")}: </Text>
 									<TouchableOpacity onPress={handleEmailPress}>
 										<Text style={{ color: theme.white }}>ml.development.2022@gmail.com</Text>
 									</TouchableOpacity>
@@ -96,10 +99,7 @@ const Home = () => {
 							</TextBlock>
 						</View>
 						<View style={{ marginVertical: margin }}>
-							<Text bold>
-								Disclaimer: This is a non-commercial, fan-made hobby project and I have no affiliation
-								with Games Workshop or its affiliates.
-							</Text>
+							<Text bold>{t("Disclaimer")}</Text>
 						</View>
 						{Platform.OS == "android" ? (
 							<View style={{ marginVertical: margin * 3 }}>
@@ -108,11 +108,19 @@ const Home = () => {
 										<View style={{ marginRight: 8 }}>
 											<Entypo name='paypal' size={24} color={theme.text} />
 										</View>
-										<Text>Support Development</Text>
+										<Text>{t("SupportDevelopment")}</Text>
 									</View>
 								</Button>
 							</View>
 						) : null}
+					</View>
+					<View>
+						<Button onPress={() => settings.setLang("en")} variant={"primary"}>
+							<Text>Set to English</Text>
+						</Button>
+						<Button onPress={() => settings.setLang("es")} variant={"primary"}>
+							<Text>Set to Spanish</Text>
+						</Button>
 					</View>
 				</View>
 			</ImageBackground>
