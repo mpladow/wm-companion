@@ -10,6 +10,8 @@ import MainContainerWithBlankBG from "@components/MainContainerWithBlankBG";
 import ArmyPointsCount from "../ArmyPointsCount";
 import { useTheme } from "@hooks/useTheme";
 import { Button, Text } from "@components/index";
+import UnitPreview from "../UnitCardPreview/UnitPreview";
+import { Entypo } from "@expo/vector-icons";
 
 export type AddUnitProps = {
 	addingUnits: boolean;
@@ -23,13 +25,16 @@ export type AddUnitProps = {
 	// ) => void;
 	// handleOnUnitCardPress: (name: string) => void;
 };
-const AddUnit = ({ route, navigate }) => {
+const AddUnit = () => {
 	const { theme } = useTheme();
+	const route = useRoute();
 	const { addingUnits } = route.params;
 	const navigation = useNavigation();
 	const builder = useBuilderContext();
 	const [factionUnits, setFactionUnits] = useState<UnitProps[] | undefined>(); //TODO: we NEED to strongly type this data
 	const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
+	const [selectedUnitDetails, setSelectedUnitDetails] = useState<UnitProps>();
+	const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
 	const [totalPoints, setTotalPoints] = useState(1000);
 	const [errorsVisible, setErrorsVisible] = useState(false);
 	const armyCount = useMemo(() => {
@@ -97,7 +102,7 @@ const AddUnit = ({ route, navigate }) => {
 		}
 	}, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
 
-	const handleOnUnitCardPress = (unitName: string) => {
+	const handleViewPreview = (unitName: string) => {
 		const rawUnitData = factionUnits?.find((x) => x.name == unitName);
 		let _unit = Object.assign({}, rawUnitData);
 		_unit.specialRules = [];
@@ -134,8 +139,8 @@ const AddUnit = ({ route, navigate }) => {
 				}
 			}
 
-			// setSelectedUnitDetails(_unit);
-			// setUnitPreviewVisible(true);
+			setSelectedUnitDetails(_unit);
+			setUnitPreviewVisible(true);
 		} else {
 			console.error(`UNIT NOT FOUND for ${unitName}`);
 		}
@@ -163,7 +168,7 @@ const AddUnit = ({ route, navigate }) => {
 								unit={item}
 								onAddUnitPress={builder.addUnit}
 								currentCount={unitCount}
-								onUnitCardPress={() => console.log("open unit details")}
+								onUnitCardPress={handleViewPreview}
 								currentArmyCount={builder.calculateCurrentArmyPoints()}
 							/>
 						);
@@ -208,9 +213,19 @@ const AddUnit = ({ route, navigate }) => {
 			<View style={{ zIndex: 9, position: "absolute", bottom: 10, right: 20, flexDirection: "row" }}>
 				{/* TODO extract out  */}
 				<Button onPress={() => navigation.goBack()} variant={"primary"}>
-					<Text bold>Go Back</Text>
+					<View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 4 }}>
+						<Entypo name='chevron-left' size={16} color={theme.text} />
+						<Text bold>Back</Text>
+					</View>
 				</Button>
 			</View>
+			{selectedUnitDetails ? (
+				<UnitPreview
+					handleSetVisible={(visibility) => setUnitPreviewVisible(visibility)}
+					visible={unitPreviewVisible}
+					selectedUnitDetails={selectedUnitDetails}
+				/>
+			) : null}
 		</MainContainerWithBlankBG>
 	);
 };

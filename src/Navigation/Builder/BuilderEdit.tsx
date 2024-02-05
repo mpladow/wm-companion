@@ -19,7 +19,6 @@ import { Button, CustomCheckbox, Text, TextBlock } from "@components/index";
 import { getFactionUnits, getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
 import CustomModal from "@components/CustomModal";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
-import UnitCard from "./components/UnitCard";
 import { Entypo } from "@expo/vector-icons";
 import UnitDetailsCard from "./components/UnitDetailsCard";
 import SpecialRulesCollapsible from "./components/SpecialRulesCollapsible";
@@ -552,7 +551,7 @@ const BuilderEdit = () => {
 									onShowUnitDetails={() => console.log("showUnitDetails")}
 									onAddUnit={handleAddUnitToArmyPress}
 									onDeleteUnit={() => handleRemoveUnit(item.id, unitDetails.points)}
-									onAddUpgrade={() => handleAddMagicItemPress(item.unitName, unitDetails.type)}
+									onAddUpgrade={() => navigation.navigate("AddItem", {"unitName": item.unitName, "unitType":unitDetails.type})}
 									onRemoveUpgrade={handleRemoveUpgrade}
 									onUnitCardPress={handleOnUnitCardPress}
 									onUpgradePress={handleOnUpgradePress}
@@ -618,48 +617,6 @@ const BuilderEdit = () => {
 				</View>
 			</CustomModal>
 			{/* // add new new */}
-			<CustomModal
-				setModalVisible={() => {
-					setModalVisible(!modalVisible);
-				}}
-				modalVisible={modalVisible}
-				headerTitle={"Select Units"}
-				footerLeft={
-					<ArmyPointsCount
-						armyErrorsCount={builder.armyErrors.length}
-						setVisibility={(visibility) => setErrorsVisible(visibility)}
-						armyCount={armyCount}
-						disableButton={true}
-					/>
-				}
-			>
-				<View>
-					<FlatList
-						data={
-							addingUnits
-								? factionUnits?.filter((x) => !x.command && x.command != 0)
-								: factionUnits?.filter((x) => x.command || x.command == 0)
-						}
-						renderItem={({ item, index }) => {
-							const units = addingUnits
-								? sectionListData?.find((x) => x.title == "Units")?.data
-								: sectionListData?.find((x) => x.title == "Leaders")?.data;
-							const _unit = units?.filter((x) => x.unitName == item.name)[0];
-							const unitCount = _unit ? _unit.currentCount : 0;
-							return (
-								<UnitCard
-									key={index.toString()}
-									unit={item}
-									onAddUnitPress={handleAddUnitToArmyPress}
-									currentCount={unitCount}
-									onUnitCardPress={handleOnUnitCardPress}
-									currentArmyCount={builder.calculateCurrentArmyPoints()}
-								/>
-							);
-						}}
-					/>
-				</View>
-			</CustomModal>
 			<UpgradePreview
 				handleSetVisible={(visibility) => setUpgradePreviewVisible(visibility)}
 				visible={upgradePreviewVisible}

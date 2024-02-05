@@ -246,23 +246,6 @@ const UnitDetailsCard = ({
 											</>
 										) : null}
 									</View>
-									{/* <View style={{ flex: 1, flexDirection: "column" }}>
-									{unitDetailsExpanded?.specialRules &&
-									unitDetailsExpanded?.specialRules?.length > 0 ? (
-										<>
-											<View style={{ flex: 1 }}>
-												<QuickviewProfileHeading label={"Special Rules"} />
-											</View>
-											<View style={{ flex: 1 }}>
-												<Text>
-													{unitDetailsExpanded?.specialRules?.map(
-														(r) => r
-													)}
-												</Text>
-											</View>
-										</>
-									) : null}
-								</View> */}
 								</>
 							)}
 						</View>

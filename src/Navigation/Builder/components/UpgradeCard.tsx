@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { UnitProps, UpgradesProps } from "@utils/types";
 import { Button, Text } from "@components/index";
@@ -12,6 +12,7 @@ type UpgradeCardProps = {
 	upgrade: UpgradesProps;
 	targetUnitName: string;
 	key: number | string;
+	onShowUpgradePreview: () => void;
 	onAddUpgradePress: (
 		unitName: string,
 		type: string,
@@ -23,10 +24,18 @@ type UpgradeCardProps = {
 	) => void;
 	currentCount?: number; // get current count of units in army
 };
-const UpgradeCard = ({ upgrade, targetUnitName, key, onAddUpgradePress, currentCount }: UpgradeCardProps) => {
+const UpgradeCard = ({
+	upgrade,
+	onShowUpgradePreview,
+	targetUnitName,
+	key,
+	onAddUpgradePress,
+	currentCount,
+}: UpgradeCardProps) => {
 	const { theme } = useTheme();
 	return (
-		<View
+		<Pressable
+			onPress={onShowUpgradePreview}
 			key={key}
 			style={{
 				flexDirection: "row",
@@ -86,7 +95,7 @@ const UpgradeCard = ({ upgrade, targetUnitName, key, onAddUpgradePress, currentC
 					</View>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 };
 

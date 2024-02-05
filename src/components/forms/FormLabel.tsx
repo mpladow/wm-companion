@@ -4,7 +4,7 @@ import { Text } from "@components/index";
 
 type FormLabelProps = {
 	label: string;
-	style: TextProps["style"]
+	style?: TextProps["style"]
 };
 const FormLabel = ({ label, style }: FormLabelProps) => {
 	return (
