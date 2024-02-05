@@ -82,7 +82,10 @@ const UnitDetailsCard = ({
 	}, [existingUnits]);
 
 	return (
-		<View key={key} style={{ flexDirection: "column", overflow: 'hidden', padding: 12, backgroundColor: theme.background }}>
+		<View
+			key={key}
+			style={{ flexDirection: "column", overflow: "hidden", padding: 12, backgroundColor: theme.background }}
+		>
 			<>
 				<Image
 					source={require("../../../../assets/images/card-texture.png")}
@@ -158,7 +161,9 @@ const UnitDetailsCard = ({
 											<QuickviewProfileHeading label={"Command"} />
 										</View>
 										<View style={{ flex: 1 }}>
-											<Text>{unit.command}</Text>
+											<View>
+												<Text>{unit.command}</Text>
+											</View>
 										</View>
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>

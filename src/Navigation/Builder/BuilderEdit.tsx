@@ -27,7 +27,7 @@ import magicItemsList from "../../data/json/wmr/magic-items.json";
 import UpgradeCard from "./components/UpgradeCard";
 import { Factions } from "@utils/constants";
 import SpellBookModal from "./components/SpellBookModal";
-import UnitPreview from "./components/UnitPreview";
+import UnitPreview from "./components/UnitCardPreview/UnitPreview";
 import UpgradePreview from "./components/UpgradePreview";
 import ArmyPointsCount from "./components/ArmyPointsCount";
 import { LinearGradient } from "expo-linear-gradient";
@@ -36,16 +36,18 @@ import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-m
 import { getUpgradeDetailsByName } from "./utils/builderHelpers";
 import _ from 'lodash';
 import { useTranslation } from "react-i18next";
+import { useSettingsContext } from "@context/SettingsContext";
 
 export type sectionListDataProps = {
 	title: string;
 	data: SelectedUnitProps[];
 };
 const BuilderEdit = () => {
-	const {t} = useTranslation(["builder", "common", "forms"])
+	const { t } = useTranslation(["builder", "common", "forms"]);
 	const builder = useBuilderContext();
 	const navigation = useNavigation();
 	const { theme } = useTheme();
+	const { settings, setShowStatlineSetting } = useSettingsContext();
 	//modals
 	const [modalVisible, setModalVisible] = useState(false);
 	const [magicItemModalVisible, setMagicItemModalVisible] = useState(false);
@@ -56,7 +58,6 @@ const BuilderEdit = () => {
 	const [allSelectedUpgradesVisible, setAllSelectedUpgradesVisible] = useState(false);
 
 	// show statline
-	const [showStatline, setShowStatline] = useState(false);
 
 	const [magicItems, setMagicItems] = useState<UpgradesProps[]>([]);
 	const [currentPoints, setCurrentPoints] = useState(0);
@@ -70,32 +71,55 @@ const BuilderEdit = () => {
 	const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 	const [addingUnits, setAddingUnits] = useState(false);
 
+	const setSettings = () => {
+		setShowStatlineSetting();
+		navigation.setOptions({ headerRight: () => headerRight(settings.showStatline) });
+	};
+	const headerRight = (showStatline: boolean) => {
+		return (
+			<Menu>
+				<MenuTrigger>
+					<Entypo name='dots-three-vertical' size={20} color={theme.text} />
+				</MenuTrigger>
+				<MenuOptions>
+					<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
+						<View style={{ flexDirection: "row", alignItems: "center" }}>
+							<View style={{ flex: 1 }}>
+								<Entypo name='export' size={20} color='black' />
+							</View>
+							<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
+								<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
+							</View>
+						</View>
+					</MenuOption>
+					{/* <MenuOption
+						onSelect={() => {
+							setSettings();
+						}}
+					>
+						<View style={{ flexDirection: "row", alignItems: "center" }}>
+							<View style={{ flex: 1 }}>
+								<Entypo name='export' size={20} color='black' />
+							</View>
+							<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
+								<Text style={{ color: theme.black }}>{t("ShowStatline")}</Text>
+							</View>
+							{showStatline && (
+								<View style={{ paddingRight: 8 }}>
+									<Entypo name='warning' size={20} color={theme.warning} />
+								</View>
+							)}
+						</View>
+					</MenuOption> */}
+				</MenuOptions>
+			</Menu>
+		);
+	};
 	useEffect(() => {
 		// get all units for selected army list
 		if (builder.selectedArmyList) {
 			navigation.setOptions({
-				headerRight: () => (
-					<Menu>
-						<MenuTrigger>
-							<Entypo name='dots-three-vertical' size={20} color={theme.text} />
-						</MenuTrigger>
-						<MenuOptions>
-							<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
-								<View style={{ flexDirection: "row", alignItems: "center" }}>
-									<View style={{ flex: 1 }}>
-										<Entypo name='export' size={20} color='black' />
-									</View>
-									<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
-										<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
-									</View>
-									<View style={{ paddingRight: 8 }}>
-										<Entypo name='warning' size={20} color={theme.warning} />
-									</View>
-								</View>
-							</MenuOption>
-						</MenuOptions>
-					</Menu>
-				),
+				headerRight: headerRight,
 				headerTitle: (props: any) => (
 					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
 						<View style={{ width: 250 }}>
@@ -468,8 +492,8 @@ const BuilderEdit = () => {
 					<Text style={{ fontSize: 16 }}>{builder.getUnitCounts()}</Text>
 				</View>
 				<CustomCheckbox
-					onValueChange={(val) => setShowStatline(val)}
-					value={showStatline}
+					onValueChange={() => setShowStatlineSetting()}
+					value={settings.showStatline}
 					label={t("ShowStatline")}
 				/>
 				<View>
@@ -532,7 +556,7 @@ const BuilderEdit = () => {
 									currentArmyCount={builder.calculateCurrentArmyPoints()}
 									hasError={builder.armyErrors.findIndex((x) => x.sourceName == item.unitName) > -1}
 									unitDetailsExpanded={getUnitDetailsByUnitName(item.unitName)}
-									showStatline={showStatline}
+									showStatline={settings.showStatline}
 								/>
 							</>
 						);

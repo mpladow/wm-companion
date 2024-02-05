@@ -21,4 +21,5 @@ export default {
 	Credits: "Credits",
 	ReportBug: "Report a bug",
 	AppVersion: "App Version",
+	SpecialRules: "Special Rules"
 };

@@ -51,6 +51,53 @@ export const getKeyByValue = (object, value) => {
 export const getGenericSpecialRules = () => {
 	return genericSpecialRules;
 };
+export const getLocalFactionAssets = (faction: string) => {
+	console.log(faction, "faction");
+	switch (faction) {
+		case "Dark_Elves":
+			return [require("../../assets/images/wm-darkElves.jpeg")];
+
+		case "Bretonnians":
+			return [require("../../assets/images/wm-bretonnian.jpg")];
+		case "Orcs":
+			return [require("../../assets/images/wm-orcs.jpg")];
+		case "Tomb_Kings":
+		case "Empire":
+			return [require("../../assets/images/wm-empire.png")];
+		case "Skaven":
+		case "Chaos":
+			return [require("../../assets/images/wm-chaos.jpeg")];
+		case "Wood_Elves":
+		case "Vampire_Counts":
+			return [require("../../assets/images/wm-vampcounts.jpeg")];
+		case "Beastmen":
+		case "Cathay":
+		case "Goblins":
+			return [require("../../assets/images/wm-goblins.jpg")];
+		case "Dwarves":
+			return [require("../../assets/images/wm-dwarves.jpg")];
+		case "High_Elves":
+			return [require("../../assets/images/wm-highElves.jpg")];
+		case "Daemons":
+			return [[require("../../assets/images/wm-daemons.jpg")]];
+		case "Nippon":
+		case "Chaos_Dwarves":
+		case "Dogs_Of_War":
+		case "Araby":
+		case "Lizardmen":
+		case "Albion":
+		case "Ogres":
+			return [require("../../assets/images/wm-ogres.jpg")];
+		case "Kislev":
+		case "Norse":
+		case "Witch_Hunters":
+
+		default:
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+			break;
+	}
+};
+
 export const getFactionUnits = (factionSelection: number) => {
 	let list: any[] = [];
 	let factionList;

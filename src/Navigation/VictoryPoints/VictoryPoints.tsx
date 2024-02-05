@@ -205,11 +205,11 @@ const VictoryPoints = () => {
 		<ModalContainer
 			rotateContainer={vpContext.selectedPlayer == "playerTwo" && !settings.trackerTwoPlayerMode}
 			onPageModalClosePressed={() => navigation.goBack()}
-			headerTitle={`${t("VictoryPoints")}: ${
+			headerTitle={`${t("VPs")}: ${
 				vpContext.selectedPlayer == "playerOne" ? vpContext.getP1TotalPoints : vpContext.getP2TotalPoints
 			}`}
 		>
-			<View style={{ flex: 1, flexDirection: "column" }}>
+			<View style={{ flex: 0.9, flexDirection: "column" }}>
 				<View style={[styles.topContainer]}>
 					<View style={{ paddingBottom: 12, alignItems: "center" }}>
 						{calculateTotalUnits() > 0 ? (

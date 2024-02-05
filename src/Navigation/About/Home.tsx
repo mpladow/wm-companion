@@ -118,19 +118,19 @@ const Home = () => {
 								isNewWindow={true}
 							></IconButton>
 						</View>
-						<View style={{ marginVertical: margin * 3 }}>
-							<Button onPress={handlePressSupport} variant={"primary"}>
-								<View style={{ flexDirection: "row", alignItems: "center" }}>
-									{Platform.OS == "android" ? (
+						{Platform.OS !== "android" ? (
+							<View style={{ marginVertical: margin * 3 }}>
+								<Button onPress={handlePressSupport} variant={"primary"}>
+									<View style={{ flexDirection: "row", alignItems: "center" }}>
 										<View style={{ marginRight: 8 }}>
 											<Entypo name='paypal' size={24} color={theme.text} />
 										</View>
-									) : null}
 
-									<Text>{t("SupportDevelopment")}</Text>
-								</View>
-							</Button>
-						</View>
+										<Text bold>{t("SupportDevelopment")}</Text>
+									</View>
+								</Button>
+							</View>
+						) : null}
 						<TextBlock variant='large'>
 							<Text bold>App Version: {version}</Text>
 						</TextBlock>

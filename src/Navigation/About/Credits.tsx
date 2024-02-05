@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ImageBackground, StyleSheet, Image, TouchableOpacity, View } from "react-native";
 import React from "react";
 import LogoWmr from "@components/SVGS/LogoWmr";
 import { Text, TextBlock } from "@components/index";
@@ -12,21 +12,31 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Credits = () => {
 	const { t } = useTranslation(["home", "common"]);
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<MainContainerWithImage>
-				<View style={{ flex: 1, zIndex: 9, alignItems: "center", justifyContent: "center" }}>
-					<TextBlock variant='large'>
-						<Text>{t("GeneralThanks")}</Text>
-					</TextBlock>
-					<TextBlock variant='large'>
-						<Text>
-							{t("SpecialMentions")}: Forest Dragon Miniatures, Onmioji, K Rauff, Paintera Przemas Bak, M
-							Hobbes, Hardy
-						</Text>
-					</TextBlock>
-				</View>
-			</MainContainerWithImage>
-		</SafeAreaView>
+		<MainContainerWithImage>
+			<View style={{ flex: 1, zIndex: 9, justifyContent: "center", padding: 12, paddingTop: 0, marginTop: -100 }}>
+				{/* <View style={{ height: 100 , backgroundColor: "green"}}>
+						<Image
+							style={{ width: 50, height: 50 }}
+							source={{ uri: "https://giphy.com/stickers/goblin-gobbo-slowquest-IK1nFzxLlFcZcLMV0q" }}
+						/>
+					</View> */}
+				<TextBlock variant='large'>
+					<Text>{t("GeneralThanks")}</Text>
+				</TextBlock>
+				<TextBlock variant='large'>
+					<Text>
+						<Text bold>{t("SpecialMentionsForSculptors")}</Text>: Forest Dragon Miniatures, Onmioji,
+						Greenskin Miniatures, GW, Wakes Emporium
+					</Text>
+				</TextBlock>
+				<TextBlock variant='large'>
+					<Text>
+						<Text bold>{t("SpecialMentionsForImages")}</Text>: K Rauff, Przemas Bak, M Hobbes, Hardy,
+						Alexander Carraro, Mattias R, Byron L, Kristoffer Rauff, Geoff A,
+					</Text>
+				</TextBlock>
+			</View>
+		</MainContainerWithImage>
 	);
 };
 
