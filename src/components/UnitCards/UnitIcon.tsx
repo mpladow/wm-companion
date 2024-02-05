@@ -14,19 +14,20 @@ import Archery from "./Archery";
 import Machine from "./Machine";
 
 type UnitIconProps = {
+	noCount: boolean;
 	type: string;
 	canShoot: boolean;
 	size?: "small" | "large";
 };
-const UnitIcon = ({ type, canShoot, size = "small" }: UnitIconProps) => {
+const UnitIcon = ({ noCount, type, canShoot, size = "small" }: UnitIconProps) => {
 	const { theme } = useTheme();
 	const renderIcon = useMemo(() => {
-        const size24 = size == "large"? 24 * 2 : 24;
-        const size28 = size == "large"? 28*2 : 24;
+		const size24 = size == "large" ? 24 * 2 : 24;
+		const size28 = size == "large" ? 28 * 2 : 24;
 		switch (type) {
 			case UnitTypes.Infantry:
 				if (canShoot) {
-					return <Archery size={24} color={theme.black}  />;
+					return <Archery size={24} color={theme.black} />;
 				} else {
 					return <Infantry size={28} color={theme.black} />;
 				}
@@ -61,7 +62,9 @@ const UnitIcon = ({ type, canShoot, size = "small" }: UnitIconProps) => {
 				);
 		}
 	}, []);
-	return <View style={{ alignItems: "center", justifyContent: "center" }}>{renderIcon}</View>;
+	return (
+		<View style={{ alignItems: "center", justifyContent: "center", opacity: noCount ? 0.2 : 1 }}>{renderIcon}</View>
+	);
 };
 
 export default UnitIcon;

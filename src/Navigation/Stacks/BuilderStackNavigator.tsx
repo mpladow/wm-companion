@@ -5,10 +5,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native";
 import { Text, TextBlock } from "@components/index";
 import BuilderQuickView from "@navigation/Builder/BuilderQuickView";
+import AddUnit, { AddUnitProps } from "@navigation/Builder/components/BuilderEdit/AddUnit";
 
 export type BuilderStackParamList = {
 	BuilderHome: undefined;
 	BuilderEdit: undefined;
+	AddUnit: AddUnitProps;
 	Settings: undefined;
 	Blunders: undefined;
 	VictoryPoints: undefined;
@@ -53,6 +55,14 @@ const BuilderStackNavigator = () => {
 			<Stack.Screen
 				name='BuilderEdit'
 				component={BuilderEdit}
+				options={{
+					headerShown: true,
+					title: "Builder",
+				}}
+			/>
+			<Stack.Screen
+				name='AddUnit'
+				component={AddUnit}
 				options={{
 					headerShown: true,
 					title: "Builder",

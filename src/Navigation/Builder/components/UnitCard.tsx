@@ -52,7 +52,7 @@ const UnitCard = ({ unit, key, onAddUnitPress, currentCount, currentArmyCount }:
 			}}
 		>
 			<View style={{ marginRight: 8 }}>
-				<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
+				<UnitIcon noCount={currentCount == 0} type={unit.type} canShoot={unit.range == undefined ? false : true} />
 			</View>
 			<View style={{ flex: 2 }}>
 				<Text bold style={{fontSize: 16}}>{unit.name}</Text>

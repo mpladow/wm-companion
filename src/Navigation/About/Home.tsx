@@ -91,6 +91,11 @@ const Home = () => {
 						<TextBlock variant='large'>
 							<Text bold>{t("Disclaimer")}</Text>
 						</TextBlock>
+						<TextBlock variant='large'>
+							<Text bold>
+								{t("AppVersion", {ns: "common"})}: {version}
+							</Text>
+						</TextBlock>
 						<View style={{ paddingVertical: 4 }}>
 							<IconButton
 								onPress={() => navigation.navigate("Preferences")}
@@ -100,6 +105,7 @@ const Home = () => {
 								isStackNavigation={true}
 							></IconButton>
 						</View>
+
 						<View style={{ paddingVertical: 8 }}>
 							<IconButton
 								onPress={() => navigation.navigate("Credits")}
@@ -131,9 +137,6 @@ const Home = () => {
 								</Button>
 							</View>
 						) : null}
-						<TextBlock variant='large'>
-							<Text bold>App Version: {version}</Text>
-						</TextBlock>
 					</View>
 				</View>
 			</MainContainerWithImage>

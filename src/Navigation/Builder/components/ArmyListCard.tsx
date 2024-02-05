@@ -37,20 +37,6 @@ const ArmyListCard = ({
 	const { theme } = useTheme();
 
 	const setImage = () => {
-		// if (armyList.faction == Factions.Chaos)
-		// 	return (
-		// 		<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm_chaos.png")} />
-		// 		</View>
-		// 	);
-		// if (armyList.faction == Factions.Empire)
-		// 	return (
-		// 		<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
-		// 		</View>
-		// 	);
-		// console.log(armyList.faction, "faction");
-
 		const armyName = getKeyByValue(Factions, armyList.faction);
 		const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
 		console.log(factionAssets, "assets");
@@ -86,7 +72,7 @@ const ArmyListCard = ({
 					</View>
 
 					<View style={{ marginBottom: 4 }}>
-						<Text>{Object.keys(Factions)[armyList.faction - 1]?.replaceAll("_", " ")}</Text>
+						<Text>{armyList.faction && getKeyByValue(Factions, armyList.faction).replaceAll("_", " ")}</Text>
 					</View>
 					<View style={{ alignItems: "flex-start", flexDirection: "row" }}>
 						<View>

@@ -97,6 +97,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const [userArmyLists, setUserArmyLists] = useState<ArmyListProps[]>([]);
 	const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
 	const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
+	const [totalPoints, setTotalPoints] = useState(1000);
+
+
 	useEffect(() => {
 		//AsyncStorage.removeItem(`userArmies`);
 		getScoresFromStorage();
@@ -108,8 +111,16 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const setCurrentFaction = (faction: number) => {
 		setFaction(faction);
 	};
-
-	// HANDLE LOCAL STORAGE MANAGEMENT
+	// useEffect(() => {
+	// 	console.log("ChECKING ARMY POINTS");
+	// 	const _currentPoints = calculateCurrentArmyPoints();
+	// 	if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
+	// 	if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
+	// 	if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
+	// 	if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
+	// 	if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
+	// }, [calculateCurrentArmyPoints()]);
+	// // HANDLE LOCAL STORAGE MANAGEMENT
 	const getScoresFromStorage = async () => {
 		try {
 			// get user army lists from storage

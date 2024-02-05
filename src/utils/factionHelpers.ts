@@ -31,9 +31,15 @@ import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 
 export const getFactions = () => {
 	let ddFactionList = [];
+	// for (const value in Factions) {
+	// 	ddFactionList.push({ label: value?.replaceAll("_", " "), value: key } as DropDownItemProps);
+	// }
 	for (const [key, value] of Object.entries(Factions)) {
-		ddFactionList.push({ label: key.replaceAll("_", " "), value: value } as DropDownItemProps);
+		console.log(key, "key");
+		console.log(value, "value");
+		isNaN(parseInt(key)) && ddFactionList.push({ label: key.replaceAll("_", " "), value: value } as DropDownItemProps);
 	}
+	console.log(ddFactionList, "factionList");
 	ddFactionList = ddFactionList.sort((a, b) => {
 		if (a.label < b.label) {
 			return -1;
@@ -45,7 +51,7 @@ export const getFactions = () => {
 	});
 	return { ddFactionList: ddFactionList };
 };
-export const getKeyByValue = (object, value) => {
+export const getKeyByValue = (object: object, value: number) => {
 	return Object.keys(object).find((key) => object[key] === value);
 };
 export const getGenericSpecialRules = () => {

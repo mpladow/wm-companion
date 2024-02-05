@@ -147,6 +147,7 @@ const BuilderEdit = () => {
 	}, [builder.selectedArmyList]);
 
 	useEffect(() => {
+		console.log("ChECKING ARMY POINTS")
 		const _currentPoints = builder.calculateCurrentArmyPoints();
 		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
 		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
@@ -527,7 +528,9 @@ const BuilderEdit = () => {
 							{title}
 						</Text>
 						{/* //TODO: Extract into seperate button */}
-						<TouchableOpacity onPress={() => handleAddUnitPress(title != "Leaders")}>
+						<TouchableOpacity
+							onPress={() => navigation.navigate("AddUnit", { addingUnits: title != "Leaders" })}
+						>
 							<View style={{ backgroundColor: theme.accent, borderRadius: 4, padding: 4 }}>
 								<Entypo name='plus' size={24} color='black' />
 							</View>
