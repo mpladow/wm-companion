@@ -12,6 +12,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import MenuOptionButton from "@components/MenuOptionButton";
 import { LinearGradient } from "expo-linear-gradient";
 import { Foundation } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
+import ArmyListCardImageContainer from "./ArmyListCardImageContainer";
+import { getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 type ArmyListCardProps = {
 	armyList: ArmyListProps;
 	handleArmyListPress: (armyId: string) => void;
@@ -30,103 +33,15 @@ const ArmyListCard = ({
 	handleToggleFavourite,
 	handleOpenArmyNotes,
 }: ArmyListCardProps) => {
-	const menuRef = useRef(null);
+	const { t } = useTranslation(["builder", "common"]);
 	const { theme } = useTheme();
 
 	const setImage = () => {
-		// if (armyList.faction == Factions.Chaos)
-		// 	return (
-		// 		<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm_chaos.png")} />
-		// 		</View>
-		// 	);
-		// if (armyList.faction == Factions.Empire)
-		// 	return (
-		// 		<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
-		// 		</View>
-		// 	);
-		if (armyList.faction == Factions.Dark_Elves)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-darkElves.jpeg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.High_Elves)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-highElves.jpg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Daemons)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-daemons.jpg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Dwarves)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-dwarves.jpg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Goblins)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-goblins.jpg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Empire)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-empire.png")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Orcs)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-orcs.jpg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Vampire_Counts)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-vampcounts.jpeg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Chaos)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-chaos.jpeg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Bretonnians)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-bretonnian.jpg")} />
-				</View>
-			);
-		if (armyList.faction == Factions.Ogres)
-			return (
-				<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-					<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-ogres.jpg")} />
-				</View>
-			);
-		// if (armyList.faction == Factions.Araby)
-		// 	return (
-		// 		<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-araby.PNG")} />
-		// 		</View>
-		// 	);
-		// if (armyList.faction == Factions.Lizardmen)
-		// 	return (
-		// 		<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-		// 			<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-lizardmen.png")} />
-		// 		</View>
-		// 	);
+		const armyName = getKeyByValue(Factions, armyList.faction);
+		const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
 		return (
 			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-				<Image style={[styles.stretch]} source={require("../../../../assets/images/wm-genericarmy-2.png")} />
+				<Image style={[styles.stretch]} source={factionAssets && factionAssets[0]} />
 			</View>
 		);
 	};
@@ -134,7 +49,14 @@ const ArmyListCard = ({
 	return (
 		<TouchableOpacity onPress={() => handleArmyListPress(armyList.armyId)}>
 			<View
-				style={{ overflow: "hidden", backgroundColor: theme.background, borderRadius: 8, flexDirection: "row" }}
+				style={{
+					overflow: "hidden",
+					backgroundColor: theme.background,
+					borderRadius: 8,
+					flexDirection: "row",
+					borderWidth: 1,
+					borderColor: theme.grey3,
+				}}
 			>
 				<Image
 					source={require("../../../../assets/images/card-texture.png")}
@@ -142,14 +64,14 @@ const ArmyListCard = ({
 					style={{ opacity: 0.2, position: "absolute" }}
 				/>
 				<View style={{ flex: 3, margin: 20 }}>
-					<View style={{ marginBottom: 4 }}>
-						<Text variant='heading3' ellipsizeMode='tail' style={{ fontSize: 24 }}>
+					<View style={{ marginBottom: 4, flex: 1, paddingRight: 30 }}>
+						<Text variant='heading3' numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 24 }}>
 							{armyList.name}
 						</Text>
 					</View>
 
 					<View style={{ marginBottom: 4 }}>
-						<Text>{Object.keys(Factions)[armyList.faction - 1]?.replaceAll("_", " ")}</Text>
+						<Text>{armyList.faction && getKeyByValue(Factions, armyList.faction).replaceAll("_", " ")}</Text>
 					</View>
 					<View style={{ alignItems: "flex-start", flexDirection: "row" }}>
 						<View>
@@ -198,28 +120,30 @@ const ArmyListCard = ({
 								<MenuOptionButton
 									icon={<AntDesign name='star' size={18} color={theme.warning} />}
 									variant={"outline"}
-									ButtonText={armyList.isFavourite ? "Remove Favourite" : "Set Favourite"}
+									ButtonText={
+										armyList.isFavourite ? `${t("RemoveFavourite")}` : `${t("SetFavourite")}`
+									}
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleDuplicateArmyPress(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<FontAwesome name='copy' size={18} color={theme.text} />}
 									variant={"outline"}
-									ButtonText={"Duplicate"}
+									ButtonText={t("Duplicate", { ns: "common" })}
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<FontAwesome name='pencil' size={18} color={theme.text} />}
 									variant={"outline"}
-									ButtonText={"Edit"}
+									ButtonText={t("Edit", { ns: "common" })}
 								/>
 							</MenuOption>
 							<MenuOption onSelect={() => handleDeleteArmyPress(armyList.armyId)}>
 								<MenuOptionButton
 									icon={<AntDesign name='delete' size={18} color={theme.white} />}
 									variant={"danger"}
-									ButtonText={"Delete"}
+									ButtonText={t("Delete", { ns: "common" })}
 								/>
 							</MenuOption>
 						</MenuOptions>

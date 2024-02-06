@@ -14,6 +14,8 @@ import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
 import { AntDesign } from "@expo/vector-icons";
 import { getFactions, getFactionUnits } from "@utils/factionHelpers";
 import uuid from "uuid-random";
+import { useSettingsContext } from "@context/SettingsContext";
+import { useTranslation } from "react-i18next";
 
 type VictoryPointsProps = {
 	player: playerTypes;
@@ -26,6 +28,8 @@ type ItemCompact = {
 };
 const VictoryPoints = () => {
 	const navigation = useNavigation();
+	const { settings } = useSettingsContext();
+	const {t} = useTranslation(["tracker", "common"])
 	const { theme } = useTheme();
 	// set faction based of session.faction
 	const vpContext = useVictoryPoints();
@@ -189,23 +193,28 @@ const VictoryPoints = () => {
 
 	const calculateTotalUnits = () => {
 		const currentScore = vpContext.selectedPlayer == "playerOne" ? vpContext.p1VpScore : vpContext.p2VpScore;
-		const count = currentScore.filter((x) => x.isUnit).filter((x) => !x.isHalfPoints).length;
-		return count;
+		const countFull = currentScore.filter((x) => x.isUnit).filter((x) => !x.isHalfPoints).length;
+		const halfUnits = currentScore.filter((x) => x.isUnit).filter((x) => x.isHalfPoints).length;
+		const countHalf = halfUnits / 2;
+
+		console.log(countHalf, "half");
+
+		return countFull + countHalf;
 	};
 	return (
 		<ModalContainer
-			rotateContainer={vpContext.selectedPlayer == "playerTwo" && !vpContext.useOnePlayerMode}
+			rotateContainer={vpContext.selectedPlayer == "playerTwo" && !settings.trackerTwoPlayerMode}
 			onPageModalClosePressed={() => navigation.goBack()}
-			headerTitle={`Victory Points: ${
+			headerTitle={`${t("VPs")}: ${
 				vpContext.selectedPlayer == "playerOne" ? vpContext.getP1TotalPoints : vpContext.getP2TotalPoints
 			}`}
 		>
-			<View style={{ flex: 1, flexDirection: "column" }}>
+			<View style={{ flex: 0.9, flexDirection: "column" }}>
 				<View style={[styles.topContainer]}>
 					<View style={{ paddingBottom: 12, alignItems: "center" }}>
 						{calculateTotalUnits() > 0 ? (
 							<Text style={{ color: theme.danger, fontSize: 20 }} variant={"heading3"}>
-								Enemy Units Defeated: {`${calculateTotalUnits()}`}
+								{t("EnemyUnitsDefeated")}: {`${calculateTotalUnits()}`}
 							</Text>
 						) : null}
 					</View>
@@ -287,8 +296,8 @@ const VictoryPoints = () => {
 						}}
 					/>
 				</View>
-				<ScrollView style={[styles.bottomContainer]}>
-					<View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", padding: 8 }}>
+				<View style={[styles.bottomContainer]}>
+					<View style={{ flexDirection: "row", justifyContent: "space-between", padding: 8 }}>
 						<View style={{ flex: 1, alignItems: "center" }}>
 							<TouchableOpacity onPress={() => setBottomSection("units")}>
 								<Text style={bottomSection == "units" && { color: theme.accent }}>Units</Text>
@@ -296,13 +305,15 @@ const VictoryPoints = () => {
 						</View>
 						<View style={{ flex: 1, alignItems: "center" }}>
 							<TouchableOpacity onPress={() => setBottomSection("vps")}>
-								<Text style={bottomSection == "vps" && { color: theme.accent }}>Additional</Text>
+								<Text style={bottomSection == "vps" && { color: theme.accent }}>{t("Additional", {ns: "common"})}</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
 					{bottomSection == "units" ? (
 						<UnitSelector
-							useOnePlayer={vpContext.selectedPlayer == "playerTwo" ? vpContext.useOnePlayerMode : true}
+							useOnePlayer={
+								vpContext.selectedPlayer == "playerTwo" ? settings.trackerTwoPlayerMode : true
+							}
 							ddFactions={ddFactions}
 							ddUnits={ddUnits}
 							ddMagicItems={ddMagicItems}
@@ -318,7 +329,7 @@ const VictoryPoints = () => {
 					) : (
 						<Points onAddVPPressed={handleAddVPs} />
 					)}
-				</ScrollView>
+				</View>
 			</View>
 		</ModalContainer>
 	);
@@ -328,7 +339,7 @@ export default VictoryPoints;
 
 const styles = StyleSheet.create({
 	topContainer: {
-		flex: 0.8,
+		flex: 1.3,
 	},
 	bottomContainer: {
 		flex: 1,

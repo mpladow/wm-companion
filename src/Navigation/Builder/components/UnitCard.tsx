@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { UnitProps } from "@utils/types";
 import { Button, Text } from "@components/index";
@@ -20,10 +20,10 @@ type UnitCardProps = {
 		ignoreBreakPoint?: boolean
 	) => void;
 	currentCount?: number; // get current count of units in army
-	onUnitCardPress?: (unitName: string) => void;
+	onUnitCardPress: (unitName: string) => void;
 	currentArmyCount: number;
 };
-const UnitCard = ({ unit, key, onAddUnitPress, currentCount, currentArmyCount }: UnitCardProps) => {
+const UnitCard = ({ unit, key, onAddUnitPress, currentCount, currentArmyCount, onUnitCardPress }: UnitCardProps) => {
 	const { theme } = useTheme();
 
 	const getUnitArmyMax = () => {
@@ -40,7 +40,8 @@ const UnitCard = ({ unit, key, onAddUnitPress, currentCount, currentArmyCount }:
 		return currentMax;
 	};
 	return (
-		<View
+		<Pressable
+			onPress={() => onUnitCardPress(unit.name)}
 			key={key}
 			style={{
 				flexDirection: "row",
@@ -52,10 +53,16 @@ const UnitCard = ({ unit, key, onAddUnitPress, currentCount, currentArmyCount }:
 			}}
 		>
 			<View style={{ marginRight: 8 }}>
-				<UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
+				<UnitIcon
+					noCount={currentCount == 0}
+					type={unit.type}
+					canShoot={unit.range == undefined ? false : true}
+				/>
 			</View>
 			<View style={{ flex: 2 }}>
-				<Text bold style={{fontSize: 16}}>{unit.name}</Text>
+				<Text bold style={{ fontSize: 16 }}>
+					{unit.name}
+				</Text>
 
 				<View>
 					<Text>{currentCount} x units in force</Text>
@@ -101,7 +108,7 @@ const UnitCard = ({ unit, key, onAddUnitPress, currentCount, currentArmyCount }:
 					</View>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 };
 

@@ -8,6 +8,7 @@ type CustomTypeProps = {
 	variant?: TextVariant;
 	bold?: boolean;
 	italic?: boolean;
+	style?: TextProps
 } & TextProps
 const CustomText = ({ children, variant, bold, italic, ...props }: CustomTypeProps) => {
 	const { theme } = useTheme();

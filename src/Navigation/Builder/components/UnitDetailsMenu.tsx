@@ -33,7 +33,7 @@ const UnitDetailsMenu = ({ noMagic, onAddUnit, onAddUpgrade, onDeleteUnit }: uni
 				{!noMagic || noMagic == undefined ? (
 					<MenuOption
 						onSelect={() => {
-							setOpened(true);
+							setOpened(false);
 							onAddUpgrade();
 						}}
 					>

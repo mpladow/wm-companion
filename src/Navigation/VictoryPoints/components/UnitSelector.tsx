@@ -1,5 +1,5 @@
 import { Dimensions, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState, useTransition } from "react";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { useTheme } from "@hooks/useTheme";
 import { AntDesign } from "@expo/vector-icons";
@@ -7,6 +7,7 @@ import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
 import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
 import fonts from "@utils/fonts";
+import { useTranslation } from "react-i18next";
 
 type UnitSelectorProps = {
 	ddFactions: DropDownItemProps[];
@@ -37,6 +38,7 @@ const UnitSelector = forwardRef(
 		addUnitPressed,
 		useOnePlayer,
 	}: UnitSelectorProps) => {
+		const { t } = useTranslation(["tracker", "common", "forms"]);
 		const { theme } = useTheme();
 		const [defaultFaction, setDefaultFaction] = useState<DropDownItemProps>();
 		const [disableAddButton, setDisableAddButton] = useState(true);
@@ -63,7 +65,7 @@ const UnitSelector = forwardRef(
 						]}
 						dropdownPosition={!useOnePlayer ? "top" : "bottom"}
 						transformOrigin={"center"}
-						placeholder='Select Faction'
+						placeholder={t("SelectFaction", { ns: "forms" })}
 						placeholderStyle={{ color: "#ddd" }}
 						data={ddFactions}
 						labelField='label'
@@ -75,7 +77,7 @@ const UnitSelector = forwardRef(
 				</View>
 				<View style={{ marginBottom: 4 }}>
 					<CustomDropdown
-						placeholder='Select a Unit'
+						placeholder={t("SelectUnit", { ns: "forms" })}
 						placeholderStyle={{ color: "#ddd" }}
 						disable={factionSelection == undefined}
 						style={[styles.dropdown, { backgroundColor: theme.white }]}
@@ -95,7 +97,7 @@ const UnitSelector = forwardRef(
 				<View style={{ marginBottom: 4 }}>
 					<MultiSelect
 						ref={multiSelectRef}
-						placeholder='Select Magic Items (Optional)'
+						placeholder={t("SelectMagicItems", { ns: "forms" })}
 						placeholderStyle={{ color: "#ddd" }}
 						selectedTextStyle={styles.selectedTextStyle}
 						selectedStyle={{ backgroundColor: "blue" }}
@@ -137,13 +139,13 @@ const UnitSelector = forwardRef(
 				>
 					<View style={{ flex: 1, margin: 4 }}>
 						<Button variant={"default"} disabled={disableAddButton} onPress={() => addUnitPressed(true)}>
-							<Text>Add half VPs</Text>
+							<Text>{t("AddHalfVPs")}</Text>
 						</Button>
 					</View>
 					<View style={{ flex: 1, margin: 4 }}>
 						<Button disabled={disableAddButton} onPress={() => addUnitPressed(false)} variant={"confirm"}>
 							<Text bold style={{ color: theme.black }}>
-								Add VPs
+								{t("AddVPs")}
 							</Text>
 						</Button>
 					</View>

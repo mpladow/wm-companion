@@ -5,6 +5,7 @@ import { UpgradeTypes } from "@utils/constants";
 import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import uuid from "uuid-random";
 
 type ArmyErrorsProps = {
@@ -90,11 +91,15 @@ interface BuilderContextInterface {
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
 
 export const BuilderContextProvider = ({ children }: any) => {
+	const { t } = useTranslation(["builder", "units"]);
 	const [faction, setFaction] = useState<number | undefined>();
 	const [currentArmyList, setCurrentArmyList] = useState<ArmyListProps>();
 	const [userArmyLists, setUserArmyLists] = useState<ArmyListProps[]>([]);
 	const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
 	const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
+	const [totalPoints, setTotalPoints] = useState(1000);
+
+
 	useEffect(() => {
 		//AsyncStorage.removeItem(`userArmies`);
 		getScoresFromStorage();
@@ -106,8 +111,16 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const setCurrentFaction = (faction: number) => {
 		setFaction(faction);
 	};
-
-	// HANDLE LOCAL STORAGE MANAGEMENT
+	// useEffect(() => {
+	// 	console.log("ChECKING ARMY POINTS");
+	// 	const _currentPoints = calculateCurrentArmyPoints();
+	// 	if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
+	// 	if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
+	// 	if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
+	// 	if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
+	// 	if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
+	// }, [calculateCurrentArmyPoints()]);
+	// // HANDLE LOCAL STORAGE MANAGEMENT
 	const getScoresFromStorage = async () => {
 		try {
 			// get user army lists from storage
@@ -463,7 +476,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 			const unitUpgrade = unit?.attachedItems.find((x) => x.id == upgradeId);
 			const unitUpgradeIndex = unit?.attachedItems.findIndex((x) => x.id == upgradeId);
 			if (!unit) {
-				console.error("BuilderContext :: removeItem :: NO UNIT FOUND");
 				return;
 			}
 			if (unitUpgrade != undefined && unitUpgradeIndex != undefined && unitUpgrade?.currentCount > 1) {
@@ -492,7 +504,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				updatedArmy.selectedUnits = updatedUnit;
 			}
 			// if this upgrade had add on items that are no longer applicable, remove these items
-	
+
 			updatedArmy.points = calculateCurrentArmyPoints();
 
 			const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
@@ -526,11 +538,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 					arrayOfPoints = arrayOfPoints + amountToAdd;
 				});
 			});
-		// setCurrentArmyList(prev => {
-		// 	const x = Object.assign({}, prev);
-		// 	x.points = arrayOfPoints;
-		// 	return x
-		// })
 		currentArmyList?.points;
 		return arrayOfPoints;
 	};
@@ -559,7 +566,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 					errors.push({
 						source: "Upgrade",
 						sourceName: selectedUpgrade.upgradeName,
-						error: `Upgrade: A maximum of ${selectedUpgrade.armyLimitMaxCount} ${selectedUpgrade.upgradeName}/s in the army is permitted.`,
+						error: `${t("MaximumItemsInArmyReached", {
+							maxCount: selectedUpgrade.armyLimitMaxCount,
+							item: selectedUpgrade.upgradeName,
+						})}`,
 					});
 				}
 			}
@@ -569,7 +579,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 					errors.push({
 						source: "Upgrade",
 						sourceName: selectedUpgrade.upgradeName,
-						error: `Upgrade: A maximum of ${selectedUpgrade.maxCount} ${selectedUpgrade.upgradeName}/s per 1000pts is permitted.`,
+						error: `${t("MaximumItemsPer1000", {
+							maxCount: selectedUpgrade.maxCount,
+							item: selectedUpgrade.upgradeName,
+						})}`,
 					});
 				}
 			}
@@ -603,7 +616,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 						errors.push({
 							source: "Unit",
 							sourceName: cu.unitName,
-							error: `Mount: ${cu.unitName} has too many mounts.`,
+							error: `${t("MaxMountsReached", { unit: cu.unitName })}`,
 						});
 					}
 				}
@@ -621,7 +634,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 				errors.push({
 					source: "Unit",
 					sourceName: unitWithRequiredUnits.unitName,
-					error: `Required Unit: ${unitWithRequiredUnits.requiredUnits[0]} is required to be fielded with ${unitWithRequiredUnits.unitName}.`,
+					error: `${t("ErrorRequiredUnit", {
+						requiredUnit: unitWithRequiredUnits.requiredUnits[0],
+						targetUnit: unitWithRequiredUnits.unitName,
+					})}`,
 				});
 			}
 		}
@@ -660,17 +676,19 @@ export const BuilderContextProvider = ({ children }: any) => {
 					errors.push({
 						source: "Unit",
 						sourceName: unitExists.unitName,
-						error: `Unit: A minimum of ${u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min} ${
-							unitExists.unitName
-						}/s in the army is required.`,
+						error: `${t("MinimumUnitsRequired", {
+							minCount: u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min,
+							unit: unitExists.unitName,
+						})}`,
 					});
 				}
 			} else {
 				errors.push({
 					sourceName: u.name,
-					error: `Unit: A minimum of ${u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min} ${
-						u.name
-					}/s in the army is required.`,
+					error: `${t("MinimumUnitsRequired", {
+						minCount: u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min,
+						unit: u.name,
+					})}`,
 				});
 			}
 		});
@@ -683,7 +701,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				if (!isValid) {
 					errors.push({
 						sourceName: unitExists.unitName,
-						error: `Unit: A maximum of ${u.armyMax} ${unitExists.unitName}/s in the army is required.`,
+						error: `${t("MaximumUnitsInArmyReached", { maxCount: u.armyMax, unit: unitExists.unitName })}`,
 					});
 				}
 			}
@@ -700,7 +718,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 				if (unit.currentCount > maxCountPer1000Points) {
 					errors.push({
 						sourceName: unit.unitName,
-						error: `Unit: A maximum of ${unit.maxCount} ${unit.unitName}/s per 1000pts is permitted.`,
+						error: `${t("MaximumUnitsPer1000", { maxCount: unit.maxCount, unit: unit.unitName })}`,
 					});
 				}
 			}

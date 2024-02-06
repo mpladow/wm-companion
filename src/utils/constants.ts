@@ -10,7 +10,7 @@ export const Pages = {
 	Settings: "Settings",
 	Blunders: "Blunders",
 	Monster: "Monster",
-	Scouting: "Scouting"
+	Scouting: "Scouting",
 };
 
 export enum UnitTypes {
@@ -33,39 +33,40 @@ export enum UpgradeTypes {
 	Chariot_Mount = "Chariot Mount",
 	Special = "Special",
 }
-export const Factions = {
-	Bretonnians: 1,
-	Orcs: 2,
-	Tomb_Kings: 3,
-	Empire: 4,
-	Skaven: 5,
-	Chaos: 6,
-	Wood_Elves: 7,
-	Vampire_Counts: 8,
-	Beastmen: 9,
-	Cathay: 10,
-	Goblins: 11,
-	Dwarves: 12,
-	Dark_Elves: 13,
-	High_Elves: 14,
-	Daemons: 15,
-	Nippon: 16,
-	Chaos_Dwarves: 17,
-	Dogs_Of_War: 18,
-	Araby: 19, 
-	Lizardmen: 20,
-	Albion: 21,
-	Ogres: 22,
-	Kislev: 23,
-	Norse: 24,
-	Witch_Hunters: 25
+export enum Factions  {
+	Bretonnians= 1,
+	Orcs= 2,
+	Tomb_Kings= 3,
+	Empire= 4,
+	Skaven= 5,
+	Chaos= 6,
+	Wood_Elves= 7,
+	Vampire_Counts= 8,
+	Beastmen= 9,
+	Cathay= 10,
+	Goblins= 11,
+	Dwarves= 12,
+	Dark_Elves= 13,
+	High_Elves= 14,
+	Daemons= 15,
+	Nippon= 16,
+	Chaos_Dwarves= 17,
+	Dogs_Of_War= 18,
+	Araby= 19,
+	Lizardmen= 20,
+	Albion= 21,
+	Ogres= 22,
+	Kislev= 23,
+	Norse= 24,
+	Witch_Hunters= 25,
 };
+
 
 //export const underscoreRegex = /_(.*?)_/g;
 export const underscoreRegex = /__(.*?)__/g;
 export const asterixRegex = /\*\*(.*?)\*\*/g;
 export const asterixSingleRegex = /\*(.*?)\*/g;
-export const newLineRegex = /,,(.*?),,/g
+export const newLineRegex = /,,(.*?),,/g;
 
 export const additionalSpaceRegex = /|(.*?)|/g;
 

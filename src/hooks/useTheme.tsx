@@ -6,6 +6,7 @@ export interface Theme {
 	backgroundVariant: string;
     backgroundVariant2: string;
 	text: string;
+	textInverted: string;
 	variant: string;
 	secondary: string;
 	secondaryVariant: string;
@@ -45,6 +46,7 @@ const darkTheme: Theme = {
 	backgroundVariant: darkColours.BLUEGREY,
     backgroundVariant2: darkColours.BLACK,
 	text: darkColours.WHITE,
+	textInverted: darkColours.BLACK,
 	variant: darkColours.DARK_BLUE_3,
 	secondary: darkColours.DARK_GREEN,
 	secondaryVariant: darkColours.LIGHT_GREEN,

@@ -31,9 +31,16 @@ import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 
 export const getFactions = () => {
 	let ddFactionList = [];
+	// for (const value in Factions) {
+	// 	ddFactionList.push({ label: value?.replaceAll("_", " "), value: key } as DropDownItemProps);
+	// }
 	for (const [key, value] of Object.entries(Factions)) {
-		ddFactionList.push({ label: key.replaceAll("_", " "), value: value } as DropDownItemProps);
+		console.log(key, "key");
+		console.log(value, "value");
+		isNaN(parseInt(key)) &&
+			ddFactionList.push({ label: key.replaceAll("_", " "), value: value } as DropDownItemProps);
 	}
+	console.log(ddFactionList, "factionList");
 	ddFactionList = ddFactionList.sort((a, b) => {
 		if (a.label < b.label) {
 			return -1;
@@ -45,12 +52,82 @@ export const getFactions = () => {
 	});
 	return { ddFactionList: ddFactionList };
 };
-export const getKeyByValue = (object, value) => {
+export const getKeyByValue = (object: object, value: number) => {
 	return Object.keys(object).find((key) => object[key] === value);
 };
 export const getGenericSpecialRules = () => {
 	return genericSpecialRules;
 };
+export const getLocalFactionAssets = (faction: string) => {
+	switch (faction) {
+		case "Dark_Elves":
+			return [require("../../assets/images/wm-darkElves.jpeg")];
+
+		case "Bretonnians":
+			return [require("../../assets/images/wm-bretonnian.jpg")];
+		case "Orcs":
+			return [require("../../assets/images/wm-orcs.jpg")];
+		case "Tomb_Kings":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Empire":
+			return [require("../../assets/images/wm-empire.png")];
+		case "Skaven":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Chaos":
+			return [require("../../assets/images/wm-chaos.jpeg")];
+		case "Wood_Elves":
+		case "Vampire_Counts":
+			return [require("../../assets/images/wm-vampcounts.jpeg")];
+		case "Beastmen":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Cathay":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Goblins":
+			return [require("../../assets/images/wm-goblins.jpg")];
+		case "Dwarves":
+			return [require("../../assets/images/wm-dwarves.jpg")];
+		case "High_Elves":
+			return [require("../../assets/images/wm-highElves.jpg")];
+		case "Daemons":
+			return [require("../../assets/images/wm-daemons.jpg")];
+		case "Nippon":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Chaos_Dwarves":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Dogs_Of_War":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Araby":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+		case "Lizardmen":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Albion":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Ogres":
+			return [require("../../assets/images/wm-ogres.jpg")];
+		case "Kislev":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Norse":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		case "Witch_Hunters":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
+		default:
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+			break;
+	}
+};
+
 export const getFactionUnits = (factionSelection: number) => {
 	let list: any[] = [];
 	let factionList;

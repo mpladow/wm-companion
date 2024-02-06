@@ -27,6 +27,7 @@ import PopupConfirm from "@components/PopupConfirm";
 import { LinearGradient } from "expo-linear-gradient";
 import FormLabel from "@components/forms/FormLabel";
 import { useToast } from "react-native-toast-notifications";
+import { useTranslation } from "react-i18next";
 
 export type armySectionListDataProps = {
 	title: string;
@@ -50,6 +51,7 @@ const BuilderHome = () => {
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
 
 	const [showArmyNotes, setShowArmyNotes] = useState(false);
+	const { t } = useTranslation(["builder", "common", "forms"]);
 	const toast = useToast();
 	const handleAddArmyPress = () => {
 		setFactionName("");
@@ -232,17 +234,17 @@ const BuilderHome = () => {
 						setEditingArmy(false);
 					}}
 					setModalVisible={handleAddArmyPress}
-					headerTitle={editingArmy ? "Edit Army" : "Create Army"}
+					headerTitle={editingArmy ? t("EditArmy") : t("CreateArmy")}
 					modalVisible={showCreateArmy}
 				>
 					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-						<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
+						<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}>
 							<>
 								<View style={{ flex: 1, marginBottom: 12 }}>
-									<FormLabel label={"Army Name"} />
+									<FormLabel label={t("ArmyName")} />
 									<TextInput
 										ref={nameRef}
-										placeholder='Enter Army Name'
+										placeholder={t("PlaceholderEnterArmyName", { ns: "forms" })}
 										onChangeText={(val) => setFactionName(val)}
 										style={[
 											{
@@ -266,15 +268,15 @@ const BuilderHome = () => {
 									{!editingArmy ? (
 										<>
 											<View style={{ marginTop: 12 }}>
-												<FormLabel label={"Faction"} />
+												<FormLabel label={t("Faction")} />
 												<CustomDropdown
 													value={factionSelection}
 													style={[styles.dropdown, { backgroundColor: theme.white }]}
-													placeholder='Select Faction'
+													placeholder={t("PlaceholderSelectFaction", { ns: "forms" })}
 													placeholderStyle={{ color: "#ddd" }}
 													data={ddFactions}
 													search
-													searchPlaceholder='Search...'
+													searchPlaceholder={`${t("Search", { ns: "common" })}...`}
 													labelField='label'
 													valueField='value'
 													onChange={(item) => {
@@ -312,7 +314,7 @@ const BuilderHome = () => {
 									variant={"confirm"}
 								>
 									<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
-										{editingArmy ? "confirm" : "create"}
+										{editingArmy ? t("Confirm", { ns: "common" }) : t("Create", { ns: "common" })}
 									</Text>
 								</Button>
 							</>
@@ -344,7 +346,7 @@ const BuilderHome = () => {
 					<View style={{ flexDirection: "row", alignItems: "center" }}>
 						<AntDesign name='plus' size={20} color='black' />
 						<Text bold style={{ marginLeft: 4, color: theme.black }}>
-							Add Army
+							{t("AddArmy")}
 						</Text>
 					</View>
 				</Button>

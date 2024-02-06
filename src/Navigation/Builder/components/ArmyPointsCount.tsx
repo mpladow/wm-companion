@@ -22,7 +22,7 @@ const ArmyPointsCount = ({ armyErrorsCount, setVisibility, armyCount, disableBut
 					width: 0,
 					height: 2,
 				},
-				shadowOpacity: 0.50,
+				shadowOpacity: 0.5,
 				shadowRadius: 3.84,
 				elevation: 5,
 			}}
@@ -57,7 +57,22 @@ const ArmyPointsCount = ({ armyErrorsCount, setVisibility, armyCount, disableBut
 					</View>
 				</View>
 			</TouchableOpacity>
-			<View style={{ paddingHorizontal: 10, backgroundColor: theme.white, alignItems: "center" }}>
+			<View
+				style={{
+					paddingHorizontal: 10,
+					backgroundColor: theme.white,
+					alignItems: "center",
+					shadowColor: "#000",
+					shadowOffset: {
+						width: 0,
+						height: 3,
+					},
+					shadowOpacity: 0.27,
+					shadowRadius: 4.65,
+
+					elevation: 6,
+				}}
+			>
 				<Text bold style={{ color: theme.black }}>
 					{armyCount}
 				</Text>

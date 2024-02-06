@@ -46,7 +46,7 @@ const ModalContainer = ({
 
 	return (
 		<View style={[styles.centeredView,rotateContainer && {transform: [{rotate: '180deg'}]} ]}>
-			<View style={[styles.modalView, { width: windowWidth - 20, 
+			<View style={[styles.modalView, { width: windowWidth - 20,
 				backgroundColor: theme.black 
 				}]}>
 				<View style={{ flexDirection: "row", padding: 12 }}>
@@ -71,7 +71,7 @@ const ModalContainer = ({
 						</View>
 					</View>
 				</View>
-				<View style={{ paddingHorizontal: 12, paddingVertical: 12, paddingBottom: 60, flex: 1 }}>
+				<View style={{ paddingHorizontal: 12, paddingVertical: 12, paddingBottom: 40, flex: 1 }}>
 					{children}
 				</View>
 				<View
@@ -124,9 +124,10 @@ const styles = StyleSheet.create({
 		// marginTop: 22,
 	},
 	modalView: {
+		zIndex: 9999999,
 		flex: 1,
 		margin: 20,
-		marginBottom: 40,
+		marginBottom: 30,
 		backgroundColor: "white",
 		borderRadius: 20,
 		// paddingVertical: 40,

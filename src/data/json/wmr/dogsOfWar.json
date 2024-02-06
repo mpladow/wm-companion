@@ -111,7 +111,7 @@
         "name": "Galloper Guns",
         "order": 9,
         "type": "Artillery",
-        "attack": "1/2+bounce",
+        "attack": "1/2 +bounce",
         "range": "40cm",
         "hits": 2,
         "size": 2,

@@ -19,6 +19,7 @@ const UpgradeIcon = ({ type, size = "small" }: UpgradeIconProps) => {
 	const renderIcon = useMemo(() => {
 		const size24 = size == "large" ? 24 * 2 : 24;
 		const size28 = size == "large" ? 28 * 2 : 24;
+		console.log(type, "type")
 		switch (type) {
 			case UpgradeTypes.Magic_Standard:
 				return <Banner size={24} color={theme.black} />;

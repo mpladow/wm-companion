@@ -12,6 +12,8 @@ import MenuOptionButton from "@components/MenuOptionButton";
 import { FontAwesome } from "@expo/vector-icons";
 import { useVictoryPoints } from "@context/VPContext";
 import { Entypo } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
+import { useSettingsContext } from "@context/SettingsContext";
 
 type CentreSectionProps = {
 	handleReset: () => void;
@@ -37,8 +39,10 @@ const CentreSection = ({
 }: CentreSectionProps) => {
 	const { theme } = useTheme();
 	const vpContext = useVictoryPoints();
+	const {settings} = useSettingsContext();
 	const [menuOpen, setMenuOpen] = useState(false);
 
+	const { t } = useTranslation(["tracker", "home", "common"]);
 
 	const onExpandedPress = () => {
 		console.log(menuOpen ? "expanded" : "collapsed");
@@ -46,30 +50,30 @@ const CentreSection = ({
 	};
 	const test = [
 		{
-			label: "Exit",
+			label: t("Exit", {ns: "common"}),
 			onPress: handleSettingsPress,
 			// icon: <Ionicons name='settings' size={24} color={theme.text} />,
 			icon: <Ionicons name='exit-outline' size={24} color={theme.text} />,
 		} as MenuOptionsType,
 		{
-			label: !vpContext.useOnePlayerMode ? "Set Solo Mode" : "Set Two Player Mode",
+			label: !settings.trackerTwoPlayerMode ? t("SetSoloMode") : t("SetTwoPlayerMode"),
 			onPress: handleToggleOnePlayerMode,
 			// icon: <Ionicons name='settings' size={24} color={theme.text} />,
-			icon: !vpContext.useOnePlayerMode ? (
+			icon: !settings.trackerTwoPlayerMode? (
 				<Entypo name='user' size={20} color={theme.text} />
 			) : (
 				<Entypo name='users' size={20} color={theme.text} />
 			),
 		} as MenuOptionsType,
 		{
-			label: "Blunder Chart",
+			label: t("BlunderChart"),
 			onPress: handleBlunderPress,
 			icon: <Ionicons name='warning' size={24} color={theme.text} />,
 		},
 		{
-			label: "Scouting Chart",
+			label: t("ScoutingChart"),
 			onPress: handleScoutingPress,
-			icon: <FontAwesome name="binoculars" size={20} color={theme.text}  />,
+			icon: <FontAwesome name='binoculars' size={20} color={theme.text} />,
 		},
 		// {
 		// 	label: "Save Game",
@@ -84,7 +88,7 @@ const CentreSection = ({
 					<Ionicons name='refresh' size={32} color={theme.text} />
 				</TouchableOpacity>
 			</View>
-			<ResultSection resultOne={bottomResultValue} resultTwo={topResultValue} />
+			<ResultSection isTwoPlayerMode={settings.trackerTwoPlayerMode} resultOne={bottomResultValue} resultTwo={topResultValue} />
 			<View
 				style={{
 					flex: 1,
@@ -101,7 +105,7 @@ const CentreSection = ({
 					handleMenuPress={onExpandedPress}
 				/> */}
 				<Menu style={{ zIndex: 99 }}>
-					<MenuTrigger style={{padding: 12, paddingRight: 4}}>
+					<MenuTrigger style={{ padding: 12, paddingRight: 4 }}>
 						<MaterialCommunityIcons name='dots-vertical' size={32} color={theme.text} />
 					</MenuTrigger>
 					<MO
@@ -122,11 +126,8 @@ const CentreSection = ({
 					</MO>
 				</Menu>
 			</View>
-
 		</>
 	);
 };
 
 export default CentreSection;
-
-const styles = StyleSheet.create({});

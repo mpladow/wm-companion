@@ -2,7 +2,17 @@ import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, V
 import React, { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "@hooks/useTheme";
 
-type variant = "default" | "primary" | "secondary" | "confirm" | "warning" | "danger" | "text" | "outline-dark" | "outline-light";
+type variant =
+	| "default"
+	| "primary"
+	| "secondary"
+	| "confirm"
+	| "warning"
+	| "danger"
+	| "text"
+	| "outline-dark"
+	| "outline-light"
+	| "navigation-button";
 export type size = "sm" | "lg";
 type buttonProps = {
 	onPress: () => void;
@@ -32,8 +42,10 @@ const Button = ({ children, onPress, variant, circle, disabled, size, style }: b
 				return { backgroundColor: theme.secondary };
 			case "outline-dark":
 				return { backgroundColor: "transparent", borderColor: theme.blueGrey, borderWidth: 2 };
-				case "outline-light":
-					return { backgroundColor: "transparent", borderColor: theme.white, borderWidth: 2 };
+			case "outline-light":
+				return { backgroundColor: "transparent", borderColor: theme.white, borderWidth: 2 };
+			case "navigation-button":
+				return { backgroundColor: theme.white };
 			case "text":
 				return { backgroundColor: "transparent", border: 0 };
 			default:
@@ -73,7 +85,7 @@ const styles = StyleSheet.create({
 		boxShadow: `0px 0px 18px 8px rgba(0, 0, 0, 0.80)`,
 		alignItems: "center",
 		justifyContent: "center",
-		zIndex: 999
+		zIndex: 999,
 	},
 	large: {
 		paddingHorizontal: 48,

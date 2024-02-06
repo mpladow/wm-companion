@@ -10,6 +10,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useVictoryPoints } from "@context/VPContext";
 import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
+import { useSettingsContext } from "@context/SettingsContext";
 
 export type PlayerDetailsProps = {
 	player: playerTypes;
@@ -33,6 +34,7 @@ export const Tracker = () => {
 	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
 	const theme = useTheme();
 	const vpContext = useVictoryPoints();
+	const {setTwoPlayerMode, settings} = useSettingsContext();
 
 	const [playerOneScore, setPlayerOneScore] = useState<number>(1);
 	const [playerTwoScore, setPlayerTwoScore] = useState<number>(0);
@@ -127,7 +129,7 @@ export const Tracker = () => {
 	};
 	const onScoutingPress = () => {
 		navigation.navigate("Scouting");
-	}
+	};
 	const onVictoryPointsPress = (player?: playerTypes) => {
 		// this needs to be udpates to
 		vpContext.setPlayer("playerOne");
@@ -154,13 +156,14 @@ export const Tracker = () => {
 		}, [])
 	);
 
+
 	return (
 		<View style={{ flex: 1 }}>
 			<View
 				style={[
 					styles.container,
 					{
-						transform: [{ rotate: vpContext.useOnePlayerMode ? "0deg" : "180deg" }],
+						transform: [{ rotate: settings.trackerTwoPlayerMode ? "0deg" : "180deg" }],
 						justifyContent: "space-between",
 						flexDirection: "row",
 						backgroundColor: theme.theme.backgroundVariant,
@@ -174,7 +177,6 @@ export const Tracker = () => {
 					style={{ opacity: 0.2, position: "absolute" }}
 				/>
 				<PlayerSection
-					useOnePlayerMode={vpContext.useOnePlayerMode}
 					player={"playerTwo"}
 					playerScore={playerTwoScore}
 					handleSetPlayerScore={(player, score) => handleSetPlayerScore(player, score)}
@@ -200,13 +202,15 @@ export const Tracker = () => {
 					handleBlunderPress={onBlunderPress}
 					handleScoutingPress={onScoutingPress}
 					handleVictoryPointsPress={onVictoryPointsPress}
-					handleToggleOnePlayerMode={() => vpContext.toggleOnePlayerMode()}
+					handleToggleOnePlayerMode={() => {
+						setTwoPlayerMode();
+						// vpContext.toggleOnePlayerMode();
+					}}
 					handleReset={handleReset}
 					topResultValue={combatResultTop}
 					bottomResultValue={combatResultBottom}
 					handleOnSavePress={() => console.log("SAVE")}
 				/>
-
 			</View>
 			<View
 				style={[

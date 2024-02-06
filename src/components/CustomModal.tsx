@@ -118,7 +118,7 @@ const CustomModal = ({
 							</View>
 						</View>
 					</View>
-					<View style={{ padding: 12, paddingBottom: 60, flex: 1 }}>
+					<View style={{ paddingBottom: 60, flex: 1 }}>
 						{modalContent ? modalContent : children}
 					</View>
 					<View

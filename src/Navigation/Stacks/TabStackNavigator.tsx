@@ -1,17 +1,15 @@
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "@navigation/Home/Home";
-import TrackerStack from "./TrackerStackNavigator";
-import TrackerHome from "@navigation/Tracker/screens/TrackerHome";
+import Home from "@navigation/About/Home";
 import { useTheme } from "@hooks/useTheme";
 import { AntDesign } from "@expo/vector-icons";
 import { Button, Text, TextBlock } from "@components/index";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import LogoWmr from "@components/SVGS/LogoWmr";
-import BuilderHome from "@navigation/Builder/BuilderHome";
 import BuilderStackNavigator from "./BuilderStackNavigator";
 import TrackerStackNavigator from "./TrackerStackNavigator";
+import AboutStackNavigator from "./AboutStackNavigator";
+import fonts from "@utils/fonts";
 
 const Tab = createBottomTabNavigator();
 export const navigatorOptions = {};
@@ -38,7 +36,7 @@ const TabStackNavigator = () => {
 				tabBarIcon: ({ color, size, focused }) => {
 					let icon: JSX.Element = <></>;
 					let label = "";
-					switch (screenProps.route.name) {
+					switch (screenProps.route.name) { 
 						case "TrackerHome":
 							label = "Tracker";
 							icon = (
@@ -78,7 +76,7 @@ const TabStackNavigator = () => {
 							}}
 						>
 							{icon}
-							<Text style={{ color: focused ? theme.warning : theme.text, fontSize: 12 }}>{label}</Text>
+							<Text style={[{ color: focused ? theme.warning : theme.text, fontSize: 16, fontFamily: fonts.BarlowCodensedBold }]}>{label}</Text>
 						</View>
 					);
 				},
@@ -93,11 +91,13 @@ const TabStackNavigator = () => {
 		>
 			<Tab.Screen
 				name='About'
-				component={Home}
+				component={AboutStackNavigator}
 				options={{
+					unmountOnBlur: true,
 					tabBarLabel: "About",
 					title: "About",
 					headerShadowVisible: false,
+					headerShown: false,
 					headerStyle: { backgroundColor: theme.blueGrey },
 				}}
 			/>

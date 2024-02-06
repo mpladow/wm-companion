@@ -1,0 +1,23 @@
+export default {
+    AccessLookupChartsDescription: " Ver tablas de búsqueda con facilidad ",
+    AccessLookupChartsHeader: "ACCESO A LAS TABLAS DE BÚSQUEDA",
+    AddHalfVPs: "Añadir medio PV",
+    AddVPs: "Añadir PV",
+    BattleTracker: "Calculadora de Combates",
+    BlunderChart: "Tabla de Malentendidos",
+    Blunders: "Malentendidos",
+    CalculateCombatResolutionsHeader: "CALCULA LOS RESULTADOS DE LOS COMBATES",
+    CalculateCombatResolutionDescription: "Utiliza la calculadora de combates para determinar rápidamente las bajas y apoyos en los combates.",
+    CasualtiesInflicted: "Bajas infligidas",
+    CombatBonuses: "Bonus al Combate",
+    EnemyUnitsDefeated: "Unidades Enemigas Destruidas",
+    Exit: "Salir",
+    NewBattle: "¡Nueva Batalla!",
+    Scouting: "Exploración",
+    ScoutingChart: "Tabla de Exploración",
+    SetSoloMode: "Modo Solitario",
+    SetTwoPlayerMode: "Modo 2 jugadores",
+    TrackVictoryPointsHeader: "CONTABILIZA LOS PUNTOS DE VICTORIA",
+    TrackVictoryPointsDescription: "Registra los puntos de victoria seleccionando las unidades/objetos mágicos de tu oponente",
+    VictoryPoints: "Puntos de Victoria"
+};

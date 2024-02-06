@@ -1,6 +1,6 @@
 import { useTheme } from "@hooks/useTheme";
 import BlunderChart from "@navigation/Charts/BlunderChart";
-import Home from "@navigation/Home/Home";
+import Home from "@navigation/About/Home";
 import Settings from "@navigation/Settings/screens/Settings";
 import TrackerHome from "@navigation/Tracker/screens/TrackerHome";
 import VictoryPoints from "@navigation/VictoryPoints/VictoryPoints";
