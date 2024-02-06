@@ -238,7 +238,7 @@ const BuilderHome = () => {
 					modalVisible={showCreateArmy}
 				>
 					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-						<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
+						<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}>
 							<>
 								<View style={{ flex: 1, marginBottom: 12 }}>
 									<FormLabel label={t("ArmyName")} />
