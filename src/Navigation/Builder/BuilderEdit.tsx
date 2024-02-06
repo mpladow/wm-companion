@@ -353,7 +353,6 @@ const BuilderEdit = () => {
 		upgradesForUnitStrings &&
 			upgradesForUnitStrings.map((upgrade) => {
 				const _upgradeFound = factionUpgrades?.find((x) => x.name == upgrade);
-				console.log(factionUpgrades, "faction upgrades");
 				_upgradeFound && specificUpgradesForUnitArr.push(_upgradeFound);
 			});
 		//if given the upgrade of wizard, all the user to have wizard items

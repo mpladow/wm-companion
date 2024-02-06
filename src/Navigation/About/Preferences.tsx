@@ -19,7 +19,7 @@ const Preferences = () => {
 		<SafeAreaView style={{ flex: 1 }}>
 			<MainContainerWithBlankBG>
 				<View style={{ flex: 1, zIndex: 999, padding: 8 }}>
-					{/* <View style={{ backgroundColor: theme.white, padding: 12, borderRadius: 8 }}>
+					<View style={{ backgroundColor: theme.white, padding: 12, borderRadius: 8 }}>
 						<FormLabel style={{ color: theme.textInverted }} label={t("Language", { ns: "common" })} />
 						<SelectCountry
 							data={[
@@ -43,7 +43,7 @@ const Preferences = () => {
 							itemContainerStyle={{ padding: 8 }}
 							onChange={(val) => settings.setLang(val.value)}
 						/>
-					</View> */}
+					</View>
 					<View style={{ backgroundColor: theme.white, padding: 12, borderRadius: 8, marginTop: 12 }}>
 						<FormLabel style={{ color: theme.textInverted }} label={t("BattleTracker", { ns: "common" })} />
 						<View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>

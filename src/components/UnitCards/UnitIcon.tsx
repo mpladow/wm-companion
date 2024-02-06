@@ -14,7 +14,7 @@ import Archery from "./Archery";
 import Machine from "./Machine";
 
 type UnitIconProps = {
-	noCount: boolean;
+	noCount?: boolean;
 	type: string;
 	canShoot: boolean;
 	size?: "small" | "large";
@@ -22,7 +22,7 @@ type UnitIconProps = {
 const UnitIcon = ({ noCount, type, canShoot, size = "small" }: UnitIconProps) => {
 	const { theme } = useTheme();
 	const renderIcon = useMemo(() => {
-		const size24 = size == "large" ? 24 * 2 : 24;
+		const iconSize = size == "large" ? 24 * 2 : 24;
 		const size28 = size == "large" ? 28 * 2 : 24;
 		switch (type) {
 			case UnitTypes.Infantry:

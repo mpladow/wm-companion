@@ -39,7 +39,6 @@ const ArmyListCard = ({
 	const setImage = () => {
 		const armyName = getKeyByValue(Factions, armyList.faction);
 		const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
-		console.log(factionAssets, "assets");
 		return (
 			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
 				<Image style={[styles.stretch]} source={factionAssets && factionAssets[0]} />

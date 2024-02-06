@@ -43,7 +43,7 @@ const StatContainer = ({ statName, statValue }: StatContainerProps) => {
 					// },
 				]}
 			>
-				<Text bold style={{ textAlignVertical: "center", color: theme.textInverted, fontSize: STAT_FONT_SIZE }}>
+				<Text bold style={{ textAlignVertical: "center", textAlign: "center",color: theme.textInverted, fontSize: STAT_FONT_SIZE }}>
 					{statValue}
 				</Text>
 			</View>

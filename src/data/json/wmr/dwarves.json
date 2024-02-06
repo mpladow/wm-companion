@@ -55,7 +55,7 @@
         "name": "Cannon",
         "order": 4,
         "type": "Artillery",
-        "attack": "1/2+bounce",
+        "attack": "1/2 +bounce",
         "range": "60cm",
         "hits": 2,
         "armour": "6+",

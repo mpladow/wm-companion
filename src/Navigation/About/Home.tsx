@@ -30,7 +30,8 @@ import { Ionicons } from "@expo/vector-icons";
 const Home = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation();
-	const version = Constants?.manifest?.version;
+	const version = Constants?.expoConfig?.version;
+
 	const toast = useToast();
 	const handlePressSupport = () => {
 		Linking.openURL(

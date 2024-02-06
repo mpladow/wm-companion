@@ -35,6 +35,11 @@ const Credits = () => {
 						Alexander Carraro, Mattias R, Byron L, Kristoffer Rauff, Geoff A,
 					</Text>
 				</TextBlock>
+				<TextBlock variant='large'>
+					<Text>
+						<Text bold>{t("SpecialMentionsTranslations")}</Text>: 
+					</Text>
+				</TextBlock>
 			</View>
 		</MainContainerWithImage>
 	);

@@ -10,7 +10,7 @@ import Constants from "expo-constants";
 const UpdatesModal = () => {
     const navigation = useNavigation();
     const {theme} = useTheme();
-    const version = Constants?.manifest?.version;
+	const version = Constants?.expoConfig?.version;
 
 	return (
 		<ModalContainer onPageModalClosePressed={() => navigation.goBack()} headerTitle={"Information"} rotateContainer={false}>
