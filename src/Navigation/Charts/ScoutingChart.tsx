@@ -15,7 +15,7 @@ const ScoutingChart = () => {
 	return (
 		<ModalContainer
 			onPageModalClosePressed={() => navigation.goBack()}
-			headerTitle={"Scouting"}
+			headerTitle={t("Scouting", {ns: "charts"})}
 			footerRight={<Text>pg 82</Text>}
 		>
 			<>

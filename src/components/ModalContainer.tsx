@@ -4,8 +4,6 @@ import {
 	Modal,
 	Pressable,
 	StyleSheet,
-	TouchableOpacity,
-	TouchableWithoutFeedback,
 	View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -13,9 +11,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
 import { Button, Text, TextBlock } from "@components/index";
 import fontSize from "@utils/styling";
-import Settings from "@navigation/Settings/screens/Settings";
-import { Pages } from "@utils/constants";
-import BlunderChart from "@navigation/Charts/BlunderChart";
 
 type CustomModalProps = {
 	onPageModalClosePressed: () => void;

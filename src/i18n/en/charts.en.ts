@@ -1,4 +1,5 @@
 export default {
+	Blunders: "Blunders",
 	blunder1Title: "You must be crazy!",
 	blunder1Description1: "The unit may not move and -1 Command Penalty to unit for the rest of the battle.",
 	blunder1Description2: "If a brigade has blundered then this penalty applies to one unit of the player's choosing.",
@@ -17,7 +18,7 @@ export default {
 		"The unit must move at its maximum pace towards the nearest visible enemy unit, and will charge if possible.",
 	blunder4Description2:
 		"If a brigade order is given, move each unit individually. The unit may not receive any further orders this turn.",
-
+	Scouting: "Scouting",
 	scoutingGeneralDescription1:
 		"Before the game starts, indicate which units an/or characters you wish to commit to scouting.",
 	scoutingGeneralDescription2: "Roll 2D6 and add this to the number of committed scouting points.",
@@ -34,6 +35,6 @@ export default {
 	ScoutsExamples:
 		"{{example1}}; {{example2}}; {{example3}}; {{example4}}/{{example5}} deployed as ambushers; {{example6}}, non/flying General.",
 	Patrols: "Patrols",
-    PatrolsDesc1: "Any unit of cavalry with zero or 5+ armour",
-    PatrolsExamples: "{{example1}}; {{example2}}, non-flying command 8 character"
+	PatrolsDesc1: "Any unit of cavalry with zero or 5+ armour",
+	PatrolsExamples: "{{example1}}; {{example2}}, non-flying command 8 character",
 };

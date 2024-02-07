@@ -1,4 +1,5 @@
 export default {
+	Blunders: "Malentendidos",
 	blunder1Title: "¡Debes de estar loco!",
 	blunder1Description1: "La unidad no puede mover y añade un -1 a las órdenes de mando para el resto de la batalla.",
 	blunder1Description2:
@@ -18,6 +19,7 @@ export default {
 		"La unidad debe mover el máximo de su movimiento hacia la unidad enemiga visible más cercana y cargarla si es posible.",
 	blunder4Description2:
 		"Si afecta a una brigada, mueve cada unidad individualmente. La unidad no puede recibir más órdenes este turno.",
+	Scouting: "Exploración",
 	scoutingGeneralDescription1:
 		"Antes del comienzo de la partida, indica que unidad y/o personajes vas a elegir para explorar.",
 	scoutingGeneralDescription2: "Lanza 2D6 y añade esto a los puntos de exploración.",

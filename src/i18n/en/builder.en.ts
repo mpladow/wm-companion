@@ -4,6 +4,7 @@ export default {
 	AddItem: "Add Item",
 	Armies: "Armies",
 	ArmyName: "Army Name",
+	ArmyNotes: "Army Notes",
 	ArmySpecialRules: "Army Special Rules",
 	CopyText: "Copy Text",
 	CreateArmy: "Create Army",
@@ -31,4 +32,9 @@ export default {
 	MaxItemsRequred: "{{unit}} can have a maximum of {{minCount}} magic item/s.",
 	MaximumItemReached: "A maximum of {{maxCount}} {{item}} in the army is permitted.",
 	MaxMountsReached: "Mount: {{unit}} has too many mounts.",
+	Attack: "Attack",
+	Armour: "Armour",
+	Hits: "hits",
+	Range: "Range",
+	Special: "Special"
 };

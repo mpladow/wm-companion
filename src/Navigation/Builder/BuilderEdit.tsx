@@ -33,7 +33,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { getUpgradeDetailsByName } from "./utils/builderHelpers";
-import _ from 'lodash';
+import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { useSettingsContext } from "@context/SettingsContext";
 
@@ -118,7 +118,28 @@ const BuilderEdit = () => {
 		// get all units for selected army list
 		if (builder.selectedArmyList) {
 			navigation.setOptions({
-				headerRight: headerRight,
+				headerRight: () => (
+					<Menu>
+						<MenuTrigger>
+							<Entypo name='dots-three-vertical' size={20} color={theme.text} />
+						</MenuTrigger>
+						<MenuOptions>
+							<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
+								<View style={{ flexDirection: "row", alignItems: "center" }}>
+									<View style={{ flex: 1 }}>
+										<Entypo name='export' size={20} color='black' />
+									</View>
+									<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
+										<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
+									</View>
+									<View style={{ paddingRight: 8 }}>
+										<Entypo name='warning' size={20} color={theme.warning} />
+									</View>
+								</View>
+							</MenuOption>
+						</MenuOptions>
+					</Menu>
+				),
 				headerTitle: (props: any) => (
 					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
 						<View style={{ width: 250 }}>
@@ -146,7 +167,7 @@ const BuilderEdit = () => {
 	}, [builder.selectedArmyList]);
 
 	useEffect(() => {
-		console.log("ChECKING ARMY POINTS")
+		console.log("ChECKING ARMY POINTS");
 		const _currentPoints = builder.calculateCurrentArmyPoints();
 		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
 		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
@@ -550,7 +571,12 @@ const BuilderEdit = () => {
 									onShowUnitDetails={() => console.log("showUnitDetails")}
 									onAddUnit={handleAddUnitToArmyPress}
 									onDeleteUnit={() => handleRemoveUnit(item.id, unitDetails.points)}
-									onAddUpgrade={() => navigation.navigate("AddItem", {"unitName": item.unitName, "unitType":unitDetails.type})}
+									onAddUpgrade={() =>
+										navigation.navigate("AddItem", {
+											unitName: item.unitName,
+											unitType: unitDetails.type,
+										})
+									}
 									onRemoveUpgrade={handleRemoveUpgrade}
 									onUnitCardPress={handleOnUnitCardPress}
 									onUpgradePress={handleOnUpgradePress}

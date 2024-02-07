@@ -10,11 +10,13 @@ import BuilderStackNavigator from "./BuilderStackNavigator";
 import TrackerStackNavigator from "./TrackerStackNavigator";
 import AboutStackNavigator from "./AboutStackNavigator";
 import fonts from "@utils/fonts";
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator();
 export const navigatorOptions = {};
 const TabStackNavigator = () => {
 	const { theme } = useTheme();
+	const {t} = useTranslation("common")
 	return (
 		<Tab.Navigator
 			initialRouteName='About'
@@ -38,7 +40,7 @@ const TabStackNavigator = () => {
 					let label = "";
 					switch (screenProps.route.name) { 
 						case "TrackerHome":
-							label = "Tracker";
+							label = t("Tracker");
 							icon = (
 								<MaterialCommunityIcons
 									name='counter'
@@ -48,7 +50,7 @@ const TabStackNavigator = () => {
 							);
 							break;
 						case "ArmyBuilder":
-							label = "Army Builder";
+							label = t("ArmyBuilder");
 							icon = (
 								<MaterialCommunityIcons
 									name='sword-cross'
@@ -58,7 +60,7 @@ const TabStackNavigator = () => {
 							);
 							break;
 						case "About":
-							label = "About";
+							label = t("About");
 							icon = (
 								<AntDesign name='infocirlceo' size={24} color={focused ? theme.warning : theme.text} />
 							);

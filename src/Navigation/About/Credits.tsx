@@ -37,7 +37,7 @@ const Credits = () => {
 				</TextBlock>
 				<TextBlock variant='large'>
 					<Text>
-						<Text bold>{t("SpecialMentionsTranslations")}</Text>: 
+						<Text bold>{t("SpecialMentionsTranslations")}</Text>: Chus
 					</Text>
 				</TextBlock>
 			</View>

@@ -365,7 +365,7 @@ const BuilderHome = () => {
 						}}
 					>
 						<Text variant='heading3' style={{ color: theme.text, fontSize: 28 }}>
-							Army Notes
+							{t("ArmyNotes", {ns: "builder"})}
 						</Text>
 						<TextInput
 							multiline
