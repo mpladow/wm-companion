@@ -160,7 +160,7 @@ const UnitDetailsCard = ({
 								<>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										<View style={{ flex: 1 }}>
-											<QuickviewProfileHeading label={"Command"} />
+											<QuickviewProfileHeading label={t("Command", { ns: "builder" })}  />
 										</View>
 										<View style={{ flex: 1 }}>
 											<View>

@@ -125,7 +125,7 @@ const Home = () => {
 								isNewWindow={true}
 							></IconButton>
 						</View>
-						{Platform.OS !== "android" ? (
+						{Platform.OS == "android" ? (
 							<View style={{ marginVertical: margin * 3 }}>
 								<Button onPress={handlePressSupport} variant={"primary"}>
 									<View style={{ flexDirection: "row", alignItems: "center" }}>

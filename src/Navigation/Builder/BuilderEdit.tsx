@@ -70,53 +70,10 @@ const BuilderEdit = () => {
 	const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 	const [addingUnits, setAddingUnits] = useState(false);
 
-	const setSettings = () => {
-		setShowStatlineSetting();
-		navigation.setOptions({ headerRight: () => headerRight(settings.showStatline) });
-	};
-	const headerRight = (showStatline: boolean) => {
-		return (
-			<Menu>
-				<MenuTrigger>
-					<Entypo name='dots-three-vertical' size={20} color={theme.text} />
-				</MenuTrigger>
-				<MenuOptions>
-					<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<View style={{ flex: 1 }}>
-								<Entypo name='export' size={20} color='black' />
-							</View>
-							<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
-								<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
-							</View>
-						</View>
-					</MenuOption>
-					{/* <MenuOption
-						onSelect={() => {
-							setSettings();
-						}}
-					>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<View style={{ flex: 1 }}>
-								<Entypo name='export' size={20} color='black' />
-							</View>
-							<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
-								<Text style={{ color: theme.black }}>{t("ShowStatline")}</Text>
-							</View>
-							{showStatline && (
-								<View style={{ paddingRight: 8 }}>
-									<Entypo name='warning' size={20} color={theme.warning} />
-								</View>
-							)}
-						</View>
-					</MenuOption> */}
-				</MenuOptions>
-			</Menu>
-		);
-	};
 	useEffect(() => {
 		// get all units for selected army list
 		if (builder.selectedArmyList) {
+			console.log("useEffect:: setting header");
 			navigation.setOptions({
 				headerRight: () => (
 					<Menu>
@@ -140,16 +97,10 @@ const BuilderEdit = () => {
 						</MenuOptions>
 					</Menu>
 				),
-				headerTitle: (props: any) => (
-					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
+				headerTitle: () => (
+					<View style={{ flexDirection: "row" }}>
 						<View style={{ width: 250 }}>
-							<Text
-								numberOfLines={1}
-								variant='heading3'
-								style={{
-									fontSize: 20,
-								}}
-							>
+							<Text numberOfLines={1} variant='heading1' style={{ fontSize: 20 }}>
 								{builder.selectedArmyList?.name}
 							</Text>
 							<Text>
@@ -164,7 +115,7 @@ const BuilderEdit = () => {
 			const factionListData = getFactionUnits(builder.selectedArmyList?.faction);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
-	}, [builder.selectedArmyList]);
+	}, [[builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]]);
 
 	useEffect(() => {
 		console.log("ChECKING ARMY POINTS");

@@ -23,5 +23,6 @@ export default {
 	AppVersion: "App Version",
 	SpecialRules: "Special Rules",
 	Yes: "Yes",
-	No: "No"
+	No: "No",
+	Cancel: "Cancel"
 };

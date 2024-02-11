@@ -29,4 +29,16 @@ export default {
 	Hits: "Impactos",
 	Range: "Alcance",
 	Special: "Especial",
+	AttackBonus: "Bonus de Ataque",
+	Command: "Mando",
+	NoItemsAvailable: "No hay objetos disponibles",
+	XUnitsInForce: "unidades en el ejércit",
+	Notes: "Notas",
+	Size: "Tamaño",
+	RecruitLeaders: "Reclutar Líderes",
+	RecruitUnits: "Reclutar Unidades",
+	SpawnLeaders: "Desplegar Líderes",
+	SpawnUnits: "Desplegar Unidades",
+	Export: "Exportar",
+	ArmyNotes: "Notas del ejército"
 };

@@ -27,8 +27,7 @@ export default {
 	MaximumItemsInArmyReached: "A maximum of {{maxCount}} {{item}} in the army has been reached.",
 	MaximumUnitsPer1000: "Unit: A maximum of {{maxCount}} {{unit}}/s per 1000pts is permitted.",
 	MaximumItemsPer1000: "Unit: A maximum of {{maxCount}} {{item}}/s per 1000pts is permitted.",
-	ErrorRequiredUnit:
-		"Required Unit: {{requiredUnit}} is required to be fielded with {{targetUnit}}.",
+	ErrorRequiredUnit: "Required Unit: {{requiredUnit}} is required to be fielded with {{targetUnit}}.",
 	MaxItemsRequred: "{{unit}} can have a maximum of {{minCount}} magic item/s.",
 	MaximumItemReached: "A maximum of {{maxCount}} {{item}} in the army is permitted.",
 	MaxMountsReached: "Mount: {{unit}} has too many mounts.",
@@ -36,5 +35,18 @@ export default {
 	Armour: "Armour",
 	Hits: "hits",
 	Range: "Range",
-	Special: "Special"
+	Special: "Special",
+	AttackBonus: "Attack Bonus",
+	Command: "Command",
+	NoItemsAvailable: "No Items Available",
+	XUnitsInForce: "units in force",
+	Notes: "Notes",
+	Size: "Size",
+	RecruitLeaders: "Recruit Leaders",
+	RecruitUnits: "Recruit Units",
+	SpawnLeaders: "Spawn Leaders",
+	SpawnUnits: "Spawn Units",
+	Export: "Export",
+	DeleteArmy: "Delete Army"
+
 };
