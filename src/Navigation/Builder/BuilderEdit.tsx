@@ -73,7 +73,6 @@ const BuilderEdit = () => {
 	useEffect(() => {
 		// get all units for selected army list
 		if (builder.selectedArmyList) {
-			console.log("useEffect:: setting header");
 			navigation.setOptions({
 				headerRight: () => (
 					<Menu>
@@ -118,7 +117,6 @@ const BuilderEdit = () => {
 	}, [[builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]]);
 
 	useEffect(() => {
-		console.log("ChECKING ARMY POINTS");
 		const _currentPoints = builder.calculateCurrentArmyPoints();
 		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
 		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
@@ -171,7 +169,6 @@ const BuilderEdit = () => {
 	}, [factionUnits, builder.selectedArmyList]);
 
 	useEffect(() => {
-		console.log("updated army list");
 		if (builder?.selectedArmyList) {
 			// set leaders
 			const _leaders = builder?.selectedArmyList?.selectedUnits

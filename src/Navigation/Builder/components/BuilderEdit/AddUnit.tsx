@@ -42,7 +42,6 @@ const AddUnit = () => {
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
 
 	useEffect(() => {
-		console.log("ChECKING ARMY POINTS");
 		const _currentPoints = builder.calculateCurrentArmyPoints();
 		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
 		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
