@@ -1,24 +1,21 @@
 import {
-	Animated,
 	Dimensions,
 	FlatList,
 	Modal,
 	SafeAreaView,
 	SectionList,
-	SectionListData,
 	StyleSheet,
-	Touchable,
 	TouchableOpacity,
 	View,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { BuilderContextProvider, SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
+import { SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
 import { Button, CustomCheckbox, Text, TextBlock } from "@components/index";
 import { getFactionUnits, getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
 import CustomModal from "@components/CustomModal";
-import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
+import { UnitProps, UpgradesProps } from "@utils/types";
 import { Entypo } from "@expo/vector-icons";
 import UnitDetailsCard from "./components/UnitDetailsCard";
 import SpecialRulesCollapsible from "./components/SpecialRulesCollapsible";
@@ -48,7 +45,6 @@ const BuilderEdit = () => {
 	const { theme } = useTheme();
 	const { settings, setShowStatlineSetting } = useSettingsContext();
 	//modals
-	const [modalVisible, setModalVisible] = useState(false);
 	const [magicItemModalVisible, setMagicItemModalVisible] = useState(false);
 	const [errorsVisible, setErrorsVisible] = useState(false);
 	const [spellsVisible, setSpellsVisible] = useState(false);
@@ -124,11 +120,6 @@ const BuilderEdit = () => {
 		if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
 		if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
 	}, [builder.calculateCurrentArmyPoints()]);
-
-	const handleAddUnitPress = (openUnits: boolean) => {
-		setAddingUnits(openUnits);
-		setModalVisible(true);
-	};
 
 	const handleAddUnitToArmyPress = (
 		unitName: string,
@@ -624,7 +615,7 @@ const BuilderEdit = () => {
 					>
 						<FlatList
 							data={builder.armyErrors}
-							renderItem={(nestedItem) => {
+							renderItem={() => {
 								return (
 									<View>
 										<Text style={{ color: theme.black }}>{nestedItem.item.error}</Text>
