@@ -94,14 +94,14 @@ const Home = () => {
 						</TextBlock>
 						<TextBlock variant='large'>
 							<Text bold>
-								{t("AppVersion", {ns: "common"})}: {version}
+								{t("AppVersion", { ns: "common" })}: {version}
 							</Text>
 						</TextBlock>
 						<View style={{ paddingVertical: 4 }}>
 							<IconButton
 								onPress={() => navigation.navigate("Preferences")}
 								variant={"primary"}
-								title={"Preferences"}
+								title={t("Preferences", { ns: "common" })}
 								icon={<EvilIcons name='gear' size={24} color='black' />}
 								isStackNavigation={true}
 							></IconButton>
@@ -111,7 +111,7 @@ const Home = () => {
 							<IconButton
 								onPress={() => navigation.navigate("Credits")}
 								variant={"primary"}
-								title={"Credits"}
+								title={t("Credits", { ns: "common" })}
 								icon={<MaterialCommunityIcons name='hand-clap' size={24} color='black' />}
 								isStackNavigation={true}
 							></IconButton>
@@ -120,12 +120,12 @@ const Home = () => {
 							<IconButton
 								onPress={() => handleEmailPress()}
 								variant={"primary"}
-								title={"Report a Bug"}
+								title={t("ReportBug", { ns: "common" })}
 								icon={<Ionicons name='bug-outline' size={24} color='black' />}
 								isNewWindow={true}
 							></IconButton>
 						</View>
-						{Platform.OS !== "android" ? (
+						{Platform.OS == "android" ? (
 							<View style={{ marginVertical: margin * 3 }}>
 								<Button onPress={handlePressSupport} variant={"primary"}>
 									<View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -133,7 +133,7 @@ const Home = () => {
 											<Entypo name='paypal' size={24} color={theme.text} />
 										</View>
 
-										<Text bold>{t("SupportDevelopment")}</Text>
+										<Text bold>{t("SupportDevelopment", {ns: "home"})}</Text>
 									</View>
 								</Button>
 							</View>

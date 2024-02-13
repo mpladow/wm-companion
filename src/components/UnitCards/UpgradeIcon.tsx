@@ -13,13 +13,14 @@ import SpecialItem from "./SpecialItem";
 type UpgradeIconProps = {
 	type: UpgradeTypes;
 	size?: "small" | "large";
+	noCount?: boolean;
 };
-const UpgradeIcon = ({ type, size = "small" }: UpgradeIconProps) => {
+const UpgradeIcon = ({ type, noCount, size = "small" }: UpgradeIconProps) => {
 	const { theme } = useTheme();
 	const renderIcon = useMemo(() => {
 		const size24 = size == "large" ? 24 * 2 : 24;
 		const size28 = size == "large" ? 28 * 2 : 24;
-		console.log(type, "type")
+		console.log(type, "type");
 		switch (type) {
 			case UpgradeTypes.Magic_Standard:
 				return <Banner size={24} color={theme.black} />;
@@ -39,7 +40,9 @@ const UpgradeIcon = ({ type, size = "small" }: UpgradeIconProps) => {
 				return <SpecialItem size={16} color={theme.black} isUpgrade={true} />;
 		}
 	}, []);
-	return <View style={{ alignItems: "center", justifyContent: "center" }}>{renderIcon}</View>;
+	return (
+		<View style={{ alignItems: "center", justifyContent: "center", opacity: noCount ? 0.2 : 1 }}>{renderIcon}</View>
+	);
 };
 
 export default UpgradeIcon;

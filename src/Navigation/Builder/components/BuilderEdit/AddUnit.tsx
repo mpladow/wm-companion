@@ -12,6 +12,8 @@ import { useTheme } from "@hooks/useTheme";
 import { Button, Text } from "@components/index";
 import UnitPreview from "../UnitCardPreview/UnitPreview";
 import { Entypo } from "@expo/vector-icons";
+import { Factions } from "@utils/constants";
+import { useTranslation } from "react-i18next";
 
 export type AddUnitProps = {
 	addingUnits: boolean;
@@ -26,6 +28,7 @@ export type AddUnitProps = {
 	// handleOnUnitCardPress: (name: string) => void;
 };
 const AddUnit = () => {
+	const { t } = useTranslation("builder");
 	const { theme } = useTheme();
 	const route = useRoute();
 	const { addingUnits } = route.params;
@@ -42,7 +45,6 @@ const AddUnit = () => {
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
 
 	useEffect(() => {
-		console.log("ChECKING ARMY POINTS");
 		const _currentPoints = builder.calculateCurrentArmyPoints();
 		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
 		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
@@ -53,24 +55,23 @@ const AddUnit = () => {
 
 	useEffect(() => {
 		// get all units for selected army list
+		let title;
+		if (addingUnits) {
+			if (builder.selectedArmyList?.faction == Factions.Chaos) {
+				title = t("SpawnUnits");
+			} else {
+				title = t("RecruitUnits");
+			}
+		} else {
+			if (builder.selectedArmyList?.faction == Factions.Chaos) {
+				title = t("SpawnLeaders");
+			} else {
+				title = t("RecruitLeaders");
+			}
+		}
 		if (builder.selectedArmyList) {
 			navigation.setOptions({
-				title: addingUnits ? "Recruit Unit" : "Recruit Leaders",
-				// headerTitle: (props: any) => (
-				// 	<View style={{ flexDirection: "row"}}>
-				// 		<View>
-				// 			<Text
-				// 				numberOfLines={1}
-				// 				variant='heading3'
-				// 				style={{
-				// 					fontSize: 20,
-				// 				}}
-				// 			>
-				// 				Add Unit
-				// 			</Text>
-				// 		</View>
-				// 	</View>
-				// ),
+				title: title,
 			});
 
 			const factionListData = getFactionUnits(builder.selectedArmyList?.faction);

@@ -17,7 +17,7 @@ type UnitPreviewProps = {
 };
 const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPreviewProps) => {
 	const { theme } = useTheme();
-	const { t } = useTranslation(["common"]);
+	const { t } = useTranslation(["common", "builder"]);
 	const STAT_FONT_SIZE = 22;
 
 	return (
@@ -104,21 +104,21 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 								>
 									<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 										<StatContainer
-											statName={"Attack"}
+											statName={t("Attack", { ns: "builder" })}
 											statValue={selectedUnitDetails.attack?.toString()}
 										/>
 									</View>
 									{selectedUnitDetails?.range ? (
 										<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 											<StatContainer
-												statName={"Range"}
+												statName={t("Range", { ns: "builder" })}
 												statValue={selectedUnitDetails.range?.toString() || "-"}
 											/>
 										</View>
 									) : null}
 									<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 										<StatContainer
-											statName={"Hits"}
+											statName={t("Hits", { ns: "builder" })}
 											statValue={selectedUnitDetails.hits?.toString() || "-"}
 										/>
 									</View>
@@ -126,7 +126,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
 								<View style={{ flexDirection: "row" }}>
 									<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
 										<StatContainer
-											statName={"Armour"}
+											statName={t("Armour", { ns: "builder" })}
 											statValue={selectedUnitDetails.armour?.toString() || "-"}
 										/>
 									</View>

@@ -15,7 +15,7 @@ const BlunderChart = () => {
 	return (
 		<ModalContainer
 			onPageModalClosePressed={() => navigation.goBack()}
-			headerTitle={"Blunders"}
+			headerTitle={t("Blunders", {ns: "charts"})}
 			footerRight={<Text>pg 61</Text>}
 		>
 			<ScrollView style={{ display: "flex", flex: 1 }} showsVerticalScrollIndicator={false}>

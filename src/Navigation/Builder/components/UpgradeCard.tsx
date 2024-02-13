@@ -7,6 +7,7 @@ import PointsContainer from "@components/pointsContainer";
 import { Entypo } from "@expo/vector-icons";
 import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
 import { UpgradeTypes } from "@utils/constants";
+import { current } from "@reduxjs/toolkit";
 
 type UpgradeCardProps = {
 	upgrade: UpgradesProps;
@@ -47,7 +48,7 @@ const UpgradeCard = ({
 			}}
 		>
 			<View style={{ marginRight: 8 }}>
-				<UpgradeIcon type={upgrade.type as UpgradeTypes} />
+				<UpgradeIcon noCount={currentCount == 0} type={upgrade.type as UpgradeTypes} />
 			</View>
 			<View style={{ flex: 2 }}>
 				<Text bold>{upgrade.name}</Text>

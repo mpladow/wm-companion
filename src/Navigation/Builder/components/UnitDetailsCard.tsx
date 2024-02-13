@@ -13,6 +13,7 @@ import { current } from "@reduxjs/toolkit";
 import UnitDetailsMenu from "./UnitDetailsMenu";
 import AnimatedView from "@components/Animated/AnimatedView";
 import QuickviewProfileHeading from "./UnitDetailsCard/QuickviewProfileHeading";
+import { useTranslation } from "react-i18next";
 
 type UnitCardDetailsProps = {
 	unit: UnitProps;
@@ -56,6 +57,7 @@ const UnitDetailsCard = ({
 	showStatline,
 }: UnitCardDetailsProps) => {
 	const { theme } = useTheme();
+	const { t } = useTranslation(["common", "builder"]);
 
 	const getUnitArmyMax = () => {
 		const interval = get1000PointInterval(currentArmyCount);
@@ -158,7 +160,7 @@ const UnitDetailsCard = ({
 								<>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										<View style={{ flex: 1 }}>
-											<QuickviewProfileHeading label={"Command"} />
+											<QuickviewProfileHeading label={t("Command", { ns: "builder" })}  />
 										</View>
 										<View style={{ flex: 1 }}>
 											<View>
@@ -168,7 +170,7 @@ const UnitDetailsCard = ({
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										<View style={{ flex: 2 }}>
-											<QuickviewProfileHeading label={"Attack"} />
+											<QuickviewProfileHeading label={t("Attack", { ns: "builder" })} />
 										</View>
 										<View style={{ flex: 2 }}>
 											<Text>{unit.attack}</Text>
@@ -181,7 +183,7 @@ const UnitDetailsCard = ({
 										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
 											<>
 												<View style={{ flex: 1 }}>
-													<QuickviewProfileHeading label={"Special"} />
+													<QuickviewProfileHeading label={t("Special", { ns: "builder" })} />
 												</View>
 												<View style={{ flex: 1 }}>
 													<Text>
@@ -196,7 +198,7 @@ const UnitDetailsCard = ({
 								<>
 									<View style={{ flex: 1.4, flexDirection: "column" }}>
 										<View style={{ flex: 2 }}>
-											<QuickviewProfileHeading label={"Attack"} />
+											<QuickviewProfileHeading label={t("Attack", { ns: "builder" })} />
 										</View>
 										<View style={{ flex: 2 }}>
 											<Text>{unit.attack}</Text>
@@ -204,7 +206,7 @@ const UnitDetailsCard = ({
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										<View style={{ flex: 1 }}>
-											<QuickviewProfileHeading label={"Armour"} />
+											<QuickviewProfileHeading label={t("Armour", { ns: "builder" })} />
 										</View>
 										<View style={{ flex: 1 }}>
 											<Text>{unit.armour ? unit.armour : "-"}</Text>
@@ -212,7 +214,7 @@ const UnitDetailsCard = ({
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										<View style={{ flex: 1 }}>
-											<QuickviewProfileHeading label={"Hits"} />
+											<QuickviewProfileHeading label={t("Hits", { ns: "builder" })} />
 										</View>
 										<View style={{ flex: 1 }}>
 											<Text>{unit.hits}</Text>
@@ -222,7 +224,7 @@ const UnitDetailsCard = ({
 										{unit.range ? (
 											<>
 												<View style={{ flex: 1 }}>
-													<QuickviewProfileHeading label={"Range"} />
+													<QuickviewProfileHeading label={t("Range", { ns: "builder" })} />
 												</View>
 												<View style={{ flex: 1 }}>
 													<Text>{unit.range}</Text>
@@ -236,11 +238,12 @@ const UnitDetailsCard = ({
 										unitDetailsExpanded?.specialRulesExpanded?.length > 0 ? (
 											<>
 												<View style={{ flex: 1 }}>
-													<QuickviewProfileHeading label={"Special"} />
+													<QuickviewProfileHeading label={t("Special", { ns: "builder" })} />
 												</View>
 												<View style={{ flex: 1 }}>
 													<Text>
-														{unitDetailsExpanded?.specialRulesExpanded?.length > 0 && "Yes"}
+														{unitDetailsExpanded?.specialRulesExpanded?.length > 0 &&
+															`${t("Yes", { ns: "common" })}`}
 													</Text>
 												</View>
 											</>

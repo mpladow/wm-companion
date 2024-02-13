@@ -9,6 +9,7 @@ import { Tracker } from "../Tracker/screens/Tracker";
 import { View } from "react-native";
 import { Text } from "@components/index";
 import ScoutingChart from "@navigation/Charts/ScoutingChart";
+import { useTranslation } from "react-i18next";
 
 export type TrackerStackParamList = {
 	TrackerHome: undefined;
@@ -23,6 +24,7 @@ const Stack = createNativeStackNavigator<TrackerStackParamList>();
 
 const TrackerStackNavigator = () => {
 	const { theme } = useTheme();
+	const { t } = useTranslation("common");
 	return (
 		<Stack.Navigator
 			initialRouteName='TrackerHome'
@@ -41,7 +43,7 @@ const TrackerStackNavigator = () => {
 									fontSize: 28,
 								}}
 							>
-								Tracker
+								{t("Tracker")}
 							</Text>
 						</View>
 					),
@@ -49,7 +51,7 @@ const TrackerStackNavigator = () => {
 				name='TrackerHome'
 				component={TrackerHome}
 			/>
-			<Stack.Screen options={{headerShown: false}} name='Tracker' component={Tracker} />
+			<Stack.Screen options={{ headerShown: false }} name='Tracker' component={Tracker} />
 			<Stack.Group screenOptions={{ presentation: "containedTransparentModal", headerShown: false }}>
 				<Stack.Screen name='Settings' component={Settings} options={{ headerTitle: "Information" }} />
 				<Stack.Screen name='Blunders' component={BlunderChart} />

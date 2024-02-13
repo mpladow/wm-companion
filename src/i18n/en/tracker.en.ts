@@ -1,6 +1,6 @@
 export default {
-    AccessLookupChartsDescription: "View lookup charts with ease",
-    AccessLookupChartsHeader: "Access Lookup Charts",
+	AccessLookupChartsDescription: "View lookup charts with ease",
+	AccessLookupChartsHeader: "Access Lookup Charts",
 	AddHalfVPs: "Add Half VPs",
 	AddVPs: "Add VPs",
 	BattleTracker: "Battle Tracker",
@@ -10,11 +10,14 @@ export default {
 	CasualtiesInflicted: "Casualties Inflicted",
 	CombatBonuses: "Combat Bonuses",
 	EnemyUnitsDefeated: "Enemy Units Defeated",
-    NewBattle: "New Battle!",
+	NewBattle: "New Battle!",
 	ScoutingChart: "Scouting Chart",
 	SetSoloMode: "Set Solo Mode",
 	SetTwoPlayerMode: "Set Two Player Mode",
 	TrackVictoryPointsHeader: "Track victory points",
 	TrackVictoryPointsDescription: "Record victory points by selecting your opponents faction units/magic items.",
-	VictoryPoints: "Victory Points"
+	VictoryPoints: "Victory Points",
+	Draw: "Draw by",
+	Victory: "Victory by",
+	Defeat: "Defeat by",
 };

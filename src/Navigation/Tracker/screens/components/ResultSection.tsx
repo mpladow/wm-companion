@@ -5,6 +5,7 @@ import { useTheme } from "@hooks/useTheme";
 import { Text, TextBlock } from "@components/index";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useSettingsContext } from "@context/SettingsContext";
+import { useTranslation } from "react-i18next";
 
 type ResultSectionProps = {
 	isTwoPlayerMode: boolean;
@@ -12,8 +13,9 @@ type ResultSectionProps = {
 	resultTwo?: ResultProps;
 };
 const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
-	const {settings} = useSettingsContext()
+	const { settings } = useSettingsContext();
 	const { theme } = useTheme();
+	const { t } = useTranslation("tracker");
 
 	const resultOneStyle = useMemo(() => {
 		switch (resultOne?.result) {
@@ -97,7 +99,7 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 						</View>
 					) : null}
 					<Text style={{ fontSize: 20, color: resultOneStyle }}>
-						{resultOne?.result} by {resultOne?.diff}
+						{`${t(resultOne?.result)} ${resultOne?.diff}`}
 					</Text>
 				</Animated.View>
 				<Animated.View
@@ -115,7 +117,7 @@ const ResultSection = ({ resultOne, resultTwo }: ResultSectionProps) => {
 						bold={resultTwo?.result == "Victory" && true}
 						style={[{ fontSize: 20, color: resultTwoStyle }]}
 					>
-						{resultTwo?.result} by {resultTwo?.diff}
+						{`${t(resultTwo?.result)} ${resultTwo?.diff}`}
 					</Text>
 				</Animated.View>
 			</View>

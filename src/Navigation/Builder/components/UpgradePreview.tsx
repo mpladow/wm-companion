@@ -12,6 +12,7 @@ import { useBuilderContext } from "@context/BuilderContext";
 import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
 import { UpgradeTypes } from "@utils/constants";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 type UpgradePreviewProps = {
 	handleSetVisible: (visible: boolean) => void;
@@ -21,6 +22,7 @@ type UpgradePreviewProps = {
 const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: UpgradePreviewProps) => {
 	const STAT_FONT_SIZE = 22;
 	const { theme } = useTheme();
+	const { t } = useTranslation(["common", "builder"]);
 
 	return (
 		<CustomModal
@@ -88,7 +90,7 @@ const UpgradePreview = ({ handleSetVisible, visible, selectedUpgradeDetails }: U
 								}}
 							>
 								<View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
-									<Text>Attack</Text>
+									<Text>{t("attack", { ns: "builder" })}</Text>
 									<Text style={{ fontSize: STAT_FONT_SIZE }}>{selectedUpgradeDetails?.attack}</Text>
 								</View>
 							</View>

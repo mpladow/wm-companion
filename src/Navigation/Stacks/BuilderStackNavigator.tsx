@@ -7,6 +7,7 @@ import { Text, TextBlock } from "@components/index";
 import BuilderQuickView from "@navigation/Builder/BuilderQuickView";
 import AddUnit, { AddUnitProps } from "@navigation/Builder/components/BuilderEdit/AddUnit";
 import AddItem, { AddItemProps } from "@navigation/Builder/components/BuilderEdit/AddItem";
+import { useTranslation } from "react-i18next";
 
 export type BuilderStackParamList = {
 	BuilderHome: undefined;
@@ -23,6 +24,7 @@ const Stack = createNativeStackNavigator<BuilderStackParamList>();
 
 const BuilderStackNavigator = () => {
 	const { theme } = useTheme();
+	const { t } = useTranslation("common");
 
 	return (
 		<Stack.Navigator
@@ -51,7 +53,7 @@ const BuilderStackNavigator = () => {
 				component={BuilderHome}
 				options={{
 					headerShown: true,
-					title: "Builder",
+					title: t("ArmyBuilder"),
 				}}
 			/>
 			<Stack.Screen
@@ -59,7 +61,7 @@ const BuilderStackNavigator = () => {
 				component={BuilderEdit}
 				options={{
 					headerShown: true,
-					title: "Builder",
+					title: t("ArmyBuilder"),
 				}}
 			/>
 			<Stack.Screen
@@ -67,7 +69,7 @@ const BuilderStackNavigator = () => {
 				component={AddUnit}
 				options={{
 					headerShown: true,
-					title: "Builder",
+					title: t("ArmyBuilder"),
 				}}
 			/>
 			<Stack.Screen

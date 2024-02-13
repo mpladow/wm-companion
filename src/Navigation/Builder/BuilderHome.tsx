@@ -238,7 +238,9 @@ const BuilderHome = () => {
 					modalVisible={showCreateArmy}
 				>
 					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-						<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}>
+						<View
+							style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}
+						>
 							<>
 								<View style={{ flex: 1, marginBottom: 12 }}>
 									<FormLabel label={t("ArmyName")} />
@@ -287,7 +289,7 @@ const BuilderHome = () => {
 										</>
 									) : (
 										<View style={{ marginTop: 12 }}>
-											<FormLabel label={"Notes"} />
+											<FormLabel label={t("Notes", { ns: "builder" })} />
 											<TextInput
 												multiline
 												value={factionNotes}
@@ -333,9 +335,9 @@ const BuilderHome = () => {
 						setConfirmDialog(false);
 					}}
 					text={<Text style={{ color: theme.text, fontSize: 16 }}>Do you want to delete this army?</Text>}
-					confirmText={"Delete Army"}
-					cancelText={"Cancel"}
-					headerText={"Delete Army"}
+					confirmText={t("DeleteArmy", {ns: "builder"})}
+					cancelText={t("Cancel", { ns: "common" })}
+					headerText={t("DeleteArmy", {ns: "builder"})}
 				/>
 			</ImageBackground>
 			<View style={{ zIndex: 99999, position: "absolute", bottom: 30, right: 24 }}>
@@ -365,7 +367,7 @@ const BuilderHome = () => {
 						}}
 					>
 						<Text variant='heading3' style={{ color: theme.text, fontSize: 28 }}>
-							Army Notes
+							{t("ArmyNotes", { ns: "builder" })}
 						</Text>
 						<TextInput
 							multiline

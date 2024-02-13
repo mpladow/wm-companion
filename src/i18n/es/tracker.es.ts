@@ -19,5 +19,8 @@ export default {
     SetTwoPlayerMode: "Modo 2 jugadores",
     TrackVictoryPointsHeader: "CONTABILIZA LOS PUNTOS DE VICTORIA",
     TrackVictoryPointsDescription: "Registra los puntos de victoria seleccionando las unidades/objetos mágicos de tu oponente",
-    VictoryPoints: "Puntos de Victoria"
+    VictoryPoints: "Puntos de Victoria",
+	Draw: "Tirada",
+	Victory: "Victoria",
+	Defeat: "Bajas",
 };

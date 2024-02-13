@@ -29,13 +29,12 @@ export const SettingsContextProvider = ({ children }: any) => {
 	const [trackerTwoPlayerMode, setTrackerTwoPlayerMode] = useState(false);
 	const getStoredSettingsAsync = async () => {
 		const _storedSettings = await AsyncStorage.getItem(SETTINGS_KEY, (result) => {
-			console.log(result, "Result here");
+			console.log(result, "SettingsContext:: returned storedSettings");
 		});
 		return _storedSettings;
 	};
 	useEffect(() => {
 		getStoredSettingsAsync().then((settings) => {
-			console.log(settings, "SETTINGS RETRIEVED");
 			if (settings) {
 				const settingsObj: SettingsProps = JSON.parse(settings);
 				setSettings(settingsObj);
@@ -64,7 +63,6 @@ export const SettingsContextProvider = ({ children }: any) => {
 	useEffect(() => {
 		// set to async storage
 		const setAsyncStorage = async () => {
-			console.log("settingsContext:: updating async storage");
 			const _settings = { ...settings };
 			_settings.showStatline = showStatline;
 			_settings.language = language;

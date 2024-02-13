@@ -1,24 +1,21 @@
 import {
-	Animated,
 	Dimensions,
 	FlatList,
 	Modal,
 	SafeAreaView,
 	SectionList,
-	SectionListData,
 	StyleSheet,
-	Touchable,
 	TouchableOpacity,
 	View,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { BuilderContextProvider, SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
+import { SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
 import { Button, CustomCheckbox, Text, TextBlock } from "@components/index";
 import { getFactionUnits, getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
 import CustomModal from "@components/CustomModal";
-import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
+import { UnitProps, UpgradesProps } from "@utils/types";
 import { Entypo } from "@expo/vector-icons";
 import UnitDetailsCard from "./components/UnitDetailsCard";
 import SpecialRulesCollapsible from "./components/SpecialRulesCollapsible";
@@ -33,7 +30,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { getUpgradeDetailsByName } from "./utils/builderHelpers";
-import _ from 'lodash';
+import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { useSettingsContext } from "@context/SettingsContext";
 
@@ -48,7 +45,6 @@ const BuilderEdit = () => {
 	const { theme } = useTheme();
 	const { settings, setShowStatlineSetting } = useSettingsContext();
 	//modals
-	const [modalVisible, setModalVisible] = useState(false);
 	const [magicItemModalVisible, setMagicItemModalVisible] = useState(false);
 	const [errorsVisible, setErrorsVisible] = useState(false);
 	const [spellsVisible, setSpellsVisible] = useState(false);
@@ -70,65 +66,36 @@ const BuilderEdit = () => {
 	const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 	const [addingUnits, setAddingUnits] = useState(false);
 
-	const setSettings = () => {
-		setShowStatlineSetting();
-		navigation.setOptions({ headerRight: () => headerRight(settings.showStatline) });
-	};
-	const headerRight = (showStatline: boolean) => {
-		return (
-			<Menu>
-				<MenuTrigger>
-					<Entypo name='dots-three-vertical' size={20} color={theme.text} />
-				</MenuTrigger>
-				<MenuOptions>
-					<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<View style={{ flex: 1 }}>
-								<Entypo name='export' size={20} color='black' />
-							</View>
-							<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
-								<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
-							</View>
-						</View>
-					</MenuOption>
-					{/* <MenuOption
-						onSelect={() => {
-							setSettings();
-						}}
-					>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<View style={{ flex: 1 }}>
-								<Entypo name='export' size={20} color='black' />
-							</View>
-							<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
-								<Text style={{ color: theme.black }}>{t("ShowStatline")}</Text>
-							</View>
-							{showStatline && (
-								<View style={{ paddingRight: 8 }}>
-									<Entypo name='warning' size={20} color={theme.warning} />
-								</View>
-							)}
-						</View>
-					</MenuOption> */}
-				</MenuOptions>
-			</Menu>
-		);
-	};
 	useEffect(() => {
 		// get all units for selected army list
 		if (builder.selectedArmyList) {
 			navigation.setOptions({
-				headerRight: headerRight,
-				headerTitle: (props: any) => (
-					<View style={{ flexDirection: "row", alignItems: "flex-end" }}>
+				headerRight: () => (
+					<Menu>
+						<MenuTrigger>
+							<Entypo name='dots-three-vertical' size={20} color={theme.text} />
+						</MenuTrigger>
+						<MenuOptions>
+							<MenuOption onSelect={() => navigation.navigate("BuilderQuickView")}>
+								<View style={{ flexDirection: "row", alignItems: "center" }}>
+									<View style={{ flex: 1 }}>
+										<Entypo name='export' size={20} color='black' />
+									</View>
+									<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
+										<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
+									</View>
+									<View style={{ paddingRight: 8 }}>
+										<Entypo name='warning' size={20} color={theme.warning} />
+									</View>
+								</View>
+							</MenuOption>
+						</MenuOptions>
+					</Menu>
+				),
+				headerTitle: () => (
+					<View style={{ flexDirection: "row" }}>
 						<View style={{ width: 250 }}>
-							<Text
-								numberOfLines={1}
-								variant='heading3'
-								style={{
-									fontSize: 20,
-								}}
-							>
+							<Text numberOfLines={1} variant='heading1' style={{ fontSize: 20 }}>
 								{builder.selectedArmyList?.name}
 							</Text>
 							<Text>
@@ -143,10 +110,9 @@ const BuilderEdit = () => {
 			const factionListData = getFactionUnits(builder.selectedArmyList?.faction);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
-	}, [builder.selectedArmyList]);
+	}, [[builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]]);
 
 	useEffect(() => {
-		console.log("ChECKING ARMY POINTS")
 		const _currentPoints = builder.calculateCurrentArmyPoints();
 		if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
 		if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
@@ -154,11 +120,6 @@ const BuilderEdit = () => {
 		if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
 		if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
 	}, [builder.calculateCurrentArmyPoints()]);
-
-	const handleAddUnitPress = (openUnits: boolean) => {
-		setAddingUnits(openUnits);
-		setModalVisible(true);
-	};
 
 	const handleAddUnitToArmyPress = (
 		unitName: string,
@@ -199,7 +160,6 @@ const BuilderEdit = () => {
 	}, [factionUnits, builder.selectedArmyList]);
 
 	useEffect(() => {
-		console.log("updated army list");
 		if (builder?.selectedArmyList) {
 			// set leaders
 			const _leaders = builder?.selectedArmyList?.selectedUnits
@@ -550,7 +510,12 @@ const BuilderEdit = () => {
 									onShowUnitDetails={() => console.log("showUnitDetails")}
 									onAddUnit={handleAddUnitToArmyPress}
 									onDeleteUnit={() => handleRemoveUnit(item.id, unitDetails.points)}
-									onAddUpgrade={() => navigation.navigate("AddItem", {"unitName": item.unitName, "unitType":unitDetails.type})}
+									onAddUpgrade={() =>
+										navigation.navigate("AddItem", {
+											unitName: item.unitName,
+											unitType: unitDetails.type,
+										})
+									}
 									onRemoveUpgrade={handleRemoveUpgrade}
 									onUnitCardPress={handleOnUnitCardPress}
 									onUpgradePress={handleOnUpgradePress}
@@ -650,7 +615,7 @@ const BuilderEdit = () => {
 					>
 						<FlatList
 							data={builder.armyErrors}
-							renderItem={(nestedItem) => {
+							renderItem={() => {
 								return (
 									<View>
 										<Text style={{ color: theme.black }}>{nestedItem.item.error}</Text>
