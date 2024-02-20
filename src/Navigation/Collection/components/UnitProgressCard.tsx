@@ -108,7 +108,7 @@ const UnitProgressCard = ({
 			</View>
 			<View style={{ flexDirection: "row" }}>
 				<View style={{ backgroundColor: theme.blueGrey, borderRadius: 8, padding: 12 }}>
-					<Text>{statValue}</Text>
+					<Text>{statValue} stands</Text>
 				</View>
 				<View
 					style={{
@@ -132,7 +132,7 @@ const UnitProgressCard = ({
 						}}
 					></View>
 					<Text style={{ textAlign: "center" }} italic={statName == "Wishlist"}>
-						{statName}
+						{statName} {Math.round(calculatePercentageWidth || 0)}%
 					</Text>
 				</View>
 			</View>

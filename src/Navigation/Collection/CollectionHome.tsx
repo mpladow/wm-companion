@@ -18,7 +18,7 @@ import { CollectionList, MiniatureDetailsOverview, useCollection } from "@contex
 import Accordion from "react-native-collapsible/Accordion";
 import { Factions } from "@utils/constants";
 import { Button, Text } from "@components/index";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
@@ -53,6 +53,8 @@ const CollectionHome = () => {
 			collectionId: cl.collectionId.toString(),
 		}));
 	}, [collectionList]);
+	const [editCollection, setEditCollection] = useState(false);
+	const [editCollectionListId, setEditCollectionListId] = useState<string>();
 	const [showCreateCollection, setShowCreateCollection] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [collectionToDelete, setCollectionToDelete] = useState<string>();
@@ -71,7 +73,7 @@ const CollectionHome = () => {
 		return (
 			<View
 				style={{
-					backgroundColor: theme.background,
+					backgroundColor: theme.backgroundVariant3,
 					borderRadius: 8,
 					minHeight: 100,
 					alignItems: "center",
@@ -88,7 +90,7 @@ const CollectionHome = () => {
 					<Text variant='heading3' style={{ color: theme.text, fontSize: 24, marginBottom: 4 }}>
 						{section.collectionName}
 					</Text>
-					<Text style={{ color: theme.text }}>{section.title.replaceAll("_", " ")}</Text>
+					<Text style={{ color: theme.text }}>{section?.title?.replaceAll("_", " ")}</Text>
 				</View>
 				<View style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}>
 					{setImage(section.title)}
@@ -115,6 +117,19 @@ const CollectionHome = () => {
 						>
 							<MenuOption
 								onSelect={() => {
+									setEditCollection(true);
+									setEditCollectionListId(section.collectionId);
+									setShowCreateCollection(true);
+								}}
+							>
+								<MenuOptionButton
+									icon={<FontAwesome name='pencil' size={18} color={theme.text} />}
+									variant={"outline"}
+									ButtonText={t("Edit", { ns: "common" })}
+								/>
+							</MenuOption>
+							<MenuOption
+								onSelect={() => {
 									setCollectionToDelete(section.collectionId);
 									setShowConfirmDelete(true);
 								}}
@@ -133,16 +148,14 @@ const CollectionHome = () => {
 	};
 
 	const handleDeleteCollection = () => {
-		collectionToDelete &&
-			deleteCollection(collectionToDelete).then(() => {
-				alert("Collection deleted");
-			});
+		collectionToDelete && deleteCollection(collectionToDelete).then(() => {});
 	};
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<MainContainerWithImage>
 				<ScrollView style={{ zIndex: 999, padding: 16, paddingBottom: 500 }}>
+					<View></View>
 					<Accordion
 						sections={sections}
 						activeSections={activeSections}
@@ -152,7 +165,7 @@ const CollectionHome = () => {
 						containerStyle={{ zIndex: 999, backgroundColor: "transparent", paddingBottom: 300 }}
 						renderContent={(section) => (
 							<FlatList
-                            contentContainerStyle={{marginTop: 8}}
+								contentContainerStyle={{ marginTop: 8 }}
 								data={section?.content}
 								renderItem={({ item, index }) => {
 									const totalMinisForCollection =
@@ -194,11 +207,20 @@ const CollectionHome = () => {
 					() => setShowCreateCollection(!showCreateCollection);
 				}}
 				setModalVisible={() => setShowCreateCollection(!showCreateCollection)}
-				headerTitle={t("CreateCollection")}
+				headerTitle={
+					editCollection
+						? t("EditCollection", { ns: "collection" })
+						: t("CreateCollection", { ns: "collection" })
+				}
 				modalVisible={showCreateCollection}
 			>
 				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					<CollectionCreate onDismiss={() => setShowCreateCollection(!showCreateCollection)} />
+					<CollectionCreate
+						isEdit={editCollection}
+						onDismiss={() => setShowCreateCollection(!showCreateCollection)}
+						collectionId={editCollectionListId}
+						completeConfirmation={() => setEditCollection(false)}
+					/>
 				</TouchableWithoutFeedback>
 			</CustomModal>
 			<PopupConfirm

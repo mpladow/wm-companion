@@ -5,6 +5,7 @@ export interface Theme {
 	background: string;
 	backgroundVariant: string;
 	backgroundVariant2: string;
+	backgroundVariant3: string;
 	text: string;
 	textInverted: string;
 	variant: string;
@@ -54,6 +55,7 @@ const darkTheme: Theme = {
 	background: darkColours.DARK_GREEN_2,
 	backgroundVariant: darkColours.BLUEGREY,
 	backgroundVariant2: darkColours.BLACK,
+	backgroundVariant3: darkColours.DARK_BLUE_3,
 	text: darkColours.WHITE,
 	textInverted: darkColours.BLACK,
 	variant: darkColours.DARK_BLUE_3,
@@ -75,8 +77,7 @@ const darkTheme: Theme = {
 	orange: darkColours.ORANGE,
 	yellow: darkColours.YELLOW,
 	lightGreen3: darkColours.LIGHT_GREEN3,
-	darkGreen4: darkColours.DARK_GREEN4
-
+	darkGreen4: darkColours.DARK_GREEN4,
 };
 
 interface UseThemeHook {

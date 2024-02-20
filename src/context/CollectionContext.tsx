@@ -39,7 +39,7 @@ export type CollectionList = {
 
 interface ICollectionContext {
 	collectionList: CollectionList[];
-	updateCollection: (updatedCollection: CollectionList) => void;
+	updateCollectionName: (collectionName: string, collectionId: string) => Promise<void>;
 	updateUnit: (collectionId: string, unit: MiniatureDetailsOverview) => void;
 	createCollection: (faction: number, name: string) => Promise<CollectionList>;
 	deleteCollection: (collectionId: string) => Promise<void>;
@@ -122,8 +122,17 @@ export const CollectionProvider = ({ children }: any) => {
 		];
 	};
 
-	const updateCollection = (updated: CollectionList) => {
+	const updateCollectionName = async (collectionName: string, collectionId: string) => {
 		// get collection by collectionId
+		console.log(`${collectionName}`);
+		setCollectionList(
+			produce((draft) => {
+				const collectionToUpdate = draft.find((x) => x.collectionId == collectionId);
+				if (collectionToUpdate) {
+					collectionToUpdate.collectionName = collectionName;
+				}
+			})
+		);
 	};
 	const updateUnit = (collectionId: string, unit: MiniatureDetailsOverview) => {
 		setCollectionList(
@@ -175,7 +184,7 @@ export const CollectionProvider = ({ children }: any) => {
 
 	return (
 		<CollectionContext.Provider
-			value={{ collectionList, updateCollection, updateUnit, createCollection, deleteCollection }}
+			value={{ collectionList, updateCollectionName, updateUnit, createCollection, deleteCollection }}
 		>
 			{children}
 		</CollectionContext.Provider>
