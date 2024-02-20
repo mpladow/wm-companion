@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useTheme } from "@hooks/useTheme";
 import { Feather } from "@expo/vector-icons";
@@ -43,16 +43,18 @@ const SpecialRulesCollapsible = ({ visible, title, contents, toggleVisible }: Sp
 
 			<Collapsible collapsed={visible} align='center'>
 				<View style={{ paddingVertical: 4, paddingTop: 8, marginTop: 8 }}>
-					{contents &&
-						contents?.map((x) => {
-							// remove double commas and add extra line
-							let sanitized = sanitizeText(x, theme.black)
-							return (
-								<View>
-									<Text style={{ color: theme.black }}>{sanitized}</Text>
-								</View>
-							);
-						})}
+					<ScrollView style={{ maxHeight: Dimensions.get("screen").height / 2 }}>
+						{contents &&
+							contents?.map((x) => {
+								// remove double commas and add extra line
+								let sanitized = sanitizeText(x, theme.black);
+								return (
+									<View>
+										<Text style={{ color: theme.black }}>{sanitized}</Text>
+									</View>
+								);
+							})}
+					</ScrollView>
 				</View>
 			</Collapsible>
 		</View>

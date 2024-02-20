@@ -209,22 +209,7 @@ const BuilderHome = () => {
 							);
 						}}
 					/>
-					{/* <FlatList
-						ListFooterComponent={() => <View style={{ padding: 140 }}></View>}
-						data={builder.userArmyLists}
-						ItemSeparatorComponent={() => <View style={{ padding: 4 }}></View>}
-						renderItem={({ item, index }) => {
-							//TODO: Extract
-							return (
-								<ArmyListCard
-									armyList={item}
-									handleArmyListPress={onArmyListPress}
-									handleDeleteArmyPress={onArmyListDeletePress}
-									handleArmyNameChange={handleEditArmyPress}
-								/>
-							);
-						}}
-					/> */}
+
 				</View>
 
 				<CustomModal

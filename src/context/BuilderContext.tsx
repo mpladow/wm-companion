@@ -111,15 +111,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const setCurrentFaction = (faction: number) => {
 		setFaction(faction);
 	};
-	// useEffect(() => {
-	// 	console.log("ChECKING ARMY POINTS");
-	// 	const _currentPoints = calculateCurrentArmyPoints();
-	// 	if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000) setTotalPoints(2000);
-	// 	if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000) setTotalPoints(3000);
-	// 	if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
-	// 	if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
-	// 	if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
-	// }, [calculateCurrentArmyPoints()]);
+	
 	// // HANDLE LOCAL STORAGE MANAGEMENT
 	const getScoresFromStorage = async () => {
 		try {

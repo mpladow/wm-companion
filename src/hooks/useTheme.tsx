@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useContext } from "react";
 export interface Theme {
 	background: string;
 	backgroundVariant: string;
-    backgroundVariant2: string;
+	backgroundVariant2: string;
 	text: string;
 	textInverted: string;
 	variant: string;
@@ -14,14 +14,19 @@ export interface Theme {
 	success: string;
 	warning: string;
 	error: string;
-    black: string;
+	black: string;
 	white: string;
-    disabled: string;
+	disabled: string;
 	grey: string;
 	grey2: string;
 	grey3: string;
 	danger: string;
 	blueGrey: string;
+	darkRed: string;
+	orange: string;
+	yellow: string;
+	lightGreen3: string;
+	darkGreen4: string;
 }
 const darkColours = {
 	DARK_GREEN: "#588157", //dark green
@@ -34,17 +39,21 @@ const darkColours = {
 	DARK_BLUE_3: "#14213d",
 	RED: "#E14919",
 	YELLO: "#F8D33F",
-    BLACK: "#000000",
-    GREY1: "#6c757d",
+	BLACK: "#000000",
+	GREY1: "#6c757d",
 	GREY2: "#586994",
 	GREY3: "#2B2D42",
-	BLUEGREY: "#153243"
-
+	BLUEGREY: "#153243",
+	DARKRED: "#8f1b0e",
+	ORANGE: "#e36052",
+	YELLOW: "#877c03",
+	LIGHT_GREEN3: "#71c924",
+	DARK_GREEN4: "#017a19",
 };
 const darkTheme: Theme = {
 	background: darkColours.DARK_GREEN_2,
 	backgroundVariant: darkColours.BLUEGREY,
-    backgroundVariant2: darkColours.BLACK,
+	backgroundVariant2: darkColours.BLACK,
 	text: darkColours.WHITE,
 	textInverted: darkColours.BLACK,
 	variant: darkColours.DARK_BLUE_3,
@@ -54,14 +63,20 @@ const darkTheme: Theme = {
 	success: darkColours.DARK_BLUE,
 	warning: darkColours.YELLO,
 	error: darkColours.RED,
-    black: darkColours.BLACK,
+	black: darkColours.BLACK,
 	white: darkColours.WHITE,
-    disabled: darkColours.GREY1,
+	disabled: darkColours.GREY1,
 	grey: darkColours.GREY2,
 	grey2: darkColours.GREY2,
 	grey3: darkColours.GREY3,
 	danger: darkColours.RED,
-	blueGrey: darkColours.BLUEGREY
+	blueGrey: darkColours.BLUEGREY,
+	darkRed: darkColours.DARKRED,
+	orange: darkColours.ORANGE,
+	yellow: darkColours.YELLOW,
+	lightGreen3: darkColours.LIGHT_GREEN3,
+	darkGreen4: darkColours.DARK_GREEN4
+
 };
 
 interface UseThemeHook {

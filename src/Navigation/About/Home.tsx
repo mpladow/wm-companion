@@ -118,6 +118,15 @@ const Home = () => {
 						</View>
 						<View style={{ paddingVertical: 8 }}>
 							<IconButton
+								onPress={() => navigation.navigate("Collection", { screen: "CollectionHome" })}
+								variant={"primary"}
+								title={"Miniatures Collection"}
+								icon={<Ionicons name='library' size={24} color='black' />}
+								isStackNavigation={true}
+							></IconButton>
+						</View>
+						<View style={{ paddingVertical: 8 }}>
+							<IconButton
 								onPress={() => handleEmailPress()}
 								variant={"primary"}
 								title={t("ReportBug", { ns: "common" })}
@@ -133,7 +142,7 @@ const Home = () => {
 											<Entypo name='paypal' size={24} color={theme.text} />
 										</View>
 
-										<Text bold>{t("SupportDevelopment", {ns: "home"})}</Text>
+										<Text bold>{t("SupportDevelopment", { ns: "home" })}</Text>
 									</View>
 								</Button>
 							</View>

@@ -6,11 +6,13 @@ import { View } from "react-native";
 import { Text } from "@components/index";
 import Credits from "@navigation/About/Credits";
 import { useTranslation } from "react-i18next";
+import CollectionStackNavigator from "./CollectionStackNavigator";
 
 export type AboutStackParamList = {
 	Home: undefined;
 	Preferences: undefined;
 	Credits: undefined;
+	Collection: undefined;
 };
 const Stack = createNativeStackNavigator<AboutStackParamList>();
 
@@ -41,6 +43,11 @@ const AboutStackNavigator = () => {
 			<Stack.Screen name='Home' component={Home} options={{ title: t("About") }} />
 			<Stack.Screen name='Preferences' component={Preferences} options={{ title: t("Preferences") }} />
 			<Stack.Screen name='Credits' component={Credits} options={{ title: t("Credits") }} />
+			<Stack.Screen
+				name='Collection'
+				component={CollectionStackNavigator}
+				options={{ title: "Collection", headerShown: false }}
+			/>
 		</Stack.Navigator>
 	);
 };

@@ -1,0 +1,53 @@
+import { StyleSheet, View } from "react-native";
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import CollectionHome from "@navigation/Collection/CollectionHome";
+import CollectionEdit from "@navigation/Collection/CollectionEdit";
+import { Text } from "@components/index";
+import { useTheme } from "@hooks/useTheme";
+
+export type CollectionStackParamsList = {
+	CollectionEdit: { collectionId: string; unitName: string };
+	CollectionCreate: undefined;
+	CollectionHome: undefined;
+};
+const CollectionStack = createNativeStackNavigator();
+const CollectionStackNavigator = () => {
+	const { theme } = useTheme();
+	return (
+		<CollectionStack.Navigator
+			screenOptions={{
+				headerTitle: (props) => (
+					<View style={{ flexDirection: "row", alignItems: "center" }}>
+						<Text
+							variant='heading3'
+							style={{
+								fontSize: 28,
+							}}
+						>
+							{props.children}
+						</Text>
+					</View>
+				),
+				headerBackTitleVisible: false,
+				headerTintColor: theme.warning,
+				headerShadowVisible: false,
+				headerStyle: { backgroundColor: theme.blueGrey },
+			}}
+		>
+			<CollectionStack.Screen
+				name='CollectionHome'
+				component={CollectionHome}
+				options={{
+					// headerShown: false,
+					title: "Collection",
+				}}
+			/>
+			<CollectionStack.Screen name='CollectionEdit' component={CollectionEdit} />
+		</CollectionStack.Navigator>
+	);
+};
+
+export default CollectionStackNavigator;
+
+const styles = StyleSheet.create({});

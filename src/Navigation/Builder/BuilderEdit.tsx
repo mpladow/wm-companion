@@ -143,7 +143,6 @@ const BuilderEdit = () => {
 		builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount, addOnUpgrades);
 	};
 	const handleRemoveUpgrade = (unitName: string, id: string) => {
-		console.log(`handleRemoveUpgrade:: removing ${id} from ${unitName} `);
 		builder.removeItem(unitName, id);
 	};
 	useEffect(() => {
