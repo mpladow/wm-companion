@@ -8,7 +8,6 @@ import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { useTranslation } from "react-i18next";
 import { getFactionUnits, getFactions, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 import { CollectionList, useCollection } from "@context/CollectionContext";
-import { useNavigation } from "@react-navigation/core";
 import { Factions } from "@utils/constants";
 
 type CollectionCreateType = {
@@ -144,7 +143,6 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 						<>
 							<View style={{ marginTop: 12 }}>
 								<FormLabel label={t("Faction")} />
-
 								<FlatList
 									ref={thumbRef}
 									horizontal
@@ -237,24 +235,6 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 									return <Text style={{ textAlign: "center", paddingBottom: 4 }}>{item}</Text>;
 								})}
 							</ScrollView>
-
-							{/* <View style={{ marginTop: 12 }}>
-								<FormLabel label={t("Faction")} />
-								<CustomDropdown
-									value={factionSelection}
-									style={[styles.dropdown, { backgroundColor: theme.white }]}
-									placeholder={t("PlaceholderSelectFaction", { ns: "forms" })}
-									placeholderStyle={{ color: "#ddd" }}
-									data={ddFactions}
-									search
-									searchPlaceholder={`${t("Search", { ns: "common" })}...`}
-									labelField='label'
-									valueField='value'
-									onChange={(item) => {
-										handleFactionSelection(item.value);
-									}}
-								/>
-							</View> */}
 						</>
 					)}
 				</View>

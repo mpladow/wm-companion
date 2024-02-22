@@ -69,7 +69,7 @@ export const getLocalFactionAssets = (faction: string) => {
 			return [require("../../assets/images/wm-genericarmy-2.png")];
 
 		case "Empire":
-			return [require("../../assets/images/wm-empire.png")];
+			return [require("../../assets/images/wm-empire2.jpeg")];
 		case "Skaven":
 			return [require("../../assets/images/wm-genericarmy-2.png")];
 
@@ -98,15 +98,15 @@ export const getLocalFactionAssets = (faction: string) => {
 			return [require("../../assets/images/wm-genericarmy-2.png")];
 
 		case "Chaos_Dwarves":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-chaosDwarves2.jpeg")];
 
 		case "Dogs_Of_War":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-dogsOfWar2.png")];
 
 		case "Araby":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-araby1.jpeg")];
 		case "Lizardmen":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-lizardmen1.jpeg")];
 
 		case "Albion":
 			return [require("../../assets/images/wm-genericarmy-2.png")];
@@ -239,7 +239,7 @@ export const getFactionUnits = (factionSelection: number) => {
 		default:
 			break;
 	}
-	description = factionList?.description ? factionList?.description : ["Description coming soon!"];
+	description = factionList?.description ? factionList?.description : [""];
 	const ddFactionUnits = list?.map((x) => ({
 		label: `${x.name} - ${x.points}pts`,
 		value: x.name ? x.name : "",

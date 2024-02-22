@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Image, TouchableOpacity, View } from "react-native";
+import { ImageBackground, StyleSheet, Image, TouchableOpacity, View, Dimensions } from "react-native";
 import React from "react";
 import LogoWmr from "@components/SVGS/LogoWmr";
 import { Text, TextBlock } from "@components/index";
@@ -14,12 +14,12 @@ const Credits = () => {
 	return (
 		<MainContainerWithImage>
 			<View style={{ flex: 1, zIndex: 9, justifyContent: "center", padding: 12, paddingTop: 0, marginTop: -100 }}>
-				{/* <View style={{ height: 100 , backgroundColor: "green"}}>
-						<Image
-							style={{ width: 50, height: 50 }}
-							source={{ uri: "https://giphy.com/stickers/goblin-gobbo-slowquest-IK1nFzxLlFcZcLMV0q" }}
-						/>
-					</View> */}
+				<View style={{ alignSelf: 'center', borderRadius: 8, borderWidth: 3, borderColor: "black", marginBottom: 12}}>
+					<Image
+						style={{ resizeMode: "cover", width: Dimensions.get("screen").width - 30, height: 200 }}
+						source={require("../../../assets/images/wm-bg2.jpeg")}
+					/>
+				</View>
 				<TextBlock variant='large'>
 					<Text>{t("GeneralThanks")}</Text>
 				</TextBlock>
@@ -32,7 +32,7 @@ const Credits = () => {
 				<TextBlock variant='large'>
 					<Text>
 						<Text bold>{t("SpecialMentionsForImages")}</Text>: K Rauff, Przemas Bak, M Hobbes, Hardy,
-						Alexander Carraro, Mattias R, Byron L, Kristoffer Rauff, Geoff A,
+						Alexander Carraro, Mattias R, Byron L, Kristoffer Rauff, Geoff A, Kai Tek Ng, Mattias R
 					</Text>
 				</TextBlock>
 				<TextBlock variant='large'>
