@@ -1,299 +1,288 @@
 {
-    "name": "Goblin",
-    "version": "Warmaster Revolution",
-    "group": 2,
-    "order": 1,
-    "units": [{
-      
-        "name": "Goblins",
-        "order": 0,
-        "type": "Infantry",
-        "attack": "2/1",
-        "range": "15cm",
-        "hits": 3,
-        "size": 3,
-        "points": 30,
-        "min": 4,
-        "upgrades": [
-          "Squig Herd"
-        ]
-      },
-      {
-        "name": "Squig Herd",
-        "order": 1,
-        "type": "Infantry",
-        "attack": 3,
-        "hits": 3,
-        "size": 3,
-        "points": 30
-      },
-      {
-        "name": "Trolls",
-        "order": 2,
-        "type": "Infantry",
-        "attack": 5,
-        "hits": 3,
-        "armour": "5+",
-        "size": 3,
-        "points": 110,
-        "max": 4
-      },
-      {
-        "name": "Wolf Riders",
-        "order": 3,
-        "type": "Cavalry",
-        "attack": "2/1",
-        "range": "15cm",
-        "hits": 3,
-        "armour": "6+",
-        "size": 3,
-        "points": 60,
-        "min": 2
-      },
-      {
-        "name": "Wolf Chariots",
-        "order": 4,
-        "type": "Chariot",
-        "attack": 3,
-        "hits": 3,
-        "armour": "6+",
-        "size": 3,
-        "points": 80,
-        "max": 4
-      },
-      {
-        "name": "Pump Wagon",
-        "order": 5,
-        "type": "Chariot",
-        "attack": "D6",
-        "hits": 3,
-        "armour": "5+",
-        "size": 1,
-        "points": 50,
-        "max": 2,
-        "noCount": true,
-        "noMagic": true
-      },
-      {
-        "name": "Giant",
-        "order": 6,
-        "type": "Monster",
-        "attack": 8,
-        "hits": 8,
-        "armour": "5+",
-        "size": 1,
-        "points": 135,
-        "max": 1,
-        "noMagic": true
-      },
-      {
-        "name": "Doom Diver",
-        "order": 7,
-        "type": "Artillery",
-        "attack": "1/3",
-        "range": "60cm",
-        "hits": 2,
-        "size": 2,
-        "points": 80,
-        "max": 1,
-        "noMagic": true
-      },
-      {
-        "name": "Spear Chukka",
-        "order": 8,
-        "type": "Artillery",
-        "attack": "1/2 per stand",
-        "range": "40cm",
-        "hits": 2,
-        "size": 2,
-        "points": 65,
-        "max": 2,
-        "specialRules": [
-          "Bolt Thrower"
-        ],
-        "noMagic": true
-      },
-      {
-        "name": "Goblin Warboss",
-        "order": 9,
-        "type": "General",
-        "attack": "+1",
-        "command": 8,
-        "size": 1,
-        "points": 80,
-        "armyMin": 1,
-        "armyMax": 1,
-        "upgrades": [
-          "Wolf Chariot",
-          "Wyvern"
-        ]
-      },
-      {
-        "name": "Goblin Hero",
-        "order": 10,
-        "type": "Hero",
-        "attack": "+1",
-        "command": 7,
-        "size": 1,
-        "points": 45,
-        "max": 4,
-        "upgrades": [
-          "Wolf Chariot",
-          "Wyvern"
-        ]
-      },
-      {
-        "name": "Goblin Shaman",
-        "order": 11,
-        "type": "Wizard",
-        "attack": "+0",
-        "command": 6,
-        "size": 1,
-        "points": 30,
-        "max": 2,
-        "upgrades": [
-          "Wolf Chariot",
-          "Wyvern"
-        ]
-      }
-    ],
-    "upgrades": [
-      {
-        "name":"Wolf Chariot",
-        "order": 0,
-        "type": "Chariot Mount",
-        "attack": "+1",
-        "points": "+10",
-        "max": 1
-      },
-      {
-        "name":"Wyvern",
-        "order": 1,
-        "type": "Monstrous Mount",
-        "attack": "+2",
-        "points": "+80",
-        "max": 1
-      },
-      {
-        "name": "Squig Herd",
-        "order": 2,
-        "type": "Infantry",
-        "attack": 3,
-        "hits": 3,
-        "size": 3,
-        "points": "+0",
-        "max": 2
-      }
-    ],
-    "magic": true,
-    "specialRules": {
-      "Goblins": {
-        "order": 1,
-        "text": [
-          "Goblins fight in a close mob or huddle in which the smallest and weediest are pushed to the outside. A unit of Goblins includes some armed with bows, some armed with clubs, a few with spears and most with whatever comes to hand. To represent this, the Goblin unit is allowed to shoot as if it had bows but its range is reduced to 15cm. Up to two units per full 1000 points can be replaced by Squig Herd while still counting for the Goblin min/max value. Note that these units still count for min/max value of Squig Herds."
-        ]
-      },
-      "Trolls": {
-        "order": 2,
-        "text": [
-          "When trying to issue an order to a unit of Trolls or to a brigade that contains a unit of Trolls, any Command penalty applied for distance between the character and the Troll unit is always doubled. So at 20cm no penalty applies, at 40cm -2, at 60cm -4, and so on. Trolls can regenerate wounds - in each round of combat after whole stands have been removed Trolls automatically regenerate one outstanding hit. If no hits are left over after removing whole stands then regeneration has no effect. Regenerated hits still count towards the combat result for the round."
-        ]
-      },
-      "Wolf Riders": {
-        "order": 3,
-        "text": [
-          "Wolf Riders’ bows have only a short range compared to other shooting weapons, so their fire is restricted to 15cm. However, because their weapons are so handy they can shoot behind or to the side without turning stands to face their target. Just measure the range from any stand edge. They can therefore shoot at enemy charging them from any direction."
-        ]
-      },
-      "Pump Wagon": {
-        "order": 4,
-        "text": [
-          "The Pump Wagon doesn’t move in Command phase by initiative or by successful orders. Instead of this it can always move once up to 10xD6cm. This move is automatic, requiring no Command roll, and happens at any time during the Command phase. This movement can be made in any direction and will give the Pump Wagon a movement of between 10cm and 60cm each turn. A Pump Wagon does not have to move if the player wishes.",
-          "",
-          "In the turn it charges or for pursuits and advances, a Pump Wagon receives D6 attacks. This is in addition too any additional attacks it receives for charging enemy in the open and for being a chariot. When charged or retreating as a result of combat, its attacks are halved to D3. The Pump Wagon is crewed by Snotlings who feed on magic mushrooms making them mad and crazy, with no care for their own lives. A Pump Wagon moves forward (and backwards, as well as to the side) at a relentless rate and cannot be driven back by shooting. Nor can it be confused in any way.",
-          "",
-          "The Pump Wagon forms a unit of its own and cannot be brigaded with other units; not even another Pump Wagon, and a character model cannot join it. The enemy does not gain Victory points for a destroyed Pump Wagon and a Pump Wagon does not count towards the Goblin army’s break value."
-        ]
-      },
-      "Giant": {
-        "order": 5
-      },
-      "Doom Diver": {
-        "order": 6,
-        "text": [
-          "The Doom Diver Catapult is a torsion-powered device much like a Spear Chukka, but instead of firing spears it is designed to fire Goblins. These Goblins are equipped with crude, folding wings which enable them to stay aloft for a short time before plunging back down to earth. When they do land it is usually with a loud splat that causes confusion more than anything else in the enemy ranks.",
-          "",
-          "The Doom Diver has a range of 60cm and a unit hit by a Doom Diver is allowed to make its normal armour save. Doom Divers shoot at such a high trajectory that they cannot shoot at charging enemies."
-        ]
-      },
-      "Bolt Thrower": {
-        "order": 7
-      },
-      "Goblin Shaman": {
-        "order": 8,
-        "text": [
-          "Goblin Shaman can cast spells chosen from the Goblin spells list."
-        ]
-      },
-      "Wolf Chariot": {
-        "order": 9,
-        "text": [
-          "A General, Hero or Wizard can ride a Wolf Chariot. The character riding a chariot adds +1 to his Attacks."
-        ]
-      },
-      "Wyvern": {
-        "order": 10,
-        "text": [
-          "Characters may ride Wyverns. A Wyvern can fly increasing its rider’s movement from 60cm to 100cm, and it adds +2 Attacks to those of its rider. A unit that includes a Wyvern rider causes terror in its enemies."
-        ]
-      }
-    },
-    "spells": [
-      {
-        "name": "Mork Save Uz!",
-        "roll": 5,
-        "range": "30cm",
-        "text": [
-          "*The Shaman summons the power of Mork to protect the greenskins from the enemy.*",
-          "",
-          "This spell can be cast on any friendly unit within 30cm of the Shaman. The unit gains a 5+ save worked out in the usual manner until the beginning of their next turn. If the unit already has a saving roll then it can choose which one to make, but may not take both."
-        ]
-      },
-      {
-        "name": "Gerroff!!!",
-        "roll": 5,
-        "range": "60cm",
-        "text": [
-          "*The voice of Gork booms out across the battlefield, forcing back his foes with a rancid gale force bellow.*",
-          "",
-          "This can be cast on any enemy unit within 60cm, whether the Shaman can see it or not. It cannot be cast on a unit engaged in combat or cast successfully on a unit more than once per turn.",
-          "",
-          "The enemy unit is driven back by the blast of the bellow 5xD6cm towards its own table edge. This is treated in the same way as a driveback from shooting except the direction is established by determining the shortest route to the table edge. A unit cannot be routed by a drive back from Gerroff!!! spell. If the unit leaves the table edge it must roll as described in the main rules."
-        ]
-      },
-      {
-        "name": "Brain Busta",
-        "roll": 5,
-        "range": "30cm",
-        "text": [
-          "*A fearsome bolt of pure Waaagh! energy issues from the Shaman’s outstretched hand and strikes an enemy unit.*",
-          "",
-          "The Shaman must be able to see his target to use this spell and it cannot be directed at a unit engaged in combat.",
-          "",
-          "Brain Busta is treated like three ordinary shooting attacks except that armour saves have no effect (all targets count as having no armour). A unit can be driven back by Brain Busta as with ordinary shooting."
-        ]
-      },
-      {
-        "name": "Waaagh!",
-        "roll": 4,
-        "range": "30cm",
-        "text": [
-          "*The Shaman summons the power of the mighty Waaagh!, invigorating the greenskins.*",
-          "",
-          "This spell can be cast on a friendly unit of Goblins engaged in combat; including Squig Herds, Wolf Riders, Wolf Chariots and Pump Wagons but not Trolls, Giants or other non-greenskins. The spell can be cast regardless of whether the Shaman can see the target or not.",
-          "",
-          "The spell lasts for the duration of the following Combat phase. Every stand in the unit, including characters that have joined the unit, adds +1 to its Attacks value."
-        ]
-      }
-    ]
-  } 
+	"name": "Goblin",
+	"version": "Warmaster Revolution",
+	"group": 2,
+	"order": 1,
+	"description": [
+		"Goblins are generally recognised as belonging to two main breeds, namely Common Goblins and Night Goblins. These types are not physically different to each other, although all kinds of Goblin are liable to extreme variations in size, so it is quite usual for a mob of Goblins to include some individuals as much as twice the size of others. In this respect, where a big Snotling becomes a Goblin and vice versa is debatable, though from an Orc’s point of view it hardly matters as they’re all there to be bossed about.",
+		"The majority of Goblins living in open areas, most notably in the Badlands and Dark Lands, are Common Goblins or just ordinary Gobbos. They are as common as muck throughout the hills, valleys and plains of the Old World and beyond. We quite cheerfully refer to all the different kinds of Goblins as Goblins, but where this might prove confusing we call ordinary Common Goblins just that ... Common Goblins. And ain’t they just!"
+	],
+	"units": [
+		{
+			"name": "Goblins",
+			"order": 0,
+			"type": "Infantry",
+			"attack": "2/1",
+			"range": "15cm",
+			"hits": 3,
+			"size": 3,
+			"points": 30,
+			"min": 4,
+			"upgrades": ["Squig Herd"]
+		},
+		{
+			"name": "Squig Herd",
+			"order": 1,
+			"type": "Infantry",
+			"attack": 3,
+			"hits": 3,
+			"size": 3,
+			"points": 30
+		},
+		{
+			"name": "Trolls",
+			"order": 2,
+			"type": "Infantry",
+			"attack": 5,
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 110,
+			"max": 4
+		},
+		{
+			"name": "Wolf Riders",
+			"order": 3,
+			"type": "Cavalry",
+			"attack": "2/1",
+			"range": "15cm",
+			"hits": 3,
+			"armour": "6+",
+			"size": 3,
+			"points": 60,
+			"min": 2
+		},
+		{
+			"name": "Wolf Chariots",
+			"order": 4,
+			"type": "Chariot",
+			"attack": 3,
+			"hits": 3,
+			"armour": "6+",
+			"size": 3,
+			"points": 80,
+			"max": 4
+		},
+		{
+			"name": "Pump Wagon",
+			"order": 5,
+			"type": "Chariot",
+			"attack": "D6",
+			"hits": 3,
+			"armour": "5+",
+			"size": 1,
+			"points": 50,
+			"max": 2,
+			"noCount": true,
+			"noMagic": true
+		},
+		{
+			"name": "Giant",
+			"order": 6,
+			"type": "Monster",
+			"attack": 8,
+			"hits": 8,
+			"armour": "5+",
+			"size": 1,
+			"points": 135,
+			"max": 1,
+			"noMagic": true
+		},
+		{
+			"name": "Doom Diver",
+			"order": 7,
+			"type": "Artillery",
+			"attack": "1/3",
+			"range": "60cm",
+			"hits": 2,
+			"size": 2,
+			"points": 80,
+			"max": 1,
+			"noMagic": true
+		},
+		{
+			"name": "Spear Chukka",
+			"order": 8,
+			"type": "Artillery",
+			"attack": "1/2 per stand",
+			"range": "40cm",
+			"hits": 2,
+			"size": 2,
+			"points": 65,
+			"max": 2,
+			"specialRules": ["Bolt Thrower"],
+			"noMagic": true
+		},
+		{
+			"name": "Goblin Warboss",
+			"order": 9,
+			"type": "General",
+			"attack": "+1",
+			"command": 8,
+			"size": 1,
+			"points": 80,
+			"armyMin": 1,
+			"armyMax": 1,
+			"upgrades": ["Wolf Chariot", "Wyvern"]
+		},
+		{
+			"name": "Goblin Hero",
+			"order": 10,
+			"type": "Hero",
+			"attack": "+1",
+			"command": 7,
+			"size": 1,
+			"points": 45,
+			"max": 4,
+			"upgrades": ["Wolf Chariot", "Wyvern"]
+		},
+		{
+			"name": "Goblin Shaman",
+			"order": 11,
+			"type": "Wizard",
+			"attack": "+0",
+			"command": 6,
+			"size": 1,
+			"points": 30,
+			"max": 2,
+			"upgrades": ["Wolf Chariot", "Wyvern"]
+		}
+	],
+	"upgrades": [
+		{
+			"name": "Wolf Chariot",
+			"order": 0,
+			"type": "Chariot Mount",
+			"attack": "+1",
+			"points": "+10",
+			"max": 1
+		},
+		{
+			"name": "Wyvern",
+			"order": 1,
+			"type": "Monstrous Mount",
+			"attack": "+2",
+			"points": "+80",
+			"max": 1
+		},
+		{
+			"name": "Squig Herd",
+			"order": 2,
+			"type": "Infantry",
+			"attack": 3,
+			"hits": 3,
+			"size": 3,
+			"points": "+0",
+			"max": 2
+		}
+	],
+	"magic": true,
+	"specialRules": {
+		"Goblins": {
+			"order": 1,
+			"text": [
+				"Goblins fight in a close mob or huddle in which the smallest and weediest are pushed to the outside. A unit of Goblins includes some armed with bows, some armed with clubs, a few with spears and most with whatever comes to hand. To represent this, the Goblin unit is allowed to shoot as if it had bows but its range is reduced to 15cm. Up to two units per full 1000 points can be replaced by Squig Herd while still counting for the Goblin min/max value. Note that these units still count for min/max value of Squig Herds."
+			]
+		},
+		"Trolls": {
+			"order": 2,
+			"text": [
+				"When trying to issue an order to a unit of Trolls or to a brigade that contains a unit of Trolls, any Command penalty applied for distance between the character and the Troll unit is always doubled. So at 20cm no penalty applies, at 40cm -2, at 60cm -4, and so on. Trolls can regenerate wounds - in each round of combat after whole stands have been removed Trolls automatically regenerate one outstanding hit. If no hits are left over after removing whole stands then regeneration has no effect. Regenerated hits still count towards the combat result for the round."
+			]
+		},
+		"Wolf Riders": {
+			"order": 3,
+			"text": [
+				"Wolf Riders’ bows have only a short range compared to other shooting weapons, so their fire is restricted to 15cm. However, because their weapons are so handy they can shoot behind or to the side without turning stands to face their target. Just measure the range from any stand edge. They can therefore shoot at enemy charging them from any direction."
+			]
+		},
+		"Pump Wagon": {
+			"order": 4,
+			"text": [
+				"The Pump Wagon doesn’t move in Command phase by initiative or by successful orders. Instead of this it can always move once up to 10xD6cm. This move is automatic, requiring no Command roll, and happens at any time during the Command phase. This movement can be made in any direction and will give the Pump Wagon a movement of between 10cm and 60cm each turn. A Pump Wagon does not have to move if the player wishes.",
+				"",
+				"In the turn it charges or for pursuits and advances, a Pump Wagon receives D6 attacks. This is in addition too any additional attacks it receives for charging enemy in the open and for being a chariot. When charged or retreating as a result of combat, its attacks are halved to D3. The Pump Wagon is crewed by Snotlings who feed on magic mushrooms making them mad and crazy, with no care for their own lives. A Pump Wagon moves forward (and backwards, as well as to the side) at a relentless rate and cannot be driven back by shooting. Nor can it be confused in any way.",
+				"",
+				"The Pump Wagon forms a unit of its own and cannot be brigaded with other units; not even another Pump Wagon, and a character model cannot join it. The enemy does not gain Victory points for a destroyed Pump Wagon and a Pump Wagon does not count towards the Goblin army’s break value."
+			]
+		},
+		"Giant": {
+			"order": 5
+		},
+		"Doom Diver": {
+			"order": 6,
+			"text": [
+				"The Doom Diver Catapult is a torsion-powered device much like a Spear Chukka, but instead of firing spears it is designed to fire Goblins. These Goblins are equipped with crude, folding wings which enable them to stay aloft for a short time before plunging back down to earth. When they do land it is usually with a loud splat that causes confusion more than anything else in the enemy ranks.",
+				"",
+				"The Doom Diver has a range of 60cm and a unit hit by a Doom Diver is allowed to make its normal armour save. Doom Divers shoot at such a high trajectory that they cannot shoot at charging enemies."
+			]
+		},
+		"Bolt Thrower": {
+			"order": 7
+		},
+		"Goblin Shaman": {
+			"order": 8,
+			"text": ["Goblin Shaman can cast spells chosen from the Goblin spells list."]
+		},
+		"Wolf Chariot": {
+			"order": 9,
+			"text": [
+				"A General, Hero or Wizard can ride a Wolf Chariot. The character riding a chariot adds +1 to his Attacks."
+			]
+		},
+		"Wyvern": {
+			"order": 10,
+			"text": [
+				"Characters may ride Wyverns. A Wyvern can fly increasing its rider’s movement from 60cm to 100cm, and it adds +2 Attacks to those of its rider. A unit that includes a Wyvern rider causes terror in its enemies."
+			]
+		}
+	},
+	"spells": [
+		{
+			"name": "Mork Save Uz!",
+			"roll": 5,
+			"range": "30cm",
+			"text": [
+				"*The Shaman summons the power of Mork to protect the greenskins from the enemy.*",
+				"",
+				"This spell can be cast on any friendly unit within 30cm of the Shaman. The unit gains a 5+ save worked out in the usual manner until the beginning of their next turn. If the unit already has a saving roll then it can choose which one to make, but may not take both."
+			]
+		},
+		{
+			"name": "Gerroff!!!",
+			"roll": 5,
+			"range": "60cm",
+			"text": [
+				"*The voice of Gork booms out across the battlefield, forcing back his foes with a rancid gale force bellow.*",
+				"",
+				"This can be cast on any enemy unit within 60cm, whether the Shaman can see it or not. It cannot be cast on a unit engaged in combat or cast successfully on a unit more than once per turn.",
+				"",
+				"The enemy unit is driven back by the blast of the bellow 5xD6cm towards its own table edge. This is treated in the same way as a driveback from shooting except the direction is established by determining the shortest route to the table edge. A unit cannot be routed by a drive back from Gerroff!!! spell. If the unit leaves the table edge it must roll as described in the main rules."
+			]
+		},
+		{
+			"name": "Brain Busta",
+			"roll": 5,
+			"range": "30cm",
+			"text": [
+				"*A fearsome bolt of pure Waaagh! energy issues from the Shaman’s outstretched hand and strikes an enemy unit.*",
+				"",
+				"The Shaman must be able to see his target to use this spell and it cannot be directed at a unit engaged in combat.",
+				"",
+				"Brain Busta is treated like three ordinary shooting attacks except that armour saves have no effect (all targets count as having no armour). A unit can be driven back by Brain Busta as with ordinary shooting."
+			]
+		},
+		{
+			"name": "Waaagh!",
+			"roll": 4,
+			"range": "30cm",
+			"text": [
+				"*The Shaman summons the power of the mighty Waaagh!, invigorating the greenskins.*",
+				"",
+				"This spell can be cast on a friendly unit of Goblins engaged in combat; including Squig Herds, Wolf Riders, Wolf Chariots and Pump Wagons but not Trolls, Giants or other non-greenskins. The spell can be cast regardless of whether the Shaman can see the target or not.",
+				"",
+				"The spell lasts for the duration of the following Combat phase. Every stand in the unit, including characters that have joined the unit, adds +1 to its Attacks value."
+			]
+		}
+	]
+}

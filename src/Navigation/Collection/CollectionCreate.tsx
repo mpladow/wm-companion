@@ -21,7 +21,6 @@ const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
 const SPACING = 5;
 const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmation }: CollectionCreateType) => {
-	const navigation = useNavigation();
 	const nameRef = useRef<TextInput>(null);
 	const [factionName, setFactionName] = useState<string>("");
 	const [factionNameError, setFactionNameError] = useState(false);
@@ -98,12 +97,18 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 			const x = ddFactions[index]?.value;
 			setFactionSelection(x as number);
 		}
-		// if (index * (THUMBNAIL_WIDTH + SPACING) - THUMBNAIL_WIDTH / 2 > width / 2) {
-		// 	thumbRef?.current?.scrollToOffset({
-		// 		offset: index * (THUMBNAIL_WIDTH + SPACING) - width / 2 + THUMBNAIL_WIDTH / 2,
-		// 		animated: true,
-		// 	});
-		// }
+		if (index * (THUMBNAIL_WIDTH + 19 + SPACING) - (THUMBNAIL_WIDTH + 19) / 2 > width / 2) {
+			thumbRef?.current?.scrollToOffset({
+				offset: index * (THUMBNAIL_WIDTH + 19 + SPACING) - width / 2 + (THUMBNAIL_WIDTH + 18) / 2,
+				// offset: index * (width / 2),
+				animated: true,
+			});
+		} else {
+			thumbRef?.current?.scrollToOffset({
+				offset: 0,
+				animated: true,
+			});
+		}
 	};
 	const [activeIndex, setActiveIndex] = useState(0);
 	const { width, height } = Dimensions.get("screen");
@@ -144,8 +149,8 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 									ref={thumbRef}
 									horizontal
 									data={ddFactions}
-									snapToInterval={100}
-									contentContainerStyle={{ paddingHorizontal: 50 }}
+									// snapToInterval={width / 2 - THUMBNAIL_WIDTH + 5}
+									contentContainerStyle={{ paddingHorizontal: SPACING, paddingVertical: 4 }}
 									// onMomentumScrollEnd={(ev) => {
 									// 	setCurrentActiveIndex(
 									// 		Math.floor(ev.nativeEvent.contentOffset.x / THUMBNAIL_WIDTH)
@@ -158,22 +163,44 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 
 										const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
 										return (
-											<TouchableOpacity onPress={() => setCurrentActiveIndex(index)} key={index}>
+											<TouchableOpacity
+												onPress={() => setCurrentActiveIndex(index)}
+												key={index}
+												style={{ overflow: "hidden" }}
+											>
 												<View
 													style={{
-														width: THUMBNAIL_WIDTH + 5,
-														height: THUMBNAIL_HEIGHT + 20,
+														width:
+															activeIndex == index
+																? THUMBNAIL_WIDTH + 5
+																: THUMBNAIL_WIDTH + 5,
+														height:
+															activeIndex == index
+																? THUMBNAIL_HEIGHT + 20
+																: THUMBNAIL_HEIGHT + 20,
 														backgroundColor: theme.background,
 														borderRadius: 8,
 														borderColor:
-															activeIndex == index ? theme.warning : "transparent",
+															activeIndex == index ? theme.warning : theme.background,
 														borderWidth: 2,
 														marginRight: SPACING,
 														overflow: "hidden",
 													}}
 												>
 													<Image
-														style={[styles.stretch]}
+														style={[
+															styles.stretch,
+															{
+																width:
+																	activeIndex == index
+																		? THUMBNAIL_WIDTH + 5
+																		: THUMBNAIL_WIDTH + 5,
+																height:
+																	activeIndex == index
+																		? THUMBNAIL_HEIGHT - 2
+																		: THUMBNAIL_HEIGHT - 2,
+															},
+														]}
 														source={factionAssets && factionAssets[0]}
 													/>
 
@@ -182,6 +209,8 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 															zIndex: 999,
 															backgroundColor: theme.white,
 															height: 20,
+															borderBottomLeftRadius: 8,
+															borderBottomRightRadius: 8,
 														}}
 													>
 														<Text

@@ -3,6 +3,9 @@
 	"version": "Warmaster Revolution",
 	"group": 2,
 	"order": 5,
+	"description": [
+		"In the dark forests of the Old World dwell the favoured Children of Chaos: foul and unholy things that hate the world and hide from the honest light of day. They serve no mortal master, but belong heart and soul to the Dark Gods of Chaos. Men call these creatures Beastmen for they are part-human and part-beast, their twisted bodies a blasphemy of nature. They have horns upon their bestial heads, claws and cloven hooves adorn their limbs. Beastmen are wild and brutish creatures that care little for other beings and despise the race of Men above all else. They are cruel and brutal creatures who brawl and fight amongst themselves when not venting their hatred against mankind."
+	],
 	"units": [
 		{
 			"name": "Beastherd",
