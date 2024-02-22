@@ -35,12 +35,10 @@ export const getFactions = () => {
 	// 	ddFactionList.push({ label: value?.replaceAll("_", " "), value: key } as DropDownItemProps);
 	// }
 	for (const [key, value] of Object.entries(Factions)) {
-		console.log(key, "key");
 		console.log(value, "value");
 		isNaN(parseInt(key)) &&
 			ddFactionList.push({ label: key.replaceAll("_", " "), value: value } as DropDownItemProps);
 	}
-	console.log(ddFactionList, "factionList");
 	ddFactionList = ddFactionList.sort((a, b) => {
 		if (a.label < b.label) {
 			return -1;
@@ -78,6 +76,8 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Chaos":
 			return [require("../../assets/images/wm-chaos.jpeg")];
 		case "Wood_Elves":
+			return [require("../../assets/images/wm-genericarmy-2.png")];
+
 		case "Vampire_Counts":
 			return [require("../../assets/images/wm-vampcounts.jpeg")];
 		case "Beastmen":
@@ -131,10 +131,12 @@ export const getLocalFactionAssets = (faction: string) => {
 export const getFactionUnits = (factionSelection: number) => {
 	let list: any[] = [];
 	let factionList;
+	let description: string[] = [];
 	switch (factionSelection) {
 		case Factions.Bretonnians:
 			list = bretonnianList.units;
 			factionList = bretonnianList;
+			description = bretonnianList.description;
 			break;
 		case Factions.Orcs:
 			list = orcList.units;
@@ -143,6 +145,7 @@ export const getFactionUnits = (factionSelection: number) => {
 		case Factions.Tomb_Kings:
 			list = tombKingsList.units;
 			factionList = tombKingsList;
+			description = bretonnianList.description;
 			break;
 		case Factions.Empire:
 			list = empireList.units;
@@ -171,6 +174,7 @@ export const getFactionUnits = (factionSelection: number) => {
 		case Factions.Cathay:
 			list = cathayList.units;
 			factionList = cathayList;
+			description = cathayList.description;
 			break;
 		case Factions.Goblins:
 			list = nightGoblinsList.units;
@@ -235,9 +239,10 @@ export const getFactionUnits = (factionSelection: number) => {
 		default:
 			break;
 	}
+	description = factionList?.description ? factionList?.description : ["Description coming soon!"];
 	const ddFactionUnits = list?.map((x) => ({
 		label: `${x.name} - ${x.points}pts`,
 		value: x.name ? x.name : "",
 	}));
-	return { ddFactionUnits: ddFactionUnits, factionList: factionList };
+	return { ddFactionUnits: ddFactionUnits, factionList: factionList, description: description };
 };

@@ -36,6 +36,7 @@ const UnitListItem = ({ item, collectionId, index, totalInCollection }: UnitList
 				justifyContent: "space-between",
 				backgroundColor: theme.backgroundVariant2,
 				borderRadius: 8,
+				marginHorizontal: 4
 			}}
 			key={index}
 		>

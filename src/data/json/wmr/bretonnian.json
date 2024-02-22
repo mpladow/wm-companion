@@ -4,6 +4,9 @@
 	"version": "Warmaster Revolution",
 	"group": 1,
 	"order": 0,
+	"description": [
+		"Bretonnia has grown into a powerful and influential nation under the leadership of its proud King Leoncour. At the capital of Couronne the greatest knights gather to attend their king and to accept from him such heroic quests as he chooses to set them. To the knights of Bretonnia honour is everything and it is an undoubted fact that a knight would sooner die than bring dishonour upon himself or his lord."
+	],
 	"units": [
 		{
 			"name": "Bowmen",
@@ -29,7 +32,7 @@
 			"min": 1,
 			"noCount": true
 		},
-		 {
+		{
 			"name": "Peasants",
 			"order": 2,
 			"type": "Infantry",
@@ -41,7 +44,8 @@
 			"max": 4,
 			"noCount": true,
 			"upgrades": ["Grail Reliquae"]
-		},{
+		},
+		{
 			"name": "Squires",
 			"order": 3,
 			"type": "Cavalry",
@@ -201,9 +205,7 @@
 		},
 		"Trebuchet": {
 			"order": 5,
-			"textFull": [
-
-			],
+			"textFull": [],
 			"text": [
 				"The Bretonnian Trebuchet is one of the mightiest and most excellent stone throwers that are built in the Old World. At first it was designed to help the noble knights with the sometimes coming up and messy sieges that had to be done but later was adjusted to be used in field battles too.",
 				"",

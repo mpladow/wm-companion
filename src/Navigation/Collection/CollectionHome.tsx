@@ -10,49 +10,53 @@ import {
 	Keyboard,
 	TextInput,
 	ScrollView,
+	SectionList,
+	SectionListData,
 } from "react-native";
 import React, { useMemo, useState, useTransition } from "react";
 import MainContainerWithImage from "@components/MainContainerWithImage";
 import { useTheme } from "@hooks/useTheme";
 import { CollectionList, MiniatureDetailsOverview, useCollection } from "@context/CollectionContext";
-import Accordion from "react-native-collapsible/Accordion";
 import { Factions } from "@utils/constants";
 import { Button, Text } from "@components/index";
 import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
-import MainContainerWithBlankBG from "@components/MainContainerWithBlankBG";
 import CustomModal from "@components/CustomModal";
-import FormLabel from "@components/forms/FormLabel";
 import CollectionCreate from "./CollectionCreate";
 import UnitListItem from "./components/UnitListItem";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MenuOptionButton from "@components/MenuOptionButton";
 import PopupConfirm from "@components/PopupConfirm";
-import { WorkflowType } from "./CollectionEdit";
 import { getLocalFactionAssets } from "@utils/factionHelpers";
 
 type SectionContentType = {
 	title: string;
-	content: MiniatureDetailsOverview[];
+	data: MiniatureDetailsOverview[];
 	collectionId: string;
-	collectionName: string;
+	factionName: string;
+};
+type CollectionSelctionListType = {
+	title: string;
+	data: SectionContentType[];
 };
 const CollectionHome = () => {
 	const { t } = useTranslation("collection");
 	const { theme } = useTheme();
 	const { collectionList, deleteCollection } = useCollection();
 	const [activeSections, setActiveSections] = useState<number[]>([]);
-	const navigation = useNavigation();
+
 	const sections = useMemo(() => {
 		return collectionList?.map((cl) => ({
-			title: Factions[cl.faction],
-			collectionName: cl.collectionName,
-			content: cl.miniatureDetails,
-			collectionId: cl.collectionId.toString(),
+			title: cl.collectionName,
+			factionName: Factions[cl.faction],
+			collectionId: cl.collectionId,
+			data: cl.miniatureDetails,
 		}));
 	}, [collectionList]);
+	console.log(sections, "sections");
+
 	const [editCollection, setEditCollection] = useState(false);
 	const [editCollectionListId, setEditCollectionListId] = useState<string>();
 	const [showCreateCollection, setShowCreateCollection] = useState(false);
@@ -69,7 +73,7 @@ const CollectionHome = () => {
 			</View>
 		);
 	};
-	const renderHeader = (section: SectionContentType) => {
+	const renderHeader = (section: any) => {
 		return (
 			<View
 				style={{
@@ -79,6 +83,7 @@ const CollectionHome = () => {
 					alignItems: "center",
 					overflow: "hidden",
 					flexDirection: "row",
+					marginBottom: 8,
 				}}
 			>
 				<Image
@@ -88,12 +93,12 @@ const CollectionHome = () => {
 				/>
 				<View style={{ flex: 3, justifyContent: "center", margin: 20 }}>
 					<Text variant='heading3' style={{ color: theme.text, fontSize: 24, marginBottom: 4 }}>
-						{section.collectionName}
+						{section?.title}
 					</Text>
-					<Text style={{ color: theme.text }}>{section?.title?.replaceAll("_", " ")}</Text>
+					<Text style={{ color: theme.text }}>{section.factionName.replaceAll("_", " ")}</Text>
 				</View>
 				<View style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}>
-					{setImage(section.title)}
+					{setImage(section.factionName)}
 					<LinearGradient
 						colors={["rgba(31,46,39, 0.9)", "rgba(6,9,7, 0.0)"]}
 						start={{ y: 0, x: 1 }}
@@ -154,42 +159,34 @@ const CollectionHome = () => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<MainContainerWithImage>
-				<ScrollView style={{ zIndex: 999, padding: 16, paddingBottom: 500 }}>
-					<View></View>
-					<Accordion
+				<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
+					<SectionList
 						sections={sections}
-						activeSections={activeSections}
-						renderHeader={renderHeader}
-						onChange={(as) => setActiveSections(as)}
-						sectionContainerStyle={{ marginVertical: 12 }}
-						containerStyle={{ zIndex: 999, backgroundColor: "transparent", paddingBottom: 300 }}
-						renderContent={(section) => (
-							<FlatList
-								contentContainerStyle={{ marginTop: 8 }}
-								data={section?.content}
-								renderItem={({ item, index }) => {
-									const totalMinisForCollection =
-										item?.wishlistCount +
-										item?.assembledCount +
-										item?.completedCount +
-										item?.ownedCount +
-										item?.paintedCount;
-									return (
-										<UnitListItem
-											item={item}
-											index={index}
-											collectionId={section.collectionId}
-											totalInCollection={totalMinisForCollection}
-										/>
-									);
-								}}
-								ItemSeparatorComponent={() => (
-									<View style={{ height: 4, backgroundColor: "transparent" }}></View>
-								)}
-							/>
+						renderSectionHeader={(x) => renderHeader(x.section)}
+						contentContainerStyle={{ marginBottom: 500 }}
+						SectionSeparatorComponent={() => <View style={{ padding: 8 }}></View>}
+						ListFooterComponent={<View style={{ padding: 150 }}></View>}
+						renderItem={({ section, item, index }) => {
+							const totalMinisForCollection =
+								item?.wishlistCount +
+								item?.assembledCount +
+								item?.completedCount +
+								item?.ownedCount +
+								item?.paintedCount;
+							return (
+								<UnitListItem
+									item={item}
+									index={index}
+									collectionId={section.collectionId}
+									totalInCollection={totalMinisForCollection}
+								/>
+							);
+						}}
+						ItemSeparatorComponent={() => (
+							<View style={{ height: 4, backgroundColor: "transparent" }}></View>
 						)}
 					/>
-				</ScrollView>
+				</View>
 			</MainContainerWithImage>
 
 			<View style={{ zIndex: 99999, position: "absolute", bottom: 30, right: 24 }}>

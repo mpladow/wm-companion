@@ -3,6 +3,9 @@
 	"version": "Warmaster Revolution",
 	"group": 2,
 	"order": 7,
+	"description": [
+		"Located far to the east of the Old World, the Grand Empire of Cathay is populous, wealthy, and technologically advanced in comparison to many of its neighbours. Indeed, it is the largest and probably the most secure of the realms of men. Cathay’s people live mostly within highly developed agricultural systems along the great river valleys. The prosperous economy sustains large cities which, like the empire’s northern border, are protected by thick walls and strong garrisons. The misty mountainous regions are less densely populated, and their forests are home to many magical creatures, while on the western border the Warpstone Desert is an inhospitable territory for both friends and foes. Cathay maintains some long-distance trade routes and cordial diplomatic relations with other parts of the Old World, but merchants’ ships and caravans must brave dangerous journeys to acquire luxury items from the empire."
+	],
 	"units": [
 		{
 			"name": "Bannermen",

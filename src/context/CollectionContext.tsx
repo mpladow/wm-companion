@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Factions } from "@utils/constants";
 import { getFactionUnits } from "@utils/factionHelpers";
 import _ from "lodash";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
@@ -55,8 +54,10 @@ export const CollectionProvider = ({ children }: any) => {
 		try {
 			// get user army lists from storage
 			const collection = await AsyncStorage.getItem(USER_COLLECTION);
-			const collectionObject: CollectionList[] = collection && JSON.parse(collection);
-			setCollectionList(collectionObject);
+			if (collection) {
+				const collectionObject: CollectionList[] = collection && JSON.parse(collection);
+				setCollectionList(collectionObject);
+			}
 		} catch (e) {}
 	};
 	const updateStorageAsync = async () => {
@@ -65,7 +66,6 @@ export const CollectionProvider = ({ children }: any) => {
 		} catch (e) {}
 	};
 	useEffect(() => {
-		console.log("useEffect generating dummy data");
 		//setCollectionList(GENERATE_DUMMY_DATA());
 		getCollectionFromStorageAsync();
 	}, []);
@@ -73,54 +73,6 @@ export const CollectionProvider = ({ children }: any) => {
 		// update local storage
 		updateStorageAsync();
 	}, [collectionList]);
-	const GENERATE_DUMMY_DATA = () => {
-		return [
-			{
-				collectionId: "1",
-				faction: Factions.Bretonnians,
-				miniatureDetails: [
-					{
-						unitName: "Peasants",
-						wishlistCount: 0,
-						ownedCount: 0,
-						assembledCount: 0,
-						paintedCount: 0,
-						completedCount: 0,
-					} as MiniatureDetailsOverview,
-					{
-						unitName: "Knights",
-						wishlistCount: 20,
-						ownedCount: 10,
-						assembledCount: 2,
-						paintedCount: 1,
-						completedCount: 10,
-					} as MiniatureDetailsOverview,
-				],
-			} as CollectionList,
-			{
-				collectionId: "2",
-				faction: Factions.Empire,
-				miniatureDetails: [
-					{
-						unitName: "Handgunners",
-						wishlistCount: 0,
-						ownedCount: 0,
-						assembledCount: 0,
-						paintedCount: 0,
-						completedCount: 0,
-					} as MiniatureDetailsOverview,
-					{
-						unitName: "Cannon",
-						wishlistCount: 20,
-						ownedCount: 10,
-						assembledCount: 2,
-						paintedCount: 3,
-						completedCount: 0,
-					} as MiniatureDetailsOverview,
-				],
-			} as CollectionList,
-		];
-	};
 
 	const updateCollectionName = async (collectionName: string, collectionId: string) => {
 		// get collection by collectionId
