@@ -3,6 +3,7 @@
 	"version": "Warmaster Revolution",
 	"group": 0,
 	"order": 1,
+	"description": ["In ages past the land of Khemri was fertile, populous and prosperous thanks to the waters of the Great River of Life whose annual floods irrigated the fields and guaranteed a bountiful harvest. Each city was ruled by a Priest King and for many centuries these omnipotent monarchs lived and died and were buried in tombs constructed by their faithful Liche Priests. The bodies of the Priest Kings, and those of their most faithful troops and retainers, were carefully embalmed and interred with holy spells of immortality to prepare them for the far off day of re-awakening."],
 	"units": [
 		{
 			"name": "Skeletons",

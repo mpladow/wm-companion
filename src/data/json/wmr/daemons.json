@@ -3,6 +3,9 @@
 	"version": "Warmaster Revolution",
 	"group": 1,
 	"order": 3,
+	"description": [
+		"The world is awash with unseen magic that comes from the dark dimension between time and space. It was introduced into the world when the great intra-spatial gateways of the Old Ones collapsed, creating a rift in space and spewing magically volatile warp-matter over the whole planet. Magic is a malleable energy that can be harnessed and wielded, but the very act of doing so reshapes and changes everyone and everything it comes into contact with. Whether used for good or ill, magic is ultimately corrupting and dangerous."
+	],
 	"units": [
 		{
 			"name": "Daemon Hordes",

@@ -3,6 +3,10 @@
 	"version": "Warmaster Revolution",
 	"group": 0,
 	"order": 7,
+	"description": [
+		"Before Chaos came into the world there was a more ancient forgotten age - the Age of the Old Ones. This far-off time lies beyond the memory of man and is recalled only dimly by the Elves - the most ancient of all the world‘s warm-blooded races. In that distant age the planet was dominated by cold- blooded creatures. The undisputed rulers of the world were the reptilian lizardmen. The mysterious Old Ones themselves came not from this planet but from the great darkness. They travelled between the stars in their silver ships by means of immense inter-dimensional portals fashioned with arcane skills blending both sorcery and science. In that forgotten era the Old Ones were unchallenged masters of the universe of time and space. Our world was but one small insignificant colony amidst a glittering galaxy of stars.",
+		"According to the most ancient records preserved in Lustria, themselves a cryptic and much distorted copy of even older accounts now lost, the Old Ones discovered a dying world of ice deserts inhabited only by primitive reptiles. They employed their strange sorcery to arco-engineer the native creatures into various types of workers and slaves. First of all they set the mystical master-race of Slann to fulfil their ambitions and rule over the rest. The Slann used the incomparable power of their minds to reposition the planet in its orbit so that temperatures became more tolerable and jungles grew up to cover the equatorial regions. Most importantly they constructed a permanent trans-dimensional gateway through the axis of the planet. Portals over the poles allowed the Old Ones to transport huge fleets from world to world. By this means new creatures of many kinds were introduced including the ancestors of the warm-blooded races such as Elves, Dwarfs and Men."
+	],
 	"units": [
 		{
 			"name": "Skinks",

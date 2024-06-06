@@ -143,7 +143,6 @@ const BuilderEdit = () => {
 		builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount, addOnUpgrades);
 	};
 	const handleRemoveUpgrade = (unitName: string, id: string) => {
-		console.log(`handleRemoveUpgrade:: removing ${id} from ${unitName} `);
 		builder.removeItem(unitName, id);
 	};
 	useEffect(() => {
@@ -551,35 +550,6 @@ const BuilderEdit = () => {
 				upgrades={magicItems}
 				selectedUpgrades={builder.selectedArmyList?.selectedUpgrades}
 			/>
-			{/* // add units/magic item modal */}
-			<CustomModal
-				setModalVisible={() => {
-					setMagicItemModalVisible(!magicItemModalVisible);
-				}}
-				onDismiss={() => setMagicItems([])}
-				modalVisible={magicItemModalVisible}
-				headerTitle={"Select Upgrades"}
-			>
-				<View>
-					<FlatList
-						data={magicItems}
-						renderItem={(nestedItem) => {
-							const itemStatusInArmy = builder.selectedArmyList?.selectedUpgrades.filter(
-								(x) => x.upgradeName == nestedItem.item.name
-							);
-							return (
-								<UpgradeCard
-									key={nestedItem.index}
-									targetUnitName={selectedUnit}
-									upgrade={nestedItem.item}
-									onAddUpgradePress={handleAddUpgradeToUnitPress}
-									currentCount={itemStatusInArmy ? itemStatusInArmy.length : 0}
-								/>
-							);
-						}}
-					/>
-				</View>
-			</CustomModal>
 			{/* // add new new */}
 			<UpgradePreview
 				handleSetVisible={(visibility) => setUpgradePreviewVisible(visibility)}
@@ -615,10 +585,10 @@ const BuilderEdit = () => {
 					>
 						<FlatList
 							data={builder.armyErrors}
-							renderItem={() => {
+							renderItem={({ item }) => {
 								return (
 									<View>
-										<Text style={{ color: theme.black }}>{nestedItem.item.error}</Text>
+										<Text style={{ color: theme.black }}>{item.error}</Text>
 									</View>
 								);
 							}}

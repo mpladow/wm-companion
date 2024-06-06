@@ -12,6 +12,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import { ToastProvider } from "react-native-toast-notifications";
 import "./src/i18n/i18n";
 import { SettingsContextProvider } from "@context/SettingsContext";
+import { CollectionProvider } from "@context/CollectionContext";
 
 const darkTheme = {
 	dark: true,
@@ -62,14 +63,16 @@ const App = () => {
 				<SettingsContextProvider>
 					<RootSiblingParent>
 						<MenuProvider>
-							<BuilderContextProvider>
-								<VPContextProvider>
-									<NavigationContainer theme={darkTheme}>
-										<RootStack />
-										<StatusBar translucent />
-									</NavigationContainer>
-								</VPContextProvider>
-							</BuilderContextProvider>
+							<CollectionProvider>
+								<BuilderContextProvider>
+									<VPContextProvider>
+										<NavigationContainer theme={darkTheme}>
+											<RootStack />
+											<StatusBar translucent />
+										</NavigationContainer>
+									</VPContextProvider>
+								</BuilderContextProvider>
+							</CollectionProvider>
 						</MenuProvider>
 					</RootSiblingParent>
 				</SettingsContextProvider>

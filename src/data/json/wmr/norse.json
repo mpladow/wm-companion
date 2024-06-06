@@ -3,6 +3,7 @@
     "version": "Warmaster Revolution",
     "group": 2,
     "order": 6,
+    "description": ["The northern regions of the Old World suffer from extremes of climate and geography unlike anywhere else. The dense dark forests, high barren mountains, icy seas and long winter nights conspire to make life here both hard and short. This cruel land known as Norsca is a home to the Norsemen - a race of men that are as fierce, brutal and unforgiving as the landscape itself."],
     "units": [
       {
         "name": "Bondsmen",

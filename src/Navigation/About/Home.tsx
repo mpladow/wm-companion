@@ -4,6 +4,7 @@ import {
 	Platform,
 	Pressable,
 	SafeAreaView,
+	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
 	View,
@@ -56,7 +57,7 @@ const Home = () => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<MainContainerWithImage>
-				<View style={{ zIndex: 9, flex: 1, padding: 16 }}>
+				<ScrollView style={{ zIndex: 9, flex: 1, padding: 16 }}>
 					<TextBlock variant='large'>
 						<>
 							<View
@@ -76,7 +77,7 @@ const Home = () => {
 							</View>
 						</>
 					</TextBlock>
-					<View style={{ justifyContent: "space-between" }}>
+					<View style={{ justifyContent: "space-between", paddingBottom: 250 }}>
 						<TextBlock variant='large'>
 							<Text>{t("Tagline")}</Text>
 						</TextBlock>
@@ -118,6 +119,15 @@ const Home = () => {
 						</View>
 						<View style={{ paddingVertical: 8 }}>
 							<IconButton
+								onPress={() => navigation.navigate("Collection", { screen: "CollectionHome" })}
+								variant={"primary"}
+								title={"Miniatures Collection"}
+								icon={<Ionicons name='library' size={24} color='black' />}
+								isStackNavigation={true}
+							></IconButton>
+						</View>
+						<View style={{ paddingVertical: 8 }}>
+							<IconButton
 								onPress={() => handleEmailPress()}
 								variant={"primary"}
 								title={t("ReportBug", { ns: "common" })}
@@ -133,13 +143,13 @@ const Home = () => {
 											<Entypo name='paypal' size={24} color={theme.text} />
 										</View>
 
-										<Text bold>{t("SupportDevelopment", {ns: "home"})}</Text>
+										<Text bold>{t("SupportDevelopment", { ns: "home" })}</Text>
 									</View>
 								</Button>
 							</View>
 						) : null}
 					</View>
-				</View>
+				</ScrollView>
 			</MainContainerWithImage>
 		</SafeAreaView>
 	);

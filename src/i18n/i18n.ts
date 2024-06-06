@@ -1,6 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import { commonEn, builderEn, homeEn, trackerEn, chartsEn, unitsEn, formsEn } from "./en";
+import { commonEn, builderEn, homeEn, trackerEn, chartsEn, unitsEn, formsEn, collectionEn } from "./en";
 import { commonEs, trackerEs, builderEs, homeEs, chartsEs, unitsEs, formsEs } from "./es";
 
 // the translations
@@ -14,7 +14,8 @@ const resources = {
 		home: homeEn,
 		charts: chartsEn,
 		units: unitsEn,
-		forms: formsEn
+		forms: formsEn,
+		collection: collectionEn
 	},
 	es: {
 		common: commonEs,

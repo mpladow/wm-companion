@@ -193,9 +193,15 @@
 			"points": "+10",
 			"armyMax": 1,
 			"text": [
-				"If a Wizard casts a spell and rolls sufficiently well for it to work then he can cast another spell. He can only do this once during the entire game. Note that it does not matter if the previous spell is dispelled or anti-magicked by a Runesmith so long as the required dice score is rolled. Once any effects of the previous spell have been resolved, the Wizard can decide to use the Rod of Repetition to cast another spell - this can be the same spell again or a different one. Note that the same spell can be cast upon the same unit if the previous spell has been dispelled/anti-magicked. This next spell is cast exactly like any other - roll a dice to determine if it works in the usual way.",
+				"If a Wizard casts a spell and succeeds by scoring the required dice roll they can cast another spell, regardless of whether the spell was dispelled or anti-magicked by a Runesmith.",
 				"",
-				"Note that some spells, such as the Teleport spell, already allow for the possibility of casting a further spell on a random dice roll. In these cases the Rod of Repetition can be used instead of the random dice roll to try and cast the second spell if you prefer, or the Rod of Repetition could be used after the second spell has been cast assuming it is cast successfully. By using the Rod of Repetition with spells of this kind it is possible to cast the spell again, however, you do lose the bonus spell option, effectivly restricting casting to a maximum of 3 spells per turn. For example: Teleport, 2<sup>nd</sup> spell, RoR, 3<sup>rd</sup> spell - or - 1<sup>st</sup> spell, RoR, Teleport, 3<sup>rd</sup> spell - supposing the 1<sup>st</sup>, 2<sup>nd</sup> or 3<sup>rd</sup> spell may be a Teleport too."
+				"They can only do this once during the entire game.",
+				"",
+				"The spell can be the same spell or a different spell. The target can be the same unit or a different unit.",
+				"",
+				"Note that some spells, such as the Teleport spell, already allow for the possibility of casting a further spell on a random dice roll. In these cases the Rod of Repetition can be used instead of the random dice roll to try and cast the second spell if you prefer, or the Rod of Repetition could be used after the second spell has been cast assuming it is cast successfully. By using the Rod of Repetition with spells of this kind it is possible to cast the spell again, however, you do lose the bonus spell option, effectivly restricting casting to a maximum of 3 spells per turn.",
+				"",
+				"For example: Teleport, 2nd spell, RoR, 3rd spell - or - 1st spell, RoR, Teleport, 3rd spell - supposing the 1st, 2nd or 3rd spell may be a Teleport too."
 			]
 		}
 	],

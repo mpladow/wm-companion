@@ -5,7 +5,9 @@ export default {
 	Tagline: "Una herramienta complementaria para echar una mano en los wargames, Warmaster y Warmaster Revolution.",
 	GeneralThanks: "¡Gracias a toda la comunidad de Warmaster Revolutions por mantener vivo este juego!",
 	SpecialMentions: "Menciones especiales para",
-    SpecialMentionsForSculptors: "Miniaturas diseñadas por",
-    SpecialMentionsForImages: "Añadidos e imágenes de los ejércitos por",
-    SpecialMentionsTranslations: "Traducciones al Español por",
+	SpecialMentionsForSculptors: "Miniaturas diseñadas por",
+	SpecialMentionsForImages: "Añadidos e imágenes de los ejércitos por",
+	SpecialMentionsTranslations: "Traducciones al Español por",
+	PreferencesBattleTrackerDesc: "La calculadora rotará los botones para el modo solitario",
+	DescStalineDesc: "Mantener las estadísticas de las unidades visibles",
 };

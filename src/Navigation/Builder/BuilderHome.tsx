@@ -10,6 +10,9 @@ import {
 	TouchableOpacity,
 	TouchableWithoutFeedback,
 	View,
+	Image,
+	ScrollView,
+	Pressable,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,7 +22,7 @@ import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import CustomModal from "@components/CustomModal";
 import fonts from "@utils/fonts";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
-import { getFactions, getFactionUnits } from "@utils/factionHelpers";
+import { getFactions, getFactionUnits, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import ArmyListCard from "./components/ArmyListCard";
@@ -28,11 +31,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import FormLabel from "@components/forms/FormLabel";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
+import { Factions } from "@utils/constants";
+
+const THUMBNAIL_HEIGHT = 100;
+const THUMBNAIL_WIDTH = 100;
+const SPACING = 5;
 
 export type armySectionListDataProps = {
 	title: string;
 	data: ArmyListProps[];
 };
+
 const BuilderHome = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation();
@@ -150,6 +159,38 @@ const BuilderHome = () => {
 		setFocusedArmy(builder.getArmyByArmyId(armyId));
 		setShowArmyNotes(true);
 	};
+
+	// faction selection
+	const thumbRef = useRef<FlatList>(null);
+	const setCurrentActiveIndex = (index) => {
+		if (index !== undefined) {
+			setActiveIndex(index);
+			const x = ddFactions[index]?.value;
+			setFactionSelection(x as number);
+		}
+		if (index * (THUMBNAIL_WIDTH + 19 + SPACING) - (THUMBNAIL_WIDTH + 19) / 2 > width / 2) {
+			thumbRef?.current?.scrollToOffset({
+				offset: index * (THUMBNAIL_WIDTH + 19 + SPACING) - width / 2 + (THUMBNAIL_WIDTH + 18) / 2,
+				// offset: index * (width / 2),
+				animated: true,
+			});
+		} else {
+			thumbRef?.current?.scrollToOffset({
+				offset: 0,
+				animated: true,
+			});
+		}
+	};
+	const [activeIndex, setActiveIndex] = useState(0);
+	const { width, height } = Dimensions.get("screen");
+
+	const [factionDescription, setFactionDescription] = useState([] as string[]);
+	useEffect(() => {
+		// get factionDescription
+		const factionunits = getFactionUnits(factionSelection as number);
+		setFactionDescription(factionunits.description);
+	}, [factionSelection]);
+
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
@@ -209,120 +250,8 @@ const BuilderHome = () => {
 							);
 						}}
 					/>
-					{/* <FlatList
-						ListFooterComponent={() => <View style={{ padding: 140 }}></View>}
-						data={builder.userArmyLists}
-						ItemSeparatorComponent={() => <View style={{ padding: 4 }}></View>}
-						renderItem={({ item, index }) => {
-							//TODO: Extract
-							return (
-								<ArmyListCard
-									armyList={item}
-									handleArmyListPress={onArmyListPress}
-									handleDeleteArmyPress={onArmyListDeletePress}
-									handleArmyNameChange={handleEditArmyPress}
-								/>
-							);
-						}}
-					/> */}
 				</View>
 
-				<CustomModal
-					onDismiss={() => {
-						setFocusedArmyId(undefined);
-						setFocusedArmy(undefined);
-						setEditingArmy(false);
-					}}
-					setModalVisible={handleAddArmyPress}
-					headerTitle={editingArmy ? t("EditArmy") : t("CreateArmy")}
-					modalVisible={showCreateArmy}
-				>
-					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-						<View
-							style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}
-						>
-							<>
-								<View style={{ flex: 1, marginBottom: 12 }}>
-									<FormLabel label={t("ArmyName")} />
-									<TextInput
-										ref={nameRef}
-										placeholder={t("PlaceholderEnterArmyName", { ns: "forms" })}
-										onChangeText={(val) => setFactionName(val)}
-										style={[
-											{
-												color: theme.black,
-												fontFamily: fonts.PTSansBold,
-												fontSize: 16,
-												backgroundColor: theme.white,
-												borderRadius: 16,
-												padding: 16,
-											},
-											factionNameError && { borderColor: theme.danger, borderWidth: 4 },
-										]}
-									>
-										{factionName}
-									</TextInput>
-									{factionNameError && (
-										<Text italic style={{ color: theme.danger }}>
-											An army name is required
-										</Text>
-									)}
-									{!editingArmy ? (
-										<>
-											<View style={{ marginTop: 12 }}>
-												<FormLabel label={t("Faction")} />
-												<CustomDropdown
-													value={factionSelection}
-													style={[styles.dropdown, { backgroundColor: theme.white }]}
-													placeholder={t("PlaceholderSelectFaction", { ns: "forms" })}
-													placeholderStyle={{ color: "#ddd" }}
-													data={ddFactions}
-													search
-													searchPlaceholder={`${t("Search", { ns: "common" })}...`}
-													labelField='label'
-													valueField='value'
-													onChange={(item) => {
-														handleFactionSelection(item.value);
-													}}
-												/>
-											</View>
-										</>
-									) : (
-										<View style={{ marginTop: 12 }}>
-											<FormLabel label={t("Notes", { ns: "builder" })} />
-											<TextInput
-												multiline
-												value={factionNotes}
-												onChangeText={(val) => setFactionNotes(val)}
-												style={[
-													{
-														color: theme.black,
-														fontFamily: fonts.PTSansBold,
-														fontSize: 16,
-														backgroundColor: theme.white,
-														borderRadius: 16,
-														padding: 16,
-														paddingTop: 16,
-														height: 100,
-													},
-													// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
-												]}
-											/>
-										</View>
-									)}
-								</View>
-								<Button
-									onPress={() => (editingArmy ? onArmyNameChange() : onConfirmCreateArmyPress(true))}
-									variant={"confirm"}
-								>
-									<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
-										{editingArmy ? t("Confirm", { ns: "common" }) : t("Create", { ns: "common" })}
-									</Text>
-								</Button>
-							</>
-						</View>
-					</TouchableWithoutFeedback>
-				</CustomModal>
 				<PopupConfirm
 					visible={confirmDialog}
 					onConfirm={() => {
@@ -335,11 +264,195 @@ const BuilderHome = () => {
 						setConfirmDialog(false);
 					}}
 					text={<Text style={{ color: theme.text, fontSize: 16 }}>Do you want to delete this army?</Text>}
-					confirmText={t("DeleteArmy", {ns: "builder"})}
+					confirmText={t("DeleteArmy", { ns: "builder" })}
 					cancelText={t("Cancel", { ns: "common" })}
-					headerText={t("DeleteArmy", {ns: "builder"})}
+					headerText={t("DeleteArmy", { ns: "builder" })}
 				/>
 			</ImageBackground>
+			<CustomModal
+				onDismiss={() => {
+					setFocusedArmyId(undefined);
+					setFocusedArmy(undefined);
+					setEditingArmy(false);
+				}}
+				setModalVisible={handleAddArmyPress}
+				headerTitle={editingArmy ? t("EditArmy") : t("CreateArmy")}
+				modalVisible={showCreateArmy}
+			>
+				<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}>
+					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+						<>
+							<View style={{ flex: 1, marginBottom: 12 }}>
+								<FormLabel label={t("ArmyName")} />
+								<TextInput
+									ref={nameRef}
+									placeholder={t("PlaceholderEnterArmyName", { ns: "forms" })}
+									onChangeText={(val) => setFactionName(val)}
+									style={[
+										{
+											color: theme.black,
+											fontFamily: fonts.PTSansBold,
+											fontSize: 16,
+											backgroundColor: theme.white,
+											borderRadius: 16,
+											padding: 16,
+										},
+										factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+									]}
+								>
+									{factionName}
+								</TextInput>
+								{factionNameError && (
+									<Text italic style={{ color: theme.danger }}>
+										An army name is required
+									</Text>
+								)}
+								{!editingArmy ? (
+									<>
+										<View style={{ marginTop: 12 }}>
+											<FormLabel label={t("Faction")} />
+											<FlatList
+												ref={thumbRef}
+												horizontal
+												data={ddFactions}
+												// snapToInterval={width / 2 - THUMBNAIL_WIDTH + 5}
+												contentContainerStyle={{
+													paddingHorizontal: SPACING,
+													paddingVertical: 4,
+												}}
+												renderItem={({ item, index }) => {
+													const armyName = item.value
+														? getKeyByValue(Factions, item?.value as number)
+														: "";
+
+													const factionAssets = getLocalFactionAssets(
+														armyName ? armyName : ""
+													);
+													return (
+														<TouchableOpacity
+															onPress={() => setCurrentActiveIndex(index)}
+															key={index}
+															style={{ overflow: "hidden" }}
+														>
+															<View
+																style={{
+																	width:
+																		activeIndex == index
+																			? THUMBNAIL_WIDTH + 5
+																			: THUMBNAIL_WIDTH + 5,
+																	height:
+																		activeIndex == index
+																			? THUMBNAIL_HEIGHT + 20
+																			: THUMBNAIL_HEIGHT + 20,
+																	backgroundColor: theme.background,
+																	borderRadius: 8,
+																	borderColor:
+																		activeIndex == index
+																			? theme.warning
+																			: theme.background,
+																	borderWidth: 2,
+																	marginRight: SPACING,
+																	overflow: "hidden",
+																}}
+															>
+																<Image
+																	style={[
+																		styles.stretch,
+																		{
+																			width:
+																				activeIndex == index
+																					? THUMBNAIL_WIDTH + 5
+																					: THUMBNAIL_WIDTH + 5,
+																			height:
+																				activeIndex == index
+																					? THUMBNAIL_HEIGHT - 2
+																					: THUMBNAIL_HEIGHT - 2,
+																		},
+																	]}
+																	source={factionAssets && factionAssets[0]}
+																/>
+
+																<View
+																	style={{
+																		zIndex: 999,
+																		backgroundColor: theme.white,
+																		height: 20,
+																		borderBottomLeftRadius: 8,
+																		borderBottomRightRadius: 8,
+																	}}
+																>
+																	<Text
+																		bold
+																		style={{
+																			textAlign: "center",
+																			color: theme.textInverted,
+																		}}
+																	>
+																		{item.label}
+																	</Text>
+																</View>
+															</View>
+														</TouchableOpacity>
+													);
+												}}
+												ItemSeparatorComponent={() => <View style={{ width: 12 }}></View>}
+											/>
+										</View>
+										<View style={{ marginVertical: 4 }}>
+											<Text style={{ textAlign: "center", fontSize: 20 }} bold>
+												{Factions[factionSelection]?.replaceAll("_", " ")}
+											</Text>
+										</View>
+										<ScrollView
+											onStartShouldSetResponder={() => true}
+											contentContainerStyle={{ flexGrow: 1 }}
+											scrollEnabled={true}
+										>
+											{factionDescription.map((item, index) => {
+												return (
+													<Text style={{ textAlign: "center", paddingBottom: 4 }}>
+														{item}
+													</Text>
+												);
+											})}
+										</ScrollView>
+									</>
+								) : (
+									<View style={{ marginTop: 12 }}>
+										<FormLabel label={t("Notes", { ns: "builder" })} />
+										<TextInput
+											multiline
+											value={factionNotes}
+											onChangeText={(val) => setFactionNotes(val)}
+											style={[
+												{
+													color: theme.black,
+													fontFamily: fonts.PTSansBold,
+													fontSize: 16,
+													backgroundColor: theme.white,
+													borderRadius: 16,
+													padding: 16,
+													paddingTop: 16,
+													height: 100,
+												},
+												// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+											]}
+										/>
+									</View>
+								)}
+							</View>
+							<Button
+								onPress={() => (editingArmy ? onArmyNameChange() : onConfirmCreateArmyPress(true))}
+								variant={"confirm"}
+							>
+								<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
+									{editingArmy ? t("Confirm", { ns: "common" }) : t("Create", { ns: "common" })}
+								</Text>
+							</Button>
+						</>
+					</TouchableWithoutFeedback>
+				</View>
+			</CustomModal>
 			<View style={{ zIndex: 99999, position: "absolute", bottom: 30, right: 24 }}>
 				{/* <Button circle onPress={handleAddArmyPress} variant={"confirm"}>
 							<AntDesign name='plus' size={24} color='black' />
@@ -398,6 +511,12 @@ export default BuilderHome;
 
 const styles = StyleSheet.create({
 	dropdown: { paddingHorizontal: 16, padding: 8, borderRadius: 16 },
+	stretch: {
+		width: THUMBNAIL_WIDTH,
+		height: THUMBNAIL_HEIGHT - 5,
+		resizeMode: "cover",
+		borderRadius: 8,
+	},
 	image: {
 		flex: 1,
 		justifyContent: "center",

@@ -3,6 +3,7 @@
     "version": "Warmaster Revolution",
     "group": 0,
     "order": 2,
+    "description": ["The tribes of the northlands are called Marauders by the civilised folk of the south. Their domain stretches across the great steppes and throughout the rocky land of Norsca and encompasses many savage tribes of men. These tribes can be divided into three main groups - the towering flaxen- haired Norse, the raven-haired and dark-skinned Kurgan, and the squat, powerfully built, horse-riding Hung. These peoples together make up the barbarian hordes of the north whose incursions to the south comprise the greatest threat to the civilised nations of the world."],
     "units": [
       {
         "name": "Chaos Warriors",
