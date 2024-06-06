@@ -229,7 +229,7 @@
 		"Doombull": {
 			"order": 7,
 			"text": [
-				"Causes Terror. Beastherd, Herdkin and Bestigors joined by a Doombull will become subject to Bloodlust in the same way as Minotaur units, until the end of the following command phase."
+				"Any unit joined by a Doombull will cause Terror. Beastherd, Herdkin and Bestigors joined by a Doombull will become subject to Bloodlust in the same way as Minotaur units, until the end of the following command phase."
 			]
 		},
 		"Tuskgor Chariot": {

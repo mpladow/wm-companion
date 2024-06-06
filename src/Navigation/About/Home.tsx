@@ -4,6 +4,7 @@ import {
 	Platform,
 	Pressable,
 	SafeAreaView,
+	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
 	View,
@@ -56,7 +57,7 @@ const Home = () => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<MainContainerWithImage>
-				<View style={{ zIndex: 9, flex: 1, padding: 16 }}>
+				<ScrollView style={{ zIndex: 9, flex: 1, padding: 16 }}>
 					<TextBlock variant='large'>
 						<>
 							<View
@@ -76,7 +77,7 @@ const Home = () => {
 							</View>
 						</>
 					</TextBlock>
-					<View style={{ justifyContent: "space-between" }}>
+					<View style={{ justifyContent: "space-between", paddingBottom: 250 }}>
 						<TextBlock variant='large'>
 							<Text>{t("Tagline")}</Text>
 						</TextBlock>
@@ -148,7 +149,7 @@ const Home = () => {
 							</View>
 						) : null}
 					</View>
-				</View>
+				</ScrollView>
 			</MainContainerWithImage>
 		</SafeAreaView>
 	);

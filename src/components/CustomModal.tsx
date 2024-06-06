@@ -1,6 +1,7 @@
 import {
 	Alert,
 	Dimensions,
+	KeyboardAvoidingView,
 	Modal,
 	Pressable,
 	StyleSheet,
@@ -78,6 +79,7 @@ const CustomModal = ({
 			setModalContent(undefined);
 		}
 	}, [page]);
+	const { height, width } = Dimensions.get("window");
 
 	return (
 		<Modal
@@ -91,67 +93,71 @@ const CustomModal = ({
 				setModalVisible();
 			}}
 		>
-			<TouchableWithoutFeedback onPress={setModalVisible}>
-				<View style={styles.modalOverlay} />
-			</TouchableWithoutFeedback>
-			<View style={styles.centeredView}>
-				<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.blueGrey }]}>
-					<View style={{ flexDirection: "row", padding: 12 }}>
+			<KeyboardAvoidingView style={{ height, width }}>
+				<TouchableWithoutFeedback onPress={setModalVisible}>
+					<View style={styles.modalOverlay} />
+				</TouchableWithoutFeedback>
+				<View style={styles.centeredView}>
+					<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.blueGrey }]}>
+						<View style={{ flexDirection: "row", padding: 12 }}>
+							<View
+								style={{
+									width: "100%",
+									flexDirection: "row",
+									alignItems: "center",
+									justifyContent: "space-between",
+								}}
+							>
+								<View style={{ flex: 1, alignItems: "flex-start" }}></View>
+								<View style={{ flex: 4, alignItems: "center" }}>
+									<Text
+										style={{ fontSize: fontSize.xxl, textAlign: "center" }}
+										variant={"heading3"}
+										bold
+									>
+										{modalHeader}
+									</Text>
+								</View>
+								<View style={{ flex: 1, alignItems: "flex-end" }}>
+									{/* <TouchableOpacity onPress={setModalVisible}>
+									<AntDesign name='close' size={24} color={theme.text} />
+								</TouchableOpacity> */}
+								</View>
+							</View>
+						</View>
+						<View style={{ paddingBottom: 60, flex: 1 }}>{modalContent ? modalContent : children}</View>
 						<View
 							style={{
 								width: "100%",
 								flexDirection: "row",
-								alignItems: "center",
-								justifyContent: "space-between",
-							}}
-						>
-							<View style={{ flex: 1, alignItems: "flex-start" }}></View>
-							<View style={{ flex: 4, alignItems: "center" }}>
-								<Text style={{ fontSize: fontSize.xxl, textAlign: "center" }} variant={"heading3"} bold>
-									{modalHeader}
-								</Text>
-							</View>
-							<View style={{ flex: 1, alignItems: "flex-end" }}>
-								{/* <TouchableOpacity onPress={setModalVisible}>
-									<AntDesign name='close' size={24} color={theme.text} />
-								</TouchableOpacity> */}
-							</View>
-						</View>
-					</View>
-					<View style={{ paddingBottom: 60, flex: 1 }}>
-						{modalContent ? modalContent : children}
-					</View>
-					<View
-						style={{
-							width: "100%",
-							flexDirection: "row",
-							alignItems: "flex-end",
-							justifyContent: "center",
-						}}
-					>
-						<View style={{ position: "absolute", left: 0, padding: 12 }}>{footerLeft}</View>
-						<View
-							style={{
-								position: "absolute",
-								top: -40,
-								width: 70,
-								height: 70,
-								backgroundColor: theme.background,
-								borderRadius: 200,
-								alignItems: "center",
+								alignItems: "flex-end",
 								justifyContent: "center",
 							}}
 						>
-							<TouchableOpacity hitSlop={40} onPress={setModalVisible}>
-								<AntDesign name='close' size={24} color={theme.text} />
-							</TouchableOpacity>
-						</View>
-						<View style={{ position: "absolute", right: 0, padding: 12 }}>
-							<Text>{modalMetaContent?.pageNumber}</Text>
+							<View style={{ position: "absolute", left: 0, padding: 12 }}>{footerLeft}</View>
+							<View
+								style={{
+									position: "absolute",
+									top: -40,
+									width: 70,
+									height: 70,
+									backgroundColor: theme.background,
+									borderRadius: 200,
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+							>
+								<TouchableOpacity hitSlop={40} onPress={setModalVisible}>
+									<AntDesign name='close' size={24} color={theme.text} />
+								</TouchableOpacity>
+							</View>
+							<View style={{ position: "absolute", right: 0, padding: 12 }}>
+								<Text>{modalMetaContent?.pageNumber}</Text>
+							</View>
 						</View>
 					</View>
 				</View>
-			</View>
+			</KeyboardAvoidingView>
 		</Modal>
 	);
 };

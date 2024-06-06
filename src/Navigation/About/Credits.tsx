@@ -31,7 +31,7 @@ const Credits = () => {
 				</TextBlock>
 				<TextBlock variant='large'>
 					<Text>
-						<Text bold>{t("SpecialMentionsForImages")}</Text>: K Rauff, Przemas Bak, M Hobbes, Hardy,
+						<Text bold>{t("SpecialMentionsForImages")}</Text>: K Rauff, Przemas Bak, Hobbes, Hardy,
 						Alexander Carraro, Mattias R, Byron L, Kristoffer Rauff, Geoff A, Kai Tek Ng, Mattias R
 					</Text>
 				</TextBlock>

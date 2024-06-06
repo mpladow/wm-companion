@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import React, { useMemo } from "react";
 
 import { Text } from "@components/index";
@@ -29,9 +29,11 @@ const UnitProgressCard = ({
 	ctaWishlistProgressText,
 }: UnitProgressCardProps) => {
 	const calculatePercentageWidth = useMemo(() => {
-		if (statValue) {
+		if (statValue && total) {
 			console.log((statValue / total) * 100, statName);
 			return (statValue / total) * 100;
+		} else {
+			return 0;
 		}
 	}, [total, statValue]);
 

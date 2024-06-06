@@ -19,7 +19,7 @@ const CollectionEdit = ({ route, navigation }) => {
 	const [unit, setUnit] = useState<MiniatureDetailsOverview>();
 	const { collectionList, updateUnit } = useCollection();
 	const { theme } = useTheme();
-	
+
 	const workflow: WorkflowType[] = [
 		{ key: "wishlistCount", name: "Wishlist", primaryColor: theme.darkRed },
 		{ key: "ownedCount", name: "Owned", primaryColor: theme.orange },
@@ -149,6 +149,7 @@ const CollectionEdit = ({ route, navigation }) => {
 						if (wf.key == "wishlistCount") {
 							return (
 								<UnitProgressCard
+									key={index}
 									primaryColor={wf.primaryColor}
 									statName={wf.name}
 									statValue={unit?.wishlistCount}
@@ -180,6 +181,7 @@ const CollectionEdit = ({ route, navigation }) => {
 						} else {
 							return (
 								<UnitProgressCard
+									key={index}
 									primaryColor={wf.primaryColor}
 									statName={wf.name}
 									statValue={unit ? (unit[wf.key] as number) : undefined}
