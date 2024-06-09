@@ -2,8 +2,9 @@ import { get1000PointInterval } from "@navigation/Builder/utils/builderHelpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { current } from "@reduxjs/toolkit";
 import { UpgradeTypes } from "@utils/constants";
-import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
+import { getGenericSpecialRules } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
+import { useFactionUnits } from "@utils/useFactionUnits";
 import { produce } from "immer";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,7 +21,7 @@ export type SelectedUpgradesProps = {
 	type: string;
 	attachedToName: string; // the name of the unit this item is attached to
 	points: number;
-	currentCount: number;
+	currentCount?: number;
 	maxCount?: number;
 	armyLimitMaxCount?: number; // hard limit
 	addOnUpgrades?: string[];
@@ -31,7 +32,7 @@ export type SelectedUnitProps = {
 	order: number;
 	points?: number;
 	isLeader?: boolean;
-	currentCount: number;
+	currentCount?: number;
 	maxCount?: number;
 	minCount?: number;
 	ignoreBreakPoint?: boolean;
@@ -100,6 +101,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
 	const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
 	const [totalPoints, setTotalPoints] = useState(1000);
+
+	const CURRENT_VERSION = 2; // this should be retrieved by the config
+	const { getFactionUnitsByVersion } = useFactionUnits();
 
 	useEffect(() => {
 		//AsyncStorage.removeItem(`userArmies`);
@@ -173,7 +177,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			points: 0,
 		};
 		// autopopulate if true
-		const _factionDetails = getFactionUnits(faction);
+		const _factionDetails = getFactionUnitsByVersion(faction, 2);
 		// set faction upgrade tails
 		factionDetails && setFactionDetails(_factionDetails.factionList);
 
@@ -273,13 +277,13 @@ export const BuilderContextProvider = ({ children }: any) => {
 		const selectedList = userArmyLists.find((x) => x.armyId == armyId);
 		if (selectedList) {
 			selectedList.points = calculateCurrentArmyPoints(selectedList);
-			const _factionDetails = getFactionUnits(selectedList?.faction);
+			const _factionDetails = getFactionUnitsByVersion(selectedList?.faction, CURRENT_VERSION);
 			// set faction upgrade tails
 			factionDetails && setFactionDetails(_factionDetails.factionList);
 			setCurrentArmyList(selectedList);
 		} else {
 			if (faction) {
-				const factionDetails = getFactionUnits(faction);
+				const _factionDetails = getFactionUnitsByVersion(faction, CURRENT_VERSION);
 				factionDetails && setFactionDetails(_factionDetails.factionList);
 				setCurrentArmyList(selectedList);
 			}
@@ -310,20 +314,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 				if (armyList) armyList.armyNotes = notes;
 			})
 		);
-		// setUserArmyLists((prev) => {
-		// 	const armyListToUpdateIndex = prev.findIndex((x) => x.armyId == armyId);
-		// 	const _selectedArmyList = Object.assign(
-		// 		{},
-		// 		prev.find((x) => x.armyId == armyId)
-		// 	);
-		// 	_selectedArmyList.armyNotes = notes;
-		// 	const updatedSelectedUnits = [
-		// 		...prev.slice(0, armyListToUpdateIndex),
-		// 		_selectedArmyList,
-		// 		...prev.slice(armyListToUpdateIndex + 1),
-		// 	];
-		// 	return updatedSelectedUnits;
-		// });
 	};
 	const addUnit = (
 		unitName: string,
@@ -352,7 +342,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			produce((draft) => {
 				const unit = draft?.selectedUnits.find((u) => u.unitName == unitName);
 
-				if (unit) {
+				if (unit && unit.currentCount) {
 					unit.currentCount = unit.currentCount + 1;
 				} else {
 					draft?.selectedUnits.push(newUnit);
@@ -365,7 +355,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 		setCurrentArmyList(
 			produce((draft) => {
 				const unit = draft?.selectedUnits.find((u) => u.id == unitId);
-				if (unit) {
+				if (unit && unit.currentCount) {
 					if (unit.currentCount > 1) {
 						unit.currentCount = unit.currentCount - 1;
 					} else {
