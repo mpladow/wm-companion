@@ -28,6 +28,7 @@ import witchHunterList from "../data/json/wmr/witchHunters.json";
 import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
 
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
+import { ArmyReferenceType } from "src/types/data/army";
 
 export const getFactions = () => {
 	let ddFactionList = [];
@@ -130,7 +131,7 @@ export const getLocalFactionAssets = (faction: string) => {
 
 export const getFactionUnits = (factionSelection: number) => {
 	let list: any[] = [];
-	let factionList;
+	let factionList: ArmyReferenceType;
 	let description: string[] = [];
 	switch (factionSelection) {
 		case Factions.Bretonnians:

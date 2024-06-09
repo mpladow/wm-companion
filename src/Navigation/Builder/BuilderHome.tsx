@@ -122,6 +122,7 @@ const BuilderHome = () => {
 		}
 	};
 	const onArmyListPress = (armyId: string) => {
+		console.log(armyId, "armyIdOnPress");
 		builder.setSelectedArmyList(armyId);
 		navigation.navigate("BuilderEdit");
 	};

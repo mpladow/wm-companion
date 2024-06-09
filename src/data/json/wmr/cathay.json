@@ -56,7 +56,7 @@
 			"order": 4,
 			"type": "Infantry",
 			"attack": 4,
-			"range": 4,
+			"hits": 4,
 			"armour": "4+",
 			"size": 3,
 			"points": 140,

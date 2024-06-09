@@ -35,7 +35,6 @@ const ArmyListCard = ({
 }: ArmyListCardProps) => {
 	const { t } = useTranslation(["builder", "common"]);
 	const { theme } = useTheme();
-
 	const setImage = () => {
 		const armyName = getKeyByValue(Factions, armyList.faction);
 		const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
@@ -71,7 +70,9 @@ const ArmyListCard = ({
 					</View>
 
 					<View style={{ marginBottom: 4 }}>
-						<Text>{armyList.faction && getKeyByValue(Factions, armyList.faction).replaceAll("_", " ")}</Text>
+						<Text>
+							{armyList.faction && getKeyByValue(Factions, armyList.faction).replaceAll("_", " ")}
+						</Text>
 					</View>
 					<View style={{ alignItems: "flex-start", flexDirection: "row" }}>
 						<View>
