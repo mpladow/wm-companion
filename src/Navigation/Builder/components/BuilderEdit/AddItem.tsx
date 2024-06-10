@@ -1,7 +1,6 @@
 import { FlatList, Modal, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { UnitProps, UpgradesProps } from "@utils/types";
-import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
 import { SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
 import { sectionListDataProps } from "../../BuilderEdit";
 import UnitCard from "../UnitCard";
@@ -17,6 +16,7 @@ import UpgradeCard from "../UpgradeCard";
 import UpgradePreview from "../UpgradePreview";
 import { getUpgradeDetailsByName } from "@navigation/Builder/utils/builderHelpers";
 import _ from "lodash";
+import { useFactionUnits } from "@utils/useFactionUnits";
 
 export type AddItemProps = {
 	unitName: string;
@@ -43,7 +43,7 @@ const AddItem = () => {
 	const [selectedUnit, setSelectedUnit] = useState();
 	const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
 	const [currentUpgradeDetails, setCurrentUpgradeDetails] = useState<UpgradesProps | undefined>();
-
+	const { getFactionUnitsByVersion } = useFactionUnits();
 	const armyCount = useMemo(() => {
 		return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
@@ -59,7 +59,7 @@ const AddItem = () => {
 
 	useEffect(() => {
 		// get faction list data
-		const factionListData = getFactionUnits(builder.selectedArmyList?.faction);
+		const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
 		const factionUnits = factionListData?.factionList?.units;
 		const handleAddMagicItemPress = () => {
 			// get all magic items

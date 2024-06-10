@@ -6,9 +6,10 @@ import fonts from "@utils/fonts";
 import { Button, CustomDropdown, Text } from "@components/index";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { useTranslation } from "react-i18next";
-import { getFactionUnits, getFactions, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
+import { getFactions, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 import { CollectionList, useCollection } from "@context/CollectionContext";
 import { Factions } from "@utils/constants";
+import { useFactionUnits } from "@utils/useFactionUnits";
 
 type CollectionCreateType = {
 	onDismiss: () => void;
@@ -25,17 +26,15 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 	const [factionNameError, setFactionNameError] = useState(false);
 	const [factionSelection, setFactionSelection] = useState<number>();
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
-	const handleFactionSelection = (faction: number) => {
-		setFactionSelection(faction);
-	};
 	const { t } = useTranslation(["builder", "forms", "collection"]);
 	const { theme } = useTheme();
 	const collectionContext = useCollection();
+	const { getFactionUnitsByVersion } = useFactionUnits();
 
 	const [factionDescription, setFactionDescription] = useState([] as string[]);
 	useEffect(() => {
 		// get factionDescription
-		const factionunits = getFactionUnits(factionSelection as number);
+		const factionunits = getFactionUnitsByVersion(factionSelection as number, 2);
 		setFactionDescription(factionunits.description);
 	}, [factionSelection]);
 

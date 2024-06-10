@@ -13,14 +13,12 @@ import { useNavigation } from "@react-navigation/native";
 import { SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
 import { Button, CustomCheckbox, Text, TextBlock } from "@components/index";
-import { getFactionUnits, getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
-import CustomModal from "@components/CustomModal";
+import { getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
 import { UnitProps, UpgradesProps } from "@utils/types";
 import { Entypo } from "@expo/vector-icons";
 import UnitDetailsCard from "./components/UnitDetailsCard";
 import SpecialRulesCollapsible from "./components/SpecialRulesCollapsible";
 import magicItemsList from "../../data/json/wmr/magic-items.json";
-import UpgradeCard from "./components/UpgradeCard";
 import { Factions } from "@utils/constants";
 import SpellBookModal from "./components/SpellBookModal";
 import UnitPreview from "./components/UnitCardPreview/UnitPreview";
@@ -33,6 +31,7 @@ import { getUpgradeDetailsByName } from "./utils/builderHelpers";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { useSettingsContext } from "@context/SettingsContext";
+import { useFactionUnits } from "@utils/useFactionUnits";
 
 export type sectionListDataProps = {
 	title: string;
@@ -65,6 +64,8 @@ const BuilderEdit = () => {
 
 	const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 	const [addingUnits, setAddingUnits] = useState(false);
+
+	const { getFactionUnitsByVersion } = useFactionUnits();
 
 	useEffect(() => {
 		// get all units for selected army list
@@ -107,7 +108,7 @@ const BuilderEdit = () => {
 				),
 			});
 
-			const factionListData = getFactionUnits(builder.selectedArmyList?.faction);
+			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
 	}, [[builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]]);

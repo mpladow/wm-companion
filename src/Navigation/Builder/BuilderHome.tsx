@@ -22,7 +22,7 @@ import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import CustomModal from "@components/CustomModal";
 import fonts from "@utils/fonts";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
-import { getFactions, getFactionUnits, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
+import { getFactions, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import ArmyListCard from "./components/ArmyListCard";
@@ -32,6 +32,7 @@ import FormLabel from "@components/forms/FormLabel";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
 import { Factions } from "@utils/constants";
+import { useFactionUnits } from "@utils/useFactionUnits";
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
@@ -60,6 +61,8 @@ const BuilderHome = () => {
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
 
 	const [showArmyNotes, setShowArmyNotes] = useState(false);
+
+	const { getFactionUnitsByVersion } = useFactionUnits();
 	const { t } = useTranslation(["builder", "common", "forms"]);
 	const toast = useToast();
 	const handleAddArmyPress = () => {
@@ -188,7 +191,7 @@ const BuilderHome = () => {
 	const [factionDescription, setFactionDescription] = useState([] as string[]);
 	useEffect(() => {
 		// get factionDescription
-		const factionunits = getFactionUnits(factionSelection as number);
+		const factionunits = getFactionUnitsByVersion(factionSelection as number, 2);
 		setFactionDescription(factionunits.description);
 	}, [factionSelection]);
 

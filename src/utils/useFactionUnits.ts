@@ -27,7 +27,7 @@ import norseList from "../data/json/wmr/norse.json";
 import witchHunterList from "../data/json/wmr/witchHunters.json";
 
 export const useFactionUnits = () => {
-	const getFactionUnitsByVersion = (factionSelection: number, version: number) => {
+	const getFactionUnitsByVersion = (factionSelection: number, version?: number) => {
 		let list: any[] = [];
 		let factionList: ArmyReferenceType = {} as ArmyReferenceType;
 		let description: string[] = [];
