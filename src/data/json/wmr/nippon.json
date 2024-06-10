@@ -29,6 +29,7 @@
 			"type": "Infantry",
 			"attack": "3/1",
 			"range": "30cm",
+			"armour": "-",
 			"hits": 3,
 			"size": 3,
 			"points": 55
@@ -39,6 +40,7 @@
 			"type": "Infantry",
 			"attack": "3/1",
 			"range": "30cm",
+			"armour": "-",
 			"hits": 3,
 			"size": 3,
 			"points": 65
@@ -59,6 +61,7 @@
 			"name": "Mikata (Ronin & Monks)",
 			"order": 4,
 			"type": "Infantry",
+			"armour": "-",
 			"attack": 5,
 			"hits": 3,
 			"size": 3,
@@ -109,7 +112,7 @@
 			"type": "Cavalry",
 			"attack": 2,
 			"hits": 3,
-			"armour": "5+",
+			"armour": "-",
 			"size": 3,
 			"points": 40,
 			"max": 3,

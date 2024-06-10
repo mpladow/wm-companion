@@ -33,7 +33,7 @@ export default {
 	MaxMountsReached: "Mount: {{unit}} has too many mounts.",
 	Attack: "Attack",
 	Armour: "Armour",
-	Hits: "hits",
+	Hits: "Hits",
 	Range: "Range",
 	Special: "Special",
 	AttackBonus: "Attack Bonus",

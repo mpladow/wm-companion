@@ -18,15 +18,6 @@ import { useFactionUnits } from "@utils/useFactionUnits";
 
 export type AddUnitProps = {
 	addingUnits: boolean;
-	// handleAddUnitToArmyPress: (
-	// 	unitName: string,
-	// 	points: number | undefined,
-	// 	isLeader: boolean,
-	// 	maxCount?: number,
-	// 	minCount?: number,
-	// 	ignoreBreakPoint?: boolean
-	// ) => void;
-	// handleOnUnitCardPress: (name: string) => void;
 };
 const AddUnit = () => {
 	const { t } = useTranslation("builder");

@@ -1,6 +1,5 @@
 import { useTheme } from "@hooks/useTheme";
 import BuilderEdit from "@navigation/Builder/BuilderEdit";
-import BuilderHome from "@navigation/Builder/BuilderHome";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native";
 import { Text, TextBlock } from "@components/index";
@@ -8,6 +7,7 @@ import BuilderQuickView from "@navigation/Builder/BuilderQuickView";
 import AddUnit, { AddUnitProps } from "@navigation/Builder/components/BuilderEdit/AddUnit";
 import AddItem, { AddItemProps } from "@navigation/Builder/components/BuilderEdit/AddItem";
 import { useTranslation } from "react-i18next";
+import BuilderHome from "@navigation/Builder/BuilderHome/BuilderHome";
 
 export type BuilderStackParamList = {
 	BuilderHome: undefined;

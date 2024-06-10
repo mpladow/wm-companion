@@ -34,106 +34,148 @@ export const useFactionUnits = () => {
 		switch (factionSelection) {
 			case Factions.Bretonnians:
 				list = bretonnianList.units;
-				factionList = bretonnianList;
+				factionList = bretonnianList as ArmyReferenceType;
 				description = bretonnianList.description;
 				break;
 			case Factions.Orcs:
 				list = orcList.units;
-				factionList = orcList;
+				factionList = orcList as ArmyReferenceType;
+				description = orcList.description;
 				break;
 			case Factions.Tomb_Kings:
 				list = tombKingsList.units;
-				factionList = tombKingsList;
-				description = bretonnianList.description;
+				factionList = tombKingsList as ArmyReferenceType;
+				description = tombKingsList.description;
 				break;
 			case Factions.Empire:
 				list = empireList.units;
-				factionList = empireList;
+				factionList = empireList as ArmyReferenceType;
+				description = empireList.description;
 				break;
 			case Factions.Skaven:
 				list = skavenList.units;
-				factionList = skavenList;
+				factionList = skavenList as ArmyReferenceType;
+				description = skavenList.description;
+
 				break;
 			case Factions.Chaos:
 				list = chaosList.units;
-				factionList = chaosList;
+				factionList = chaosList as ArmyReferenceType;
+				description = chaosList.description;
+
 				break;
 			case Factions.Wood_Elves:
 				list = woodElvesList.units;
-				factionList = woodElvesList;
+				factionList = woodElvesList as ArmyReferenceType;
+				description = woodElvesList.description;
+
 				break;
 			case Factions.Vampire_Counts:
 				list = vampireCountsList.units;
-				factionList = vampireCountsList;
+				factionList = vampireCountsList as ArmyReferenceType;
+				description = vampireCountsList.description;
+
 				break;
 			case Factions.Beastmen:
 				list = beastmenList.units;
-				factionList = beastmenList;
+				factionList = beastmenList as ArmyReferenceType;
+				description = beastmenList.description;
+
 				break;
 			case Factions.Cathay:
 				list = cathayList.units;
-				factionList = cathayList;
+				factionList = cathayList as ArmyReferenceType;
 				description = cathayList.description;
 				break;
 			case Factions.Goblins:
 				list = nightGoblinsList.units;
-				factionList = nightGoblinsList;
+				factionList = nightGoblinsList as ArmyReferenceType;
+				description = nightGoblinsList.description;
+
 				break;
 			case Factions.Dwarves:
 				list = dwarvesList.units;
-				factionList = dwarvesList;
+				factionList = dwarvesList as ArmyReferenceType;
+				description = dwarvesList.description;
+
 				break;
 			case Factions.Dark_Elves:
 				list = darkElvesList.units;
-				factionList = darkElvesList;
+				factionList = darkElvesList as ArmyReferenceType;
+				description = darkElvesList.description;
+
 				break;
 			case Factions.High_Elves:
 				list = highElvesList.units;
-				factionList = highElvesList;
+				factionList = highElvesList as ArmyReferenceType;
+				description = highElvesList.description;
+
 				break;
 			case Factions.Daemons:
 				list = daemonsList.units;
-				factionList = daemonsList;
+				factionList = daemonsList as ArmyReferenceType;
+				description = daemonsList.description;
+
 				break;
 			case Factions.Nippon:
 				list = nipponList.units;
-				factionList = nipponList;
+				factionList = nipponList as ArmyReferenceType;
+				description = nipponList.description;
+
 				break;
 			case Factions.Chaos_Dwarves:
 				list = chaosDwarvesList.units;
-				factionList = chaosDwarvesList;
+				factionList = chaosDwarvesList as ArmyReferenceType;
+				description = chaosDwarvesList.description;
+
 				break;
 			case Factions.Dogs_Of_War:
 				list = dogsOfWarList.units;
-				factionList = dogsOfWarList;
+				factionList = dogsOfWarList as ArmyReferenceType;
+				description = dogsOfWarList.description;
+
 				break;
 			case Factions.Araby:
 				list = arabyList.units;
-				factionList = arabyList;
+				factionList = arabyList as ArmyReferenceType;
+				description = arabyList.description;
+
 				break;
 			case Factions.Lizardmen:
 				list = lizardmenList.units;
-				factionList = lizardmenList;
+				factionList = lizardmenList as ArmyReferenceType;
+				description = lizardmenList.description;
+
 				break;
 			case Factions.Albion:
 				list = albionList.units;
-				factionList = albionList;
+				factionList = albionList as ArmyReferenceType;
+				description = albionList.description;
+
 				break;
 			case Factions.Ogres:
 				list = ogresList.units;
-				factionList = ogresList;
+				factionList = ogresList as ArmyReferenceType;
+				description = ogresList.description;
+
 				break;
 			case Factions.Kislev:
 				list = kislevList.units;
-				factionList = kislevList;
+				factionList = kislevList as ArmyReferenceType;
+				description = kislevList.description;
+
 				break;
 			case Factions.Norse:
 				list = norseList.units;
-				factionList = norseList;
+				factionList = norseList as ArmyReferenceType;
+				description = norseList.description;
+
 				break;
 			case Factions.Witch_Hunters:
 				list = witchHunterList.units;
-				factionList = witchHunterList;
+				factionList = witchHunterList as ArmyReferenceType;
+				description = witchHunterList.description;
+
 				break;
 			default:
 				break;

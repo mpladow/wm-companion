@@ -4,23 +4,19 @@ import ModalContainer from "@components/ModalContainer";
 import { useNavigation } from "@react-navigation/native";
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 
-import playerTypes, { Factions } from "@utils/constants";
 import { useTheme } from "@hooks/useTheme";
-import { Button, Text, TextBlock } from "@components/index";
+import { Button, Text } from "@components/index";
 import UnitSelector from "./components/UnitSelector";
 import Points from "./components/Points";
-import { DropDownItemProps, PlayerDetailsProps } from "@navigation/Tracker/screens/Tracker";
+import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
 import { AntDesign } from "@expo/vector-icons";
-import { getFactions } from "@utils/factionHelpers";
+import { getFactionsDropdown } from "@utils/factionHelpers";
 import uuid from "uuid-random";
 import { useSettingsContext } from "@context/SettingsContext";
 import { useTranslation } from "react-i18next";
 import { useFactionUnits } from "@utils/useFactionUnits";
 
-type VictoryPointsProps = {
-	player: playerTypes;
-};
 type ItemCompact = {
 	name: string;
 	points: number;
@@ -67,7 +63,7 @@ const VictoryPoints = () => {
 	const multiSelectRef = useRef(null);
 	useEffect(() => {
 		// get list of factions
-		const { ddFactionList } = getFactions();
+		const { ddFactionList } = getFactionsDropdown();
 		setDdFactions(ddFactionList);
 	}, []);
 

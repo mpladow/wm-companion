@@ -1,3 +1,5 @@
+import { UnitProps } from "@utils/types";
+
 export type ArmyReferenceType = {
 	name: string;
 	version: string;
@@ -5,7 +7,7 @@ export type ArmyReferenceType = {
 	group: number;
 	order: number;
 	description: string[];
-	units: UnitType[];
+	units: UnitProps[];
 	upgrades?: any[];
 	magic: boolean;
 	armyRules?: string[];
@@ -19,7 +21,7 @@ export type UnitType = {
 	attack?: string | number; // characters can be undefined
 	range?: string;
 	hits?: number;
-	armour?: string;
+	armour?: "-" | "6+" | "5+" | "4+" | "3+" | "2+";
 	size: number | string;
 	points: number;
 	noCount?: boolean;
@@ -33,6 +35,7 @@ export type UnitType = {
 	upgrades?: any[];
 	augendUnits?: string[];
 };
+
 
 export type UpgradeType = {
 	name: string;
