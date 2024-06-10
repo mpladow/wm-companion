@@ -4,22 +4,19 @@ import ModalContainer from "@components/ModalContainer";
 import { useNavigation } from "@react-navigation/native";
 import magicItemsList from "../../data/json/wmr/magic-items.json";
 
-import playerTypes, { Factions } from "@utils/constants";
 import { useTheme } from "@hooks/useTheme";
-import { Button, Text, TextBlock } from "@components/index";
+import { Button, Text } from "@components/index";
 import UnitSelector from "./components/UnitSelector";
 import Points from "./components/Points";
-import { DropDownItemProps, PlayerDetailsProps } from "@navigation/Tracker/screens/Tracker";
+import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { useVictoryPoints, VPScoreProps } from "@context/VPContext";
 import { AntDesign } from "@expo/vector-icons";
-import { getFactions, getFactionUnits } from "@utils/factionHelpers";
+import { getFactionsDropdown } from "@utils/factionHelpers";
 import uuid from "uuid-random";
 import { useSettingsContext } from "@context/SettingsContext";
 import { useTranslation } from "react-i18next";
+import { useFactionUnits } from "@utils/useFactionUnits";
 
-type VictoryPointsProps = {
-	player: playerTypes;
-};
 type ItemCompact = {
 	name: string;
 	points: number;
@@ -29,7 +26,7 @@ type ItemCompact = {
 const VictoryPoints = () => {
 	const navigation = useNavigation();
 	const { settings } = useSettingsContext();
-	const {t} = useTranslation(["tracker", "common"])
+	const { t } = useTranslation(["tracker", "common"]);
 	const { theme } = useTheme();
 	// set faction based of session.faction
 	const vpContext = useVictoryPoints();
@@ -46,7 +43,7 @@ const VictoryPoints = () => {
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
 	const [ddUnits, setDdUnits] = useState<DropDownItemProps[]>([]);
 	const [ddMagicItems, setDdMagicItems] = useState<DropDownItemProps[]>([]);
-
+	const { getFactionUnitsByVersion } = useFactionUnits();
 	// on startup, if a selected faction exists, use this faction
 	useEffect(() => {
 		vpContext.selectedPlayer == "playerOne"
@@ -66,14 +63,14 @@ const VictoryPoints = () => {
 	const multiSelectRef = useRef(null);
 	useEffect(() => {
 		// get list of factions
-		const { ddFactionList } = getFactions();
+		const { ddFactionList } = getFactionsDropdown();
 		setDdFactions(ddFactionList);
 	}, []);
 
 	useEffect(() => {
 		console.log(factionSelection, "factionSelection");
 		if (factionSelection) {
-			const { factionList, ddFactionUnits } = getFactionUnits(factionSelection);
+			const { factionList, ddFactionUnits } = getFactionUnitsByVersion(factionSelection, 2);
 			setFactionList(factionList);
 			setDdUnits(ddFactionUnits);
 		}
@@ -305,7 +302,9 @@ const VictoryPoints = () => {
 						</View>
 						<View style={{ flex: 1, alignItems: "center" }}>
 							<TouchableOpacity onPress={() => setBottomSection("vps")}>
-								<Text style={bottomSection == "vps" && { color: theme.accent }}>{t("Additional", {ns: "common"})}</Text>
+								<Text style={bottomSection == "vps" && { color: theme.accent }}>
+									{t("Additional", { ns: "common" })}
+								</Text>
 							</TouchableOpacity>
 						</View>
 					</View>

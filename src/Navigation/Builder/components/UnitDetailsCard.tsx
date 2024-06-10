@@ -160,7 +160,7 @@ const UnitDetailsCard = ({
 								<>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										<View style={{ flex: 1 }}>
-											<QuickviewProfileHeading label={t("Command", { ns: "builder" })}  />
+											<QuickviewProfileHeading label={t("Command", { ns: "builder" })} />
 										</View>
 										<View style={{ flex: 1 }}>
 											<View>
@@ -206,18 +206,18 @@ const UnitDetailsCard = ({
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>
 										<View style={{ flex: 1 }}>
-											<QuickviewProfileHeading label={t("Armour", { ns: "builder" })} />
-										</View>
-										<View style={{ flex: 1 }}>
-											<Text>{unit.armour ? unit.armour : "-"}</Text>
-										</View>
-									</View>
-									<View style={{ flex: 1, flexDirection: "column" }}>
-										<View style={{ flex: 1 }}>
 											<QuickviewProfileHeading label={t("Hits", { ns: "builder" })} />
 										</View>
 										<View style={{ flex: 1 }}>
 											<Text>{unit.hits}</Text>
+										</View>
+									</View>
+									<View style={{ flex: 1, flexDirection: "column" }}>
+										<View style={{ flex: 1 }}>
+											<QuickviewProfileHeading label={t("Armour", { ns: "builder" })} />
+										</View>
+										<View style={{ flex: 1 }}>
+											<Text>{unit.armour ? unit.armour : "-"}</Text>
 										</View>
 									</View>
 									<View style={{ flex: 1, flexDirection: "column" }}>

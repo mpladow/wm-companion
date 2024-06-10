@@ -1,9 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getFactionUnits } from "@utils/factionHelpers";
 import _ from "lodash";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { produce } from "immer";
 import uuid from "uuid-random";
+import { useFactionUnits } from "@utils/useFactionUnits";
 
 export type MiniatureDetailsOverview = {
 	unitName: string;
@@ -48,7 +48,7 @@ const CollectionContext = createContext<ICollectionContext>({} as ICollectionCon
 const USER_COLLECTION = "USER_COLLECTION";
 export const CollectionProvider = ({ children }: any) => {
 	const [collectionList, setCollectionList] = useState<CollectionList[]>([] as CollectionList[]);
-
+	const { getFactionUnitsByVersion } = useFactionUnits();
 	// // HANDLE LOCAL STORAGE MANAGEMENT
 	const getCollectionFromStorageAsync = async () => {
 		try {
@@ -107,7 +107,7 @@ export const CollectionProvider = ({ children }: any) => {
 	// UNIT TEST NEEDED
 	const createCollection = async (faction: number, name: string) => {
 		// create an empty object with every single unit in the faction
-		const factionList = getFactionUnits(faction);
+		const factionList = getFactionUnitsByVersion(faction, 2);
 		const newCollection: CollectionList = {
 			collectionId: uuid(),
 			faction: faction,

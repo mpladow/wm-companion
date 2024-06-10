@@ -134,7 +134,6 @@ export const generateUsedMagicItems = (army: ArmyListProps, factionDetails: Fact
 		return factionRule;
 	});
 
-	console.log(usedUpgrades, "usedUPgrades");
 	if (usedUpgrades.length > 0) {
 		const usedUpgradesList = { upgrades: usedUpgrades };
 		const output = Mustache.render(_html, usedUpgradesList);

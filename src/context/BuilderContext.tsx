@@ -2,8 +2,10 @@ import { get1000PointInterval } from "@navigation/Builder/utils/builderHelpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { current } from "@reduxjs/toolkit";
 import { UpgradeTypes } from "@utils/constants";
-import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
+import { getGenericSpecialRules } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
+import { useFactionUnits } from "@utils/useFactionUnits";
+import { produce } from "immer";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import uuid from "uuid-random";
@@ -19,7 +21,7 @@ export type SelectedUpgradesProps = {
 	type: string;
 	attachedToName: string; // the name of the unit this item is attached to
 	points: number;
-	currentCount: number;
+	currentCount?: number;
 	maxCount?: number;
 	armyLimitMaxCount?: number; // hard limit
 	addOnUpgrades?: string[];
@@ -30,7 +32,7 @@ export type SelectedUnitProps = {
 	order: number;
 	points?: number;
 	isLeader?: boolean;
-	currentCount: number;
+	currentCount?: number;
 	maxCount?: number;
 	minCount?: number;
 	ignoreBreakPoint?: boolean;
@@ -38,6 +40,7 @@ export type SelectedUnitProps = {
 	requiredUnits?: string[];
 };
 export type ArmyListProps = {
+	versionNumber?: number;
 	armyId: string;
 	faction: number;
 	name: string;
@@ -91,27 +94,38 @@ interface BuilderContextInterface {
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
 
 export const BuilderContextProvider = ({ children }: any) => {
-	const { t } = useTranslation(["builder", "units"]);
 	const [faction, setFaction] = useState<number | undefined>();
 	const [currentArmyList, setCurrentArmyList] = useState<ArmyListProps>();
 	const [userArmyLists, setUserArmyLists] = useState<ArmyListProps[]>([]);
 	const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
 	const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
-	const [totalPoints, setTotalPoints] = useState(1000);
 
+	const CURRENT_VERSION = 2; // TODO: this should be retrieved by the config
+	const { t } = useTranslation(["builder", "units"]);
+	const { getFactionUnitsByVersion } = useFactionUnits();
 
 	useEffect(() => {
 		//AsyncStorage.removeItem(`userArmies`);
 		getScoresFromStorage();
 	}, []);
+
 	useEffect(() => {
 		// save changes to local storage
 		updateStorage();
 	}, [userArmyLists]);
+
+	useEffect(() => {
+		if (currentArmyList) {
+			updateUserArmyLists();
+			// update points count
+			setArmyErrors(calculateArmyErrors());
+		}
+	}, [currentArmyList]);
+
 	const setCurrentFaction = (faction: number) => {
 		setFaction(faction);
 	};
-	
+
 	// // HANDLE LOCAL STORAGE MANAGEMENT
 	const getScoresFromStorage = async () => {
 		try {
@@ -136,28 +150,30 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const getUserArmyList = () => {
 		return userArmyLists;
 	};
-	const duplicateArmyList = (armyId: string) => {
-		const armyToDuplicate = userArmyLists.find((x) => x.armyId == armyId);
-		if (armyToDuplicate) {
-			const newArmyList: any = {};
-			Object.assign(newArmyList, armyToDuplicate);
-			newArmyList.armyId = uuid();
-			newArmyList.name = `${armyToDuplicate.name} (copy)`;
-			// const newArmyList: ArmyListProps = {
-			// 	armyId: uuid(),
-			// 	faction: faction,
-			// 	name: name,
-			// 	isFavourite: false,
-			// 	order: getUserArmyList.length + 1,
-			// 	selectedUnits: [],
-			// 	selectedUpgrades: [],
-			// 	points: 0,
-			// };
-			newArmyList.points = calculateCurrentArmyPoints(newArmyList);
-			setUserArmyLists([...userArmyLists, newArmyList]);
-			return newArmyList.armyId;
-		}
-	};
+	// COMPLETED REFACTOR
+	const duplicateArmyList = useCallback((armyId: string) => {
+		setUserArmyLists(
+			produce((draft) => {
+				const armyToDuplicate = draft.find((x) => x.armyId == armyId);
+				if (armyToDuplicate) {
+					// create new armyId
+					const newArmy = Object.assign({}, armyToDuplicate);
+					newArmy.armyId = uuid();
+					newArmy.name = `${newArmy.name} (copy)`;
+					newArmy.armyNotes = "";
+					// update unitIds for each nested array
+					newArmy.selectedUnits.forEach((u) => {
+						u.id = uuid();
+						u.attachedItems.forEach((i) => (i.id = uuid()));
+					});
+					newArmy.selectedUpgrades.forEach((u) => {
+						u.id = uuid();
+					});
+					draft.push(newArmy);
+				}
+			})
+		);
+	}, []);
 	const addUserArmyList = async (faction: number, name: string, autopopulate: boolean) => {
 		const newArmyList: ArmyListProps = {
 			armyId: uuid(),
@@ -170,7 +186,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			points: 0,
 		};
 		// autopopulate if true
-		const _factionDetails = getFactionUnits(faction);
+		const _factionDetails = getFactionUnitsByVersion(faction, 2);
 		// set faction upgrade tails
 		factionDetails && setFactionDetails(_factionDetails.factionList);
 
@@ -211,31 +227,19 @@ export const BuilderContextProvider = ({ children }: any) => {
 		return newArmyList.armyId;
 	};
 
+	// COMPLETED REFACTOR
 	const updateArmyName = (name: string, armyId: string) => {
-		setUserArmyLists((prev) => {
-			const armyListToUpdateIndex = prev.findIndex((x) => x.armyId == armyId);
-			const _selectedArmyList = Object.assign(
-				{},
-				prev.find((x) => x.armyId == armyId)
-			);
-			_selectedArmyList.name = name;
-			const updatedSelectedUnits = [
-				...prev.slice(0, armyListToUpdateIndex),
-				_selectedArmyList,
-				...prev.slice(armyListToUpdateIndex + 1),
-			];
-			return updatedSelectedUnits;
-		});
+		setUserArmyLists(
+			produce((draft) => {
+				const armyList = draft.find((a) => a.armyId == armyId);
+				if (armyList) {
+					armyList.name = name;
+				}
+			})
+		);
 	};
 
-	useEffect(() => {
-		if (currentArmyList) {
-			updateUserArmyLists();
-			// update points count
-			setArmyErrors(calculateArmyErrors());
-		}
-	}, [currentArmyList]);
-
+	// COMPLETED REFACTOR
 	const updateUserArmyLists = (armyIdUpdated?: string) => {
 		const armyListToUpdateIndex = userArmyLists.findIndex((x) => x.armyId == currentArmyList?.armyId);
 		if (currentArmyList) {
@@ -250,64 +254,57 @@ export const BuilderContextProvider = ({ children }: any) => {
 		}
 	};
 
+	// COMPLETED REFACTOR
 	const deleteUserArmyList = (armyId: string) => {
-		setUserArmyLists((prev) => {
-			const updatedUserArmyLists = userArmyLists.filter((u) => u.armyId != armyId);
-			return updatedUserArmyLists;
-		});
+		setUserArmyLists(
+			produce((draft) => {
+				const index = draft.findIndex((a) => a.armyId === armyId);
+				if (index !== -1) draft.splice(index, 1);
+			})
+		);
 	};
 
 	const setSelectedArmyList = (armyId: string, faction?: number) => {
 		// once user selects army, set selectedUnits, name,
 		const selectedList = userArmyLists.find((x) => x.armyId == armyId);
 		if (selectedList) {
+			// get list version
 			selectedList.points = calculateCurrentArmyPoints(selectedList);
-			const _factionDetails = getFactionUnits(selectedList?.faction);
+			const _factionDetails = getFactionUnitsByVersion(selectedList?.faction, CURRENT_VERSION);
 			// set faction upgrade tails
 			factionDetails && setFactionDetails(_factionDetails.factionList);
 			setCurrentArmyList(selectedList);
 		} else {
 			if (faction) {
-				const factionDetails = getFactionUnits(faction);
+				const _factionDetails = getFactionUnitsByVersion(faction, CURRENT_VERSION);
 				factionDetails && setFactionDetails(_factionDetails.factionList);
 				setCurrentArmyList(selectedList);
 			}
 		}
 	};
 
+	// COMPLETED REFACTOR
 	const toggleFavourite = (armyId: string) => {
-		setUserArmyLists((prev) => {
-			const armyListToUpdateIndex = prev.findIndex((x) => x.armyId == armyId);
-			const _selectedArmyList = Object.assign(
-				{},
-				prev.find((x) => x.armyId == armyId)
-			);
-			_selectedArmyList.isFavourite = !_selectedArmyList.isFavourite;
-			const updatedSelectedUnits = [
-				...prev.slice(0, armyListToUpdateIndex),
-				_selectedArmyList,
-				...prev.slice(armyListToUpdateIndex + 1),
-			];
-			return updatedSelectedUnits;
-		});
+		setUserArmyLists(
+			produce((draft) => {
+				const armyToUpdate = draft.find((a) => a.armyId == armyId);
+				if (armyToUpdate) {
+					armyToUpdate.isFavourite = !armyToUpdate?.isFavourite;
+				}
+			})
+		);
 	};
 
+	// COMPLETED REFACTOR
 	const updateArmyNotes = (armyId: string, notes: string) => {
-		setUserArmyLists((prev) => {
-			const armyListToUpdateIndex = prev.findIndex((x) => x.armyId == armyId);
-			const _selectedArmyList = Object.assign(
-				{},
-				prev.find((x) => x.armyId == armyId)
-			);
-			_selectedArmyList.armyNotes = notes;
-			const updatedSelectedUnits = [
-				...prev.slice(0, armyListToUpdateIndex),
-				_selectedArmyList,
-				...prev.slice(armyListToUpdateIndex + 1),
-			];
-			return updatedSelectedUnits;
-		});
+		setUserArmyLists(
+			produce((draft) => {
+				const armyList = draft.find((x) => x.armyId == armyId);
+				if (armyList) armyList.armyNotes = notes;
+			})
+		);
 	};
+	// COMPLETED REFACTOR
 	const addUnit = (
 		unitName: string,
 		unitPoints?: number,
@@ -331,66 +328,41 @@ export const BuilderContextProvider = ({ children }: any) => {
 			requiredUnits: currentUnit.requiredUnits,
 		};
 
-		setCurrentArmyList((prev) => {
-			// find if unit exists in selected units
-			const updatedArmy = Object.assign({}, prev);
-			const unit = updatedArmy?.selectedUnits.find((u) => u.unitName == unitName);
-			const unitIndex = updatedArmy?.selectedUnits.findIndex((u) => u.unitName == unitName);
+		setCurrentArmyList(
+			produce((draft) => {
+				const unit = draft?.selectedUnits.find((u) => u.unitName == unitName);
 
-			if (unit) {
-				// if it does, update the count for this unit
-				unit.currentCount = unit.currentCount + 1;
-				const updatedSelected = [
-					...updatedArmy.selectedUnits.slice(0, unitIndex),
-					unit,
-					...updatedArmy.selectedUnits.slice(unitIndex + 1),
-				];
-				updatedArmy.selectedUnits = updatedSelected;
-			} else {
-				// else add this unit to the selected units
-				calculateCurrentArmyPoints();
-				updatedArmy.selectedUnits.push(newUnit);
-			}
-			updatedArmy.points = calculateCurrentArmyPoints();
-			// update total army points
-			return updatedArmy;
-		});
-	};
-	const removeUnit = (unitId: string) => {
-		setCurrentArmyList((prev) => {
-			const updatedArmy = Object.assign({}, prev);
-			const unitExists = updatedArmy.selectedUnits.find((x) => x.id == unitId);
-			const unitExistsIndex = updatedArmy.selectedUnits.findIndex((x) => x.id == unitId);
-			if (unitExists && unitExistsIndex > -1) {
-				if (unitExists.currentCount && unitExists.currentCount > 1) {
-					unitExists.currentCount = unitExists.currentCount - 1;
-					const updatedSelected = [
-						...updatedArmy.selectedUnits.slice(0, unitExistsIndex),
-						unitExists,
-						...updatedArmy.selectedUnits.slice(unitExistsIndex + 1),
-					];
-					updatedArmy.selectedUnits = updatedSelected;
+				if (unit && unit.currentCount) {
+					unit.currentCount = unit.currentCount + 1;
 				} else {
-					updatedArmy.selectedUnits = updatedArmy.selectedUnits.filter((x) => x.id != unitId);
+					draft?.selectedUnits.push(newUnit);
 				}
-			}
-			updatedArmy.points = calculateCurrentArmyPoints();
-			// update count for upgrades
-			const unitItems = unitExists?.attachedItems;
-			if (unitItems && unitItems?.length > 0) {
-				unitItems?.map((ui) => {
-					const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
-						(x) => x.upgradeName == ui?.upgradeName
-					);
-					if (armyUpgradeIndex > -1) updatedArmy?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
-				});
-			}
-
-			return updatedArmy;
-		});
+				// recaculate army points
+				if (draft) draft.points = calculateCurrentArmyPoints(draft);
+			})
+		);
+	};
+	// COMPLETED REFACTOR
+	const removeUnit = (unitId: string) => {
+		setCurrentArmyList(
+			produce((draft) => {
+				const unit = draft?.selectedUnits.find((u) => u.id == unitId);
+				if (unit && unit.currentCount) {
+					if (unit.currentCount > 1) {
+						unit.currentCount = unit.currentCount - 1;
+					} else {
+						if (draft) {
+							draft.selectedUnits = draft?.selectedUnits.filter((u) => u.id !== unitId);
+						}
+					}
+				}
+				// recaculate army points
+				if (draft) draft.points = calculateCurrentArmyPoints(draft);
+			})
+		);
 	};
 
-	// TODO
+	// COMPLETED REFACTOR
 	const addItem = (
 		unitName: string,
 		type: string,
@@ -412,102 +384,58 @@ export const BuilderContextProvider = ({ children }: any) => {
 			addOnUpgrades: addOnUpgrades,
 		};
 
-		setCurrentArmyList((prev) => {
-			const updatedArmy = Object.assign({}, prev);
-			updatedArmy.selectedUpgrades.push(newUpgrade);
-			// find unit
-			const unit = updatedArmy.selectedUnits.find((x) => x.unitName == unitName);
-			const unitIndex = updatedArmy.selectedUnits.findIndex((x) => x.unitName == unitName);
-
-			if (unit != undefined && unitIndex > -1) {
-				// find upgrade
-				const unitUpgrade = unit?.attachedItems.find((x) => x.upgradeName == itemName);
-				const unitUpgradeIndex = unit?.attachedItems.findIndex((x) => x.upgradeName == itemName);
-				if (unitUpgrade != undefined && unitUpgradeIndex != undefined && unitUpgrade.currentCount > 0) {
-					// update
-					unitUpgrade.currentCount = unitUpgrade.currentCount + 1;
-					// update upgrades
-					const updatedUpgrades = [
-						...unit?.attachedItems.slice(0, unitUpgradeIndex),
-						unitUpgrade,
-						...unit.attachedItems.slice(unitUpgradeIndex + 1),
-					];
-					unit.attachedItems = updatedUpgrades;
-					const updatedUnit = [
-						...updatedArmy.selectedUnits.slice(0, unitIndex),
-						unit,
-						...updatedArmy.selectedUnits.slice(unitIndex + 1),
-					];
-					updatedArmy.selectedUnits = updatedUnit;
-				} else {
-					updatedArmy.selectedUnits.find((x) => x.unitName == unitName)?.attachedItems.push(newUpgrade); // push upgrade
-					const updatedUnit = [
-						...updatedArmy.selectedUnits.slice(0, unitIndex),
-						unit,
-						...updatedArmy.selectedUnits.slice(unitIndex + 1),
-					];
-					updatedArmy.selectedUnits = updatedUnit;
+		setCurrentArmyList(
+			produce((draft) => {
+				if (draft) {
+					// add to army selected upgrades
+					draft?.selectedUpgrades.push(newUpgrade);
+					// add to unit
+					const unit = draft?.selectedUnits.find((u) => u.unitName == unitName);
+					if (unit) {
+						// find upgrade if one exists.
+						const unitHasUpgrade = unit.attachedItems.find((x) => x.upgradeName == itemName);
+						if (unitHasUpgrade && unitHasUpgrade.currentCount) {
+							unitHasUpgrade.currentCount = unitHasUpgrade.currentCount + 1;
+						} else {
+							// add new item to unit
+							unit.attachedItems.push(newUpgrade);
+						}
+					}
+					// upgrade army points
+					draft.points = calculateCurrentArmyPoints(draft);
 				}
-				updatedArmy.points = calculateCurrentArmyPoints();
-			}
-			return updatedArmy;
-		});
+			})
+		);
 	};
+	// COMPLETED REFACTOR
 	const removeItem = (unitName: string, upgradeId: string) => {
-		//TODO: extract this into a helpfer function
-		// find unit that has attached items
-		//TODO: extract this into a seperate functionc
-		//
-		setCurrentArmyList((prev) => {
-			const updatedArmy = Object.assign({}, prev);
-			// find unit
-			const unit = updatedArmy.selectedUnits.find((x) => x.unitName == unitName);
-			const unitIndex = updatedArmy.selectedUnits.findIndex((x) => x.unitName == unitName);
+		setCurrentArmyList(
+			produce((draft) => {
+				if (draft) {
+					const unit = draft?.selectedUnits.find((u) => u.unitName == unitName);
+					if (unit) {
+						const unitUpgrade = unit?.attachedItems.find((x) => x.id == upgradeId);
+						if (!unitUpgrade || !unitUpgrade.currentCount) return;
+						if (unitUpgrade && unitUpgrade.currentCount > 1) {
+							// reduce count
+							unitUpgrade.currentCount = unitUpgrade.currentCount - 1;
+						} else {
+							// splice from array
+							unit.attachedItems = unit.attachedItems.filter((i) => i.id != upgradeId);
+						}
+						// REFECTOR THE BELOW
+						const armyUpgradeIndex = draft?.selectedUpgrades?.findIndex(
+							(x) => x.upgradeName == unitUpgrade?.upgradeName
+						);
 
-			// find upgrade
-			const unitUpgrade = unit?.attachedItems.find((x) => x.id == upgradeId);
-			const unitUpgradeIndex = unit?.attachedItems.findIndex((x) => x.id == upgradeId);
-			if (!unit) {
-				return;
-			}
-			if (unitUpgrade != undefined && unitUpgradeIndex != undefined && unitUpgrade?.currentCount > 1) {
-				unitUpgrade.currentCount = unitUpgrade.currentCount - 1;
-				//update upgrades array
-				const updatedUpgrades = [
-					...unit.attachedItems.slice(0, unitUpgradeIndex),
-					unitUpgrade,
-					...unit.attachedItems.slice(unitUpgradeIndex + 1),
-				];
-				unit.attachedItems = updatedUpgrades;
-				const updatedUnit = [
-					...updatedArmy.selectedUnits.slice(0, unitIndex),
-					unit,
-					...updatedArmy.selectedUnits.slice(unitIndex + 1),
-				];
-				updatedArmy.selectedUnits = updatedUnit;
-			} else {
-				const updatedArray = unit.attachedItems.filter((x) => x.id != upgradeId);
-				unit.attachedItems = updatedArray;
-				const updatedUnit = [
-					...updatedArmy.selectedUnits.slice(0, unitIndex),
-					unit,
-					...updatedArmy.selectedUnits.slice(unitIndex + 1),
-				];
-				updatedArmy.selectedUnits = updatedUnit;
-			}
-			// if this upgrade had add on items that are no longer applicable, remove these items
+						if (armyUpgradeIndex > -1) draft?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
 
-			updatedArmy.points = calculateCurrentArmyPoints();
-
-			const armyUpgradeIndex = updatedArmy?.selectedUpgrades?.findIndex(
-				(x) => x.upgradeName == unitUpgrade?.upgradeName
-			);
-
-			if (armyUpgradeIndex > -1) updatedArmy?.selectedUpgrades?.splice(armyUpgradeIndex, 1);
-
-			// update count
-			return updatedArmy;
-		});
+						// recaculate army points
+						draft.points = calculateCurrentArmyPoints(draft);
+					}
+				}
+			})
+		);
 	};
 
 	const calculateCurrentArmyPoints = (targetArmyList?: ArmyListProps) => {

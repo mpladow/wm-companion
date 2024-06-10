@@ -1,7 +1,7 @@
 import { FlatList, Modal, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { UnitProps } from "@utils/types";
-import { getFactionUnits, getGenericSpecialRules } from "@utils/factionHelpers";
+import { getGenericSpecialRules } from "@utils/factionHelpers";
 import { useBuilderContext } from "@context/BuilderContext";
 import { sectionListDataProps } from "../../BuilderEdit";
 import UnitCard from "../UnitCard";
@@ -14,18 +14,10 @@ import UnitPreview from "../UnitCardPreview/UnitPreview";
 import { Entypo } from "@expo/vector-icons";
 import { Factions } from "@utils/constants";
 import { useTranslation } from "react-i18next";
+import { useFactionUnits } from "@utils/useFactionUnits";
 
 export type AddUnitProps = {
 	addingUnits: boolean;
-	// handleAddUnitToArmyPress: (
-	// 	unitName: string,
-	// 	points: number | undefined,
-	// 	isLeader: boolean,
-	// 	maxCount?: number,
-	// 	minCount?: number,
-	// 	ignoreBreakPoint?: boolean
-	// ) => void;
-	// handleOnUnitCardPress: (name: string) => void;
 };
 const AddUnit = () => {
 	const { t } = useTranslation("builder");
@@ -43,6 +35,7 @@ const AddUnit = () => {
 	const armyCount = useMemo(() => {
 		return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
+	const { getFactionUnitsByVersion } = useFactionUnits();
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -74,14 +67,14 @@ const AddUnit = () => {
 				title: title,
 			});
 
-			const factionListData = getFactionUnits(builder.selectedArmyList?.faction);
+			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
 	}, [builder.selectedArmyList]);
 
 	useEffect(() => {
 		if (builder.selectedArmyList) {
-			const factionListData = getFactionUnits(builder.selectedArmyList?.faction);
+			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
 		if (builder?.selectedArmyList) {

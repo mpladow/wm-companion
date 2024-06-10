@@ -22,25 +22,26 @@ import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import CustomModal from "@components/CustomModal";
 import fonts from "@utils/fonts";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
-import { getFactions, getFactionUnits, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
+import { getFactions, getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import ArmyListCard from "./components/ArmyListCard";
 import PopupConfirm from "@components/PopupConfirm";
 import { LinearGradient } from "expo-linear-gradient";
 import FormLabel from "@components/forms/FormLabel";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
 import { Factions } from "@utils/constants";
+import { useFactionUnits } from "@utils/useFactionUnits";
+import ArmySectionList, { armySectionListDataProps } from "./components/ArmySectionList";
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
 const SPACING = 5;
 
-export type armySectionListDataProps = {
-	title: string;
-	data: ArmyListProps[];
-};
+// export type armySectionListDataProps = {
+// 	title: string;
+// 	data: ArmyListProps[];
+// };
 
 const BuilderHome = () => {
 	const { theme } = useTheme();
@@ -60,8 +61,25 @@ const BuilderHome = () => {
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
 
 	const [showArmyNotes, setShowArmyNotes] = useState(false);
+
+	const { getFactionUnitsByVersion } = useFactionUnits();
 	const { t } = useTranslation(["builder", "common", "forms"]);
 	const toast = useToast();
+
+	useEffect(() => {
+		const { ddFactionList } = getFactionsDropdown();
+		setDdFactions(ddFactionList);
+	}, []);
+	useEffect(() => {
+		if (factionName != "") setFactionNameError(false);
+	}, [factionName]);
+	useEffect(() => {
+		if (focusedArmy) {
+			setFactionNotes(focusedArmy?.armyNotes);
+			setFactionName(focusedArmy?.name);
+		}
+	}, [focusedArmy]);
+
 	const handleAddArmyPress = () => {
 		setFactionName("");
 		setFactionSelection(undefined);
@@ -74,14 +92,9 @@ const BuilderHome = () => {
 		setShowCreateArmy(!showCreateArmy);
 	};
 
-	useEffect(() => {
-		const { ddFactionList } = getFactions();
-		setDdFactions(ddFactionList);
-	}, []);
-
-	const handleFactionSelection = (faction: number) => {
-		setFactionSelection(faction);
-	};
+	// const handleFactionSelection = (faction: number) => {
+	// 	setFactionSelection(faction);
+	// };
 	const onArmyNameChange = () => {
 		if (factionName !== "" && focusedArmyId) {
 			builder.updateArmyName(factionName, focusedArmyId);
@@ -92,15 +105,7 @@ const BuilderHome = () => {
 			setShowCreateArmy(!showCreateArmy);
 		}
 	};
-	useEffect(() => {
-		if (factionName != "") setFactionNameError(false);
-	}, [factionName]);
-	useEffect(() => {
-		if (focusedArmy) {
-			setFactionNotes(focusedArmy?.armyNotes);
-			setFactionName(focusedArmy?.name);
-		}
-	}, [focusedArmy]);
+
 	const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
 		if (factionName == "") {
 			setFactionNameError(true);
@@ -111,7 +116,6 @@ const BuilderHome = () => {
 			builder
 				.addUserArmyList(factionSelection, factionName, autopopulate)
 				.then((result) => {
-					console.log(result, "ARMY ID");
 					builder.setSelectedArmyList(result);
 				})
 				.catch(() => {})
@@ -187,14 +191,14 @@ const BuilderHome = () => {
 	const [factionDescription, setFactionDescription] = useState([] as string[]);
 	useEffect(() => {
 		// get factionDescription
-		const factionunits = getFactionUnits(factionSelection as number);
+		const factionunits = getFactionUnitsByVersion(factionSelection as number, 2);
 		setFactionDescription(factionunits.description);
 	}, [factionSelection]);
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<ImageBackground
-				source={require("../../../assets/images/wmr_bg.png")}
+				source={require("../../../../assets/images/wmr_bg.png")}
 				resizeMode='cover'
 				style={[styles.image]}
 			>
@@ -211,47 +215,16 @@ const BuilderHome = () => {
 						zIndex: 9,
 					}}
 				></LinearGradient>
-				<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
-					<SectionList
-						style={{ zIndex: 9, marginBottom: 200 }}
-						stickySectionHeadersEnabled
-						ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
-						sections={sectionListData}
-						renderSectionHeader={({ section: { title } }) => (
-							<View
-								style={{
-									alignItems: "center",
-									padding: 12,
-									backgroundColor: theme.backgroundVariant2,
-									flexDirection: "row",
-									justifyContent: "space-between",
-								}}
-							>
-								<Text variant='heading3' style={{ fontSize: 20, textTransform: "uppercase" }}>
-									{title}
-								</Text>
-							</View>
-						)}
-						ItemSeparatorComponent={() => (
-							<View style={{ height: 8, backgroundColor: "transparent" }}></View>
-						)}
-						renderItem={({ item, index }) => {
-							// get total unit count
-							return (
-								<ArmyListCard
-									armyList={item}
-									handleOpenArmyNotes={(armyId) => handleShowArmyNotesModal(armyId)}
-									handleDuplicateArmyPress={onDuplicateArmyPress}
-									handleArmyListPress={onArmyListPress}
-									handleDeleteArmyPress={onArmyListDeletePress}
-									handleArmyNameChange={handleEditArmyPress}
-									handleToggleFavourite={(armyId) => builder.toggleFavourite(armyId)}
-								/>
-							);
-						}}
-					/>
-				</View>
 
+				<ArmySectionList
+					sectionListData={sectionListData}
+					handleShowArmyNotesModal={handleShowArmyNotesModal}
+					onDuplicateArmyPress={onDuplicateArmyPress}
+					onArmyListPress={onArmyListPress}
+					onArmyListDeletePress={onArmyListDeletePress}
+					handleEditArmyPress={handleEditArmyPress}
+					handleToggleFavourite={builder.toggleFavourite}
+				/>
 				<PopupConfirm
 					visible={confirmDialog}
 					onConfirm={() => {

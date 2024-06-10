@@ -1,48 +1,48 @@
 {
-  "expo": {
-    "expiriments": {
-      "tsconfigPaths": true
-    },
-    "name": "wm-companion",
-    "slug": "wm-companion",
-    "version": "1.2.35",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.mldevelopment.wmcompanion",
-      "buildNumber": "1.0"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.mldevelopment.wmcompanion"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "e7bcb57d-bc08-49e5-a158-b19bd96e432c"
-      }
-    },
-    "owner": "mldevelopment",
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/e7bcb57d-bc08-49e5-a158-b19bd96e432c"
-    }
-  }
+	"expo": {
+		"experiments": {
+			"tsconfigPaths": true
+		},
+		"name": "wm-companion",
+		"slug": "wm-companion",
+		"version": "1.2.35",
+		"orientation": "portrait",
+		"icon": "./assets/icon.png",
+		"userInterfaceStyle": "light",
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#000000"
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true,
+			"bundleIdentifier": "com.mldevelopment.wmcompanion",
+			"buildNumber": "1.0"
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/adaptive-icon.png",
+				"backgroundColor": "#ffffff"
+			},
+			"package": "com.mldevelopment.wmcompanion"
+		},
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "e7bcb57d-bc08-49e5-a158-b19bd96e432c"
+			},
+			"armyVersion": 2
+		},
+		"owner": "mldevelopment",
+		"runtimeVersion": {
+			"policy": "sdkVersion"
+		},
+		"updates": {
+			"url": "https://u.expo.dev/e7bcb57d-bc08-49e5-a158-b19bd96e432c"
+		},
+		"plugins": ["expo-font"]
+	}
 }

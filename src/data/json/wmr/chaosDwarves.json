@@ -41,6 +41,7 @@
 			"type": "Infantry",
 			"attack": "3/1",
 			"range": "15cm",
+			"armour": "-",
 			"hits": 3,
 			"size": 3,
 			"points": 45
@@ -61,6 +62,7 @@
 			"order": 4,
 			"type": "Infantry",
 			"attack": 4,
+			"armour": "-",
 			"hits": 3,
 			"size": 3,
 			"points": 40,
@@ -123,6 +125,7 @@
 			"type": "Artillery",
 			"attack": "1/2 per stand",
 			"range": "40cm",
+			"armour": "-",
 			"hits": 2,
 			"size": 2,
 			"points": 65,

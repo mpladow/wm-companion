@@ -16,7 +16,7 @@ export type FactionListProps = {
 	upgrades?: UpgradesProps[];
 	magic?: boolean;
 	armyRules?: string[];
-	specialRules?: Object;
+	specialRules?: any;
 	spells?: SpellsProps[];
 };
 export type UpgradesProps = {
@@ -57,8 +57,8 @@ export type UnitDetailsProps = {
 	specialRules?: any[];
 	specialRulesExpanded?: any[];
 	noMagic?: boolean;
-	noCount?:boolean;
-}
+	noCount?: boolean;
+};
 export type UnitProps = {
 	name: string;
 	order: number;
@@ -79,5 +79,5 @@ export type UnitProps = {
 	specialRules?: any[];
 	specialRulesExpanded?: any[];
 	noMagic?: boolean;
-	noCount?:boolean;
+	noCount?: boolean;
 };
