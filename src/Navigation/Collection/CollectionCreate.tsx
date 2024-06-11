@@ -3,12 +3,13 @@ import React, { useEffect, useRef, useState } from "react";
 import FormLabel from "@components/forms/FormLabel";
 import { useTheme } from "@hooks/useTheme";
 import fonts from "@utils/fonts";
-import { Button, CustomDropdown, Text } from "@components/index";
+import { Button, Text } from "@components/index";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { useTranslation } from "react-i18next";
-import { getFactions, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
-import { CollectionList, useCollection } from "@context/CollectionContext";
+import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
+import { useCollection } from "@context/CollectionContext";
 import { Factions } from "@utils/constants";
+import Constants from "expo-constants";
 import { useFactionUnits } from "@utils/useFactionUnits";
 
 type CollectionCreateType = {
@@ -30,11 +31,12 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 	const { theme } = useTheme();
 	const collectionContext = useCollection();
 	const { getFactionUnitsByVersion } = useFactionUnits();
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
 	const [factionDescription, setFactionDescription] = useState([] as string[]);
 	useEffect(() => {
 		// get factionDescription
-		const factionunits = getFactionUnitsByVersion(factionSelection as number, 2);
+		const factionunits = getFactionUnitsByVersion(factionSelection as number, CURRENT_VERSION);
 		setFactionDescription(factionunits.description);
 	}, [factionSelection]);
 
@@ -42,7 +44,7 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 		if (factionName != "") setFactionNameError(false);
 	}, [factionName]);
 	useEffect(() => {
-		const { ddFactionList } = getFactions();
+		const { ddFactionList } = getFactionsDropdown();
 		setDdFactions(ddFactionList);
 	}, []);
 

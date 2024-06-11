@@ -2,35 +2,35 @@
 	"name": "Beastmen",
 	"version": "Warmaster Revolution",
 	"group": 2,
+	"versionNumber": 2.24,
 	"order": 5,
-	"versionNumber": 1,
 	"description": [
 		"In the dark forests of the Old World dwell the favoured Children of Chaos: foul and unholy things that hate the world and hide from the honest light of day. They serve no mortal master, but belong heart and soul to the Dark Gods of Chaos. Men call these creatures Beastmen for they are part-human and part-beast, their twisted bodies a blasphemy of nature. They have horns upon their bestial heads, claws and cloven hooves adorn their limbs. Beastmen are wild and brutish creatures that care little for other beings and despise the race of Men above all else. They are cruel and brutal creatures who brawl and fight amongst themselves when not venting their hatred against mankind."
 	],
 	"units": [
 		{
-			"name": "Beastherd",
+			"name": "Gors",
 			"order": 0,
 			"type": "Infantry",
-			"attack": 3,
+			"attack": 4,
 			"hits": 3,
 			"armour": "6+",
 			"size": 3,
-			"points": 45,
+			"points": 60,
 			"min": 2,
-			"specialRules": ["Beastherd/Herdkin"]
+			"specialRules": ["Gors/Ungors"]
 		},
 		{
-			"name": "Herdkin",
+			"name": "Ungors",
 			"order": 1,
 			"type": "Infantry",
 			"attack": "3/1",
-			"range": "30cm",
+			"range": "15cm",
 			"hits": 3,
 			"size": 3,
-			"points": 55,
+			"points": 45,
 			"min": 2,
-			"specialRules": ["Beastherd/Herdkin"]
+			"specialRules": ["Gors/Ungors"]
 		},
 		{
 			"name": "Bestigors",
@@ -181,10 +181,10 @@
 	"magic": true,
 	"armyRules": ["Beastmen infantry do not suffer the usual -1 Command penalty when within woodland."],
 	"specialRules": {
-		"Beastherd/Herdkin": {
+		"Gors/Ungors": {
 			"order": 1,
 			"text": [
-				"Up to half of the total number of Beastherd/Herdkin units (rounded down) may be deployed as ambushers rather than be deployed at the start of the game. The ambushers must be deployed in groups up to 4 units. The number of Herdkin units in these groups may not exceed the number of Beastherd units.",
+				"Up to half of the total number of Gors/Ungors units (rounded down) may be deployed as ambushers rather than be deployed at the start of the game. The ambushers must be deployed in groups up to 4 units. The number of Herdkin units in these groups may not exceed the number of Beastherd units.",
 				"",
 				"During the order movement sequence the Beastmen player nominates a point within dense terrain or on any base edge other than the enemy player‘s own table edge for every group of ambushing units he wants to deploy this turn. If the nominated point is in dense terrain it must be chosen that every stand of every unit within the group must be at least partially within the terrain.",
 				"",
@@ -242,13 +242,14 @@
 	},
 	"spells": [
 		{
-			"name": "Screaming Arrows",
+			"name": "Traitor Kin",
 			"roll": 4,
 			"range": "30cm",
 			"text": [
-				"*The pulsating energies of Chaos radiate from the Shaman and envelop a cloud of arrows launched from the Beastmen’s archers. Falling around the enemy they are surrounded by ill-omened hallucinations and terrifying phantoms, arousing terror amongst the enemy.*",
+				"*The Shaman dominates the beasts used by the enemy, turning them on their masters.*",
 				"",
-				"This spell can be cast on a single unengaged unit of Herdkin, Centigor, or Chaos Spawn. The Shaman must be able to see his target to use this spell. When the spell is successfully cast the target unit gains Screaming Arrows for this shooting phase. When a unit is driven back as a result of hits scored by a unit with Screaming Arrows, then any dice rolled in respect of drivebacks for those hits will cause Confusion on the roll of 4, 5 or 6 (rather than 6 as normal). Note that if a unit has taken other hits as well it will be necessary to roll the Screaming Arrow dice separately."
+				"This spell can be cast on any enemy unit of Cavalry, Chariots or Monsters within range regardless of whether the Wizard can see it or not. The spell takes effect until the end of the opposing player's next turn.",
+				"Whilst the spell lasts the unit cannot use its Initiative. Any order given to the unit, or to any brigade of which the unit is a part, suffers a –1 Command penalty."
 			]
 		},
 		{

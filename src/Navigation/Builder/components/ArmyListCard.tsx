@@ -15,6 +15,7 @@ import { Foundation } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import ArmyListCardImageContainer from "./ArmyListCardImageContainer";
 import { getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
+import Constants from "expo-constants";
 type ArmyListCardProps = {
 	armyList: ArmyListProps;
 	handleArmyListPress: (armyId: string) => void;
@@ -35,6 +36,7 @@ const ArmyListCard = ({
 }: ArmyListCardProps) => {
 	const { t } = useTranslation(["builder", "common"]);
 	const { theme } = useTheme();
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 	const setImage = () => {
 		const armyName = getKeyByValue(Factions, armyList.faction);
 		const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
@@ -71,7 +73,8 @@ const ArmyListCard = ({
 
 					<View style={{ marginBottom: 4 }}>
 						<Text>
-							{armyList.faction && getKeyByValue(Factions, armyList.faction).replaceAll("_", " ")}
+							{armyList.faction && getKeyByValue(Factions, armyList.faction).replaceAll("_", " ")}{" "}
+							{armyList.versionNumber !== CURRENT_VERSION && `[Migration required]`}
 						</Text>
 					</View>
 					<View style={{ alignItems: "flex-start", flexDirection: "row" }}>

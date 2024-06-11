@@ -2,8 +2,8 @@
 	"name": "Chaos Dwarfs",
 	"version": "Warmaster Revolution",
 	"group": 2,
+	"versionNumber": 2.24,
 	"order": 3,
-	"versionNumber": 1,
 	"description": [
 		"Many thousands of years ago the Dwarf race moved northwards from its ancestral home somewhere in the Southlands. They moved along the high ridge of mountains known as the Worlds Edge Mountains, following the trail of mineral ores and precious gems.",
 		"The Dwarfs spread amongst the mountains, driven onwards by their lust for the secrets of rock and metal. Over a period of many hundreds of years they dug shafts and excavated cavernous underground cities, they sank mines deep into the mountain roots, and constructed tunnels which carried them further north.",
@@ -182,7 +182,7 @@
 			"order": 1,
 			"type": "Monstrous Mount",
 			"attack": "+1",
-			"points": "+20",
+			"points": "+35",
 			"max": 1
 		},
 		{

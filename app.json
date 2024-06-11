@@ -5,7 +5,7 @@
 		},
 		"name": "wm-companion",
 		"slug": "wm-companion",
-		"version": "1.2.35",
+		"version": "1.2.36",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"userInterfaceStyle": "light",
@@ -34,7 +34,7 @@
 			"eas": {
 				"projectId": "e7bcb57d-bc08-49e5-a158-b19bd96e432c"
 			},
-			"armyVersion": 2
+			"armyVersion": 2.24
 		},
 		"owner": "mldevelopment",
 		"runtimeVersion": {

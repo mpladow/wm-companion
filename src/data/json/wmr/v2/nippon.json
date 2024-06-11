@@ -3,7 +3,7 @@
 	"version": "Warmaster Revolution",
 	"group": 2,
 	"order": 8,
-	"versionNumber": 1,
+	"versionNumber": 2.24,
 	"description": [
 		"Far to the east of the Old World, even farther east than the fabled lands of Cathay, lie the islands of the Nipponese archipelago. Inhabited by a sophisticated but stoic nation of humans, where warfare is common and honour is everything.",
 		"Nipponese society is highly structured and is based on feudal rule in a strict hierarchy from the Emperor, a semi-divine being who is rarely seen in public, down to the lowest peasants who tend the fields. There are many similarities between Nippon and Brettonian society, though Daimyo – the Nippon Lords – are even harsher and uncaring towards anyone they consider to be their inferior than their Bretonnian counterparts. The strongest Daimyo vie for the position of Shogun – supreme military leader of Nippon, answerable only to the Emperor himself.",
@@ -56,6 +56,7 @@
 			"size": 3,
 			"points": 80,
 			"min": 2,
+			"max": 4,
 			"specialRules": ["Bushido"]
 		},
 		{

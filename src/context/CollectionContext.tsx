@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { produce } from "immer";
 import uuid from "uuid-random";
 import { useFactionUnits } from "@utils/useFactionUnits";
+import Constants from "expo-constants";
 
 export type MiniatureDetailsOverview = {
 	unitName: string;
@@ -49,6 +50,9 @@ const USER_COLLECTION = "USER_COLLECTION";
 export const CollectionProvider = ({ children }: any) => {
 	const [collectionList, setCollectionList] = useState<CollectionList[]>([] as CollectionList[]);
 	const { getFactionUnitsByVersion } = useFactionUnits();
+
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+
 	// // HANDLE LOCAL STORAGE MANAGEMENT
 	const getCollectionFromStorageAsync = async () => {
 		try {
@@ -107,7 +111,7 @@ export const CollectionProvider = ({ children }: any) => {
 	// UNIT TEST NEEDED
 	const createCollection = async (faction: number, name: string) => {
 		// create an empty object with every single unit in the faction
-		const factionList = getFactionUnitsByVersion(faction, 2);
+		const factionList = getFactionUnitsByVersion(faction, CURRENT_VERSION);
 		const newCollection: CollectionList = {
 			collectionId: uuid(),
 			faction: faction,

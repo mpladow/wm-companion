@@ -1,14 +1,13 @@
 import { get1000PointInterval } from "@navigation/Builder/utils/builderHelpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { current } from "@reduxjs/toolkit";
 import { UpgradeTypes } from "@utils/constants";
-import { getGenericSpecialRules } from "@utils/factionHelpers";
-import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
+import { FactionListProps } from "@utils/types";
 import { useFactionUnits } from "@utils/useFactionUnits";
 import { produce } from "immer";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import uuid from "uuid-random";
+import Constants from "expo-constants";
 
 type ArmyErrorsProps = {
 	source?: "Unit" | "Upgrade";
@@ -100,7 +99,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
 	const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
 
-	const CURRENT_VERSION = 2; // TODO: this should be retrieved by the config
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+
+	// const CURRENT_VERSION = 2; // TODO: this should be retrieved by the config
 	const { t } = useTranslation(["builder", "units"]);
 	const { getFactionUnitsByVersion } = useFactionUnits();
 
@@ -186,10 +187,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 			points: 0,
 		};
 		// autopopulate if true
-		const _factionDetails = getFactionUnitsByVersion(faction, 2);
+		const _factionDetails = getFactionUnitsByVersion(faction, CURRENT_VERSION);
 		// set faction upgrade tails
 		factionDetails && setFactionDetails(_factionDetails.factionList);
-
+		newArmyList.versionNumber = _factionDetails?.factionList.versionNumber;
 		if (autopopulate) {
 			// get unit details
 			const factionUnits = _factionDetails.factionList?.units?.filter(
@@ -270,12 +271,13 @@ export const BuilderContextProvider = ({ children }: any) => {
 		if (selectedList) {
 			// get list version
 			selectedList.points = calculateCurrentArmyPoints(selectedList);
-			const _factionDetails = getFactionUnitsByVersion(selectedList?.faction, CURRENT_VERSION);
+			const _factionDetails = getFactionUnitsByVersion(selectedList?.faction, selectedList.versionNumber);
 			// set faction upgrade tails
 			factionDetails && setFactionDetails(_factionDetails.factionList);
 			setCurrentArmyList(selectedList);
 		} else {
 			if (faction) {
+				console.log("WHY ARE WE HITTING THIS?");
 				const _factionDetails = getFactionUnitsByVersion(faction, CURRENT_VERSION);
 				factionDetails && setFactionDetails(_factionDetails.factionList);
 				setCurrentArmyList(selectedList);

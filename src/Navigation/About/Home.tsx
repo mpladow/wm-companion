@@ -32,7 +32,7 @@ const Home = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation();
 	const version = Constants?.expoConfig?.version;
-
+	const armyVersion = Constants?.expoConfig?.extra?.armyVersion;
 	const toast = useToast();
 	const handlePressSupport = () => {
 		Linking.openURL(
@@ -95,7 +95,12 @@ const Home = () => {
 						</TextBlock>
 						<TextBlock variant='large'>
 							<Text bold>
-								{t("AppVersion", { ns: "common" })}: {version}
+								{t("AppVersion", { ns: "common" })}: v{version}
+							</Text>
+						</TextBlock>
+						<TextBlock variant='large'>
+							<Text bold>
+								{t("ArmyVersion", { ns: "common" })}: v{armyVersion}
 							</Text>
 						</TextBlock>
 						<View style={{ paddingVertical: 4 }}>

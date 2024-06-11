@@ -32,6 +32,7 @@ import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { useSettingsContext } from "@context/SettingsContext";
 import { useFactionUnits } from "@utils/useFactionUnits";
+import Constants from "expo-constants";
 
 export type sectionListDataProps = {
 	title: string;
@@ -50,7 +51,7 @@ const BuilderEdit = () => {
 	const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
 	const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
 	const [allSelectedUpgradesVisible, setAllSelectedUpgradesVisible] = useState(false);
-
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 	// show statline
 
 	const [magicItems, setMagicItems] = useState<UpgradesProps[]>([]);
@@ -108,7 +109,10 @@ const BuilderEdit = () => {
 				),
 			});
 
-			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
+			const factionListData = getFactionUnitsByVersion(
+				builder.selectedArmyList?.faction,
+				builder.selectedArmyList?.versionNumber
+			);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
 	}, [[builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]]);

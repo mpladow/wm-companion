@@ -9,7 +9,6 @@ import MainContainerWithBlankBG from "@components/MainContainerWithBlankBG";
 import ArmyPointsCount from "../ArmyPointsCount";
 import { useTheme } from "@hooks/useTheme";
 import { Button, Text } from "@components/index";
-import UnitPreview from "../UnitCardPreview/UnitPreview";
 import { Entypo } from "@expo/vector-icons";
 import magicItemsList from "../../../../data/json/wmr/magic-items.json";
 import UpgradeCard from "../UpgradeCard";
@@ -17,6 +16,7 @@ import UpgradePreview from "../UpgradePreview";
 import { getUpgradeDetailsByName } from "@navigation/Builder/utils/builderHelpers";
 import _ from "lodash";
 import { useFactionUnits } from "@utils/useFactionUnits";
+import Constants from "expo-constants";
 
 export type AddItemProps = {
 	unitName: string;
@@ -47,6 +47,7 @@ const AddItem = () => {
 	const armyCount = useMemo(() => {
 		return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -59,7 +60,7 @@ const AddItem = () => {
 
 	useEffect(() => {
 		// get faction list data
-		const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
+		const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, builder.selectedArmyList?.versionNumber);
 		const factionUnits = factionListData?.factionList?.units;
 		const handleAddMagicItemPress = () => {
 			// get all magic items
@@ -158,7 +159,7 @@ const AddItem = () => {
 				}
 			});
 			// check unit upgrades and add additional items to generic magic items
-			if (unitDetails?.upgrades?.length > 0) {
+			if (unitDetails?.upgrades && unitDetails?.upgrades?.length > 0) {
 				unitDetails?.upgrades?.map((unitUpgrade) => {
 					const magicItemToAdd = itemsArray.find((u) => u.name == unitUpgrade);
 					const upgradeAlreadyExists = specificUpgradesForUnitArr.find((exUp) => exUp.name == unitUpgrade);

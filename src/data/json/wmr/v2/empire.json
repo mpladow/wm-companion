@@ -2,7 +2,7 @@
 	"name": "Empire",
 	"version": "Warmaster Revolution",
 	"group": 0,
-	"versionNumber": 1,
+	"versionNumber": 2.24,
 	"order": 0,
 	"description": [
 		"The Empire is by far the largest and most powerful of the human nations of the Old World. It stretches from the Grey Mountains in the west to the Worlds Edge Mountains and the borders of Kislev in the east. This vast nation is divided into many separate principalities or states each of which is something akin to an entire and independent land in its own right. Throughout much of the history of The Empire these states have fought amongst themselves. Rival dynasties have vied for power, alliances have been made and broken, and only rarely has a single claimant risen to control the entire land. The Empire of today is almost wholly united under the Prince of Altdorf the Elector of the Reikland - hereditary ruler of the western principality of the Reikland. Only the great sea-port of Marienburg in the Wasteland retains independence under the leadership of its powerful and wealthy mercantile community."
@@ -239,7 +239,11 @@
 		"Steam Tank": {
 			"order": 6,
 			"text": [
-				"The Steam Tank forms a unit on its own, it moves up to 20cm, and must be given its own orders. The Steam Tank cannot be given a brigade order with other units, not even with other Steams Tanks. A character cannot join with a Steam Tank. A Steam Tank can shoot from any edge of a stand: side or rear as well as the front like other units. Steam Tanks weapons have a range of 30cm. A Steam Tank therefore shoots to its front, side or rear against the closest enemy target.",
+				"The Steam Tank forms a unit on its own, it moves up to 20cm, and must be given its own orders. The Steam Tank cannot be given a brigade order with other units, not even with other Steams Tanks. A character cannot join with a Steam Tank.",
+				"",
+				"Count enemy armour values as one worse than normal when shot by a Steam Tank. So, for example, an armour value of 3+ counts as 4+, 5+ counts as 6+, and 6+ cannot save against a Steam Tank.",
+				"",
+				"A Steam Tank can shoot from any edge of a stand: side or rear as well as the front like other units. Steam Tanks weapons have a range of 30cm. A Steam Tank therefore shoots to its front, side or rear against the closest enemy target.",
 				"",
 				"Targets suffering hits from a Steam Tank count their Armour value as one worse than normal - so 3+ counts as 4+, 4+ as 5+, whilst 6+ is ignored. A Steam Tank can shoot at charging enemy.",
 				"",
@@ -248,8 +252,6 @@
 				"If the player attempts to issue an order to a Steam Tank and rolls double six then the order is failed as usual and the machine does not move. Ignore the usual Blunder chart for heroes and wizards. Roll on the following Malfunction chart. Note that although a General cannot blunder he must still roll for malfunctions.",
 				"",
 				"__Steam Tank Malfunction Chart__",
-				"",
-				"|||",
 				"-|-",
 				"__D6__|__Result__",
 				"__1.__|__Destroyed.__ The Steam Tank grinds to a halt rupturing steam and noxious gasses. Remove the Steam Tank as a casualty.",

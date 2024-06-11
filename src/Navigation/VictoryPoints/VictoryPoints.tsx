@@ -16,6 +16,7 @@ import uuid from "uuid-random";
 import { useSettingsContext } from "@context/SettingsContext";
 import { useTranslation } from "react-i18next";
 import { useFactionUnits } from "@utils/useFactionUnits";
+import Constants from "expo-constants";
 
 type ItemCompact = {
 	name: string;
@@ -44,6 +45,8 @@ const VictoryPoints = () => {
 	const [ddUnits, setDdUnits] = useState<DropDownItemProps[]>([]);
 	const [ddMagicItems, setDdMagicItems] = useState<DropDownItemProps[]>([]);
 	const { getFactionUnitsByVersion } = useFactionUnits();
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+
 	// on startup, if a selected faction exists, use this faction
 	useEffect(() => {
 		vpContext.selectedPlayer == "playerOne"
@@ -70,7 +73,7 @@ const VictoryPoints = () => {
 	useEffect(() => {
 		console.log(factionSelection, "factionSelection");
 		if (factionSelection) {
-			const { factionList, ddFactionUnits } = getFactionUnitsByVersion(factionSelection, 2);
+			const { factionList, ddFactionUnits } = getFactionUnitsByVersion(factionSelection, CURRENT_VERSION);
 			setFactionList(factionList);
 			setDdUnits(ddFactionUnits);
 		}
