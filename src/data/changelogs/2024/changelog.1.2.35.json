@@ -1,0 +1,30 @@
+{
+    "version": 1.2.35,
+    "changes": [
+        {
+            "type": "overhaul",
+            "title": "Army lists updated for version 2.24!",
+            "description": [
+                "Old army list are still available, and can be updated, however may be buggy!",
+                "It is recommended you migrate your armies to 2.24."
+            ]
+        },
+        {
+            "type": "bug",
+            "title": "Fix to army duplication",
+            "description": "Armies that were duplicated were incorrecty updating both the duplicated army, as well as the original army."
+        },
+        {
+            "type": "improvement",
+            "title": "Move Stat order from ATT/HITS/ARMOUR to ATT/ARMOUR/HITS"
+        },
+        {
+            "type": "bug",
+            "title": "army count not correctly updating in army list",
+            "description": [
+                "On the army list screen, army points were not being updated when the the points were changed in the builder"
+            ]
+        }
+    ]
+}
+

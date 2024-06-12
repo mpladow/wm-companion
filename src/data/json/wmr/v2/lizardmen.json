@@ -1,0 +1,301 @@
+{
+	"name": "Lizardmen",
+	"version": "Warmaster Revolution",
+	"group": 0,
+	"order": 7,
+	"versionNumber": 2.24,
+	"description": [
+		"Before Chaos came into the world there was a more ancient forgotten age - the Age of the Old Ones. This far-off time lies beyond the memory of man and is recalled only dimly by the Elves - the most ancient of all the world‘s warm-blooded races. In that distant age the planet was dominated by cold- blooded creatures. The undisputed rulers of the world were the reptilian lizardmen. The mysterious Old Ones themselves came not from this planet but from the great darkness. They travelled between the stars in their silver ships by means of immense inter-dimensional portals fashioned with arcane skills blending both sorcery and science. In that forgotten era the Old Ones were unchallenged masters of the universe of time and space. Our world was but one small insignificant colony amidst a glittering galaxy of stars.",
+		"According to the most ancient records preserved in Lustria, themselves a cryptic and much distorted copy of even older accounts now lost, the Old Ones discovered a dying world of ice deserts inhabited only by primitive reptiles. They employed their strange sorcery to arco-engineer the native creatures into various types of workers and slaves. First of all they set the mystical master-race of Slann to fulfil their ambitions and rule over the rest. The Slann used the incomparable power of their minds to reposition the planet in its orbit so that temperatures became more tolerable and jungles grew up to cover the equatorial regions. Most importantly they constructed a permanent trans-dimensional gateway through the axis of the planet. Portals over the poles allowed the Old Ones to transport huge fleets from world to world. By this means new creatures of many kinds were introduced including the ancestors of the warm-blooded races such as Elves, Dwarfs and Men."
+	],
+	"units": [
+		{
+			"name": "Skinks",
+			"order": 0,
+			"type": "Infantry",
+			"attack": "2/1",
+			"range": "15cm",
+			"hits": 3,
+			"size": 3,
+			"points": 35,
+			"min": 2
+		},
+		{
+			"name": "Saurus",
+			"order": 1,
+			"type": "Infantry",
+			"attack": 4,
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 75,
+			"min": 2,
+			"specialRules": ["Reptilian"]
+		},
+		{
+			"name": "Temple Guard",
+			"order": 2,
+			"type": "Infantry",
+			"attack": 4,
+			"hits": 4,
+			"armour": "5+",
+			"size": 3,
+			"points": 110,
+			"max": 1,
+			"specialRules": ["Reptilian"]
+		},
+		{
+			"name": "Salamanders",
+			"order": 3,
+			"type": "Infantry",
+			"attack": "2/2",
+			"range": "15cm",
+			"hits": 3,
+			"size": "+1",
+			"points": 25,
+			"max": 2,
+			"augendUnits": ["Skinks"],
+			"noCount": true,
+			"noMagic": true
+		},
+		{
+			"name": "Kroxigor",
+			"order": 4,
+			"type": "Infantry",
+			"attack": 5,
+			"hits": 3,
+			"armour": "4+",
+			"size": 3,
+			"points": 135,
+			"max": 2,
+			"specialRules": ["Reptilian"]
+		},
+		{
+			"name": "Cold One Riders",
+			"order": 5,
+			"type": "Cavalry",
+			"attack": 4,
+			"hits": 3,
+			"armour": "4+",
+			"size": 3,
+			"points": 140,
+			"max": 2,
+			"specialRules": ["Reptilian"]
+		},
+		{
+			"name": "Terradons",
+			"order": 6,
+			"type": "Monster",
+			"attack": "2/1",
+			"range": "15cm",
+			"hits": 3,
+			"armour": "6+",
+			"size": 3,
+			"points": 85,
+			"max": 1,
+			"noMagic": true
+		},
+		{
+			"name": "Stegadon",
+			"order": 7,
+			"type": "Monster",
+			"attack": "10/3",
+			"range": "15cm",
+			"hits": 10,
+			"armour": "4+",
+			"size": 1,
+			"points": 225,
+			"max": 1,
+			"noMagic": true
+		},
+		{
+			"name": "Slann Mage Palanquin",
+			"order": 8,
+			"type": "General",
+			"attack": "+2",
+			"command": 0,
+			"size": 1,
+			"points": 95,
+			"armyMin": 1,
+			"armyMax": 1,
+			"upgrades": [
+				"Stegadon Mount",
+				"Ring of Magic",
+				"Staff of Spellbinding",
+				"Scroll of Dispelling",
+				"Wand of Power",
+				"Rod of Repetition"
+			]
+		},
+		{
+			"name": "Saurus Hero",
+			"order": 9,
+			"type": "Hero",
+			"attack": "+2",
+			"command": 6,
+			"size": 1,
+			"points": 45,
+			"max": 1,
+			"upgrades": ["Carnosaur"]
+		},
+		{
+			"name": "Skink Hero",
+			"order": 10,
+			"type": "Hero",
+			"attack": "+0",
+			"command": 8,
+			"size": 1,
+			"points": 70,
+			"max": 3
+		},
+		{
+			"name": "Skink Shaman",
+			"order": 11,
+			"type": "Wizard",
+			"attack": "+0",
+			"command": 6,
+			"size": 1,
+			"points": 30,
+			"max": 1
+		}
+	],
+	"upgrades": [
+		{
+			"name": "Stegadon Mount",
+			"order": 0,
+			"type": "Monstrous Mount",
+			"attack": "+5",
+			"points": "+90",
+			"max": 1
+		},
+		{
+			"name": "Carnosaur",
+			"order": 1,
+			"type": "Monstrous Mount",
+			"attack": "+2",
+			"points": "+65",
+			"max": 1
+		}
+	],
+	"magic": true,
+	"armyRules": [
+		"__Dense Terrain.__ No command penalty is applied to any units in the Lizardmen army on account of dense terrain. The Lizardmen's ruin infested jungle homeland is mostly dense terrain and they are used to communicating through thick jungle and narrow tunnels by a mix of instinct and bizarre sub-sonic noises inaudible to other races."
+	],
+	"specialRules": {
+		"Skinks": {
+			"order": 1,
+			"text": [
+				"Skinks have a shooting range of 15cm. However, they can shoot from any edge without turning stands to face their target. Just measure the range from any stand edge, front, side or rear. Note that this enables them to shoot at enemies charging them from any direction."
+			]
+		},
+		"Reptilian": {
+			"order": 2,
+			"text": [
+				"Reptilian troops can only be issued an order by a character within 20cm. If reptilian units form part of a brigade an order can be issued so long as all reptilian units are within 20cm of the character issuing the order. This rule represents the creatures being cold-blooded brutes and slow to react."
+			]
+		},
+		"Salamanders": {
+			"order": 3,
+			"text": [
+				"Salamander stands never count as independent units under any circumstances. Instead you may add one stand of Salamanders to any Skink infantry units. This brings the size of the unit to 4 stands - ie 3 other stands plus the Salamander stand. The Salamander stand fights as part of the unit and can be removed as a casualty should the player who owns them wish to do so. A Salamander stands does not count as a loss upon the unit for purposes of Command penalties - ie if the Salamanders are removed leaving 3 Skink stands there is no -1 Command penalty on the unit. The Salamander stand doesn‘t count as part of the unit‘s formation when determining whether the unit is in a regular or irregular formation - ie the stand can be placed to the side, at an angle, or at a different orientation without affecting an otherwise regular formation.",
+				"",
+				"If a Salamander stand is attached to a Skink unit the entire unit, including the Salamander, is considered to employ ‘Salamander Venom‘ shooting attacks. Enemy Armour saving throws suffer a - 1 penalty when hit by Salamander Venom (eg 5+ save requires a roll of 6).",
+				"",
+				"Salamander stands have 2 shooting attacks, a range of 15cm, and can shoot from any edge in the same way as Skinks. If their unit is charged then Salamanders can shoot in the same way as any other shooting stand."
+			]
+		},
+		"Terradons": {
+			"order": 4,
+			"text": [
+				"Terradons can fly. Terradon riders have a shooting range 15cm. However, they can shoot from any edge without turning stands to face their target. Just measure the range from any stand edge, front, side or rear. Note that this enables them to shoot at enemies charging them from any direction."
+			]
+		},
+		"Stegadon": {
+			"order": 5,
+			"text": [
+				"The model must be mounted onto a base 40mm frontage and 60mm depth - note that this is equivalent to three standard sized Warmaster bases glued together.",
+				"",
+				"The Stegadon causes terror in its foes.",
+				"",
+				"The Stegadon can only be brigaded with Skink units. It cannot be brigaded with Skink units that have attached Salamanders. It cannot be brigaded with any other units including with other Stegadons.",
+				"",
+				"The Stegadon's crew has a shooting range of 15cm. However, they can shoot from any edge without turning stands to face their target. Just measure the range from any stand edge, front, side or rear. Note that this enables them to shoot at enemies charging them from any direction.",
+				"",
+				"Because the Stegadon has so many hits we must consider the possibility of hurting the beast and reducing its effectiveness. Therefore, if a Stegadon has accumulated 6-9 hits by the end of the Shooting or Combat phase and is no longer engaged in combat it is deemed to have been badly hurt. Once a Stegadon is badly hurt all accumulated hits are discounted and its Hits and Attack values are halved for the remainder of the battle to 5/2 Attacks and 5 Hits."
+			]
+		},
+		"Slann Mage Palanquin": {
+			"order": 6,
+			"text": [
+				"The Slann Mage rides a palanquin carried by his bodyguard of fierce Saurus warriors - his combat bonus is due to his bodyguard. The Slann Mage is the army's general but uniquely amongst commanders he cannot give orders, but has foreseen the flow of the battle and given his Skink retainers instructions. To represent this any Skink character within 20cm of the Slann can announce his use of the General’s Divine Guidance - deducting -1 from his dice score (eg 8 counts as 7, 10 as 9 and so on). When Divine Guidance is used the Skink cannot ‘Blunder’ - any roll of double 6 simply counts as a fail. If a Divine Guidance roll is failed then the Slann’s Divine Guidance cannot be used by any other characters that have not ordered yet in that turn, their confusion over the mixup is represented by adding +1 to their first order rolls.",
+				"",
+				"In addition the Slann is a great sorcerer. He can cast spells as a Wizard and can be given a magic item restricted to either a general or wizard should you so wish. Slaan Mages are especially powerful wizards and to represent this can re-roll a failed spell on any dice result except a 1. If a spell is failed because a 1 is rolled then no re-roll is permitted. The Slann Mage can also cast his spell using a Skink Shaman as the focus if desired - work out the spell as if it were cast from the Shaman, measuring and establishing a line of sight from the Shaman model. This does not affect the Shaman's own ability to cast spells that turn."
+			]
+		},
+		"Stegadon Mount": {
+			"order": 7,
+			"text": [
+				"The Slann Mage may lose his palanquin and bodyguard and instead ride on top of a Stegadon. His Attacks bonus is changed to that shown. If he rides a Stegadon then any unit he joins will cause terror and the usual Combat modifier will apply. No other character can ride a Stegadon."
+			]
+		},
+		"Carnosaur": {
+			"order": 8,
+			"text": [
+				"A Saurus Hero can ride a Carnosaur. If a character rides a Carnosaur then any unit he joins will cause terror and the character will gain +2 attacks. No other character can ride a Carnosaur."
+			]
+		}
+	},
+	"spells": [
+		{
+			"name": "Gaze of Sotek",
+			"roll": 5,
+			"range": "30cm",
+			"text": [
+				"*Burning jade coloured rays leap from the wizard's lidded eyes enshrouding and choking his enemies in writhing coils of magic.*",
+				"",
+				"This spell can be cast on an enemy unit. The Wizard must be able to see his target to use this spell. The spell cannot be directed at a unit engaged in combat.",
+				"",
+				"The Gaze of Sotek is treated like three ordinary shooting attacks except that armour has no effect (all targets count as having no armour). A unit can be driven back by the Gaze of Sotek as with ordinary shooting."
+			]
+		},
+		{
+			"name": "Mazdamundi's Revenge",
+			"roll": 4,
+			"range": "60cm",
+			"text": [
+				"*The wizard's foes bowels melt with dread or possibly something much worse, hindering their movement as if hobbled.*",
+				"",
+				"This spell can be cast on any enemy unit within range regardless of whether the Wizard can see it or not.",
+				"",
+				"The spell takes effect until the end of the opposing player's next turn.",
+				"",
+				"Whilst the spell lasts the unit cannot charge and if engaged in combat will not pursue or advance. Even units that are otherwise obliged to charge, pursue, or advance will not do so if affected by Mazdamundi's Revenge."
+			]
+		},
+		{
+			"name": "Wings in the Jungle",
+			"roll": 5,
+			"text": [
+				"*An eerie aura surrounds the Wizard and his companions lifting them into the air and transporting them effortlessly from one place to another.*",
+				"",
+				"The spell can be cast on any unengaged friendly unit that the Wizard has joined. The spell affects only a single unit, never a brigade and there is no supporting charge possible.",
+				"",
+				"The unit can be moved just as if it had received an order in the Command phase. The Wizard is moved together with the unit and remains joined with it. Other character stands that have joined the unit will not move with it: they remain where they are."
+			]
+		},
+		{
+			"name": "Shield of the Old Ones",
+			"roll": 5,
+			"range": "30cm",
+			"text": [
+				"*The enemy's blows are magically turned aside by the strange power of the Old Ones.*",
+				"",
+				"This spell can be cast upon a friendly unit that is engaged in combat and which is within range. The Wizard does not have to be able to see the target to cast the spell.",
+				"",
+				"The effect lasts for the duration of the following combat phase.",
+				"",
+				"The unit's Armour value counts as 1 better up to maximum value of 4+. I.e 0 counts as 6+, 6+ as 5+ and 5+ as 4+. If the unit's Armour value is already 4+, or another bonus brings it to 4+, this spell has no effect."
+			]
+		}
+	]
+}

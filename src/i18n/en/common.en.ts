@@ -5,7 +5,7 @@ export default {
 	Create: "Create",
 	Exit: "Exit",
 	Edit: "Edit",
-	Flyers: "Flyers", 
+	Flyers: "Flyers",
 	Delete: "Delete",
 	Search: "Search",
 	Units: "Units",
@@ -13,7 +13,7 @@ export default {
 	Duplicate: "Duplicate",
 	About: "About",
 	Settings: "Settings",
-	Tracker: "Battle Tracker", 
+	Tracker: "Battle Tracker",
 	ArmyBuilder: "Army Builder",
 	BattleTracker: "Battle Tracker",
 	Language: "Language",
@@ -21,8 +21,9 @@ export default {
 	Credits: "Credits",
 	ReportBug: "Report a bug",
 	AppVersion: "App Version",
+	ArmyVersion: "Army Version",
 	SpecialRules: "Special Rules",
 	Yes: "Yes",
 	No: "No",
-	Cancel: "Cancel"
+	Cancel: "Cancel",
 };

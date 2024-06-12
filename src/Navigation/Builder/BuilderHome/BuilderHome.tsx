@@ -22,7 +22,7 @@ import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import CustomModal from "@components/CustomModal";
 import fonts from "@utils/fonts";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
-import { getFactions, getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
+import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import PopupConfirm from "@components/PopupConfirm";
@@ -33,6 +33,7 @@ import { useTranslation } from "react-i18next";
 import { Factions } from "@utils/constants";
 import { useFactionUnits } from "@utils/useFactionUnits";
 import ArmySectionList, { armySectionListDataProps } from "./components/ArmySectionList";
+import Constants from "expo-constants";
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
@@ -65,6 +66,7 @@ const BuilderHome = () => {
 	const { getFactionUnitsByVersion } = useFactionUnits();
 	const { t } = useTranslation(["builder", "common", "forms"]);
 	const toast = useToast();
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
 	useEffect(() => {
 		const { ddFactionList } = getFactionsDropdown();
@@ -191,7 +193,7 @@ const BuilderHome = () => {
 	const [factionDescription, setFactionDescription] = useState([] as string[]);
 	useEffect(() => {
 		// get factionDescription
-		const factionunits = getFactionUnitsByVersion(factionSelection as number, 2);
+		const factionunits = getFactionUnitsByVersion(factionSelection as number, CURRENT_VERSION);
 		setFactionDescription(factionunits.description);
 	}, [factionSelection]);
 

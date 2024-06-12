@@ -16,6 +16,7 @@ export type ArmyReferenceType = {
 
 export type UnitType = {
 	name: string;
+	oldName?: string;
 	order: number;
 	type: string;
 	attack?: string | number; // characters can be undefined
@@ -35,7 +36,6 @@ export type UnitType = {
 	upgrades?: any[];
 	augendUnits?: string[];
 };
-
 
 export type UpgradeType = {
 	name: string;

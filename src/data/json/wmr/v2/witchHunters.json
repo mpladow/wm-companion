@@ -1,0 +1,225 @@
+{
+	"name": "Witch Hunters",
+	"version": "Warmaster Revolution",
+	"group": 2,
+	"order": 2,
+	"versionNumber": 2.24,
+	"description": [
+		"Witch Hunters are some of the most characterful and interesting aspects of the Empire. While it’s true to say they invariably fight for the greater good of humanity, their methods are often brutal and arguably little better than those of their enemies. A Witch Hunter knows that evil doesn’t play by the rules however, and that to beat it, he must be just as underhand. If a few innocents get killed in the process, then it’s regrettable but better than allowing a heretic or warlock to escape punishment.",
+		"A Witch Hunter’s army is a rag-tag sight. The black garbed Zealots of the Witch Hunters’ guild stand shoulder-to- shoulder with peasants and hastily gathered watchmen. Packs of Warhounds, equally trained to seek out the scent of the Undead or a heretic, follow baying and howling. Occasionally a regiment of Knights marches ahead, their bright armour contrasts to the rags of the army’s bulk. Priests continue their sermons on the battlefield, encouraging their followers to acts of insane bravery, while frothing Flagellants whip themselves for the sins they may have committed."
+	],
+	"units": [
+		{
+			"name": "Zealots",
+			"order": 0,
+			"type": "Infantry",
+			"attack": 3,
+			"hits": 3,
+			"size": 3,
+			"points": 35,
+			"min": 3
+		},
+		{
+			"name": "Halberdiers",
+			"order": 1,
+			"type": "Infantry",
+			"attack": 3,
+			"hits": 3,
+			"armour": "6+",
+			"size": 3,
+			"points": 45,
+			"max": 4
+		},
+		{
+			"name": "Crossbowmen",
+			"order": 2,
+			"type": "Infantry",
+			"attack": "3/1",
+			"range": "30cm",
+			"hits": 3,
+			"size": 3,
+			"points": 55,
+			"max": 2
+		},
+		{
+			"name": "Handgunners",
+			"order": 3,
+			"type": "Infantry",
+			"attack": "3/1",
+			"range": "30cm",
+			"hits": 3,
+			"size": 3,
+			"points": 65,
+			"max": 4
+		},
+		{
+			"name": "Flagellants",
+			"order": 4,
+			"type": "Infantry",
+			"attack": 5,
+			"hits": 3,
+			"size": 3,
+			"points": 70,
+			"max": 4
+		},
+		{
+			"name": "Warhounds",
+			"order": 5,
+			"type": "Infantry",
+			"attack": 3,
+			"hits": 3,
+			"size": "+1",
+			"points": 20,
+			"augendUnits": ["Zealots", "Handgunners", "Flagellants", "Pistoliers"],
+			"noCount": true,
+			"noMagic": true
+		},
+		{
+			"name": "Knights",
+			"order": 6,
+			"type": "Cavalry",
+			"attack": 3,
+			"hits": 3,
+			"armour": "4+",
+			"size": 3,
+			"points": 110,
+			"max": 1
+		},
+		{
+			"name": "Pistoliers",
+			"order": 7,
+			"type": "Cavalry",
+			"attack": "3/1",
+			"range": "15cm",
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 95,
+			"max": 1
+		},
+		{
+			"name": "Cannon",
+			"order": 8,
+			"type": "Artillery",
+			"attack": "1/2+bounce",
+			"range": "60cm",
+			"hits": 2,
+			"size": 2,
+			"points": 85,
+			"max": 1
+		},
+		{
+			"name": "General",
+			"order": 9,
+			"type": "General",
+			"attack": "+2",
+			"command": 9,
+			"size": 1,
+			"points": 125,
+			"armyMin": 1,
+			"armyMax": 1
+		},
+		{
+			"name": "Hero",
+			"order": 10,
+			"type": "Hero",
+			"attack": "+1",
+			"command": 8,
+			"size": 1,
+			"points": 80,
+			"max": 2
+		},
+		{
+			"name": "Warrior Priest",
+			"order": 11,
+			"type": "Wizard",
+			"attack": "+1",
+			"command": 7,
+			"size": 1,
+			"points": 55,
+			"max": 1
+		}
+	],
+	"magic": true,
+	"armyRules": [
+		"Some unit’s abilities from Witch Hunter army will affect ‘Chaos and/or Undead’. ‘Chaos’ means Chaos army, Daemons army, Beastmen army, Chaos Dward army and Skaven army. ‘Undead’ means Undead Tomb Kings army and Vampire Counts army (including units of Ghouls!)."
+	],
+	"specialRules": {
+		"Zealots": {
+			"order": 1,
+			"text": [
+				"Zealots form the main part of a Witch Hunter army, and are drawn from mobs whipped up by priest’s sermons. These troops gain +1 Attack in the first round of combat against Undead or Chaos (regardless of who charged) and will always use their initiative to charge these enemies if possible. If victorious in combat with Undead or Chaos like enemies they must pursue or advance where possible."
+			]
+		},
+		"Handgunners": {
+			"order": 2,
+			"text": [
+				"Count enemy armour values as one worse than normal when shot by a handgun. So an armour value of 3+ counts as 4+, 4+ as 5+, and 5+ as 6+, whilst an armour value of 6+ can’t save against a handgun."
+			]
+		},
+		"Flagellants": {
+			"order": 3,
+			"text": [
+				"So keen are they to meet their maker that a unit of Flagellants will always use its initiative to charge an enemy if possible and can’t be given orders instead. They’ll never use their initiative to evade. They can’t be driven back by shooting and do not roll for drive backs. If a unit of Flagellants is victorious in combat and is able to pursue the enemy or advance in accordance with the rules, then it must to do so where possible. Flagellants are unaffected by enemies that cause terror in combat, so they do not suffer the usual -1 Attack modifier."
+			]
+		},
+		"Warhounds": {
+			"order": 4,
+			"text": [
+				"Warhound stands never fight as independent units. Instead, you may add one stand of Warhounds to any of your infantry units. This brings the size of the unit to 4 stands -i.e. 3 ordinary stands plus the Warhounds.",
+				"Warhounds always have the same Armour value as the rest of their unit, either 6+ or 0. They fight as part of their unit and can be removed as a unit casualty if the player wishes. Warhound casualties never count as casualties for purposes of issuing orders, which means there is no -1 Command penalty as there normally would be for units that have lost a stand.",
+				"Warhound stands never count as part of the unit's formation when determining whether they move at full or half pace, so no movement penalty is incurred if they are arranged out of the unit's regular formation.",
+				"An Infantry unit containing a Warhound stand gains the ability to pursue Cavalry and Chariots."
+			]
+		},
+		"Pistoliers": {
+			"order": 5,
+			"text": [
+				"Pistoliers have a shooting range of only 15cm, however they can shoot all round - i.e. behind or to the side as well as to their front. Just measure the range from any stand edge either front, side or rear. Pistoliers can shoot at enemy charging them from any direction."
+			]
+		},
+		"Cannon": {
+			"order": 6
+		}
+	},
+	"spells": [
+		{
+			"name": "Sanctuary",
+			"roll": 5,
+			"text": [
+				"*The Warrior Priest consecrates the ground before the troops, warding off evil.*",
+				"",
+				"The Wizard must be with the unit to affect it. The unit counts as being defended, even if in the open. If the unit is already defended, it counts as fortified. Note that this also affects Cavalry units, even though they are not normally able to receive this bonus. The effect lasts until the unit moves or Priest leaves it or he casts another spell."
+			]
+		},
+		{
+			"name": "Doctrine of Sigmar",
+			"roll": 5,
+			"range": "30cm",
+			"text": [
+				"*Through the rousting speech of Sigmar’s chosen, troops are directed across the field of battle.*",
+				"",
+				"This spell can be cast on any friendly unit within 30cm. If successful, the unit may be moved as if it had received an order in the Command phase."
+			]
+		},
+		{
+			"name": "Holy Fervour",
+			"roll": 5,
+			"text": [
+				"*Enraged by their blasphemous enemies the troops rush forward thirsty for blood.*",
+				"",
+				"The Wizard must be with the unit to affect it. If successfully cast on a friendly unit, each stand including character stands gains +1 Attack during the following Combat phase."
+			]
+		},
+		{
+			"name": "Divine Curse",
+			"roll": 4,
+			"range": "30cm",
+			"text": [
+				"*Speaking the words of Magnus the Pious himself, the Warrior Priest smites his foes.*",
+				"",
+				"One unit within range has its movement halved for its next Command phase. The unit also treats all enemy units as terrifying, even if otherwise immune to terror, and stops causing terror itself. The spell lasts until the end of your opponent’s next turn."
+			]
+		}
+	]
+}

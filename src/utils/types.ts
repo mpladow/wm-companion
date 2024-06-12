@@ -18,6 +18,7 @@ export type FactionListProps = {
 	armyRules?: string[];
 	specialRules?: any;
 	spells?: SpellsProps[];
+	versionNumber?: number;
 };
 export type UpgradesProps = {
 	name: string;
@@ -61,6 +62,7 @@ export type UnitDetailsProps = {
 };
 export type UnitProps = {
 	name: string;
+	oldName?: string;
 	order: number;
 	type: string;
 	armour?: string;
@@ -71,7 +73,7 @@ export type UnitProps = {
 	points: number;
 	min?: number;
 	max?: number;
-	range: string;
+	range?: string;
 	armyMax?: number;
 	armyMin?: number;
 	upgrades?: string[];

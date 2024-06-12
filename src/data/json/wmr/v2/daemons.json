@@ -1,0 +1,279 @@
+{
+	"name": "Daemons",
+	"version": "Warmaster Revolution",
+	"group": 1,
+	"order": 3,
+	"versionNumber": 2.24,
+	"description": [
+		"The world is awash with unseen magic that comes from the dark dimension between time and space. It was introduced into the world when the great intra-spatial gateways of the Old Ones collapsed, creating a rift in space and spewing magically volatile warp-matter over the whole planet. Magic is a malleable energy that can be harnessed and wielded, but the very act of doing so reshapes and changes everyone and everything it comes into contact with. Whether used for good or ill, magic is ultimately corrupting and dangerous."
+	],
+	"units": [
+		{
+			"name": "Daemon Hordes",
+			"order": 0,
+			"type": "Infantry",
+			"attack": 4,
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 75,
+			"min": 3
+		},
+		{
+			"name": "Daemon Swarm",
+			"order": 1,
+			"type": "Infantry",
+			"attack": 2,
+			"hits": 4,
+			"size": 3,
+			"points": 45,
+			"max": 4,
+			"noMagic": true
+		},
+		{
+			"name": "Daemon Cavalry",
+			"order": 2,
+			"type": "Cavalry",
+			"attack": 4,
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 110,
+			"max": 3
+		},
+		{
+			"name": "Daemon Hounds",
+			"order": 3,
+			"type": "Cavalry",
+			"attack": 3,
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 90,
+			"max": 2
+		},
+		{
+			"name": "Daemon Chariots",
+			"order": 4,
+			"type": "Chariot",
+			"attack": 3,
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 95,
+			"max": 3
+		},
+		{
+			"name": "Daemon Beasts",
+			"order": 5,
+			"type": "Monster",
+			"attack": 5,
+			"hits": 4,
+			"armour": "5+",
+			"size": 3,
+			"points": 200,
+			"max": 1,
+			"noMagic": true
+		},
+		{
+			"name": "Daemon Flyers",
+			"order": 6,
+			"type": "Monster",
+			"attack": 2,
+			"hits": 3,
+			"armour": "5+",
+			"size": 3,
+			"points": 80,
+			"max": 1,
+			"noMagic": true
+		},
+		{
+			"name": "Greater Daemon",
+			"order": 7,
+			"type": "Monster",
+			"attack": 8,
+			"hits": 6,
+			"armour": "4+",
+			"size": 1,
+			"points": 280,
+			"max": 1,
+			"noMagic": true
+		},
+		{
+			"name": "Daemon Overlord",
+			"order": 8,
+			"type": "General",
+			"attack": "+2",
+			"command": 9,
+			"size": 1,
+			"points": 125,
+			"armyMin": 1,
+			"armyMax": 1,
+			"upgrades": ["Daemonic Wings", "Favour of the Gods", "Wizard"]
+		},
+		{
+			"name": "Daemon Lord Hero",
+			"order": 9,
+			"type": "Hero",
+			"attack": "+1",
+			"command": 8,
+			"size": 1,
+			"points": 80,
+			"max": 1,
+			"upgrades": ["Daemonic Wings", "Favour of the Gods"]
+		},
+		{
+			"name": "Daemon Sorcerer",
+			"order": 10,
+			"type": "Wizard",
+			"attack": "+1",
+			"command": 8,
+			"size": 1,
+			"points": 90,
+			"max": 1,
+			"upgrades": ["Daemonic Wings", "Favour of the Gods"]
+		}
+	],
+	"upgrades": [
+		{
+			"name": "Daemonic Wings",
+			"order": 0,
+			"type": "Special",
+			"points": "+10",
+			"max": 1
+		},
+		{
+			"name": "Favour of the Gods",
+			"order": 1,
+			"type": "Special",
+			"attack": "+1",
+			"points": "+50",
+			"max": 1
+		},
+		{
+			"name": "Wizard",
+			"order": 2,
+			"type": "Special",
+			"points": "+25",
+			"armyMax": 1,
+			"addOnUpgrades": [
+				"Ring of Magic",
+				"Staff of Spellbinding",
+				"Scroll of Dispelling",
+				"Wand of Power",
+				"Rod of Repetition"
+			]
+		}
+	],
+	"magic": true,
+	"armyRules": [
+		"__Ignore Terror.__ All units ignore the -1 Attack penalty in combat for fighting terrifying troops – you cannot frighten them at all.",
+		"",
+		"__Daemonic Instability.__ At the start of the player’s own Command phase, before making any initiatives moves, all friendly Daemon units that have taken at least 1 casualty (i.e. lost at least 1 stand out of 3) must make a ‘Daemonic Instability’ test. Roll a D6. If the unit has lost 2 stands and is further away than 20cm from a friendly daemon Wizard (i.e. has only 1 stand remaining from 3) deduct 1 from the roll.",
+		"-|-",
+		"__0-1__|One stand is destroyed – the daemons fade away and are absorbed back into the Realm of Chaos from which they came. Remove one stand from play. If a character is with the unit.and the last stand is removed the character is destroyed too.",
+		"__2-3__|The unit becomes confused - if not already confused the stand becomes confused as it is torn between this world and the next.",
+		"__4-5__|No effect – unless the unit is confused in which case it ceases to be confused as it is favoured with the invigorating power of Chaos.",
+		"__6__|The unit regains one stand. The regained stand is placed in formation with the rest of the unit. If it is impossible to position the stand in formation with its unit, then the stand cannot be added."
+	],
+	"specialRules": {
+		"Daemon Swarm": {
+			"order": 1,
+			"text": [
+				"These cannot be driven back by shooting and do not roll for drive backs. A Daemon Swarm cannot be given a magic item."
+			]
+		},
+		"Daemon Flyers": {
+			"order": 2,
+			"text": [
+				"These can fly. Daemon flyers are an exception to the normal conventions for basing monsters in that they face the long edge of the stand in the same way as infantry rather than the short edge as most other monsters."
+			]
+		},
+		"Greater Daemon": {
+			"order": 3,
+			"text": [
+				"Greater Daemons can fly regardless of whether the actual model has wings – aerial propulsion is deemed feasible by sheer effort of will.",
+				"",
+				"Greater Daemons cause terror in their enemies. A Greater Daemon that has accumulated 4-5 hits at the end of the Shooting or Combat phase and is no longer engaged in combat is deemed to have been badly hurt. Once a Greater Daemon is badly hurt accumulated hits are discounted and its Hits and Attacks values are halved for the rest of the battle (to 3 Hits and 4 Attacks)."
+			]
+		},
+		"Daemon Overlord": {
+			"order": 4,
+			"text": [
+				"The Daemon Overlord is the army’s General and has the option of having the powers of a Wizard for additional 25 points. If given magical powers the Daemon Overlord can be given a magic item restricted to either a General or a Wizard. Note that the Daemon Overlord is still a General and his command range extends over the whole battlefield as for other Generals."
+			]
+		},
+		"Daemonic Wings": {
+			"order": 5,
+			"text": [
+				"Some of the creatures of the deep vaults of hell may have wings, some of them fly on hovering discs and some even have the ability of disappearing and reappearing wherever they want on the battlefield. Daemon characters may be given the ability of flying."
+			]
+		},
+		"Favour of the Gods": {
+			"order": 6,
+			"text": [
+				"Demon Overlord, Lords or Sorcerers can be given the Favour of the Gods. The character gains then +1 extra Attack and causes terror in its enemies as described in the Warmaster rulebook."
+			]
+		},
+		"Wizard": {
+			"order": 7,
+			"text": [
+				"With this upgrade the Daemon Overlord can be given a magic item restricted to a Wizard. Note that the Daemon Overlord is still a General and his command range extends over the whole battlefield as for other Generals."
+			]
+		}
+	},
+	"spells": [
+		{
+			"name": "Summon Daemons",
+			"roll": 4,
+			"range": "60cm",
+			"text": [
+				"*With a sulphurous blast of elemental power fresh Daemons emerge from the warp to reinforce their beleaguered kindred.*",
+				"",
+				"This spell can be cast on any friendly Daemon unit of three stands that has lost one or two stands as casualties. It does not matter whether the Wizard can see the unit or not.",
+				"",
+				"The unit regains one stand. The regained stand is placed in formation with the rest of the unit. If the unit is already in combat the additional stand can be placed so that it touches the enemy and will count as charging if the unit charged. If it is impossible to position the stand in formation with its unit then the spell cannot be cast and will not work."
+			]
+		},
+		{
+			"name": "Daemonic Rage",
+			"roll": 5,
+			"range": "30cm",
+			"text": [
+				"*A keening cry of pure power rises upon daemonic lips as magical energy surges through their eldritch bodies.*",
+				"",
+				"This spell affects every friendly unit within range.",
+				"",
+				"The spell lasts during the following Combat phase.",
+				"",
+				"Every unit gains a bonus 1 attack. This attack can be allocated to any stand in the unit and can be allocated to a different stand in each combat round."
+			]
+		},
+		{
+			"name": "Sorcerous Blast",
+			"roll": 5,
+			"range": "30cm",
+			"text": [
+				"*With a single gesture a bolt of black lightning leaps from fingertip to the foe, searing the enemy with a blast of dark power.*",
+				"",
+				"This spell can be cast on an enemy unit. The Wizard must be able to see his target to use this spell. The spell cannot be directed at a unit engaged in combat.",
+				"",
+				"The Sorcerous Blast is treated like three ordinary shooting attacks except that armour has no effect (all targets count as having no armour). A unit can be driven back by a Sorcerous Blast as with ordinary shooting."
+			]
+		},
+		{
+			"name": "Frenzy of Chaos",
+			"roll": 6,
+			"range": "30cm",
+			"text": [
+				"*Rumbling thunderous power surges through the daemonic ranks driving all into a frenzied thirst for blood.*",
+				"",
+				"This spell can be cast upon a friendly unit which is engaged in combat and that is within range. The Sorcerer does not have to be able to see the target to cast the spell.",
+				"",
+				"The effect lasts until the end of the following Combat phase.",
+				"",
+				"The unit can re-roll any failed attacks in combat: take any dice that fail to score hits and roll them again. Note that you cannot re-roll a dice that has already been re-rolled either because of a spell, magic item or any other reason."
+			]
+		}
+	]
+}

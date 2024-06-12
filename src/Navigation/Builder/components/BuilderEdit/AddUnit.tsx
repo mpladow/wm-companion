@@ -15,6 +15,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Factions } from "@utils/constants";
 import { useTranslation } from "react-i18next";
 import { useFactionUnits } from "@utils/useFactionUnits";
+import Constants from "expo-constants";
 
 export type AddUnitProps = {
 	addingUnits: boolean;
@@ -32,6 +33,9 @@ const AddUnit = () => {
 	const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
 	const [totalPoints, setTotalPoints] = useState(1000);
 	const [errorsVisible, setErrorsVisible] = useState(false);
+
+	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+
 	const armyCount = useMemo(() => {
 		return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
@@ -67,14 +71,14 @@ const AddUnit = () => {
 				title: title,
 			});
 
-			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
+			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction,  builder.selectedArmyList?.versionNumber);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
 	}, [builder.selectedArmyList]);
 
 	useEffect(() => {
 		if (builder.selectedArmyList) {
-			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, 2);
+			const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction,  builder.selectedArmyList?.versionNumber);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
 		if (builder?.selectedArmyList) {

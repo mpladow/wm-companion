@@ -1,6 +1,7 @@
 {
 	"name": "Albion",
 	"version": "Warmaster Revolution",
+	"versionNumber": 1,
 	"group": 2,
 	"order": 0,
 	"description": [
