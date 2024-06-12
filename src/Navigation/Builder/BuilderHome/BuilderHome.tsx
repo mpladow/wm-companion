@@ -116,7 +116,7 @@ const BuilderHome = () => {
 		}
 		if (factionSelection && factionName != "") {
 			builder
-				.addUserArmyList(factionSelection, factionName, autopopulate)
+				.addUserArmyList(factionSelection, factionName, autopopulate, 1)
 				.then((result) => {
 					builder.setSelectedArmyList(result);
 				})
@@ -226,7 +226,7 @@ const BuilderHome = () => {
 					onArmyListDeletePress={onArmyListDeletePress}
 					handleEditArmyPress={handleEditArmyPress}
 					handleToggleFavourite={builder.toggleFavourite}
-					handleMigrateArmy={() => console.log("Call builder migrate army")}
+					handleMigrateArmy={builder.migrateArmyList}
 				/>
 				<PopupConfirm
 					visible={confirmDialog}
@@ -454,7 +454,7 @@ const BuilderHome = () => {
 							style={[
 								{
 									color: theme.text,
-									fontFamily: fonts.PTSansRegular,
+									fontFamily: fonts.GaramondMedium,
 									fontSize: 16,
 									borderRadius: 16,
 									paddingTop: 16,
@@ -468,21 +468,6 @@ const BuilderHome = () => {
 				heading={t("ArmyNotes", { ns: "builder" })}
 				onCancel={() => setShowArmyNotes(false)}
 			/>
-			{/* <Modal animationType='fade' visible={showArmyNotes} transparent={true}>
-				<View style={styles.modalOverlay} onTouchStart={() => setShowArmyNotes(!showArmyNotes)}>
-					<View
-						style={{
-							marginTop: Dimensions.get("screen").height / 3,
-							alignItems: "center",
-							justifyContent: "center",
-							backgroundColor: theme.blueGrey,
-							padding: 16,
-							margin: 12,
-							borderRadius: 20,
-						}}
-					></View>
-				</View>
-			</Modal> */}
 		</SafeAreaView>
 	);
 };

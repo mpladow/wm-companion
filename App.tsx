@@ -34,6 +34,8 @@ SplashScreen.preventAutoHideAsync();
 const App = () => {
 	const [fontsLoaded] = useFonts({
 		GaramondItalic: require("./assets/fonts/EBGaramond-Italic.ttf"),
+		GaramondMedium: require("./assets/fonts/EBGaramond-Medium.ttf"),
+		GaramondMediumItalic: require("./assets/fonts/EBGaramond-MediumItalic.ttf"),
 		GaramondRegular: require("./assets/fonts/EBGaramond-Regular.ttf"),
 		GaramondBold: require("./assets/fonts/EBGaramond-ExtraBold.ttf"),
 		"PTSans-Bold": require("./assets/fonts/PTSans-Bold.ttf"),

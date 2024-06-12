@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import Constants from "expo-constants";
 import { VERSION } from "lodash";
 import CustomText from "@components/CustomText";
+import { useToast } from "react-native-toast-notifications";
 
 export type armySectionListDataProps = {
 	title: string;
@@ -22,7 +23,7 @@ export type BuilderHomeListProps = {
 	onArmyListDeletePress: (armyId: string) => void;
 	handleEditArmyPress: (armyId: string) => void;
 	handleToggleFavourite: (armyId: string) => void;
-	handleMigrateArmy: (armyId: string) => void;
+	handleMigrateArmy: (armyId: string, versionNumber: number) => void;
 };
 const ArmySectionList = ({
 	sectionListData,
@@ -39,7 +40,16 @@ const ArmySectionList = ({
 
 	const [showMigrateModal, setShowMigrateModal] = useState(false);
 	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+	const toast = useToast();
 
+	const onMigrateArmyPress = () => {
+		selectedArmy && handleMigrateArmy(selectedArmy.armyId, CURRENT_VERSION);
+		toast.show(`Army List migrated to ${CURRENT_VERSION}!`, {
+			type: "success",
+			duration: 4000,
+		});
+		setShowMigrateModal(false);
+	};
 	return (
 		<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
 			<SectionList
@@ -97,13 +107,13 @@ const ArmySectionList = ({
 							</CustomText>
 						</TextBlock>
 						<CustomText>
-							Your old list will <CustomText bold>still be accessible</CustomText> after migration, but
-							this can be safely deleted after migration.
+							Your old list will <CustomText bold>still be accessible</CustomText> after migration, and
+							can be deleted at any time.
 						</CustomText>
 					</View>
 				}
 				heading={`Migrate Army to ${CURRENT_VERSION}`}
-				onSubmit={() => selectedArmy && handleMigrateArmy(selectedArmy.armyId)}
+				onSubmit={onMigrateArmyPress}
 				onCancel={() => setShowMigrateModal(false)}
 				submitText={`Migrate to ${CURRENT_VERSION}`}
 				cancelText={"I will do this later"}

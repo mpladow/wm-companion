@@ -136,17 +136,17 @@ const BuilderEdit = () => {
 	) => {
 		builder.addUnit(unitName, points, isLeader, maxCount, minCount, ignoreBreakPoint);
 	};
-	const handleAddUpgradeToUnitPress = (
-		unitName: string,
-		type: string,
-		points: number,
-		upgradeName: string,
-		maxCount?: number,
-		armyLimitMaxCount?: number,
-		addOnUpgrades?: string[]
-	) => {
-		builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount, addOnUpgrades);
-	};
+	// const handleAddUpgradeToUnitPress = (
+	// 	unitName: string,
+	// 	type: string,
+	// 	points: number,
+	// 	upgradeName: string,
+	// 	maxCount?: number,
+	// 	armyLimitMaxCount?: number,
+	// 	addOnUpgrades?: string[]
+	// ) => {
+	// 	builder.addItem(unitName, type, points, upgradeName, maxCount, armyLimitMaxCount, addOnUpgrades);
+	// };
 	const handleRemoveUpgrade = (unitName: string, id: string) => {
 		builder.removeItem(unitName, id);
 	};
