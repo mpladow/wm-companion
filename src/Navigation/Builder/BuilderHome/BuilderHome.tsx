@@ -17,7 +17,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@hooks/useTheme";
-import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
+import { Button, CustomDropdown, StandardModal, Text, TextBlock } from "@components/index";
 import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import CustomModal from "@components/CustomModal";
 import fonts from "@utils/fonts";
@@ -226,6 +226,7 @@ const BuilderHome = () => {
 					onArmyListDeletePress={onArmyListDeletePress}
 					handleEditArmyPress={handleEditArmyPress}
 					handleToggleFavourite={builder.toggleFavourite}
+					handleMigrateArmy={() => console.log("Call builder migrate army")}
 				/>
 				<PopupConfirm
 					visible={confirmDialog}
@@ -441,7 +442,33 @@ const BuilderHome = () => {
 					</View>
 				</Button>
 			</View>
-			<Modal animationType='fade' visible={showArmyNotes} transparent={true}>
+			<StandardModal
+				visible={showArmyNotes}
+				content={
+					<View style={{ flex: 1 }}>
+						<TextInput
+							multiline
+							value={factionNotes}
+							maxLength={10}
+							onChangeText={(val) => setFactionNotes(val)}
+							style={[
+								{
+									color: theme.text,
+									fontFamily: fonts.PTSansRegular,
+									fontSize: 16,
+									borderRadius: 16,
+									paddingTop: 16,
+									height: 100,
+								},
+								// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+							]}
+						/>
+					</View>
+				}
+				heading={t("ArmyNotes", { ns: "builder" })}
+				onCancel={() => setShowArmyNotes(false)}
+			/>
+			{/* <Modal animationType='fade' visible={showArmyNotes} transparent={true}>
 				<View style={styles.modalOverlay} onTouchStart={() => setShowArmyNotes(!showArmyNotes)}>
 					<View
 						style={{
@@ -453,31 +480,9 @@ const BuilderHome = () => {
 							margin: 12,
 							borderRadius: 20,
 						}}
-					>
-						<Text variant='heading3' style={{ color: theme.text, fontSize: 28 }}>
-							{t("ArmyNotes", { ns: "builder" })}
-						</Text>
-						<TextInput
-							multiline
-							value={factionNotes}
-							maxLength={10}
-							onChangeText={(val) => setFactionNotes(val)}
-							style={[
-								{
-									color: theme.text,
-									fontFamily: fonts.PTSansBold,
-									fontSize: 16,
-									borderRadius: 16,
-									padding: 16,
-									paddingTop: 16,
-									height: 100,
-								},
-								// factionNameError && { borderColor: theme.danger, borderWidth: 4 },
-							]}
-						/>
-					</View>
+					></View>
 				</View>
-			</Modal>
+			</Modal> */}
 		</SafeAreaView>
 	);
 };

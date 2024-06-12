@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Image, Pressable } from "react-native";
 import React, { useRef, useState } from "react";
 import { ArmyListProps, BuilderContextProvider } from "@context/BuilderContext";
 import { Text } from "@components/index";
@@ -24,6 +24,7 @@ type ArmyListCardProps = {
 	handleDuplicateArmyPress: (armyId: string) => void;
 	handleToggleFavourite: (armyId: string) => void;
 	handleOpenArmyNotes: (armyId: string) => void;
+	handleMigrateArmyPress: (armyId: string) => void;
 };
 const ArmyListCard = ({
 	armyList,
@@ -33,6 +34,7 @@ const ArmyListCard = ({
 	handleDuplicateArmyPress,
 	handleToggleFavourite,
 	handleOpenArmyNotes,
+	handleMigrateArmyPress,
 }: ArmyListCardProps) => {
 	const { t } = useTranslation(["builder", "common"]);
 	const { theme } = useTheme();
@@ -74,10 +76,9 @@ const ArmyListCard = ({
 					<View style={{ marginBottom: 4 }}>
 						<Text>
 							{armyList.faction && getKeyByValue(Factions, armyList.faction).replaceAll("_", " ")}{" "}
-							{armyList.versionNumber !== CURRENT_VERSION && `[Migration required]`}
 						</Text>
 					</View>
-					<View style={{ alignItems: "flex-start", flexDirection: "row" }}>
+					<View style={{ alignItems: "center", flexDirection: "row" }}>
 						<View>
 							<PointsContainer points={armyList.points} />
 						</View>
@@ -89,6 +90,12 @@ const ArmyListCard = ({
 								<Foundation name='clipboard-notes' size={24} color={theme.white} />
 							</TouchableOpacity>
 						) : null}
+
+						{armyList.versionNumber !== CURRENT_VERSION && (
+							<Pressable onPress={() => handleMigrateArmyPress(armyList.armyId)}>
+								<Text style={{ marginLeft: 4 }}>Migrate to {CURRENT_VERSION}</Text>
+							</Pressable>
+						)}
 					</View>
 				</View>
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>

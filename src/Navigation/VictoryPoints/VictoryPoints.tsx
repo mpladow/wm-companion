@@ -94,7 +94,7 @@ const VictoryPoints = () => {
 			const factionUpgrades: any[] = factionList?.upgrades;
 			console.log(factionUpgrades, "Faction upgrades");
 			let totalItems = [];
-			if (!factionUpgrades == undefined || factionUpgrades.length > 0) {
+			if (!factionUpgrades == undefined || factionUpgrades?.length > 0) {
 				console.log(`faction upgrades added`);
 				totalItems = itemsArray.concat(factionUpgrades);
 			} else {
