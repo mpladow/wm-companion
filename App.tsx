@@ -13,6 +13,7 @@ import { ToastProvider } from "react-native-toast-notifications";
 import "./src/i18n/i18n";
 import { SettingsContextProvider } from "@context/SettingsContext";
 import { CollectionProvider } from "@context/CollectionContext";
+import { UpdateCheckerContextProvider } from "@context/UpdateCheckerContext";
 
 const darkTheme = {
 	dark: true,
@@ -62,22 +63,24 @@ const App = () => {
 	return (
 		<ThemeContextProvider>
 			<ToastProvider>
-				<SettingsContextProvider>
-					<RootSiblingParent>
-						<MenuProvider>
-							<CollectionProvider>
-								<BuilderContextProvider>
-									<VPContextProvider>
-										<NavigationContainer theme={darkTheme}>
-											<RootStack />
-											<StatusBar translucent />
-										</NavigationContainer>
-									</VPContextProvider>
-								</BuilderContextProvider>
-							</CollectionProvider>
-						</MenuProvider>
-					</RootSiblingParent>
-				</SettingsContextProvider>
+				<UpdateCheckerContextProvider>
+					<SettingsContextProvider>
+						<RootSiblingParent>
+							<MenuProvider>
+								<CollectionProvider>
+									<BuilderContextProvider>
+										<VPContextProvider>
+											<NavigationContainer theme={darkTheme}>
+												<RootStack />
+												<StatusBar translucent />
+											</NavigationContainer>
+										</VPContextProvider>
+									</BuilderContextProvider>
+								</CollectionProvider>
+							</MenuProvider>
+						</RootSiblingParent>
+					</SettingsContextProvider>
+				</UpdateCheckerContextProvider>
 			</ToastProvider>
 		</ThemeContextProvider>
 	);
