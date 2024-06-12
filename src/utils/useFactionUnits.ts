@@ -32,13 +32,10 @@ export const useFactionUnits = () => {
 		let list: any[] = [];
 		let factionList: ArmyReferenceType = {} as ArmyReferenceType;
 		let description: string[] = [];
-		console.log(factionSelection, "factionSelection");
 		const army = Factions[factionSelection]?.replaceAll("_", " ");
-		console.log("🚀 ~ getFactionUnitsByVersion ~ army:", army);
 
 		if (version == 2.24) {
 			const _factionList = wmrArmiesV2.find((x) => x.name == army);
-			console.log("🚀 ~ getFactionUnitsByVersion ~ _factionList:", _factionList);
 			if (_factionList) {
 				factionList = _factionList;
 				list = factionList?.units;

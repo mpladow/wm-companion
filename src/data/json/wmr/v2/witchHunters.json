@@ -3,7 +3,7 @@
 	"version": "Warmaster Revolution",
 	"group": 2,
 	"order": 2,
-	"versionNumber": 1,
+	"versionNumber": 2.24,
 	"description": [
 		"Witch Hunters are some of the most characterful and interesting aspects of the Empire. While it’s true to say they invariably fight for the greater good of humanity, their methods are often brutal and arguably little better than those of their enemies. A Witch Hunter knows that evil doesn’t play by the rules however, and that to beat it, he must be just as underhand. If a few innocents get killed in the process, then it’s regrettable but better than allowing a heretic or warlock to escape punishment.",
 		"A Witch Hunter’s army is a rag-tag sight. The black garbed Zealots of the Witch Hunters’ guild stand shoulder-to- shoulder with peasants and hastily gathered watchmen. Packs of Warhounds, equally trained to seek out the scent of the Undead or a heretic, follow baying and howling. Occasionally a regiment of Knights marches ahead, their bright armour contrasts to the rags of the army’s bulk. Priests continue their sermons on the battlefield, encouraging their followers to acts of insane bravery, while frothing Flagellants whip themselves for the sins they may have committed."
@@ -166,7 +166,10 @@
 		"Warhounds": {
 			"order": 4,
 			"text": [
-				"Warhound stands never fight as indipendent unit. Instead, you may add one stand of Warhounds to your units of Zaelots, Handgunners, Pistoliers or Flagellants. This brings the size of the unit to 4 stands. Warhounds always have Armour value 0. Warhounds can move up to 30cm. They fight as part of their unit and can be removed as a unit causality if player wishes. Warhounds causality never count as causality for purpose of issuing orders, which means there is no -1 Command penalty as there normally would be for units that have lost a stand. Warhound stands never count as part of the unit's formation when determining whether they move at full or half pace pace, so no movement penalty is incurred if they are arranged out of the unit's regular formation. If they join cavalry unit (i.e. Pistoliers), they are still considered as an infantry stand, but in this particular case they can pursue enemy cavalry together with the main unit."
+				"Warhound stands never fight as independent units. Instead, you may add one stand of Warhounds to any of your infantry units. This brings the size of the unit to 4 stands -i.e. 3 ordinary stands plus the Warhounds.",
+				"Warhounds always have the same Armour value as the rest of their unit, either 6+ or 0. They fight as part of their unit and can be removed as a unit casualty if the player wishes. Warhound casualties never count as casualties for purposes of issuing orders, which means there is no -1 Command penalty as there normally would be for units that have lost a stand.",
+				"Warhound stands never count as part of the unit's formation when determining whether they move at full or half pace, so no movement penalty is incurred if they are arranged out of the unit's regular formation.",
+				"An Infantry unit containing a Warhound stand gains the ability to pursue Cavalry and Chariots."
 			]
 		},
 		"Pistoliers": {

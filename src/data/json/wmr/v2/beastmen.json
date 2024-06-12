@@ -10,6 +10,7 @@
 	"units": [
 		{
 			"name": "Gors",
+			"oldName": "Beastherd",
 			"order": 0,
 			"type": "Infantry",
 			"attack": 4,
@@ -22,6 +23,7 @@
 		},
 		{
 			"name": "Ungors",
+			"oldName": "Herdkin",
 			"order": 1,
 			"type": "Infantry",
 			"attack": "3/1",

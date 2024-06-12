@@ -21,7 +21,8 @@ import orcsListV2 from "./orks.json";
 import skavenListV2 from "./skaven.json";
 import vampireCountsListV2 from "./vampireCounts.json";
 import woodElvesListV2 from "./woodElves.json";
-
+import tombKingsListV2 from "./tombKings.json";
+import witchHuntersListV2 from "./witchHunters.json"
 import { ArmyReferenceType } from "src/types/data/army";
 
 export const wmrArmiesV2: ArmyReferenceType[] = [
@@ -48,4 +49,6 @@ export const wmrArmiesV2: ArmyReferenceType[] = [
 	skavenListV2,
 	vampireCountsListV2,
 	woodElvesListV2,
+	tombKingsListV2,
+	witchHuntersListV2
 ];

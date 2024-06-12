@@ -62,6 +62,7 @@ export type UnitDetailsProps = {
 };
 export type UnitProps = {
 	name: string;
+	oldName?: string;
 	order: number;
 	type: string;
 	armour?: string;
