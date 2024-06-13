@@ -43,11 +43,10 @@ const AddItem = () => {
 	const [selectedUnit, setSelectedUnit] = useState();
 	const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
 	const [currentUpgradeDetails, setCurrentUpgradeDetails] = useState<UpgradesProps | undefined>();
-	const { getFactionUnitsByVersion } = useFactionUnits();
+
 	const armyCount = useMemo(() => {
 		return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
-	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -60,119 +59,14 @@ const AddItem = () => {
 
 	useEffect(() => {
 		// get faction list data
-		const factionListData = getFactionUnitsByVersion(builder.selectedArmyList?.faction, builder.selectedArmyList?.versionNumber);
-		const factionUnits = factionListData?.factionList?.units;
 		const handleAddMagicItemPress = () => {
 			// get all magic items
 			setSelectedUnit(unitName);
-			const selectedUnit = builder.selectedArmyList?.selectedUnits.find((x) => x.unitName == unitName);
-			// ensure we clone this item so the original list does not get mutated.
-			const itemsArray: any = _.cloneDeep(magicItemsList.upgrades);
-			const magicItemConstraints = magicItemsList.upgradeConstraints;
-			// faction unit types can override the above constraints
-			const factionUpgrades = builder.factionDetails?.upgrades;
-			factionUpgrades?.map((x) => {
-				if (builder.factionDetails?.specialRules) {
-					const upgradeText = builder.factionDetails?.specialRules[x.name]?.text;
-					if (upgradeText) {
-						x.text = upgradeText;
-					}
-				}
-			});
-			const unitDetails = factionUnits?.find((x) => x.name == unitName);
-			const upgradesForUnitStrings = unitDetails?.upgrades;
-			let specificUpgradesForUnitArr: any[] = [];
-			// filter faction upgrades to only upgrades specific to this unit
-			upgradesForUnitStrings &&
-				upgradesForUnitStrings.map((upgrade) => {
-					const _upgradeFound = factionUpgrades?.find((x) => x.name == upgrade);
-					_upgradeFound && specificUpgradesForUnitArr.push(_upgradeFound);
-				});
-			//if given the upgrade of wizard, all the user to have wizard items
-			let permittedUpgrades: any[] = [];
-			const unitHasWizardUpgrade = selectedUnit?.attachedItems.find(
-				(x) => x.addOnUpgrades && x.addOnUpgrades?.length > 0
-			);
-			if (unitHasWizardUpgrade) {
-				permittedUpgrades = magicItemConstraints.map((ui) => {
-					const upgradePermitted = ui.unitType.some((x) => x.includes(unitType));
-					if (upgradePermitted) {
-						return ui.upgrades;
-					} else {
-						return;
-					}
-				});
-				unitHasWizardUpgrade?.addOnUpgrades?.map((y) => {
-					const upgradeToAdd = magicItemsList.upgrades.find((x) => x.name == y);
-					if (upgradeToAdd) {
-						permittedUpgrades.push(upgradeToAdd.name);
-					}
-					// add usualy upgrades
-				});
-			} else {
-				permittedUpgrades = magicItemConstraints.map((ui) => {
-					const upgradePermitted = ui.unitType.some((x) => x.includes(unitType));
-					if (upgradePermitted) {
-						return ui.upgrades;
-					} else {
-						return;
-					}
-				});
-			}
-
-			let flattedPermittedUpgrades = permittedUpgrades.flat(2);
-			flattedPermittedUpgrades.forEach((x) => {
-				const genericUpgrade = itemsArray.find((y) => y.name == x);
-				genericUpgrade && specificUpgradesForUnitArr.push(genericUpgrade);
-			});
-			// to here
-			// find upgrades from this permittedUpgrades list
-
-			let upgadesToRemove: string[] = [];
-			// console.log(specificUpgradesForUnitArr, "specific upgrades");
-			const unitHasArmour = unitDetails?.armour ? unitDetails?.armour : "-";
-			const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
-
-			specificUpgradesForUnitArr.forEach((up) => {
-				let pointsCost;
-				if (up.points == undefined) {
-					console.error(up.name, "UPGRAADE WITH UNDEFINED");
-				}
-				if (up.name == "Banner of Shielding") {
-					pointsCost = up.points[unitHasArmour];
-				}
-				if (up.name == "Banner of Steadfastness") {
-					if (unitHasArmour !== "0" && unitHasArmour !== "-") {
-						pointsCost = up.points[unitHasArmour];
-					} else {
-						upgadesToRemove.push(up.name);
-					}
-				}
-				if (up.name == "Banner of Fortitude") {
-					if (unitHits) {
-						pointsCost = up.points[unitHits];
-					}
-				}
-
-				if (pointsCost) {
-					up.points = pointsCost;
-				}
-			});
-			// check unit upgrades and add additional items to generic magic items
-			if (unitDetails?.upgrades && unitDetails?.upgrades?.length > 0) {
-				unitDetails?.upgrades?.map((unitUpgrade) => {
-					const magicItemToAdd = itemsArray.find((u) => u.name == unitUpgrade);
-					const upgradeAlreadyExists = specificUpgradesForUnitArr.find((exUp) => exUp.name == unitUpgrade);
-					if (!upgradeAlreadyExists) specificUpgradesForUnitArr.push(magicItemToAdd);
-				});
-			}
-			specificUpgradesForUnitArr = specificUpgradesForUnitArr.filter((x) => {
-				return !upgadesToRemove.includes(x.name);
-			});
-
-			setMagicItems(specificUpgradesForUnitArr);
+			const magicItems = builder.getMagicItemsForUnit(unitName);
+			setMagicItems(magicItems);
 		};
 		handleAddMagicItemPress();
+		navigation.setOptions({ title: "Add Items" });
 	}, [unitName, unitType]);
 
 	const handleOnUpgradePress = (upgradeName: string) => {

@@ -5,4 +5,5 @@ import { default as TextBlock } from "./TextBlock";
 import { default as ModalContainer } from "./ModalContainer";
 import { default as CustomDropdown } from "./dropdown";
 import { default as CustomCheckbox } from "./CustomCheckbox";
-export { Button, Text, ExpandableView, TextBlock, ModalContainer, CustomDropdown, CustomCheckbox };
+import { default as StandardModal } from "./StandardModal/StandardModal";
+export { Button, Text, ExpandableView, TextBlock, ModalContainer, CustomDropdown, CustomCheckbox, StandardModal };

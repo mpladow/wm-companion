@@ -1,13 +1,15 @@
 import { get1000PointInterval } from "@navigation/Builder/utils/builderHelpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UpgradeTypes } from "@utils/constants";
-import { FactionListProps } from "@utils/types";
+import { FactionListProps, UpgradesProps } from "@utils/types";
 import { useFactionUnits } from "@utils/useFactionUnits";
-import { produce } from "immer";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { current, produce } from "immer";
+import { createContext, useCallback, useContext, useEffect, useState, version } from "react";
 import { useTranslation } from "react-i18next";
 import uuid from "uuid-random";
 import Constants from "expo-constants";
+import _ from "lodash";
+import magicItemsList from "../data/json/wmr/magic-items.json";
 
 type ArmyErrorsProps = {
 	source?: "Unit" | "Upgrade";
@@ -52,9 +54,11 @@ export type ArmyListProps = {
 };
 interface BuilderContextInterface {
 	userArmyLists: ArmyListProps[];
-	addUserArmyList: (faction: number, name: string, autopopulate: boolean) => Promise<string>;
+	addUserArmyList: (faction: number, name: string, autopopulate: boolean, versionNumber: number) => Promise<string>;
 	deleteUserArmyList: (armyId: string) => void;
 	duplicateArmyList: (armyId: string) => void;
+	migrateArmyList: (armyId: string, versionNumber: number) => void;
+
 	setSelectedArmyList: (armyId: string) => void;
 	selectedArmyList?: ArmyListProps;
 	//armyName: string;
@@ -88,6 +92,7 @@ interface BuilderContextInterface {
 	armyErrors: ArmyErrorsProps[];
 	getArmyByArmyId: (armyId: string) => ArmyListProps | undefined;
 	getUnitCounts: () => string;
+	getMagicItemsForUnit: (unitName: string) => any[];
 }
 
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
@@ -151,6 +156,68 @@ export const BuilderContextProvider = ({ children }: any) => {
 	const getUserArmyList = () => {
 		return userArmyLists;
 	};
+	const migrateArmyList = useCallback((armyId: string, versionNumber: number) => {
+		setUserArmyLists(
+			produce((draft) => {
+				const armyToMigrate = draft.find((x) => x.armyId === armyId);
+				if (armyToMigrate) {
+					const newArmy = Object.assign({}, armyToMigrate);
+					newArmy.armyId = uuid();
+					newArmy.versionNumber = versionNumber;
+					newArmy.armyNotes = "Migrated from version 1";
+					// upgrade equipment
+					newArmy.selectedUpgrades = [];
+					// populate selected units
+					const _factionDetails = getFactionUnitsByVersion(armyToMigrate.faction, versionNumber);
+					newArmy.selectedUnits.map((u) => {
+						let unitToAdd = _factionDetails.factionList.units.find((x) => x.name == u.unitName);
+						if (!unitToAdd) {
+							unitToAdd = _factionDetails.factionList.units.find((x) => x.oldName == u.unitName);
+						}
+						// surround this logic with some tests - some unit names may change between version
+						if (!unitToAdd) {
+							alert(`Unable to add ${u.unitName}`);
+						} else {
+							// add this unit
+							let max;
+							if (unitToAdd.max) max = unitToAdd.max;
+							if (unitToAdd.armyMax) max = unitToAdd.armyMax;
+							let min;
+							if (unitToAdd.min) min = unitToAdd.min;
+							if (unitToAdd.armyMin) min = unitToAdd.armyMin;
+
+							u.id = uuid();
+							u.unitName = unitToAdd.name;
+							u.order = unitToAdd.order ? unitToAdd.order : 1;
+							u.points = unitToAdd.points;
+							u.isLeader = unitToAdd.command || unitToAdd.command == 0 ? true : false;
+							// u.currentCount = min;
+							u.maxCount = max;
+							u.minCount = unitToAdd.min ? unitToAdd.min : unitToAdd.armyMin;
+							u.ignoreBreakPoint = unitToAdd.noCount;
+
+							//TODO: we should check if there are updated magic items and update the attached item.
+							const magicItemsForUnit = getMagicItemsForUnit(u.unitName, newArmy.faction, versionNumber);
+							u.attachedItems.map((ai) => {
+								const magicItemToAdd = magicItemsForUnit.find((x) => x.name == ai.upgradeName);
+								console.log("🚀 ~ u.attachedItems.map ~ magicItemToAdd:", magicItemToAdd);
+								if (magicItemToAdd) {
+									ai.points = magicItemToAdd.points;
+									ai.id = uuid();
+									ai.attachedToName = u.unitName;
+								}
+								// push to army selectedUpgrades
+								newArmy.selectedUpgrades.push(ai);
+							});
+						}
+					});
+					newArmy.points = calculateCurrentArmyPoints(newArmy);
+
+					draft.push(newArmy);
+				}
+			})
+		);
+	}, []);
 	// COMPLETED REFACTOR
 	const duplicateArmyList = useCallback((armyId: string) => {
 		setUserArmyLists(
@@ -175,7 +242,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			})
 		);
 	}, []);
-	const addUserArmyList = async (faction: number, name: string, autopopulate: boolean) => {
+	const addUserArmyList = async (faction: number, name: string, autopopulate: boolean, versionNumber: number) => {
 		const newArmyList: ArmyListProps = {
 			armyId: uuid(),
 			faction: faction,
@@ -184,13 +251,13 @@ export const BuilderContextProvider = ({ children }: any) => {
 			order: getUserArmyList.length + 1,
 			selectedUnits: [],
 			selectedUpgrades: [],
+			versionNumber: versionNumber,
 			points: 0,
 		};
 		// autopopulate if true
-		const _factionDetails = getFactionUnitsByVersion(faction, CURRENT_VERSION);
+		const _factionDetails = getFactionUnitsByVersion(faction, versionNumber);
 		// set faction upgrade tails
 		factionDetails && setFactionDetails(_factionDetails.factionList);
-		newArmyList.versionNumber = _factionDetails?.factionList.versionNumber;
 		if (autopopulate) {
 			// get unit details
 			const factionUnits = _factionDetails.factionList?.units?.filter(
@@ -667,6 +734,127 @@ export const BuilderContextProvider = ({ children }: any) => {
 		return `${breakCount}/${unitCount}`;
 	};
 
+	const getMagicItemsForUnit = (unitName: string, faction?: number, versionNumber?: number) => {
+		// this needs to be retrieved for each unit, since costs are different each time
+		let _factionDetails = factionDetails;
+		if (faction && versionNumber) {
+			const factionListData = getFactionUnitsByVersion(faction, versionNumber);
+			_factionDetails = factionListData?.factionList;
+		}
+		const factionUnits = _factionDetails?.units;
+		// get all magic items
+		const selectedUnit = currentArmyList?.selectedUnits.find((x) => x.unitName == unitName);
+		// ensure we clone this item so the original list does not get mutated.
+		const itemsArray: any = _.cloneDeep(magicItemsList.upgrades);
+		const magicItemConstraints = magicItemsList.upgradeConstraints;
+
+		// faction unit types can override the above constraints
+		const factionUpgrades = factionDetails?.upgrades;
+		factionUpgrades?.map((x) => {
+			if (factionDetails?.specialRules) {
+				const upgradeText = factionDetails?.specialRules[x.name]?.text;
+				if (upgradeText) {
+					x.text = upgradeText;
+				}
+			}
+		});
+		const unitDetails = factionUnits?.find((x) => x.name == unitName);
+		const upgradesForUnitStrings = unitDetails?.upgrades;
+		let specificUpgradesForUnitArr: UpgradesProps[] = [];
+		// filter faction upgrades to only upgrades specific to this unit
+		upgradesForUnitStrings &&
+			upgradesForUnitStrings.map((upgrade) => {
+				const _upgradeFound = factionUpgrades?.find((x) => x.name == upgrade);
+				_upgradeFound && specificUpgradesForUnitArr.push(_upgradeFound);
+			});
+		//if given the upgrade of wizard, all the user to have wizard items
+		let permittedUpgrades: any[] = [];
+		const unitHasWizardUpgrade = selectedUnit?.attachedItems.find(
+			(x) => x.addOnUpgrades && x.addOnUpgrades?.length > 0
+		);
+		if (unitHasWizardUpgrade) {
+			console.log("🚀 ~ getMagicItemsForUnit ~ unitHasWizardUpgrade!!!!:", unitHasWizardUpgrade);
+			permittedUpgrades = magicItemConstraints.map((ui) => {
+				const upgradePermitted = ui.unitType.some((x) => x.includes(unitDetails.type));
+				if (upgradePermitted) {
+					return ui.upgrades;
+				} else {
+					return;
+				}
+			});
+			unitHasWizardUpgrade?.addOnUpgrades?.map((y) => {
+				const upgradeToAdd = magicItemsList.upgrades.find((x) => x.name == y);
+				if (upgradeToAdd) {
+					permittedUpgrades.push(upgradeToAdd.name);
+				}
+				// add usualy upgrades
+			});
+		} else {
+			permittedUpgrades = magicItemConstraints.map((ui) => {
+				const upgradePermitted = ui.unitType.some((x) => x.includes(unitDetails.type));
+				if (upgradePermitted) {
+					return ui.upgrades;
+				} else {
+					return;
+				}
+			});
+		}
+
+		let flattedPermittedUpgrades = permittedUpgrades.flat(2);
+		flattedPermittedUpgrades.forEach((x) => {
+			const genericUpgrade = itemsArray.find((y) => y.name == x);
+			genericUpgrade && specificUpgradesForUnitArr.push(genericUpgrade);
+		});
+		// to here
+		// find upgrades from this permittedUpgrades list
+
+		let upgadesToRemove: string[] = [];
+		// console.log(specificUpgradesForUnitArr, "specific upgrades");
+		const unitHasArmour: string = unitDetails?.armour ? unitDetails?.armour : "-";
+		const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
+
+		specificUpgradesForUnitArr.forEach((up) => {
+			let pointsCost;
+			if (up.points == undefined) {
+				console.error(up.name, "UPGRAADE WITH UNDEFINED");
+			}
+			if (up.name == "Banner of Shielding") {
+				pointsCost = up.points[unitHasArmour];
+			}
+			if (up.name == "Banner of Steadfastness") {
+				if (unitHasArmour !== "0" && unitHasArmour !== "-") {
+					pointsCost = up.points[unitHasArmour];
+				} else {
+					upgadesToRemove.push(up.name);
+				}
+			}
+			if (up.name == "Banner of Fortitude") {
+				if (unitHits) {
+					pointsCost = up.points[unitHits];
+				}
+			}
+
+			if (pointsCost) {
+				up.points = pointsCost;
+			}
+		});
+
+		// check unit upgrades and add additional items to generic magic items
+		if (unitDetails?.upgrades && unitDetails?.upgrades?.length > 0) {
+			unitDetails?.upgrades?.map((unitUpgrade) => {
+				const magicItemToAdd = itemsArray.find((u) => u.name == unitUpgrade);
+				console.log("🚀 ~ unitDetails?.upgrades?.map ~ unitUpgrade:", unitUpgrade);
+				console.log("🚀 ~ unitDetails?.upgrades?.map ~ magicItemToAdd:", magicItemToAdd);
+				const upgradeAlreadyExists = specificUpgradesForUnitArr.find((exUp) => exUp.name == unitUpgrade);
+				if (!upgradeAlreadyExists && magicItemToAdd) specificUpgradesForUnitArr.push(magicItemToAdd);
+			});
+		}
+		specificUpgradesForUnitArr = specificUpgradesForUnitArr.filter((x) => {
+			return !upgadesToRemove.includes(x?.name);
+		});
+		return specificUpgradesForUnitArr;
+	};
+
 	return (
 		<BuilderContext.Provider
 			value={{
@@ -691,6 +879,8 @@ export const BuilderContextProvider = ({ children }: any) => {
 				armyErrors,
 				getArmyByArmyId,
 				getUnitCounts,
+				getMagicItemsForUnit,
+				migrateArmyList,
 			}}
 		>
 			{children}

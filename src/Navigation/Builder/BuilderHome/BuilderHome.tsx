@@ -17,7 +17,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@hooks/useTheme";
-import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
+import { Button, CustomDropdown, StandardModal, Text, TextBlock } from "@components/index";
 import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import CustomModal from "@components/CustomModal";
 import fonts from "@utils/fonts";
@@ -116,7 +116,7 @@ const BuilderHome = () => {
 		}
 		if (factionSelection && factionName != "") {
 			builder
-				.addUserArmyList(factionSelection, factionName, autopopulate)
+				.addUserArmyList(factionSelection, factionName, autopopulate, CURRENT_VERSION)
 				.then((result) => {
 					builder.setSelectedArmyList(result);
 				})
@@ -226,6 +226,7 @@ const BuilderHome = () => {
 					onArmyListDeletePress={onArmyListDeletePress}
 					handleEditArmyPress={handleEditArmyPress}
 					handleToggleFavourite={builder.toggleFavourite}
+					handleMigrateArmy={builder.migrateArmyList}
 				/>
 				<PopupConfirm
 					visible={confirmDialog}
@@ -441,22 +442,10 @@ const BuilderHome = () => {
 					</View>
 				</Button>
 			</View>
-			<Modal animationType='fade' visible={showArmyNotes} transparent={true}>
-				<View style={styles.modalOverlay} onTouchStart={() => setShowArmyNotes(!showArmyNotes)}>
-					<View
-						style={{
-							marginTop: Dimensions.get("screen").height / 3,
-							alignItems: "center",
-							justifyContent: "center",
-							backgroundColor: theme.blueGrey,
-							padding: 16,
-							margin: 12,
-							borderRadius: 20,
-						}}
-					>
-						<Text variant='heading3' style={{ color: theme.text, fontSize: 28 }}>
-							{t("ArmyNotes", { ns: "builder" })}
-						</Text>
+			<StandardModal
+				visible={showArmyNotes}
+				content={
+					<View style={{ flex: 1 }}>
 						<TextInput
 							multiline
 							value={factionNotes}
@@ -465,10 +454,9 @@ const BuilderHome = () => {
 							style={[
 								{
 									color: theme.text,
-									fontFamily: fonts.PTSansBold,
+									fontFamily: fonts.PTSansRegular,
 									fontSize: 16,
 									borderRadius: 16,
-									padding: 16,
 									paddingTop: 16,
 									height: 100,
 								},
@@ -476,8 +464,10 @@ const BuilderHome = () => {
 							]}
 						/>
 					</View>
-				</View>
-			</Modal>
+				}
+				heading={t("ArmyNotes", { ns: "builder" })}
+				onCancel={() => setShowArmyNotes(false)}
+			/>
 		</SafeAreaView>
 	);
 };

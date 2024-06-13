@@ -34,7 +34,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Dark_Elves":
 			return [require("../../assets/images/wm-darkElves.jpeg")];
 
-		case "Bretonnians":
+		case "Bretonnia":
 			return [require("../../assets/images/wm-bretonnian.jpg")];
 		case "Orcs":
 			return [require("../../assets/images/wm-orcs.jpg")];
@@ -61,7 +61,7 @@ export const getLocalFactionAssets = (faction: string) => {
 
 		case "Goblins":
 			return [require("../../assets/images/wm-goblins.jpg")];
-		case "Dwarves":
+		case "Dwarfs":
 			return [require("../../assets/images/wm-dwarves.jpg")];
 		case "High_Elves":
 			return [require("../../assets/images/wm-highElves.jpg")];
@@ -70,10 +70,10 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Nippon":
 			return [require("../../assets/images/wm-genericarmy-2.png")];
 
-		case "Chaos_Dwarves":
+		case "Chaos_Dwarfs":
 			return [require("../../assets/images/wm-chaosDwarves2.jpeg")];
 
-		case "Dogs_Of_War":
+		case "Dogs_of_War":
 			return [require("../../assets/images/wm-dogsOfWar2.png")];
 
 		case "Araby":
@@ -84,7 +84,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Albion":
 			return [require("../../assets/images/wm-genericarmy-2.png")];
 
-		case "Ogres":
+		case "Ogre_Kingdoms":
 			return [require("../../assets/images/wm-ogres.jpg")];
 		case "Kislev":
 			return [require("../../assets/images/wm-genericarmy-2.png")];
