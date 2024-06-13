@@ -82,9 +82,6 @@ const BuilderEdit = () => {
 									<View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
 										<Text style={{ color: theme.black }}>{t("ExportList")}</Text>
 									</View>
-									<View style={{ paddingRight: 8 }}>
-										<Entypo name='warning' size={20} color={theme.warning} />
-									</View>
 								</View>
 							</MenuOption>
 						</MenuOptions>

@@ -40,18 +40,21 @@ const StandardModal = ({
 				<View style={styles.modalOverlay} onTouchStart={onCancel}></View>
 				<View
 					style={{
-						marginTop: Dimensions.get("screen").height / 3,
+						marginTop: Dimensions.get("screen").height / 3.5,
 						alignItems: "center",
 						justifyContent: "center",
 						backgroundColor: theme.blueGrey,
 						padding: 16,
 						margin: 12,
 						borderRadius: 20,
+						maxHeight: Dimensions.get("screen").height / 2,
 					}}
 				>
 					<StandardModalHeader title={heading} onClose={onCancel} />
-					<ScrollView style={{ paddingBottom: 24 }}>{content}</ScrollView>
-					<View>
+					<ScrollView showsVerticalScrollIndicator={true} style={{ paddingBottom: 24 }}>
+						{content}
+					</ScrollView>
+					<View style={{ paddingTop: 8 }}>
 						{onSubmit && (
 							<Button onPress={onSubmit} variant={"confirm"}>
 								<CustomText style={{ color: theme.textInverted }} bold>

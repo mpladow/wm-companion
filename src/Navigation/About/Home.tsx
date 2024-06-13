@@ -1,17 +1,15 @@
 import {
 	Dimensions,
-	ImageBackground,
 	Platform,
-	Pressable,
 	SafeAreaView,
 	ScrollView,
 	StyleSheet,
-	TouchableOpacity,
+	TouchableWithoutFeedback,
 	View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@hooks/useTheme";
-import { Button, Text, TextBlock } from "@components/index";
+import { Button, StandardModal, Text, TextBlock } from "@components/index";
 import { margin } from "@utils/constants";
 import Constants from "expo-constants";
 import * as Clipboard from "expo-clipboard";
@@ -19,14 +17,14 @@ import * as Linking from "expo-linking";
 import { useToast } from "react-native-toast-notifications";
 import { Entypo } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { useSettingsContext } from "@context/SettingsContext";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import IconButton from "@components/IconButton";
 import { EvilIcons } from "@expo/vector-icons";
 import MainContainerWithImage from "@components/MainContainerWithImage";
 import LogoWmr from "@components/SVGS/LogoWmr";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { useUpdateChecker } from "@context/UpdateCheckerContext";
 
 const Home = () => {
 	const { theme } = useTheme();
@@ -53,7 +51,58 @@ const Home = () => {
 	};
 	const { t } = useTranslation(["home", "common"]);
 
-	const settings = useSettingsContext();
+	const { isReady, changelog, clearDismissedDEBUG, dismissChangeLog, recentlyDismissedChangeLog } =
+		useUpdateChecker();
+	const [showChangeLogModal, setShowChangeLogModal] = useState(false);
+	useEffect(() => {
+		setTimeout(() => {
+			if (changelog && recentlyDismissedChangeLog) {
+				if (changelog.version !== recentlyDismissedChangeLog) {
+					setShowChangeLogModal(true);
+				} else {
+					setShowChangeLogModal(false);
+				}
+			}
+			if (changelog && !recentlyDismissedChangeLog) {
+				setShowChangeLogModal(true);
+			}
+		}, 1200);
+	}, [isReady]);
+	const handleDismissModal = () => {
+		dismissChangeLog();
+		setShowChangeLogModal(false);
+	};
+
+	const generateContent = () => {
+		return (
+			<ScrollView>
+				{changelog?.changes.map((x) => {
+					let fontStyle: { color: string; fontSize: number } = { color: theme.text, fontSize: 16 };
+
+					switch (x.type) {
+						case "overhaul":
+							fontStyle.color = theme.accent;
+							fontStyle.fontSize = 18;
+							break;
+						case "bug":
+							fontStyle.fontSize = 16;
+							break;
+						default:
+							break;
+					}
+					return (
+						<TextBlock variant='medium'>
+							<Text variant='heading3' style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
+								{x.title}
+							</Text>
+							{x.description && x.description?.map((d) => <Text>{d}</Text>)}
+						</TextBlock>
+					);
+				})}
+			</ScrollView>
+		);
+	};
+
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<MainContainerWithImage>
@@ -93,10 +142,12 @@ const Home = () => {
 						<TextBlock variant='large'>
 							<Text bold>{t("Disclaimer")}</Text>
 						</TextBlock>
-						<TextBlock variant='large'>
-							<Text bold>
-								{t("AppVersion", { ns: "common" })}: v{version}
-							</Text>
+						<TextBlock variant='small'>
+							<TouchableWithoutFeedback onLongPress={() => clearDismissedDEBUG()}>
+								<Text bold>
+									{t("AppVersion", { ns: "common" })}: v{version}
+								</Text>
+							</TouchableWithoutFeedback>
 						</TextBlock>
 						<TextBlock variant='large'>
 							<Text bold>
@@ -156,6 +207,16 @@ const Home = () => {
 					</View>
 				</ScrollView>
 			</MainContainerWithImage>
+			<StandardModal
+				content={generateContent()}
+				heading={
+					changelog ? `Changelog v${changelog?.version}` : "If you're seeing this, please report a bug :)"
+				}
+				onCancel={handleDismissModal}
+				visible={showChangeLogModal}
+				onSubmit={handleDismissModal}
+				submitText={"Understood!"}
+			/>
 		</SafeAreaView>
 	);
 };

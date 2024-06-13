@@ -10,7 +10,7 @@ export const generateHtml = (
 	army: ArmyListProps,
 	factionDetails: FactionListProps,
 	armyPoints: number,
-	breakPoints: string,
+	breakPoints: string
 ) => {
 	let template: string = `<html>
     <head>
@@ -127,10 +127,9 @@ export const generateUsedMagicItems = (army: ArmyListProps, factionDetails: Fact
 		let factionRule = factionDetails?.upgrades?.find((mi) => mi.name == x.upgradeName);
 		if (factionRule == undefined) {
 			factionRule = magicItemsList?.upgrades.find((mi) => mi.name == x.upgradeName);
+		} else {
+			factionRule.text = factionDetails?.specialRules[x.upgradeName]?.text;
 		}
-        else{
-            factionRule.text = factionDetails?.specialRules[x.upgradeName]?.text;
-        }
 		return factionRule;
 	});
 
@@ -227,6 +226,9 @@ export const generateUnitTable = (
 					.map((y) => {
 						return y as UnitProps;
 					})[0];
+				console.log("🚀 ~ .map ~ currentCount:", x.currentCount);
+				//@ts-ignore - TODO: need to check typing
+				_unit.count = x.currentCount;
 				// let _unit = factionDetails?.units.find((u) => u.name == x.unitName);
 				// get special rules
 				if (factionDetails?.specialRules && _unit?.name) {
@@ -259,6 +261,9 @@ export const generateUnitTable = (
 		.map((x) => {
 			if (factionDetails.units) {
 				let _unit = factionDetails?.units.find((u) => u.name == x.unitName);
+				console.log("🚀 ~ .map ~ currentCount for units:", x.currentCount);
+
+				_unit.count = x.currentCount;
 				// get special rules
 				if (factionDetails?.specialRules && _unit?.name) {
 					//@ts-ignore - TODO: need to check typing
@@ -275,10 +280,10 @@ export const generateUnitTable = (
 						_unit.specialRules = [];
 					}
 					// get magic items details
-                    _unit["upgradesExpanded"] = [];
+					_unit["upgradesExpanded"] = [];
 					x.attachedItems.map((x) => {
 						const upgrade = getUpgradeDetailsByName(x.upgradeName, factionDetails);
-                        console.log('upgrade found for unit')
+						console.log("upgrade found for unit");
 						_unit["upgradesExpanded"]?.push(upgrade);
 					});
 				}
@@ -294,6 +299,7 @@ export const generateUnitTable = (
 
 	const unitTemplate = `<table style="width: 100%">
     <tr style="border-bottom: 2px solid #000">
+		<th style="text-align: left">#</th>
         <th style="text-align: left">Name</th>
         <th style="text-align: left">Type</th>
         <th>Attack</th>
@@ -306,6 +312,7 @@ export const generateUnitTable = (
     </tr>
     {{#leaders}}
     <tr>
+		<td style="text-align: left">{{count}}</td>
         <td style="text-align: left">{{name}}</td>
         <td style="text-align: left">{{type}}</td>
         {{#attack}}<td>{{attack}}</td>{{/attack}}
@@ -323,6 +330,7 @@ export const generateUnitTable = (
     </tr>
     {{#upgradesExpanded}}
     <tr>
+		<td>-</td>    
         <td style="text-align: left">({{name}})</td>
         <td style="text-align: left">{{type}}</td>
         <td>-</td>    
@@ -337,6 +345,7 @@ export const generateUnitTable = (
 
     {{#units}}
     <tr>
+		<td style="text-align: left">{{count}}</td>
         <td style="text-align: left">{{name}}</td>
         <td style="text-align: left">{{type}}</td>
         <td>{{attack}}</td>
@@ -352,6 +361,7 @@ export const generateUnitTable = (
     </tr>
     {{#upgradesExpanded}}
     <tr>
+		<td style="text-align: left">{{count}}</td>
         <td style="text-align: left">({{name}})</td>
         <td style="text-align: left">{{type}}</td>
         <td>-</td>   
