@@ -30,6 +30,7 @@ export const getGenericSpecialRules = () => {
 	return genericSpecialRules;
 };
 export const getLocalFactionAssets = (faction: string) => {
+	console.log("🚀 ~ getLocalFactionAssets ~ faction:", faction);
 	switch (faction) {
 		case "Dark_Elves":
 			return [require("../../assets/images/wm-darkElves.jpeg")];
@@ -39,25 +40,22 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Orcs":
 			return [require("../../assets/images/wm-orcs.jpg")];
 		case "Tomb_Kings":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-tombkings-default.png")];
 
 		case "Empire":
 			return [require("../../assets/images/wm-empire2.jpeg")];
 		case "Skaven":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-skaven-default.png")];
 
 		case "Chaos":
 			return [require("../../assets/images/wm-chaos.jpeg")];
 		case "Wood_Elves":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-woodelves-default.png")];
 
 		case "Vampire_Counts":
 			return [require("../../assets/images/wm-vampcounts.jpeg")];
 		case "Beastmen":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
-
-		case "Cathay":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-beastmen-default.png")];
 
 		case "Goblins":
 			return [require("../../assets/images/wm-goblins.jpg")];
@@ -68,7 +66,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Daemons":
 			return [require("../../assets/images/wm-daemons.jpg")];
 		case "Nippon":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-nippon-default.png")];
 
 		case "Chaos_Dwarfs":
 			return [require("../../assets/images/wm-chaosDwarves2.jpeg")];
@@ -82,19 +80,21 @@ export const getLocalFactionAssets = (faction: string) => {
 			return [require("../../assets/images/wm-lizardmen1.jpeg")];
 
 		case "Albion":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-albion-default.png")];
 
 		case "Ogre_Kingdoms":
 			return [require("../../assets/images/wm-ogres.jpg")];
 		case "Kislev":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-kislev-default.png")];
 
 		case "Norse":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-norse-default.png")];
 
 		case "Witch_Hunters":
-			return [require("../../assets/images/wm-genericarmy-2.png")];
+			return [require("../../assets/images/wm-witchhunters-default.png")];
 
+		case "Cathay":
+			return [require("../../assets/images/wm-cathay-default.png")];
 		default:
 			return [require("../../assets/images/wm-genericarmy-2.png")];
 			break;
