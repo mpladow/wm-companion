@@ -91,7 +91,7 @@ const CollectionHome = () => {
 					resizeMode='contain'
 					style={{ opacity: 0.2, position: "absolute" }}
 				/>
-				<View style={{ flex: 3, justifyContent: "center", margin: 20 }}>
+				<View style={{ flex: 3, justifyContent: "center", margin: 16 }}>
 					<Text variant='heading3' style={{ color: theme.text, fontSize: 24, marginBottom: 4 }}>
 						{section?.title}
 					</Text>
@@ -107,7 +107,7 @@ const CollectionHome = () => {
 							position: "absolute",
 							left: 0,
 							right: 0,
-							bottom: -0,
+							bottom: -50,
 							width: 120,
 							height: 300,
 							zIndex: 9,
@@ -245,9 +245,16 @@ const CollectionHome = () => {
 export default CollectionHome;
 
 const styles = StyleSheet.create({
+	// stretch: {
+	// 	width: 120,
+	// 	height: 150,
+	// 	resizeMode: "cover",
+	// },
 	stretch: {
+		// width: 120,
 		width: 120,
-		height: 150,
-		resizeMode: "cover",
+		height: 140,
+		// resizeMode: "contain",
+		marginTop: -8,
 	},
 });

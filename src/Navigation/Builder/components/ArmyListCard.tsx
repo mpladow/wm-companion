@@ -44,7 +44,15 @@ const ArmyListCard = ({
 		const armyName = Factions[armyList.faction];
 		const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
 		return (
-			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
+			<View
+				style={{
+					backgroundColor: "black",
+					position: "absolute",
+					top: 0,
+					borderLeftColor: theme.white,
+					borderLeftWidth: 4,
+				}}
+			>
 				<Image style={[styles.stretch]} source={factionAssets && factionAssets[0]} />
 			</View>
 		);
@@ -67,7 +75,7 @@ const ArmyListCard = ({
 					resizeMode='contain'
 					style={{ opacity: 0.2, position: "absolute" }}
 				/>
-				<View style={{ flex: 3, margin: 20 }}>
+				<View style={{ flex: 3, margin: 16 }}>
 					<View style={{ marginBottom: 4, flex: 1, paddingRight: 30 }}>
 						<Text variant='heading3' numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 24 }}>
 							{armyList.name}
@@ -114,23 +122,17 @@ const ArmyListCard = ({
 					</View>
 				</View>
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-					{/* <View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>
-						<Image
-							style={[styles.stretch]}
-							source={require("../../../../assets/images/wm-genericarmy-2.png")}
-						/>
-					</View> */}
 					{setImage()}
 					<LinearGradient
-						colors={["rgba(31,46,39, 0.9)", "rgba(6,9,7, 0.0)"]}
+						colors={["rgba(31,46,39, 0.9)", "rgba(6,9,7, 0.6)", "rgba(6,9,7, 0.2)", "rgba(6,9,7, 0.0)"]}
 						start={{ y: 0, x: 1 }}
 						end={{ y: 0, x: 0 }}
 						style={{
 							position: "absolute",
-							left: 0,
+							left: -40,
 							right: 0,
 							bottom: -0,
-							width: 120,
+							width: 150,
 							height: 300,
 							zIndex: 9,
 						}}
@@ -158,10 +160,10 @@ const ArmyListCard = ({
 										style={{
 											resizeMode: "cover",
 											position: "absolute",
-											top: -20,
-											left: -20,
-											width: 120,
-											height: 120,
+											top: -0,
+											left: 2,
+											width: 80,
+											height: 80,
 										}}
 										source={require("../../../images/svgs/red_seal.png")}
 									/>
@@ -173,7 +175,8 @@ const ArmyListCard = ({
 											color: theme.text,
 										}}
 									>
-										Migrate to {CURRENT_VERSION}
+										<AntDesign name="warning" size={24} color={theme.text} />
+										{/* Migrate to {CURRENT_VERSION} */}
 									</Text>
 								</View>
 							</Pressable>
@@ -248,8 +251,10 @@ export default ArmyListCard;
 
 const styles = StyleSheet.create({
 	stretch: {
+		// width: 120,
 		width: 120,
-		height: 150,
-		resizeMode: "cover",
+		height: 140,
+		// resizeMode: "contain",
+		marginTop: -8
 	},
 });
