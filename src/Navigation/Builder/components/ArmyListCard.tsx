@@ -40,7 +40,8 @@ const ArmyListCard = ({
 	const { theme } = useTheme();
 	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 	const setImage = () => {
-		const armyName = getKeyByValue(Factions, armyList.faction);
+		// const armyName = getKeyByValue(Factions, armyList.faction);
+		const armyName = Factions[armyList.faction];
 		const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
 		return (
 			<View style={{ position: "absolute", top: 0, borderLeftColor: theme.white, borderLeftWidth: 4 }}>

@@ -43,11 +43,10 @@ const AddItem = () => {
 	const [selectedUnit, setSelectedUnit] = useState();
 	const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
 	const [currentUpgradeDetails, setCurrentUpgradeDetails] = useState<UpgradesProps | undefined>();
-	const { getFactionUnitsByVersion } = useFactionUnits();
+
 	const armyCount = useMemo(() => {
 		return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
 	}, [builder.calculateCurrentArmyPoints(), totalPoints]);
-	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -67,6 +66,7 @@ const AddItem = () => {
 			setMagicItems(magicItems);
 		};
 		handleAddMagicItemPress();
+		navigation.setOptions({ title: "Add Items" });
 	}, [unitName, unitType]);
 
 	const handleOnUpgradePress = (upgradeName: string) => {

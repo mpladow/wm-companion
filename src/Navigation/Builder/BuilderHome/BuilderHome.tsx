@@ -116,7 +116,7 @@ const BuilderHome = () => {
 		}
 		if (factionSelection && factionName != "") {
 			builder
-				.addUserArmyList(factionSelection, factionName, autopopulate, 1)
+				.addUserArmyList(factionSelection, factionName, autopopulate, CURRENT_VERSION)
 				.then((result) => {
 					builder.setSelectedArmyList(result);
 				})
@@ -454,7 +454,7 @@ const BuilderHome = () => {
 							style={[
 								{
 									color: theme.text,
-									fontFamily: fonts.GaramondMedium,
+									fontFamily: fonts.PTSansRegular,
 									fontSize: 16,
 									borderRadius: 16,
 									paddingTop: 16,
