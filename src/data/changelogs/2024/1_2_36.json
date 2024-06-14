@@ -1,0 +1,33 @@
+{
+	"version": "1.2.36",
+	"changes": [
+		{
+			"type": "overhaul",
+			"title": "Army lists updated for version 2.24!",
+			"description": [
+				"You can now create army lists that align wiht version 2.24 of the Warmaster Revolutions Army Book.",
+				"Existing armies can be migrated to use the new data sources.",
+				"It is HIGHLY recommended that you either migrate these existing armies, or create brand new armies."
+			]
+		},
+		{
+			"type": "bug",
+			"title": "Fix to army duplication",
+			"description": [
+				"Armies that were duplicated were incorrecty updating both the duplicated army, as well as the original army."
+			]
+		},
+		{
+			"type": "improvement",
+			"title": "UI Improvements",
+			"description": ["Move Stat order from ATT/HITS/ARMOUR to ATT/ARMOUR/HITS"]
+		},
+		{
+			"type": "bug",
+			"title": "Army count not correctly updating in army list",
+			"description": [
+				"On the army list screen, army points were not being updated when the points were changed in the builder"
+			]
+		}
+	]
+}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContextProvider } from "@context/ThemeContext";
@@ -13,6 +13,8 @@ import { ToastProvider } from "react-native-toast-notifications";
 import "./src/i18n/i18n";
 import { SettingsContextProvider } from "@context/SettingsContext";
 import { CollectionProvider } from "@context/CollectionContext";
+import { UpdateCheckerContextProvider } from "@context/UpdateCheckerContext";
+import * as Font from "expo-font";
 
 const darkTheme = {
 	dark: true,
@@ -32,52 +34,69 @@ const darkTheme = {
 SplashScreen.preventAutoHideAsync();
 
 const App = () => {
-	const [fontsLoaded] = useFonts({
-		GaramondItalic: require("./assets/fonts/EBGaramond-Italic.ttf"),
-		GaramondMedium: require("./assets/fonts/EBGaramond-Medium.ttf"),
-		GaramondMediumItalic: require("./assets/fonts/EBGaramond-MediumItalic.ttf"),
-		GaramondRegular: require("./assets/fonts/EBGaramond-Regular.ttf"),
-		GaramondBold: require("./assets/fonts/EBGaramond-ExtraBold.ttf"),
-		"PTSans-Bold": require("./assets/fonts/PTSans-Bold.ttf"),
-		"PTSans-Regular": require("./assets/fonts/PTSans-Regular.ttf"),
-		"PTSans-Italic": require("./assets/fonts/PTSans-Italic.ttf"),
-		"BarlowCondensed-Bold": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Bold.ttf"),
-		"BarlowCondensed-Regular": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Regular.ttf"),
-		"BarlowCondensed-Italic": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Italic.ttf"),
-	});
+	const [appReady, setAppReady] = useState(false);
+
 	useEffect(() => {
 		async function prepare() {
-			if (fontsLoaded) {
-				await new Promise((resolve) => setTimeout(resolve, 2000));
-				await SplashScreen.hideAsync();
+			try {
+				await Font.loadAsync({
+					GaramondItalic: require("./assets/fonts/EBGaramond-Italic.ttf"),
+					GaramondMedium: require("./assets/fonts/EBGaramond-Medium.ttf"),
+					GaramondMediumItalic: require("./assets/fonts/EBGaramond-MediumItalic.ttf"),
+					GaramondRegular: require("./assets/fonts/EBGaramond-Regular.ttf"),
+					GaramondBold: require("./assets/fonts/EBGaramond-ExtraBold.ttf"),
+					"PTSans-Bold": require("./assets/fonts/PTSans-Bold.ttf"),
+					"PTSans-Regular": require("./assets/fonts/PTSans-Regular.ttf"),
+					"PTSans-Italic": require("./assets/fonts/PTSans-Italic.ttf"),
+					"BarlowCondensed-Bold": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Bold.ttf"),
+					"BarlowCondensed-Regular": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Regular.ttf"),
+					"BarlowCondensed-Italic": require("./assets/fonts/Barlow_Condensed/BarlowCondensed-Italic.ttf"),
+				});
+			} catch (e) {
+				console.warn(e);
+			} finally {
+				setTimeout(() => {
+					setAppReady(true);
+				}, 1000);
 			}
 		}
 
 		prepare();
-	}, [fontsLoaded]);
+	}, []);
 
-	if (!fontsLoaded) {
+	useEffect(() => {
+		const loadApp = async () => {
+			if (appReady) {
+				await SplashScreen.hideAsync();
+			}
+		};
+		loadApp();
+	}, [appReady]);
+
+	if (!appReady) {
 		return null;
 	}
 	return (
 		<ThemeContextProvider>
 			<ToastProvider>
-				<SettingsContextProvider>
-					<RootSiblingParent>
-						<MenuProvider>
-							<CollectionProvider>
-								<BuilderContextProvider>
-									<VPContextProvider>
-										<NavigationContainer theme={darkTheme}>
-											<RootStack />
-											<StatusBar translucent />
-										</NavigationContainer>
-									</VPContextProvider>
-								</BuilderContextProvider>
-							</CollectionProvider>
-						</MenuProvider>
-					</RootSiblingParent>
-				</SettingsContextProvider>
+				<UpdateCheckerContextProvider>
+					<SettingsContextProvider>
+						<RootSiblingParent>
+							<MenuProvider>
+								<CollectionProvider>
+									<BuilderContextProvider>
+										<VPContextProvider>
+											<NavigationContainer theme={darkTheme}>
+												<RootStack />
+												<StatusBar translucent />
+											</NavigationContainer>
+										</VPContextProvider>
+									</BuilderContextProvider>
+								</CollectionProvider>
+							</MenuProvider>
+						</RootSiblingParent>
+					</SettingsContextProvider>
+				</UpdateCheckerContextProvider>
 			</ToastProvider>
 		</ThemeContextProvider>
 	);

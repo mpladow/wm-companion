@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { ReactElement } from "react";
 
 type TextBlockProps = {
-	children: ReactElement;
+	children: React.ReactNode;
 	variant?: "small" | "medium" | "large";
 	centered?: boolean;
 };
@@ -22,7 +22,7 @@ const TextBlock = ({ children, variant, centered }: TextBlockProps) => {
 		}
 	};
 	return (
-		<View style={{ alignItems: centered ? "center" : "flex-start", paddingBottom: 4,marginBottom: spacing() }}>
+		<View style={{ alignItems: centered ? "center" : "flex-start", paddingBottom: 4, marginBottom: spacing() }}>
 			{children}
 		</View>
 	);

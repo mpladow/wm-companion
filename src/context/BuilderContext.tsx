@@ -46,7 +46,7 @@ export type ArmyListProps = {
 	faction: number;
 	name: string;
 	isFavourite: boolean;
-	armyNotes?: string;
+	armyNotes: string;
 	order: number;
 	selectedUnits: SelectedUnitProps[];
 	selectedUpgrades: SelectedUpgradesProps[];

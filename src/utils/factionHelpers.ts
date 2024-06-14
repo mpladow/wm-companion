@@ -30,7 +30,6 @@ export const getGenericSpecialRules = () => {
 	return genericSpecialRules;
 };
 export const getLocalFactionAssets = (faction: string) => {
-	console.log("🚀 ~ getLocalFactionAssets ~ faction:", faction);
 	switch (faction) {
 		case "Dark_Elves":
 			return [require("../../assets/images/wm-darkElves.jpeg")];

@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
 	stretch: {
 		// width: 120,
 		width: 120,
-		height: 140,
+		height: 150,
 		// resizeMode: "contain",
 		marginTop: -8
 	},

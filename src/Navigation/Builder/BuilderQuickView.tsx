@@ -1,5 +1,18 @@
-import { Alert, ImageBackground, Share, Image, StyleSheet, TouchableOpacity, View, Platform } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+	Alert,
+	ImageBackground,
+	Share,
+	Image,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+	Platform,
+	Dimensions,
+	Pressable,
+	ScrollView,
+	ViewProps,
+} from "react-native";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useVictoryPoints } from "@context/VPContext";
 import StyledText from "react-native-styled-text";
 import { useBuilderContext } from "@context/BuilderContext";
@@ -21,7 +34,7 @@ import UnitCard from "./components/UnitCard";
 import { useTranslation } from "react-i18next";
 
 const BuilderQuickView = () => {
-	const {t} = useTranslation(["builder", "common"])
+	const { t } = useTranslation(["builder", "common"]);
 	const navigation = useNavigation();
 	const { theme } = useTheme();
 	const [html, setHtml] = useState<string>();
@@ -294,51 +307,76 @@ const BuilderQuickView = () => {
 		const printer = await Print.selectPrinterAsync(); // iOS only
 		setPrinter(printer);
 	};
+	const { width, height } = Dimensions.get("window");
 
+	const ViewRef = useRef<ViewProps>(null);
 	return (
-		<View style={{ padding: 16, backgroundColor: "#FCF5E5", height: "100%" }}>
-			<Image
-				source={require("../../../assets/images/card-texture.png")}
-				resizeMode='contain'
-				style={{ opacity: 0.5, position: "absolute" }}
-			/>
-			{/* <StyledText style={{ fontSize: 16 }}>{html}</StyledText> */}
-
-			<Text bold variant='heading3' style={{ color: theme.black, fontSize: 20 }}>
-				{builder.selectedArmyList?.name}
-			</Text>
-			<Text italic style={{ color: theme.black }}>
-				{generateFaction()}
-			</Text>
-
-			<View
+		<ScrollView style={{ backgroundColor: "#FCF5E5", minHeight: height }}>
+			<ImageBackground
+				source={require("../../images/svgs/scroll.png")}
+				resizeMode='stretch'
 				style={{
-					borderTopWidth: 1,
-					paddingTop: 8,
-					paddingBottom: 8,
-					borderBottomWidth: 1,
-					borderColor: theme.black,
-					marginBottom: 12,
-					paddingHorizontal: 4,
+					position: "absolute",
+					width: width,
+					marginLeft: -0,
+					top: -160,
+					height: height + 300,
 				}}
-			>
-				{generateLeaderPointsForUi()}
-				{generateUnitPointsForUi()}
-			</View>
-			<View style={{ flexDirection: "row" }}>
-				<View style={{ flex: 1 }}>
-					<Text style={{ color: theme.black }}>{builder.getUnitCounts()}</Text>
+			/>
+			<View style={{ height: height, paddingHorizontal: 24, marginTop: 20 }}>
+				{/* <StyledText style={{ fontSize: 16 }}>{html}</StyledText> */}
+
+				<Text bold variant='heading3' style={{ color: theme.black, fontSize: 20 }}>
+					{builder.selectedArmyList?.name}
+				</Text>
+				<Text italic style={{ color: theme.black }}>
+					{generateFaction()}
+				</Text>
+
+				<View
+					style={{
+						borderTopWidth: 1,
+						paddingTop: 8,
+						paddingBottom: 8,
+						borderBottomWidth: 1,
+						borderColor: theme.black,
+						marginBottom: 12,
+						paddingHorizontal: 4,
+					}}
+				>
+					{generateLeaderPointsForUi()}
+					{generateUnitPointsForUi()}
 				</View>
-				<View style={{ flex: 1, alignItems: "flex-end" }}>
-					<Text bold style={{ color: theme.black }}>
-						{builder.calculateCurrentArmyPoints()}
-					</Text>
+				<View style={{ flexDirection: "row" }}>
+					<View style={{ flex: 1 }}>
+						<Text style={{ color: theme.black }}>{builder.getUnitCounts()}</Text>
+					</View>
+					<View style={{ flex: 1, alignItems: "flex-end" }}>
+						<Text bold style={{ color: theme.black }}>
+							{builder.calculateCurrentArmyPoints()}
+						</Text>
+					</View>
+				</View>
+
+				<View style={{ flexDirection: "row", justifyContent: "flex-end", paddingTop: 16 }}>
+					<Pressable onPress={handleCopy}>
+						<View style={{ justifyContent: "center", alignItems: "center" }}>
+							<ImageBackground
+								source={require("../../images/svgs/red_seal.png")}
+								style={{ width: 80, height: 80 }}
+								width={50}
+								height={50}
+							>
+								<View style={{ height: "100%", alignSelf: "center", justifyContent: "center" }}>
+									<Foundation name='page-copy' size={20} color={theme.text} />
+								</View>
+							</ImageBackground>
+						</View>
+					</Pressable>
 				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
 export default BuilderQuickView;
-
-const styles = StyleSheet.create({});
