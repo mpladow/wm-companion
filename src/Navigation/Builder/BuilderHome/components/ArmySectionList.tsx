@@ -1,12 +1,10 @@
-import { Keyboard, Modal, SectionList, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { SectionList, View } from "react-native";
 import { ArmyListProps } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
 import ArmyListCard from "@navigation/Builder/components/ArmyListCard";
-import { Button, StandardModal, Text, TextBlock } from "@components/index";
-import CustomModal from "@components/CustomModal";
+import { StandardModal, Text, TextBlock } from "@components/index";
 import React, { useState } from "react";
 import Constants from "expo-constants";
-import { VERSION } from "lodash";
 import CustomText from "@components/CustomText";
 import { useToast } from "react-native-toast-notifications";
 

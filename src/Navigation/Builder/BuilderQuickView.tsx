@@ -311,12 +311,11 @@ const BuilderQuickView = () => {
 
 	const ViewRef = useRef<ViewProps>(null);
 	return (
-		<ScrollView style={{ backgroundColor: "#FCF5E5" }}>
+		<ScrollView style={{ backgroundColor: "#FCF5E5", minHeight: height }}>
 			<ImageBackground
 				source={require("../../images/svgs/scroll.png")}
 				resizeMode='stretch'
 				style={{
-					opacity: 0.5,
 					position: "absolute",
 					width: width,
 					marginLeft: -0,
@@ -324,7 +323,7 @@ const BuilderQuickView = () => {
 					height: height + 300,
 				}}
 			/>
-			<View style={{ height: "100%", paddingHorizontal: 24, marginTop: 20 }}>
+			<View style={{ height: height, paddingHorizontal: 24, marginTop: 20 }}>
 				{/* <StyledText style={{ fontSize: 16 }}>{html}</StyledText> */}
 
 				<Text bold variant='heading3' style={{ color: theme.black, fontSize: 20 }}>

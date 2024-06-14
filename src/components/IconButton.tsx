@@ -1,9 +1,9 @@
-import { StyleProp, StyleSheet, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import React, { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "@hooks/useTheme";
-import { Button, CustomDropdown, Text, TextBlock } from "@components/index";
+import { Text, TextBlock } from "@components/index";
 import { AntDesign } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type variant =
 	| "default"
@@ -30,7 +30,17 @@ type buttonProps = {
 	isStackNavigation?: boolean;
 	isNewWindow?: boolean;
 };
-const IconButton = ({ onPress, circle, disabled, size, style, title, isStackNavigation, isNewWindow, icon }: buttonProps) => {
+const IconButton = ({
+	onPress,
+	circle,
+	disabled,
+	size,
+	style,
+	title,
+	isStackNavigation,
+	isNewWindow,
+	icon,
+}: buttonProps) => {
 	const [pressing, setPressing] = useState(false);
 	const { theme } = useTheme();
 	useEffect(() => {
@@ -38,12 +48,11 @@ const IconButton = ({ onPress, circle, disabled, size, style, title, isStackNavi
 		if (pressing) onPress();
 	}, [pressing]);
 	return (
-		<TouchableOpacity
+		<Pressable
 			disabled={disabled}
-			onPressIn={() => setPressing(true)}
-			onPressOut={() => setPressing(false)}
+			onPress={() => onPress()}
+			// onPressOut={() => setPressing(false)}
 			// hitSlop={10}
-			activeOpacity={0.8}
 			style={[
 				styles.button,
 				circle && styles.buttonRound,
@@ -60,11 +69,11 @@ const IconButton = ({ onPress, circle, disabled, size, style, title, isStackNavi
 					<Text style={{ color: theme.black }}>{title}</Text>
 				</View>
 				<View style={{ flex: 1 }}>
-					{isNewWindow && <MaterialCommunityIcons name="open-in-new" size={24} color="black" />}
+					{isNewWindow && <MaterialCommunityIcons name='open-in-new' size={24} color='black' />}
 					{isStackNavigation && <AntDesign name='right' size={20} color='black' />}
 				</View>
 			</View>
-		</TouchableOpacity>
+		</Pressable>
 	);
 };
 
@@ -76,7 +85,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		backgroundColor: "grey",
 		borderRadius: 28,
-		boxShadow: `0px 0px 18px 8px rgba(0, 0, 0, 0.80)`,
+		// boxShadow: `0px 0px 18px 8px rgba(0, 0, 0, 0.80)`,
 		alignItems: "center",
 		justifyContent: "center",
 		zIndex: 999,

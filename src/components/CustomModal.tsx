@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
-import { Text, TextBlock } from "@components/index";
+import { Button, Text } from "@components/index";
 import fontSize from "@utils/styling";
 import Settings from "@navigation/Settings/screens/Settings";
 import { Pages } from "@utils/constants";
@@ -42,7 +42,6 @@ const CustomModal = ({
 	children,
 	headerTitle,
 	footerLeft,
-	footerRight,
 	onDismiss,
 }: CustomModalProps) => {
 	const windowWidth = Dimensions.get("window").width;
@@ -98,7 +97,7 @@ const CustomModal = ({
 					<View style={styles.modalOverlay} />
 				</TouchableWithoutFeedback>
 				<View style={styles.centeredView}>
-					<View style={[styles.modalView, { width: windowWidth - 20, backgroundColor: theme.blueGrey }]}>
+					<View style={[styles.modalView, { width: windowWidth - 10, backgroundColor: theme.blueGrey }]}>
 						<View style={{ flexDirection: "row", padding: 12 }}>
 							<View
 								style={{
@@ -125,7 +124,7 @@ const CustomModal = ({
 								</View>
 							</View>
 						</View>
-						<View style={{ paddingBottom: 60, flex: 1 }}>{modalContent ? modalContent : children}</View>
+						<View style={{ paddingBottom: 10, flex: 1 }}>{modalContent ? modalContent : children}</View>
 						<View
 							style={{
 								width: "100%",
@@ -136,20 +135,26 @@ const CustomModal = ({
 						>
 							<View style={{ position: "absolute", left: 0, padding: 12 }}>{footerLeft}</View>
 							<View
-								style={{
-									position: "absolute",
-									top: -40,
-									width: 70,
-									height: 70,
-									backgroundColor: theme.background,
-									borderRadius: 200,
-									alignItems: "center",
-									justifyContent: "center",
-								}}
+							// style={{
+							// 	position: "absolute",
+							// 	top: -40,
+							// 	width: 70,
+							// 	height: 70,
+							// 	backgroundColor: theme.background,
+							// 	borderRadius: 200,
+							// 	alignItems: "center",
+							// 	justifyContent: "center",
+							// }}
 							>
-								<TouchableOpacity hitSlop={40} onPress={setModalVisible}>
+								{/* <TouchableOpacity hitSlop={40} onPress={setModalVisible}>
 									<AntDesign name='close' size={24} color={theme.text} />
-								</TouchableOpacity>
+								</TouchableOpacity> */}
+								<Button variant='text' onPress={setModalVisible}>
+									<View style={{ flexDirection: "row", alignItems: "center" }}>
+										<AntDesign name='close' size={24} color={theme.text} />
+										<Text>Close</Text>
+									</View>
+								</Button>
 							</View>
 							<View style={{ position: "absolute", right: 0, padding: 12 }}>
 								<Text>{modalMetaContent?.pageNumber}</Text>
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
 	},
 	modalView: {
 		flex: 1,
-		margin: 50,
+		margin: 40,
 		backgroundColor: "white",
 		borderRadius: 20,
 		// paddingVertical: 40,

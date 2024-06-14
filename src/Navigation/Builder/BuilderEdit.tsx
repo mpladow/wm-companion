@@ -47,10 +47,7 @@ const BuilderEdit = () => {
 	const [spellsVisible, setSpellsVisible] = useState(false);
 	const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
 	const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
-	const [allSelectedUpgradesVisible, setAllSelectedUpgradesVisible] = useState(false);
 	// show statline
-
-	const [magicItems, setMagicItems] = useState<UpgradesProps[]>([]);
 	const [currentPoints, setCurrentPoints] = useState(0);
 	const [totalPoints, setTotalPoints] = useState(1000); // this state will update itself as the current points exceeds the previous value
 	const [factionUnits, setFactionUnits] = useState<UnitProps[] | undefined>(); //TODO: we NEED to strongly type this data
@@ -65,8 +62,8 @@ const BuilderEdit = () => {
 	useEffect(() => {
 		// get all units for selected army list
 		console.log("hitting use effect");
-
-		if (builder.selectedArmyList) {
+		console.log("builder.selectedArmyList?.name --", builder.selectedArmyList?.name);
+		if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
 			navigation.setOptions({
 				headerRight: () => (
 					<Menu>
@@ -91,7 +88,7 @@ const BuilderEdit = () => {
 					<View style={{ flexDirection: "row" }}>
 						<View style={{ width: 250 }}>
 							<Text numberOfLines={1} variant='heading1' style={{ fontSize: 20 }}>
-								{builder.selectedArmyList?.name}
+								{builder.selectedArmyList?.name ?? "Builder"}
 							</Text>
 							<Text>
 								{builder.selectedArmyList?.name &&
@@ -108,7 +105,7 @@ const BuilderEdit = () => {
 			);
 			setFactionUnits(factionListData?.factionList?.units);
 		}
-	}, []);
+	}, [builder.selectedArmyList, builder.selectedArmyList?.name]);
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();
