@@ -85,7 +85,7 @@ const ArmySectionList = ({
 					</View>
 					<View style={{ marginTop: 12 }}>
 						<Text variant='heading2' style={{ textAlign: "center", fontSize: 16 }}>
-							Total Armies: {sectionListData[0]?.data?.length + sectionListData[1]?.data?.length}
+							{sectionListData[0]?.data?.length + sectionListData[1]?.data?.length} armies
 						</Text>
 					</View>
 				</>
