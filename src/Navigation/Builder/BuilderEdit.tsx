@@ -65,6 +65,7 @@ const BuilderEdit = () => {
 		console.log("builder.selectedArmyList?.name --", builder.selectedArmyList?.name);
 		if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
 			navigation.setOptions({
+				title: builder.selectedArmyList?.name,
 				headerRight: () => (
 					<Menu>
 						<MenuTrigger>
@@ -85,16 +86,14 @@ const BuilderEdit = () => {
 					</Menu>
 				),
 				headerTitle: () => (
-					<View style={{ flexDirection: "row" }}>
-						<View style={{ width: 250 }}>
-							<Text numberOfLines={1} variant='heading1' style={{ fontSize: 20 }}>
-								{builder.selectedArmyList?.name ?? "Builder"}
-							</Text>
-							<Text>
-								{builder.selectedArmyList?.name &&
-									getKeyByValue(Factions, builder.selectedArmyList.faction)?.replaceAll("_", " ")}
-							</Text>
-						</View>
+					<View style={{ width: 250 }}>
+						<Text numberOfLines={1} variant='heading1' style={{ fontSize: 20 }}>
+							{builder.selectedArmyList?.name ?? "Builder"}
+						</Text>
+						<Text>
+							{builder.selectedArmyList?.name &&
+								getKeyByValue(Factions, builder.selectedArmyList.faction)?.replaceAll("_", " ")}
+						</Text>
 					</View>
 				),
 			});

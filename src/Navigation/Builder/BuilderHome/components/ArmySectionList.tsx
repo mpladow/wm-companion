@@ -1,12 +1,14 @@
-import { SectionList, View } from "react-native";
+import { Animated, SectionList, View } from "react-native";
 import { ArmyListProps } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
 import ArmyListCard from "@navigation/Builder/components/ArmyListCard";
 import { StandardModal, Text, TextBlock } from "@components/index";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Constants from "expo-constants";
 import CustomText from "@components/CustomText";
 import { useToast } from "react-native-toast-notifications";
+import LogoWmr from "@components/SVGS/LogoWmr";
+import { useTranslation } from "react-i18next";
 
 export type armySectionListDataProps = {
 	title: string;
@@ -39,6 +41,7 @@ const ArmySectionList = ({
 	const [showMigrateModal, setShowMigrateModal] = useState(false);
 	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 	const toast = useToast();
+	const { t } = useTranslation(["builder", "common", "forms"]);
 
 	const onMigrateArmyPress = () => {
 		selectedArmy && handleMigrateArmy(selectedArmy.armyId, CURRENT_VERSION);
@@ -48,9 +51,65 @@ const ArmySectionList = ({
 		});
 		setShowMigrateModal(false);
 	};
+	const HEADER_MAX_HEIGHT = 140;
+	const HEADER_MIN_HEIGHT = 0;
+	const SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+	const DynamicHeader = ({ value }: any) => {
+		const animatedHeaderHeight = value.interpolate({
+			inputRange: [0, SCROLL_DISTANCE],
+			outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+			extrapolate: "clamp",
+		});
+		const animatedOpacity = value.interpolate({
+			inputRange: [0, SCROLL_DISTANCE],
+			outputRange: [1, 0],
+			extrapolate: "clamp",
+		});
+		return (
+			<Animated.View style={[{ height: animatedHeaderHeight, opacity: animatedOpacity }]}>
+				<>
+					<View
+						style={{
+							alignSelf: "center",
+							justifyContent: "center",
+							alignItems: "center",
+							flexDirection: "column",
+						}}
+					>
+						<LogoWmr height={80} width={200} />
+						<View style={{ marginTop: -12 }}>
+							<Text variant='heading3' style={{ fontSize: 24 }}>
+								{t("Builder", { ns: "common" })}
+							</Text>
+						</View>
+					</View>
+					<View style={{ marginTop: 12 }}>
+						<Text variant='heading2' style={{ textAlign: "center", fontSize: 16 }}>
+							{sectionListData[0]?.data?.length + sectionListData[1]?.data?.length} armies
+						</Text>
+					</View>
+				</>
+			</Animated.View>
+		);
+	};
+
+	const scrollOffsetY = useRef(new Animated.Value(0)).current;
 	return (
 		<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
+			<DynamicHeader value={scrollOffsetY} />
 			<SectionList
+				onScroll={Animated.event(
+					[
+						{
+							nativeEvent: { contentOffset: { y: scrollOffsetY } },
+						},
+					],
+					{ useNativeDriver: false }
+				)}
+				bounces={false}
+				alwaysBounceVertical={false}
+				overScrollMode='never'
+				scrollEventThrottle={0}
 				style={{ zIndex: 9, marginBottom: 200 }}
 				stickySectionHeadersEnabled
 				ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
@@ -90,6 +149,7 @@ const ArmySectionList = ({
 					);
 				}}
 			/>
+			{/* MIGRATION MODAL */}
 			<StandardModal
 				visible={showMigrateModal}
 				onDismiss={() => setShowMigrateModal(false)}

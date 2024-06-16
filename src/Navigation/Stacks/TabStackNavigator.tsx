@@ -16,10 +16,10 @@ const Tab = createBottomTabNavigator();
 export const navigatorOptions = {};
 const TabStackNavigator = () => {
 	const { theme } = useTheme();
-	const {t} = useTranslation("common")
+	const { t } = useTranslation("common");
 	return (
 		<Tab.Navigator
-			initialRouteName='About'
+			initialRouteName='ArmyBuilder'
 			screenOptions={(screenProps) => ({
 				headerShown: screenProps.route.name == "Tracker" ? false : true,
 				headerTitle: (props) => (
@@ -38,7 +38,7 @@ const TabStackNavigator = () => {
 				tabBarIcon: ({ color, size, focused }) => {
 					let icon: JSX.Element = <></>;
 					let label = "";
-					switch (screenProps.route.name) { 
+					switch (screenProps.route.name) {
 						case "TrackerHome":
 							label = t("Tracker");
 							icon = (
@@ -78,7 +78,17 @@ const TabStackNavigator = () => {
 							}}
 						>
 							{icon}
-							<Text style={[{ color: focused ? theme.warning : theme.text, fontSize: 16, fontFamily: fonts.BarlowCodensedBold }]}>{label}</Text>
+							<Text
+								style={[
+									{
+										color: focused ? theme.warning : theme.text,
+										fontSize: 16,
+										fontFamily: fonts.BarlowCodensedBold,
+									},
+								]}
+							>
+								{label}
+							</Text>
 						</View>
 					);
 				},
@@ -92,17 +102,17 @@ const TabStackNavigator = () => {
 			})}
 		>
 			<Tab.Screen
-				name='About'
-				component={AboutStackNavigator}
+				name='ArmyBuilder'
+				component={BuilderStackNavigator}
 				options={{
-					unmountOnBlur: true,
-					tabBarLabel: "About",
-					title: "About",
+					title: "Army Builder",
+					tabBarLabel: "Army",
 					headerShadowVisible: false,
 					headerShown: false,
-					headerStyle: { backgroundColor: theme.blueGrey },
+					headerStyle: { backgroundColor: theme.background },
 				}}
 			/>
+
 			<Tab.Screen
 				name='TrackerHome'
 				component={TrackerStackNavigator}
@@ -114,16 +124,16 @@ const TabStackNavigator = () => {
 					headerStyle: { backgroundColor: theme.blueGrey },
 				}}
 			/>
-
 			<Tab.Screen
-				name='ArmyBuilder'
-				component={BuilderStackNavigator}
+				name='About'
+				component={AboutStackNavigator}
 				options={{
-					title: "Army Builder",
-					tabBarLabel: "Army",
+					unmountOnBlur: true,
+					tabBarLabel: "About",
+					title: "About",
 					headerShadowVisible: false,
 					headerShown: false,
-					headerStyle: { backgroundColor: theme.background },
+					headerStyle: { backgroundColor: theme.blueGrey },
 				}}
 			/>
 		</Tab.Navigator>
