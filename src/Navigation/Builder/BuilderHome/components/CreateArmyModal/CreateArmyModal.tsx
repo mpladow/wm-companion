@@ -23,10 +23,10 @@ const CreateArmyModal = ({ isVisible, theme, focusedArmy, onDismissCreateArmyMod
 			headerTitle={focusedArmy ? t("EditArmy") : t("CreateArmy")}
 			modalVisible={isVisible}
 		>
-			<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}>
+			<View style={{ flex: 1, flexDirection: "column", padding: 12 }}>
 				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 					<>
-						<View style={{ flex: 1 }}>
+						<View style={{ flex: 1, justifyContent: "space-between" }}>
 							{!focusedArmy ? (
 								<CreateArmyForm theme={theme} handleDismissModal={onDismissCreateArmyModal} />
 							) : (

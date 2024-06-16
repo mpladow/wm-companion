@@ -5,7 +5,7 @@ import { Theme } from "@hooks/useTheme";
 import fonts from "@utils/fonts";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 
 const EditArmyForm = ({
 	focusedArmy,
@@ -52,8 +52,12 @@ const EditArmyForm = ({
 	const nameRef = useRef<TextInput>(null);
 
 	return (
-		<View style={{ flex: 1, justifyContent: "space-between" }}>
-			<View style={{ marginTop: 12 }}>
+		<>
+			<ScrollView
+				onStartShouldSetResponder={() => true}
+				contentContainerStyle={{ flexGrow: 1 }}
+				scrollEnabled={false}
+			>
 				<FormLabel label={t("ArmyName")} />
 				<TextInput
 					ref={nameRef}
@@ -97,7 +101,7 @@ const EditArmyForm = ({
 						factionNameError && { borderColor: theme.danger, borderWidth: 4 },
 					]}
 				/>
-			</View>
+			</ScrollView>
 			<View style={{ paddingTop: 12, justifyContent: "flex-end" }}>
 				<Button onPress={() => onArmyNameChange()} variant={"confirm"}>
 					<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
@@ -105,8 +109,7 @@ const EditArmyForm = ({
 					</Text>
 				</Button>
 			</View>
-		</View>
+		</>
 	);
 };
 export default EditArmyForm;
-const styles = StyleSheet.create({});

@@ -142,6 +142,23 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 					)}
 					{!isEdit && (
 						<>
+							<View style={{ marginVertical: 4, marginTop: 12 }}>
+								<Text style={{ textAlign: "center", fontSize: 20 }} bold>
+									{Factions[factionSelection]?.replaceAll("_", " ")}
+								</Text>
+							</View>
+							<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+								{factionSelection == null && (
+									<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+										<Text style={{ textAlign: "center", fontSize: 20 }} bold>
+											Select a faction
+										</Text>
+									</View>
+								)}
+								{factionDescription.map((item, index) => {
+									return <Text style={{ textAlign: "center", paddingBottom: 4 }}>{item}</Text>;
+								})}
+							</ScrollView>
 							<View style={{ marginTop: 12 }}>
 								<FormLabel label={t("Faction")} />
 								<FlatList
@@ -226,16 +243,6 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 									ItemSeparatorComponent={() => <View style={{ width: 12 }}></View>}
 								/>
 							</View>
-							<View style={{ marginVertical: 4 }}>
-								<Text style={{ textAlign: "center", fontSize: 20 }} bold>
-									{Factions[factionSelection]?.replaceAll("_", " ")}
-								</Text>
-							</View>
-							<ScrollView>
-								{factionDescription.map((item, index) => {
-									return <Text style={{ textAlign: "center", paddingBottom: 4 }}>{item}</Text>;
-								})}
-							</ScrollView>
 						</>
 					)}
 				</View>

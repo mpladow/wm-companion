@@ -65,6 +65,7 @@ const BuilderEdit = () => {
 		console.log("builder.selectedArmyList?.name --", builder.selectedArmyList?.name);
 		if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
 			navigation.setOptions({
+				title: builder.selectedArmyList?.name,
 				headerRight: () => (
 					<Menu>
 						<MenuTrigger>
