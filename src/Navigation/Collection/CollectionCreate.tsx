@@ -115,7 +115,7 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 	return (
 		<View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between", padding: 12 }}>
 			<>
-				<View style={{ flex: 1, marginBottom: 12 }}>
+				<ScrollView scrollEnabled={false} style={{ flex: 1, marginBottom: 12 }}>
 					<FormLabel label={t("CollectionName", { ns: "forms" })} />
 					<TextInput
 						ref={nameRef}
@@ -147,7 +147,11 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 									{Factions[factionSelection]?.replaceAll("_", " ")}
 								</Text>
 							</View>
-							<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+							<ScrollView
+								onStartShouldSetResponder={() => true}
+								contentContainerStyle={{ flexGrow: 1 }}
+								scrollEnabled={true}
+							>
 								{factionSelection == null && (
 									<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
 										<Text style={{ textAlign: "center", fontSize: 20 }} bold>
@@ -245,7 +249,7 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 							</View>
 						</>
 					)}
-				</View>
+				</ScrollView>
 				<Button onPress={() => onConfirmCollectionCreate()} variant={"confirm"}>
 					<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
 						{isEdit ? t("Confirm", { ns: "common" }) : t("Create", { ns: "common" })}
