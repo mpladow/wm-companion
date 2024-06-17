@@ -316,66 +316,67 @@ const BuilderQuickView = () => {
 				source={require("../../images/svgs/scroll.png")}
 				resizeMode='stretch'
 				style={{
-					opacity: 0.5,
-					position: "absolute",
+					// opacity: 0.5,
+					// position: "absolute",
 					width: width,
 					marginLeft: -0,
-					top: -160,
+					top: -100,
 					height: height + 300,
 				}}
-			/>
-			<View style={{ height: "100%", paddingHorizontal: 24, marginTop: 20 }}>
-				{/* <StyledText style={{ fontSize: 16 }}>{html}</StyledText> */}
+			>
+				<View style={{ zIndex: 999, paddingTop: 160, height: "100%", paddingHorizontal: 24, marginTop: 20 }}>
+					{/* <StyledText style={{ fontSize: 16 }}>{html}</StyledText> */}
 
-				<Text bold variant='heading3' style={{ color: theme.black, fontSize: 20 }}>
-					{builder.selectedArmyList?.name}
-				</Text>
-				<Text italic style={{ color: theme.black }}>
-					{generateFaction()}
-				</Text>
+					<Text bold variant='heading3' style={{ color: theme.black, fontSize: 20 }}>
+						{builder.selectedArmyList?.name}
+					</Text>
+					<Text italic style={{ color: theme.black }}>
+						{generateFaction()}
+					</Text>
 
-				<View
-					style={{
-						borderTopWidth: 1,
-						paddingTop: 8,
-						paddingBottom: 8,
-						borderBottomWidth: 1,
-						borderColor: theme.black,
-						marginBottom: 12,
-						paddingHorizontal: 4,
-					}}
-				>
-					{generateLeaderPointsForUi()}
-					{generateUnitPointsForUi()}
-				</View>
-				<View style={{ flexDirection: "row" }}>
-					<View style={{ flex: 1 }}>
-						<Text style={{ color: theme.black }}>{builder.getUnitCounts()}</Text>
+					<View
+						style={{
+							borderTopWidth: 1,
+							paddingTop: 8,
+							paddingBottom: 8,
+							borderBottomWidth: 1,
+							borderColor: theme.black,
+							marginBottom: 12,
+							paddingHorizontal: 4,
+						}}
+					>
+						{generateLeaderPointsForUi()}
+						{generateUnitPointsForUi()}
 					</View>
-					<View style={{ flex: 1, alignItems: "flex-end" }}>
-						<Text bold style={{ color: theme.black }}>
-							{builder.calculateCurrentArmyPoints()}
-						</Text>
-					</View>
-				</View>
-
-				<View style={{ flexDirection: "row", justifyContent: "flex-end", paddingTop: 16 }}>
-					<Pressable onPress={handleCopy}>
-						<View style={{ justifyContent: "center", alignItems: "center" }}>
-							<ImageBackground
-								source={require("../../images/svgs/red_seal.png")}
-								style={{ width: 80, height: 80 }}
-								width={50}
-								height={50}
-							>
-								<View style={{ height: "100%", alignSelf: "center", justifyContent: "center" }}>
-									<Foundation name='page-copy' size={20} color={theme.text} />
-								</View>
-							</ImageBackground>
+					<View style={{ flexDirection: "row" }}>
+						<View style={{ flex: 1 }}>
+							<Text style={{ color: theme.black }}>{builder.getUnitCounts()}</Text>
 						</View>
-					</Pressable>
+						<View style={{ flex: 1, alignItems: "flex-end" }}>
+							<Text bold style={{ color: theme.black }}>
+								{builder.calculateCurrentArmyPoints()}
+							</Text>
+						</View>
+					</View>
+
+					<View style={{ flexDirection: "row", justifyContent: "flex-end", paddingTop: 16 }}>
+						<Pressable onPress={handleCopy}>
+							<View style={{ justifyContent: "center", alignItems: "center" }}>
+								<ImageBackground
+									source={require("../../images/svgs/red_seal.png")}
+									style={{ width: 80, height: 80 }}
+									width={50}
+									height={50}
+								>
+									<View style={{ height: "100%", alignSelf: "center", justifyContent: "center" }}>
+										<Foundation name='page-copy' size={20} color={theme.text} />
+									</View>
+								</ImageBackground>
+							</View>
+						</Pressable>
+					</View>
 				</View>
-			</View>
+			</ImageBackground>
 		</ScrollView>
 	);
 };

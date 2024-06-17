@@ -1,11 +1,11 @@
-import { Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { Animated, Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@hooks/useTheme";
 import { StandardModal, Text, TextBlock } from "@components/index";
 import { ArmyListFilters, ArmyListProps, ListSections, useBuilderContext } from "@context/BuilderContext";
 import fonts from "@utils/fonts";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import PopupConfirm from "@components/PopupConfirm";
 import { LinearGradient } from "expo-linear-gradient";
 import { useToast } from "react-native-toast-notifications";
@@ -15,6 +15,7 @@ import AddArmyButton from "./components/AddArmyButton";
 import CreateArmyModal from "./components/CreateArmyModal/CreateArmyModal";
 import { useUpdateChecker } from "@context/UpdateCheckerContext";
 import { filter } from "lodash";
+import AnimatedHeader from "@components/AnimatedHeader/AnimatedHeader";
 
 const BuilderHome = () => {
 	const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -32,6 +33,8 @@ const BuilderHome = () => {
 	const builder = useBuilderContext();
 	const { t } = useTranslation(["builder", "common", "forms"]);
 	const toast = useToast();
+
+	const scrollY = useRef(new Animated.Value(0));
 
 	useEffect(() => {
 		console.log("🚀 ~ BuilderHome ~ filterFavourites:", filterFavourites);

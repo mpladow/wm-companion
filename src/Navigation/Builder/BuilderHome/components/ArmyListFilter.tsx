@@ -18,7 +18,7 @@ const ArmyListFilter = ({
 	const { theme } = useTheme();
 	return (
 		<View style={{ flexDirection: "row", alignItems: "center" }}>
-			{filters.length > 0 && (
+			{/* {filters.length > 0 && (
 				<View
 					style={{
 						justifyContent: "center",
@@ -33,10 +33,14 @@ const ArmyListFilter = ({
 						{filters.length}
 					</Text>
 				</View>
-			)}
+			)} */}
 			<Menu style={{ zIndex: 99 }}>
 				<MenuTrigger>
-					<MaterialCommunityIcons name='filter-menu' size={24} color={theme.text} />
+					<MaterialCommunityIcons
+						name='filter-menu'
+						size={24}
+						color={filters.length > 0 ? theme.accent : theme.text}
+					/>
 				</MenuTrigger>
 				<MenuOptions
 					optionsContainerStyle={{

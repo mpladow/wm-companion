@@ -25,6 +25,7 @@ import LogoWmr from "@components/SVGS/LogoWmr";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useUpdateChecker } from "@context/UpdateCheckerContext";
+import { HEADER_HEIGHT } from "src/constants/styling";
 
 const Home = () => {
 	const { theme } = useTheme();
@@ -86,7 +87,7 @@ const Home = () => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<MainContainerWithImage>
-				<ScrollView style={{ zIndex: 9, flex: 1, padding: 16 }}>
+				<ScrollView style={{ zIndex: 9, flex: 1, padding: 16, paddingTop: HEADER_HEIGHT }}>
 					<TextBlock variant='large'>
 						<>
 							<View

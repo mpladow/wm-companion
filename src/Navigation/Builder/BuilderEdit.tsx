@@ -8,7 +8,7 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
@@ -36,10 +36,10 @@ export type sectionListDataProps = {
 	title: string;
 	data: SelectedUnitProps[];
 };
-const BuilderEdit = () => {
+const BuilderEdit = ({ navigation }: any) => {
 	const { t } = useTranslation(["builder", "common", "forms"]);
 	const builder = useBuilderContext();
-	const navigation = useNavigation();
+	// const navigation = useNavigation();
 	const { theme } = useTheme();
 	const { settings, setShowStatlineSetting } = useSettingsContext();
 	//modals
@@ -59,7 +59,12 @@ const BuilderEdit = () => {
 
 	const { getFactionUnitsByVersion } = useFactionUnits();
 
-	useEffect(() => {
+	useLayoutEffect(() => {
+		const factionListData = getFactionUnitsByVersion(
+			builder.selectedArmyList?.faction,
+			builder.selectedArmyList?.versionNumber
+		);
+		setFactionUnits(factionListData?.factionList?.units);
 		// get all units for selected army list
 		console.log("hitting use effect");
 		console.log("builder.selectedArmyList?.name --", builder.selectedArmyList?.name);
@@ -97,14 +102,8 @@ const BuilderEdit = () => {
 					</View>
 				),
 			});
-
-			const factionListData = getFactionUnitsByVersion(
-				builder.selectedArmyList?.faction,
-				builder.selectedArmyList?.versionNumber
-			);
-			setFactionUnits(factionListData?.factionList?.units);
 		}
-	}, [builder.selectedArmyList, builder.selectedArmyList?.name]);
+	}, [navigation, builder.selectedArmyList, builder.selectedArmyList?.name]);
 
 	useEffect(() => {
 		const _currentPoints = builder.calculateCurrentArmyPoints();

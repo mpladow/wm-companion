@@ -40,7 +40,7 @@ const AboutStackNavigator = () => {
 				headerStyle: { backgroundColor: theme.blueGrey },
 			}}
 		>
-			<Stack.Screen name='Home' component={Home} options={{ title: t("About") }} />
+			<Stack.Screen name='Home' component={Home} options={{ title: t("About"), headerShown: false }} />
 			<Stack.Screen name='Preferences' component={Preferences} options={{ title: t("Preferences") }} />
 			<Stack.Screen name='Credits' component={Credits} options={{ title: t("Credits") }} />
 			<Stack.Screen

@@ -35,6 +35,7 @@ const TrackerStackNavigator = () => {
 			<Stack.Screen
 				options={{
 					headerStyle: { backgroundColor: theme.blueGrey },
+					headerShown: false,
 					headerTitle: (props) => (
 						<View style={{ flexDirection: "row", alignItems: "center" }}>
 							<Text
