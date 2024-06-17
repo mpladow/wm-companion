@@ -98,7 +98,7 @@
 			"noMagic": true
 		},
 		{
-			"name": "Bolt Thrower",
+			"name": "Elven Bolt Thrower",
 			"order": 7,
 			"type": "Artillery",
 			"attack": "1/3",

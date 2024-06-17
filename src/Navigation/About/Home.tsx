@@ -51,27 +51,7 @@ const Home = () => {
 	};
 	const { t } = useTranslation(["home", "common"]);
 
-	const { isReady, changelog, clearDismissedDEBUG, dismissChangeLog, recentlyDismissedChangeLog } =
-		useUpdateChecker();
-	const [showChangeLogModal, setShowChangeLogModal] = useState(false);
-	useEffect(() => {
-		setTimeout(() => {
-			if (changelog && recentlyDismissedChangeLog) {
-				if (changelog.version !== recentlyDismissedChangeLog) {
-					setShowChangeLogModal(true);
-				} else {
-					setShowChangeLogModal(false);
-				}
-			}
-			if (changelog && !recentlyDismissedChangeLog) {
-				setShowChangeLogModal(true);
-			}
-		}, 1200);
-	}, [isReady]);
-	const handleDismissModal = () => {
-		dismissChangeLog();
-		setShowChangeLogModal(false);
-	};
+	const { changelog, clearDismissedDEBUG } = useUpdateChecker();
 
 	const generateContent = () => {
 		return (
@@ -207,7 +187,7 @@ const Home = () => {
 					</View>
 				</ScrollView>
 			</MainContainerWithImage>
-			<StandardModal
+			{/* <StandardModal
 				content={generateContent()}
 				heading={
 					changelog ? `Changelog v${changelog?.version}` : "If you're seeing this, please report a bug :)"
@@ -216,7 +196,7 @@ const Home = () => {
 				visible={showChangeLogModal}
 				onSubmit={handleDismissModal}
 				submitText={"Understood!"}
-			/>
+			/> */}
 		</SafeAreaView>
 	);
 };

@@ -177,8 +177,9 @@ const BuilderEdit = () => {
 				const _allGenericSpecialRules = getGenericSpecialRules();
 				//@ts-ignore
 				const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
+				console.log("🚀 ~ handleOnUnitCardPress ~ unitName:", unitName);
+				console.log("🚀 ~ handleOnUnitCardPress ~ _genericSpecialRulesExist:", _genericSpecialRulesExist);
 				if (_specialRulesForUnit) {
-					console.log("handleOnUnitCardPress:: special rule for UNIT NAME");
 					if (_specialRulesForUnit.text) _unit.specialRules.push(_specialRulesForUnit);
 					// setSpecialRules(_specialRules);
 				}

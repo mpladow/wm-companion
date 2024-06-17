@@ -1,8 +1,8 @@
-import { Dimensions, FlatList, ImageBackground, StyleSheet, TextInput, View } from "react-native";
+import { Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@hooks/useTheme";
-import { StandardModal, Text } from "@components/index";
+import { StandardModal, Text, TextBlock } from "@components/index";
 import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
 import fonts from "@utils/fonts";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import ArmySectionList, { armySectionListDataProps } from "./components/ArmySectionList";
 import AddArmyButton from "./components/AddArmyButton";
 import CreateArmyModal from "./components/CreateArmyModal/CreateArmyModal";
+import { useUpdateChecker } from "@context/UpdateCheckerContext";
 
 const BuilderHome = () => {
 	const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -76,6 +77,57 @@ const BuilderHome = () => {
 	const onArmyListDeletePress = (armyId: string) => {
 		setFocusedArmyId(armyId);
 		setConfirmDialog(true);
+	};
+
+	const { isReady, changelog, dismissChangeLog, recentlyDismissedChangeLog } = useUpdateChecker();
+	const [showChangeLogModal, setShowChangeLogModal] = useState(false);
+	useEffect(() => {
+		setTimeout(() => {
+			if (changelog && recentlyDismissedChangeLog) {
+				if (changelog.version !== recentlyDismissedChangeLog) {
+					setShowChangeLogModal(true);
+				} else {
+					setShowChangeLogModal(false);
+				}
+			}
+			if (changelog && !recentlyDismissedChangeLog) {
+				setShowChangeLogModal(true);
+			}
+		}, 1200);
+	}, [isReady]);
+	const handleDismissModal = () => {
+		dismissChangeLog();
+		setShowChangeLogModal(false);
+	};
+
+	const generateContent = () => {
+		return (
+			<ScrollView>
+				{changelog?.changes.map((x) => {
+					let fontStyle: { color: string; fontSize: number } = { color: theme.text, fontSize: 16 };
+
+					switch (x.type) {
+						case "overhaul":
+							fontStyle.color = theme.accent;
+							fontStyle.fontSize = 18;
+							break;
+						case "bug":
+							fontStyle.fontSize = 16;
+							break;
+						default:
+							break;
+					}
+					return (
+						<TextBlock variant='medium'>
+							<Text variant='heading3' style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
+								{x.title}
+							</Text>
+							{x.description && x.description?.map((d) => <Text>{d}</Text>)}
+						</TextBlock>
+					);
+				})}
+			</ScrollView>
+		);
 	};
 
 	return (
@@ -158,6 +210,16 @@ const BuilderHome = () => {
 				}
 				heading={t("ArmyNotes", { ns: "builder" })}
 				onCancel={() => setShowArmyNotes(false)}
+			/>
+			<StandardModal
+				content={generateContent()}
+				heading={
+					changelog ? `Changelog v${changelog?.version}` : "If you're seeing this, please report a bug :)"
+				}
+				onCancel={handleDismissModal}
+				visible={showChangeLogModal}
+				onSubmit={handleDismissModal}
+				submitText={"Understood!"}
 			/>
 		</SafeAreaView>
 	);
