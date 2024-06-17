@@ -1,0 +1,43 @@
+{
+	"version": "1.2.37",
+	"changes": [
+		{
+			"type": "overhaul",
+			"title": "Army lists updated for version 2.24!",
+			"description": [
+				"You can now create army lists that align wiht version 2.24 of the Warmaster Revolutions Army Book.",
+				"Existing armies can be migrated to use the new data sources.",
+				"It is HIGHLY recommended that you either migrate these existing armies, or create brand new armies."
+			]
+		},
+		{
+			"type": "improvement",
+			"title": "UI Improvements",
+			"description": ["Improved screen space on main screens"]
+		},
+		{
+			"type": "improvement",
+			"title": "Allow access to charts from Tracker home screen",
+			"description": ["Improved screen space on main screens"]
+		},
+		{
+			"type": "bug",
+			"title": "Fix to army duplication",
+			"description": [
+				"Armies that were duplicated were incorrecty updating both the duplicated army, as well as the original army."
+			]
+		},
+		{
+			"type": "bug",
+			"title": "Army count not correctly updating in army list",
+			"description": [
+				"On the army list screen, army points were not being updated when the points were changed in the builder"
+			]
+		},
+		{
+			"type": "bug",
+			"title": "Incorrect description for elven bolt throwers",
+			"description": ["Elven bolt throwers were incorrectly displaying rules for regular bolt throwers."]
+		}
+	]
+}

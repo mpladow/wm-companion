@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CollectionHome from "@navigation/Collection/CollectionHome";
@@ -43,11 +43,12 @@ const CollectionStackNavigator = () => {
 				component={CollectionHome}
 				options={{
 					// headerShown: false,
-					headerLeft: (x) => (
-						<Pressable onPress={() => nav.goBack()}>
-							<AntDesign name='left' size={24} color={x.tintColor} />
-						</Pressable>
-					),
+					headerLeft: (x) =>
+						Platform.OS == "ios" ? (
+							<Pressable onPress={() => nav.goBack()}>
+								<AntDesign name='left' size={24} color={x.tintColor} />
+							</Pressable>
+						) : undefined,
 					title: "Collection",
 				}}
 			/>

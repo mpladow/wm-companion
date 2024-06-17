@@ -9,14 +9,10 @@ import CustomText from "@components/CustomText";
 import { useToast } from "react-native-toast-notifications";
 import LogoWmr from "@components/SVGS/LogoWmr";
 import { useTranslation } from "react-i18next";
-import IconButton from "@components/IconButton";
-import { FontAwesome } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
-import MenuOptionButton from "@components/MenuOptionButton";
-import { Feather } from "@expo/vector-icons";
 import ArmyListFilter from "./ArmyListFilter";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import AnimatedHeader, { AppHeader } from "@components/AnimatedHeader/AnimatedHeader";
+import { HEADER_HEIGHT } from "src/constants/styling";
 export type armySectionListDataProps = {
 	title: string;
 	data: ArmyListProps[];
@@ -121,7 +117,7 @@ const ArmySectionList = ({
 
 	const scrollOffsetY = useRef(new Animated.Value(0)).current;
 	return (
-		<View style={{ zIndex: 999, flex: 1, padding: 16 }}>
+		<View style={{ zIndex: 999, flex: 1, padding: 16, paddingTop: HEADER_HEIGHT }}>
 			<DynamicHeader value={scrollOffsetY} />
 			<SectionList
 				onScroll={Animated.event(
@@ -136,7 +132,7 @@ const ArmySectionList = ({
 				alwaysBounceVertical={false}
 				overScrollMode='never'
 				scrollEventThrottle={0}
-				style={{ zIndex: 9, marginBottom: 200 }}
+				style={{ zIndex: 9, marginBottom: 80 }}
 				stickySectionHeadersEnabled
 				ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
 				sections={sectionListData}
