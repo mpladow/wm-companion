@@ -63,7 +63,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "High_Elves":
 			return [require("../../assets/images/wm-highElves.jpg")];
 		case "Daemons":
-			return [require("../../assets/images/wm-daemons.jpg")];
+			return [require("../../assets/images/wm-daemons-3.jpeg")];
 		case "Nippon":
 			return [require("../../assets/images/wm-nippon-default.png")];
 

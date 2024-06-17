@@ -1,4 +1,14 @@
-import { Dimensions, FlatList, StyleSheet, TextInput, View, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+	Dimensions,
+	FlatList,
+	StyleSheet,
+	TextInput,
+	View,
+	Image,
+	TouchableOpacity,
+	ScrollView,
+	ImageBackground,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import FormLabel from "@components/forms/FormLabel";
 import { useTheme } from "@hooks/useTheme";
@@ -142,10 +152,24 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 					)}
 					{!isEdit && (
 						<>
-							<View style={{ marginVertical: 4, marginTop: 12 }}>
-								<Text style={{ textAlign: "center", fontSize: 20 }} bold>
-									{Factions[factionSelection]?.replaceAll("_", " ")}
-								</Text>
+							<View style={{ height: 70, marginVertical: 4, marginTop: 12 }}>
+								<ImageBackground
+									resizeMode='stretch'
+									style={{ flex: 1, justifyContent: "flex-start", paddingTop: 10 }}
+									source={require("../../images/svgs/scroll_header.png")}
+								>
+									<Text
+										style={{
+											zIndex: 999,
+											textAlign: "center",
+											fontSize: 20,
+											color: theme.textInverted,
+										}}
+										bold
+									>
+										{factionSelection && Factions[factionSelection]?.replaceAll("_", " ")}
+									</Text>
+								</ImageBackground>
 							</View>
 							<ScrollView
 								onStartShouldSetResponder={() => true}
@@ -163,98 +187,88 @@ const CollectionCreate = ({ onDismiss, isEdit, collectionId, completeConfirmatio
 									return <Text style={{ textAlign: "center", paddingBottom: 4 }}>{item}</Text>;
 								})}
 							</ScrollView>
-							<View style={{ marginTop: 12 }}>
-								<FormLabel label={t("Faction")} />
-								<FlatList
-									ref={thumbRef}
-									horizontal
-									data={ddFactions}
-									// snapToInterval={width / 2 - THUMBNAIL_WIDTH + 5}
-									contentContainerStyle={{ paddingHorizontal: SPACING, paddingVertical: 4 }}
-									// onMomentumScrollEnd={(ev) => {
-									// 	setCurrentActiveIndex(
-									// 		Math.floor(ev.nativeEvent.contentOffset.x / THUMBNAIL_WIDTH)
-									// 	);
-									// }}
-									renderItem={({ item, index }) => {
-										const armyName = item.value
-											? getKeyByValue(Factions, item?.value as number)
-											: "";
-
-										const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
-										return (
-											<TouchableOpacity
-												onPress={() => setCurrentActiveIndex(index)}
-												key={index}
-												style={{ overflow: "hidden" }}
-											>
-												<View
-													style={{
-														width:
-															activeIndex == index
-																? THUMBNAIL_WIDTH + 5
-																: THUMBNAIL_WIDTH + 5,
-														height:
-															activeIndex == index
-																? THUMBNAIL_HEIGHT + 20
-																: THUMBNAIL_HEIGHT + 20,
-														backgroundColor: theme.background,
-														borderRadius: 8,
-														borderColor:
-															activeIndex == index ? theme.warning : theme.background,
-														borderWidth: 2,
-														marginRight: SPACING,
-														overflow: "hidden",
-													}}
-												>
-													<Image
-														style={[
-															styles.stretch,
-															{
-																width:
-																	activeIndex == index
-																		? THUMBNAIL_WIDTH + 5
-																		: THUMBNAIL_WIDTH + 5,
-																height:
-																	activeIndex == index
-																		? THUMBNAIL_HEIGHT - 2
-																		: THUMBNAIL_HEIGHT - 2,
-															},
-														]}
-														source={factionAssets && factionAssets[0]}
-													/>
-
-													<View
-														style={{
-															zIndex: 999,
-															backgroundColor: theme.white,
-															height: 20,
-															borderBottomLeftRadius: 8,
-															borderBottomRightRadius: 8,
-														}}
-													>
-														<Text
-															bold
-															style={{ textAlign: "center", color: theme.textInverted }}
-														>
-															{item.label}
-														</Text>
-													</View>
-												</View>
-											</TouchableOpacity>
-										);
-									}}
-									ItemSeparatorComponent={() => <View style={{ width: 12 }}></View>}
-								/>
-							</View>
 						</>
 					)}
 				</ScrollView>
-				<Button onPress={() => onConfirmCollectionCreate()} variant={"confirm"}>
-					<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
-						{isEdit ? t("Confirm", { ns: "common" }) : t("Create", { ns: "common" })}
-					</Text>
-				</Button>
+				<View style={{ marginTop: 8 }}>
+					<FlatList
+						ref={thumbRef}
+						horizontal
+						data={ddFactions}
+						// snapToInterval={width / 2 - THUMBNAIL_WIDTH + 5}
+						contentContainerStyle={{ paddingHorizontal: SPACING, paddingVertical: 4 }}
+						// onMomentumScrollEnd={(ev) => {
+						// 	setCurrentActiveIndex(
+						// 		Math.floor(ev.nativeEvent.contentOffset.x / THUMBNAIL_WIDTH)
+						// 	);
+						// }}
+						renderItem={({ item, index }) => {
+							const armyName = item.value ? getKeyByValue(Factions, item?.value as number) : "";
+
+							const factionAssets = getLocalFactionAssets(armyName ? armyName : "");
+							return (
+								<TouchableOpacity
+									onPress={() => setCurrentActiveIndex(index)}
+									key={index}
+									style={{ overflow: "hidden" }}
+								>
+									<View
+										style={{
+											width: activeIndex == index ? THUMBNAIL_WIDTH + 5 : THUMBNAIL_WIDTH + 5,
+											height:
+												activeIndex == index ? THUMBNAIL_HEIGHT + 20 : THUMBNAIL_HEIGHT + 20,
+											backgroundColor: theme.background,
+											borderRadius: 8,
+											borderColor: activeIndex == index ? theme.warning : theme.background,
+											borderWidth: 2,
+											marginRight: SPACING,
+											overflow: "hidden",
+										}}
+									>
+										<Image
+											style={[
+												styles.stretch,
+												{
+													width:
+														activeIndex == index
+															? THUMBNAIL_WIDTH + 5
+															: THUMBNAIL_WIDTH + 5,
+													height:
+														activeIndex == index
+															? THUMBNAIL_HEIGHT - 2
+															: THUMBNAIL_HEIGHT - 2,
+												},
+											]}
+											source={factionAssets && factionAssets[0]}
+										/>
+
+										<View
+											style={{
+												zIndex: 999,
+												backgroundColor: theme.white,
+												height: 20,
+												borderBottomLeftRadius: 8,
+												borderBottomRightRadius: 8,
+											}}
+										>
+											<Text bold style={{ textAlign: "center", color: theme.textInverted }}>
+												{item.label}
+											</Text>
+										</View>
+									</View>
+								</TouchableOpacity>
+							);
+						}}
+						ItemSeparatorComponent={() => <View style={{ width: 12 }}></View>}
+					/>
+				</View>
+				<View style={{ paddingTop: 16 }}>
+					<Button onPress={() => onConfirmCollectionCreate()} variant={"confirm"}>
+						<Text bold style={{ textTransform: "uppercase", color: theme.black }}>
+							{isEdit ? t("Confirm", { ns: "common" }) : t("Create", { ns: "common" })}
+						</Text>
+					</Button>
+				</View>
 			</>
 		</View>
 	);

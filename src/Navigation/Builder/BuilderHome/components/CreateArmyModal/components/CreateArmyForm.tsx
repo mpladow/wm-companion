@@ -8,7 +8,17 @@ import { useFactionUnits } from "@utils/useFactionUnits";
 import Constants from "expo-constants";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, FlatList, ScrollView, StyleSheet, TouchableOpacity, View, Image, TextInput } from "react-native";
+import {
+	Dimensions,
+	FlatList,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+	Image,
+	TextInput,
+	ImageBackground,
+} from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import fonts from "@utils/fonts";
 
@@ -131,10 +141,24 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
 					An army name is required
 				</Text>
 			)}
-			<View style={{ marginVertical: 4, marginTop: 12 }}>
-				<Text style={{ textAlign: "center", fontSize: 20 }} bold>
-					{factionSelection && Factions[factionSelection]?.replaceAll("_", " ")}
-				</Text>
+			<View style={{ height: 70, marginVertical: 4, marginTop: 12 }}>
+				<ImageBackground
+					resizeMode='stretch'
+					style={{ flex: 1, justifyContent: "flex-start", paddingTop: 10 }}
+					source={require("../../../../../../images/svgs/scroll_header.png")}
+				>
+					<Text
+						style={{
+							zIndex: 999,
+							textAlign: "center",
+							fontSize: 20,
+							color: theme.textInverted,
+						}}
+						bold
+					>
+						{factionSelection && Factions[factionSelection]?.replaceAll("_", " ")}
+					</Text>
+				</ImageBackground>
 			</View>
 			<ScrollView
 				onStartShouldSetResponder={() => true}

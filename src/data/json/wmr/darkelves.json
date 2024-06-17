@@ -98,7 +98,7 @@
 			"noMagic": true
 		},
 		{
-			"name": "Bolt Thrower",
+			"name": "Elven Bolt Thrower",
 			"order": 7,
 			"type": "Artillery",
 			"attack": "1/3",
@@ -209,10 +209,6 @@
 			"text": [
 				"War Hydras are so aggressive that they cannot be included as part of a brigade not even with other War Hydras. They cause terror in their enemies. The War Hydra can breath fire with a range of 20cm and 2 Attacks that are worked out in the normal way. Once all hits have been struck for that round, and assuming it has not been slain, the War Hydra automatically regenerates 1 hit that it suffered that round. A hit that is inflicted and subsequently regenerated still counts towards the results for that round."
 			]
-		},
-		"Bolt Thrower": {
-			"order": 6,
-			"text": ["The Bolt Thrower counts as an Elven Bolt Thrower."]
 		},
 		"General": {
 			"order": 7,
