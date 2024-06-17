@@ -1,15 +1,22 @@
-import { Animated, SectionList, View } from "react-native";
-import { ArmyListProps } from "@context/BuilderContext";
+import { Animated, Pressable, SectionList, View } from "react-native";
+import { ArmyListFilters, ArmyListProps, ListSections } from "@context/BuilderContext";
 import { useTheme } from "@hooks/useTheme";
 import ArmyListCard from "@navigation/Builder/components/ArmyListCard";
-import { StandardModal, Text, TextBlock } from "@components/index";
+import { Button, StandardModal, Text, TextBlock } from "@components/index";
 import React, { useRef, useState } from "react";
 import Constants from "expo-constants";
 import CustomText from "@components/CustomText";
 import { useToast } from "react-native-toast-notifications";
 import LogoWmr from "@components/SVGS/LogoWmr";
 import { useTranslation } from "react-i18next";
-
+import IconButton from "@components/IconButton";
+import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
+import MenuOptionButton from "@components/MenuOptionButton";
+import { Feather } from "@expo/vector-icons";
+import ArmyListFilter from "./ArmyListFilter";
 export type armySectionListDataProps = {
 	title: string;
 	data: ArmyListProps[];
@@ -24,8 +31,14 @@ export type BuilderHomeListProps = {
 	handleEditArmyPress: (armyId: string) => void;
 	handleToggleFavourite: (armyId: string) => void;
 	handleMigrateArmy: (armyId: string, versionNumber: number) => void;
+	handleFilterChange: (filter: ArmyListFilters, section: ListSections) => void;
+	favouritesFilters: ArmyListFilters[];
+	mainFilters: ArmyListFilters[];
 };
 const ArmySectionList = ({
+	mainFilters,
+	favouritesFilters,
+	handleFilterChange,
 	sectionListData,
 	handleShowArmyNotesModal,
 	onDuplicateArmyPress,
@@ -54,6 +67,9 @@ const ArmySectionList = ({
 	const HEADER_MAX_HEIGHT = 140;
 	const HEADER_MIN_HEIGHT = 0;
 	const SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+	// filters
+	const [showFilterModal, setShowFilterModal] = useState(false);
+	const [focusedFilters, setFocusedFilters] = useState<"favourites" | "main">();
 	const DynamicHeader = ({ value }: any) => {
 		const animatedHeaderHeight = value.interpolate({
 			inputRange: [0, SCROLL_DISTANCE],
@@ -83,10 +99,20 @@ const ArmySectionList = ({
 							</Text>
 						</View>
 					</View>
-					<View style={{ marginTop: 12 }}>
-						<Text variant='heading2' style={{ textAlign: "center", fontSize: 16 }}>
-							{sectionListData[0]?.data?.length + sectionListData[1]?.data?.length} armies
-						</Text>
+					<View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+						<View style={{ marginTop: 12 }}>
+							<Text variant='heading2' style={{ textAlign: "center", fontSize: 16 }}>
+								{sectionListData[0]?.data?.length + sectionListData[1]?.data?.length} armies
+							</Text>
+						</View>
+						{/* <View style={{ height: 50, width: 50 }}>
+							<IconButton
+								onPress={() => console.log("Show filters")}
+								variant={"danger"}
+								title={""}
+								icon={<FontAwesome name='filter' size={24} color='black' />}
+							/>
+						</View> */}
 					</View>
 				</>
 			</Animated.View>
@@ -116,6 +142,7 @@ const ArmySectionList = ({
 				sections={sectionListData}
 				renderSectionHeader={({ section: { title } }) => (
 					<View
+						key={title}
 						style={{
 							alignItems: "center",
 							padding: 12,
@@ -127,6 +154,19 @@ const ArmySectionList = ({
 						<Text variant='heading3' style={{ fontSize: 20, textTransform: "uppercase" }}>
 							{title}
 						</Text>
+						{title === "Favourited" ? (
+							<ArmyListFilter
+								listTarget='favourites'
+								filters={favouritesFilters}
+								handleFilterChange={(filter, target) => handleFilterChange(filter, target)}
+							/>
+						) : (
+							<ArmyListFilter
+								listTarget='main'
+								filters={mainFilters}
+								handleFilterChange={(filter, target) => handleFilterChange(filter, target)}
+							/>
+						)}
 					</View>
 				)}
 				ItemSeparatorComponent={() => <View style={{ height: 8, backgroundColor: "transparent" }}></View>}
@@ -175,6 +215,16 @@ const ArmySectionList = ({
 				onCancel={() => setShowMigrateModal(false)}
 				submitText={`Migrate to ${CURRENT_VERSION}`}
 				cancelText={"I will do this later"}
+			></StandardModal>
+			<StandardModal
+				visible={showFilterModal}
+				content={
+					<View>
+						<Text>Hide Old Lists</Text>
+					</View>
+				}
+				heading={focusedFilters == "favourites" ? "Favourites filter" : "Armies Filter"}
+				onCancel={() => setShowFilterModal(false)}
 			></StandardModal>
 		</View>
 	);
