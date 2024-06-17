@@ -11,6 +11,8 @@ import Constants from "expo-constants";
 import _ from "lodash";
 import magicItemsList from "../data/json/wmr/magic-items.json";
 
+export type ArmyListFilters = "old" | "losers" | "all";
+export type ListSections = "favourites" | "main";
 type ArmyErrorsProps = {
 	source?: "Unit" | "Upgrade";
 	sourceName: string;
@@ -54,6 +56,7 @@ export type ArmyListProps = {
 };
 interface BuilderContextInterface {
 	userArmyLists: ArmyListProps[];
+	getUserArmyLists: (filters?: ArmyListFilters[]) => ArmyListProps[];
 	addUserArmyList: (faction: number, name: string, autopopulate: boolean, versionNumber: number) => Promise<string>;
 	deleteUserArmyList: (armyId: string) => void;
 	duplicateArmyList: (armyId: string) => void;
@@ -253,6 +256,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 			selectedUpgrades: [],
 			versionNumber: versionNumber,
 			points: 0,
+			armyNotes: "",
 		};
 		// autopopulate if true
 		const _factionDetails = getFactionUnitsByVersion(faction, versionNumber);
@@ -854,10 +858,25 @@ export const BuilderContextProvider = ({ children }: any) => {
 		});
 		return specificUpgradesForUnitArr;
 	};
+	const getUserArmyLists = (filters?: ArmyListFilters[]) => {
+		if (filters && filters?.length > 0) {
+			if (filters.find((x) => x == "all")) {
+				return userArmyLists;
+			} else {
+				const filteredByVersion = userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
+				return filteredByVersion;
+			}
+		} else {
+			console.log("getUserARmyLists _ RETURNING ALL LISDTS");
+			const filteredByVersion = userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
+			return filteredByVersion;
+		}
+	};
 
 	return (
 		<BuilderContext.Provider
 			value={{
+				getUserArmyLists,
 				userArmyLists,
 				addUserArmyList,
 				duplicateArmyList,

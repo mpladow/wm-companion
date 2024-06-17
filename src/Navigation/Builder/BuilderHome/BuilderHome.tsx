@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@hooks/useTheme";
 import { StandardModal, Text, TextBlock } from "@components/index";
-import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
+import { ArmyListFilters, ArmyListProps, ListSections, useBuilderContext } from "@context/BuilderContext";
 import fonts from "@utils/fonts";
 import { useNavigation } from "@react-navigation/native";
 import PopupConfirm from "@components/PopupConfirm";
@@ -14,6 +14,7 @@ import ArmySectionList, { armySectionListDataProps } from "./components/ArmySect
 import AddArmyButton from "./components/AddArmyButton";
 import CreateArmyModal from "./components/CreateArmyModal/CreateArmyModal";
 import { useUpdateChecker } from "@context/UpdateCheckerContext";
+import { filter } from "lodash";
 
 const BuilderHome = () => {
 	const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -23,6 +24,9 @@ const BuilderHome = () => {
 	const [showArmyNotes, setShowArmyNotes] = useState(false);
 	const [sectionListData, setSectionListData] = useState<armySectionListDataProps[]>([]);
 
+	const [filterFavourites, setFilterFavourites] = useState<ArmyListFilters[]>(["all"] as ArmyListFilters[]);
+	const [filterMain, setFilterMain] = useState<ArmyListFilters[]>(["all"] as ArmyListFilters[]);
+
 	const { theme } = useTheme();
 	const navigation = useNavigation();
 	const builder = useBuilderContext();
@@ -30,8 +34,10 @@ const BuilderHome = () => {
 	const toast = useToast();
 
 	useEffect(() => {
-		const favourited = builder.userArmyLists.filter((x) => x.isFavourite);
-		const notFavourited = builder.userArmyLists.filter((x) => !x.isFavourite);
+		console.log("🚀 ~ BuilderHome ~ filterFavourites:", filterFavourites);
+		console.log("🚀 ~ BuilderHome ~ filterMain:", filterMain);
+		const favourited = builder.getUserArmyLists(filterFavourites).filter((x) => x.isFavourite);
+		const notFavourited = builder.getUserArmyLists(filterMain).filter((x) => !x.isFavourite);
 		const sLData: armySectionListDataProps = {
 			data: favourited,
 			title: "Favourited",
@@ -44,7 +50,7 @@ const BuilderHome = () => {
 		arr.push(sLData);
 		arr.push(notFavouritedSLData);
 		setSectionListData(arr);
-	}, [builder.userArmyLists]);
+	}, [builder.userArmyLists, filterMain, filterFavourites]);
 
 	const handleShowArmyNotesModal = (armyId: string) => {
 		setFocusedArmy(builder.getArmyByArmyId(armyId));
@@ -100,6 +106,31 @@ const BuilderHome = () => {
 		setShowChangeLogModal(false);
 	};
 
+	// const handleFilterFavouritesChange = (newFilter: ArmyListFilters) => {
+	// 	setFilterFavourites([...filterFavourites, newFilter]);
+	// };
+	const handleFilterChange = (newFilter: ArmyListFilters, section: ListSections) => {
+		console.log("🚀 ~ handleFilterChange ~ section:", section);
+		if (section == "main") {
+			setFilterMain((filters) => {
+				if (filters.find((x) => x == newFilter)) {
+					return filters.filter((x) => x !== newFilter);
+				} else {
+					return [...filters, newFilter];
+				}
+			});
+		} else {
+			console.log("setting filters");
+			setFilterFavourites((filters) => {
+				if (filters.find((x) => x == newFilter)) {
+					return filters.filter((x) => x !== newFilter);
+				} else {
+					return [...filters, newFilter];
+				}
+			});
+		}
+	};
+
 	const generateContent = () => {
 		return (
 			<ScrollView>
@@ -152,6 +183,7 @@ const BuilderHome = () => {
 				/>
 
 				<ArmySectionList
+					handleFilterChange={handleFilterChange}
 					sectionListData={sectionListData}
 					handleShowArmyNotesModal={handleShowArmyNotesModal}
 					onDuplicateArmyPress={onDuplicateArmyPress}
@@ -160,6 +192,8 @@ const BuilderHome = () => {
 					handleEditArmyPress={handleEditArmyPress}
 					handleToggleFavourite={builder.toggleFavourite}
 					handleMigrateArmy={builder.migrateArmyList}
+					favouritesFilters={filterFavourites}
+					mainFilters={filterMain}
 				/>
 				<PopupConfirm
 					visible={confirmDialog}

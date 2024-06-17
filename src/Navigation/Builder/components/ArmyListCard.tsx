@@ -59,7 +59,7 @@ const ArmyListCard = ({
 	};
 
 	return (
-		<TouchableOpacity onPress={() => handleArmyListPress(armyList.armyId)}>
+		<TouchableOpacity key={armyList.armyId} onPress={() => handleArmyListPress(armyList.armyId)}>
 			<View
 				style={{
 					overflow: "hidden",
@@ -175,7 +175,7 @@ const ArmyListCard = ({
 											color: theme.text,
 										}}
 									>
-										<AntDesign name="warning" size={24} color={theme.text} />
+										<AntDesign name='warning' size={24} color={theme.text} />
 										{/* Migrate to {CURRENT_VERSION} */}
 									</Text>
 								</View>
@@ -255,6 +255,6 @@ const styles = StyleSheet.create({
 		width: 120,
 		height: 150,
 		// resizeMode: "contain",
-		marginTop: -8
+		marginTop: -8,
 	},
 });

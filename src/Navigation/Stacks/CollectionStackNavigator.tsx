@@ -1,10 +1,12 @@
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CollectionHome from "@navigation/Collection/CollectionHome";
 import CollectionEdit from "@navigation/Collection/CollectionEdit";
 import { Text } from "@components/index";
 import { useTheme } from "@hooks/useTheme";
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
 
 export type CollectionStackParamsList = {
 	CollectionEdit: { collectionId: string; unitName: string };
@@ -14,6 +16,7 @@ export type CollectionStackParamsList = {
 const CollectionStack = createNativeStackNavigator();
 const CollectionStackNavigator = () => {
 	const { theme } = useTheme();
+	const nav = useNavigation();
 	return (
 		<CollectionStack.Navigator
 			screenOptions={{
@@ -40,6 +43,11 @@ const CollectionStackNavigator = () => {
 				component={CollectionHome}
 				options={{
 					// headerShown: false,
+					headerLeft: (x) => (
+						<Pressable onPress={() => nav.goBack()}>
+							<AntDesign name='left' size={24} color={x.tintColor} />
+						</Pressable>
+					),
 					title: "Collection",
 				}}
 			/>
