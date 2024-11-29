@@ -83,7 +83,7 @@ const TrackerHome = () => {
 								</View>
 							</Button>
 							<View style={{ padding: 8 }}></View>
-							<Button onPress={onScoutingPress} variant={"default"}>
+							<Button onPress={onBlunderPress} variant={"default"}>
 								<View style={{ flexDirection: "row", alignItems: "center" }}>
 									<Ionicons name='warning' size={24} color={theme.text} />
 									<Text style={{ marginLeft: 4 }}>Blunder Chart</Text>
