@@ -5,25 +5,20 @@
     "promptToConfigurePushNotifications": false
   },
   "build": {
-    "preview": {
-      "android": {
-        "buildType": "apk"
-      },
-      "channel": "preview"
-    },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      },
-      "channel": "preview2"
-    },
-    "preview3": {
+    "development": {
       "developmentClient": true,
-      "channel": "preview3"
+      "distribution": "internal"
     },
-    "production": {
-      "channel": "production",
-      "autoIncrement": true
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {},
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
     }
   },
   "submit": {
