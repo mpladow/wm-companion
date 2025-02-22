@@ -2,6 +2,7 @@ import { View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Button, Text } from "@components/index";
 import { Theme } from "@hooks/useTheme";
+import Animated, { FadeInDown, SlideInDown } from "react-native-reanimated";
 
 const AddArmyButton = ({
 	handleAddArmyPress,
@@ -17,14 +18,16 @@ const AddArmyButton = ({
 			{/* <Button circle onPress={handleAddArmyPress} variant={"confirm"}>
                 <AntDesign name='plus' size={24} color='black' />
             </Button> */}
-			<Button onPress={handleAddArmyPress} variant={"confirm"}>
-				<View style={{ flexDirection: "row", alignItems: "center" }}>
-					<AntDesign name='plus' size={20} color='black' />
-					<Text bold style={{ marginLeft: 4, color: theme.black }}>
-						{buttonName}
-					</Text>
-				</View>
-			</Button>
+			<Animated.View entering={FadeInDown}>
+				<Button onPress={handleAddArmyPress} variant={"confirm"}>
+					<View style={{ flexDirection: "row", alignItems: "center" }}>
+						<AntDesign name='plus' size={20} color='black' />
+						<Text bold style={{ marginLeft: 4, color: theme.black }}>
+							{buttonName}
+						</Text>
+					</View>
+				</Button>
+			</Animated.View>
 		</View>
 	);
 };

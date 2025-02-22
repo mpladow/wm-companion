@@ -1,4 +1,4 @@
-import { Animated, Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@hooks/useTheme";
@@ -14,8 +14,6 @@ import ArmySectionList, { armySectionListDataProps } from "./components/ArmySect
 import AddArmyButton from "./components/AddArmyButton";
 import CreateArmyModal from "./components/CreateArmyModal/CreateArmyModal";
 import { useUpdateChecker } from "@context/UpdateCheckerContext";
-import { filter } from "lodash";
-import AnimatedHeader from "@components/AnimatedHeader/AnimatedHeader";
 
 const BuilderHome = () => {
 	const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -33,8 +31,6 @@ const BuilderHome = () => {
 	const builder = useBuilderContext();
 	const { t } = useTranslation(["builder", "common", "forms"]);
 	const toast = useToast();
-
-	const scrollY = useRef(new Animated.Value(0));
 
 	useEffect(() => {
 		console.log("🚀 ~ BuilderHome ~ filterFavourites:", filterFavourites);

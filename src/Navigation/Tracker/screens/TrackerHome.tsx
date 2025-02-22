@@ -13,11 +13,11 @@ import MainContainerWithImage from "@components/MainContainerWithImage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { HEADER_HEIGHT } from "src/constants/styling";
+import Animated, { FadeIn } from "react-native-reanimated";
 
 const TrackerHome = () => {
 	const { theme } = useTheme();
 	const navigation = useNavigation<NativeStackNavigationProp<TrackerStackParamList>>();
-	const vpContext = useVictoryPoints();
 	const { t } = useTranslation(["tracker", "home"]);
 
 	const onBlunderPress = () => {
@@ -29,7 +29,7 @@ const TrackerHome = () => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
 			<MainContainerWithImage>
-				<View
+				<Animated.View entering={FadeIn}
 					style={{
 						height: "100%",
 						zIndex: 9,
@@ -105,7 +105,7 @@ const TrackerHome = () => {
 						</View> */}
 						</View>
 					</View>
-				</View>
+				</Animated.View>
 			</MainContainerWithImage>
 		</SafeAreaView>
 	);
