@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Button, Text } from '@components/index';
 import { Theme } from '@hooks/useTheme';
-import Animated, { FadeInDown, SlideInDown } from 'react-native-reanimated';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 type AddArmyButtonProps = {
@@ -12,7 +12,7 @@ type AddArmyButtonProps = {
 };
 const AddArmyButton = ({ onAddArmyPress, theme, buttonName }: AddArmyButtonProps) => {
   const handleAddArmyPress = () => {
-    onAddArmyPress;
+    onAddArmyPress();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
   return (
