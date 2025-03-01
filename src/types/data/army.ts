@@ -1,5 +1,7 @@
 import { UnitProps } from "@utils/types";
 
+// DEPRECATE THIS YEAR
+
 export type ArmyReferenceType = {
 	name: string;
 	version: string;

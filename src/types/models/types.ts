@@ -1,5 +1,7 @@
-import { SpecialRulesType } from './data/army';
-import { UnitType } from './schema/faction';
+import { SpecialRulesType } from '../data/army';
+import { UnitType } from '../schema/faction';
+
+// these are the types that contain the fully hydrated object from the schema. It combines all the relationships into a single entity 
 
 export type FactionType = {
 	name: string;

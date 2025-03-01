@@ -16,6 +16,8 @@ import { CollectionProvider } from '@context/CollectionContext';
 import { UpdateCheckerContextProvider } from '@context/UpdateCheckerContext';
 import * as Font from 'expo-font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { FactionProvider } from '@context/FactionDataContext';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const darkTheme = {
   dark: true,
@@ -80,26 +82,28 @@ const App = () => {
   return (
     <GestureHandlerRootView>
       <ThemeContextProvider>
-        <ToastProvider>
-          <UpdateCheckerContextProvider>
-            <SettingsContextProvider>
-              <RootSiblingParent>
-                <MenuProvider>
-                  <CollectionProvider>
-                    <BuilderContextProvider>
-                      <VPContextProvider>
-                        <NavigationContainer theme={darkTheme}>
-                          <RootStack />
-                          <StatusBar translucent />
-                        </NavigationContainer>
-                      </VPContextProvider>
-                    </BuilderContextProvider>
-                  </CollectionProvider>
-                </MenuProvider>
-              </RootSiblingParent>
-            </SettingsContextProvider>
-          </UpdateCheckerContextProvider>
-        </ToastProvider>
+        <BottomSheetModalProvider>
+          <ToastProvider>
+            <UpdateCheckerContextProvider>
+              <SettingsContextProvider>
+                <RootSiblingParent>
+                  <MenuProvider>
+                    <CollectionProvider>
+                      <BuilderContextProvider>
+                        <VPContextProvider>
+                          <NavigationContainer theme={darkTheme}>
+                            <RootStack />
+                            <StatusBar translucent />
+                          </NavigationContainer>
+                        </VPContextProvider>
+                      </BuilderContextProvider>
+                    </CollectionProvider>
+                  </MenuProvider>
+                </RootSiblingParent>
+              </SettingsContextProvider>
+            </UpdateCheckerContextProvider>
+          </ToastProvider>
+        </BottomSheetModalProvider>
       </ThemeContextProvider>
     </GestureHandlerRootView>
   );
