@@ -243,12 +243,12 @@ const BuilderHome = () => {
           headerText={t('DeleteArmy', { ns: 'builder' })}
         />
       </ImageBackground>
-      <CreateArmyModal
+      {/* <CreateArmyModal
         onDismissCreateArmyModal={handleDismissArmyCreateModal}
         theme={theme}
         focusedArmy={focusedArmy}
         isVisible={showCreateArmy}
-      />
+      /> */}
       <CreateArmyModalV2
         ref={ref}
         onChange={handleAddArmyPress}

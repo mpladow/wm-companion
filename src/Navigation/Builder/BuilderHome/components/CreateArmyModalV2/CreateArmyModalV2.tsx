@@ -34,9 +34,28 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
       // handle army creation here
       // dismiss modal and then navigate to next screen
     };
-    //   useEffect(() => {
-    //     ref.current?.present();
-    //   }, []);
+
+    //   const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
+    //     if (factionName == '') {
+    //       console.error('🚀 ~ onConfirmCreateArmyPress ~ factionName:', factionName);
+    //       setFactionNameError(true);
+    //     } else {
+    //       setFactionNameError(false);
+    //     }
+    //     if (factionSelection && factionName != '') {
+    //       builder
+    //         .addUserArmyList(factionSelection, factionName, autopopulate, CURRENT_VERSION)
+    //         .then((result) => {
+    //           builder.setSelectedArmyList(result);
+    //         })
+    //         .catch(() => {})
+    //         .finally(() => {
+    //           // navigation.navigate("BuilderEdit");
+    //           handleDismiss();
+    //           toast.show(`New army created!`);
+    //         });
+    //     }
+    //   };
 
     // renders
     const renderFooter = useCallback(
@@ -66,7 +85,7 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
         <View
           style={{
             backgroundColor: theme.blueGrey,
-            height: 40,
+            height: 20,
             alignItems: 'center',
             paddingVertical: 12,
             borderTopLeftRadius: 12,
@@ -76,6 +95,7 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
         </View>
       );
     }, []);
+
 
     return (
       <RNBottomSheet
@@ -103,11 +123,10 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
           }}>
           <>
             <View style={{ flex: 1, justifyContent: 'space-between' }}>
-              {!focusedArmy ? (
-                <ArmyCreationV2 theme={theme} handleDismissModal={onDismiss} />
-              ) : (
-                <EditArmyForm theme={theme} focusedArmy={focusedArmy} onDismiss={onDismiss} />
-              )}
+              <ArmyCreationV2
+                theme={theme}
+                handleDismissModal={onDismiss}
+              />
             </View>
           </>
         </View>

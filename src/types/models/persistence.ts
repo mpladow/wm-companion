@@ -14,35 +14,26 @@ export type ArmyListPersistenceType = {
 	order: number;
 	selectedUnits: UnitPersistenceType[];
 	selectedCharacters: CharacterPersistenceType[];
-	points: number;
 };
 
 export type UnitPersistenceType = {
-	id: number;
+	id: string;
+	unitId: number;
 	name: string;
-	min?: number;
-	armyMin?: number;
-	armyMax?: number;
-	max?: number;
 	selectedUpgrades: UpgradePersistenceType[]
-	points: number;
 }
 
 export type CharacterPersistenceType = {
-	id: number;
+	id: string;
+	characterId: number;
 	name: string;
-	upgrades?: string[]; // ids of upgrades per character
-	armyMin?: number;
-	permittedUpgrades?: string[]
 	selectedUpgrades: UpgradePersistenceType[];
-	points: number;
 }
 
 
 export type UpgradePersistenceType = {
-	id: number;
+	id: string;
+	upgradeId: number;
 	name: string;
-	max?: number;
-	points: number;
 }
 

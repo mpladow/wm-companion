@@ -22,7 +22,11 @@ import { Factions } from '@utils/constants';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
 import { Button } from '@components/index';
 import { useFactionListsV2 } from '@hooks/useArmyList';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeOutRight } from 'react-native-reanimated';
+import { useBuilderV2Context } from '@context/BuilderV2Context';
+import { useFactionDataContext } from '@context/FactionDataContext';
+import ThemedButton from '@components/Button/ThemedButton';
+import EditArmyV2 from './EditArmyV2';
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
@@ -33,8 +37,8 @@ type ArmyCreationV2Props = {
 };
 const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
   const builder = useBuilderContext();
-
-  const { getFactionUnitsByVersion } = useFactionUnits();
+  const { createUserArmyList } = useBuilderV2Context();
+  const { factionDetailsFromApi, setFaction } = useFactionDataContext();
   const { t } = useTranslation(['builder', 'common', 'forms']);
   const toast = useToast();
   const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
@@ -47,7 +51,24 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [selectedFactionId, setSelectedFactionId] = useState<Factions | undefined>(undefined);
-  const { factionDetailsFromApi } = useFactionListsV2(selectedFactionId);
+  //   const { factionDetailsFromApi } = useFactionListsV2(selectedFactionId);
+
+  const [showFactionSelection, setShowFactionSelection] = useState(true);
+  const [showFactionEditDetails, setShowFactionEditDetails] = useState(false);
+
+  const [formArmyName, setFormArmyName] = useState('');
+  const [formArmyNameError, setFormArmyNameError] = useState('');
+  const [formArmyNotes, setFormArmyNotes] = useState('');
+  const [formArmyNotesError, setFormArmyNotesError] = useState('');
+
+  const handleSetFaction = () => {
+    setFaction(selectedFactionId);
+  };
+
+  useEffect(() => {
+    handleSetFaction();
+    // console.log(builder.factionDetails, 'dfd');
+  }, [selectedFactionId]);
 
   // faction selection
   const setCurrentActiveIndex = (index: number) => {
@@ -78,25 +99,21 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
     const { ddFactionList } = getFactionsDropdown();
     setDdFactions(ddFactionList);
   }, []);
+
   useEffect(() => {
-    // get factionDescription
-    const factionunits = getFactionUnitsByVersion(factionSelection as number, CURRENT_VERSION);
-    setFactionDescription(factionunits.description);
-  }, [factionSelection]);
-  useEffect(() => {
-    if (factionName != '') setFactionNameError(false);
-  }, [factionName]);
+    if (formArmyName != '') setFormArmyNameError('');
+  }, [formArmyName]);
 
   const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
-    if (factionName == '') {
+    if (formArmyName == '') {
       console.error('🚀 ~ onConfirmCreateArmyPress ~ factionName:', factionName);
       setFactionNameError(true);
     } else {
       setFactionNameError(false);
     }
-    if (factionSelection && factionName != '') {
+    if (factionSelection && formArmyName != '') {
       builder
-        .addUserArmyList(factionSelection, factionName, autopopulate, CURRENT_VERSION)
+        .addUserArmyList(factionSelection, formArmyName, autopopulate, CURRENT_VERSION)
         .then((result) => {
           builder.setSelectedArmyList(result);
         })
@@ -118,124 +135,184 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
     resetForm();
     handleDismissModal();
   };
+  const handlePrimaryButtonPress = () => {
+    console.log('🚀 ~ handlePrimaryButtonPress ~ showFactionSelection:', selectedFactionId);
+    if (showFactionSelection && selectedFactionId !== null) {
+      setShowFactionEditDetails(true);
+      setShowFactionSelection(false);
+    }
+    if (showFactionEditDetails && formArmyName !== '' && selectedFactionId) {
+      console.log('🚀 ~ handlePrimaryButtonPress ~ selectedFactionId:', selectedFactionId);
+      createUserArmyList(selectedFactionId, formArmyName, formArmyNotes, true, 0);
+    }
+    createUserArmyList;
+  };
 
+  const handleBack = () => {
+    setShowFactionEditDetails(false);
+    setShowFactionSelection(true);
+  };
   const thumbRef = useRef<FlatList>(null);
   const nameRef = useRef<TextInput>(null);
 
   return (
     <>
-      <View style={{ height: 70, marginVertical: 4 }}>
-        <ImageBackground
-          resizeMode="stretch"
-          style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 10, height: 70 }}
-          source={require('../../../../../../images/svgs/scroll_header.png')}>
-          <ThemedText
-            style={{
-              zIndex: 999,
-              textAlign: 'center',
-              fontSize: 20,
-              color: theme.textInverted,
-            }}
-            bold>
-            {factionDetailsFromApi?.name}
-          </ThemedText>
-        </ImageBackground>
-      </View>
-      <ScrollView
-        onStartShouldSetResponder={() => true}
-        contentContainerStyle={{ flexGrow: 1 }}
-        scrollEnabled={true}>
-        {factionDetailsFromApi == null && (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ThemedText style={{ textAlign: 'center', fontSize: 20 }} bold>
-              Select a faction
-            </ThemedText>
-          </View>
-        )}
-        {factionDetailsFromApi?.description.map((item, index) => {
-          return <ThemedText style={{ textAlign: 'center', paddingBottom: 4 }}>{item}</ThemedText>;
-        })}
-      </ScrollView>
-      <View style={{ marginTop: 12 }}>
-        <FlatList
-          ref={thumbRef}
-          horizontal
-          data={ddFactions}
-          // snapToInterval={width / 2 - THUMBNAIL_WIDTH + 5}
-          contentContainerStyle={{
-            paddingHorizontal: SPACING,
-            paddingVertical: 4,
-          }}
-          renderItem={({ item, index }) => {
-            const armyName = item.value ? getKeyByValue(Factions, item?.value as number) : '';
-
-            const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  setCurrentActiveIndex(index);
-                  setSelectedFactionId(item.value);
-                  console.log(item, 'ITEM');
+      {showFactionSelection ? (
+        <Animated.View entering={FadeInLeft.delay(200)} exiting={FadeOutRight}>
+          <View style={{ height: 120, marginVertical: 4 }}>
+            <Animated.View style={{ alignItems: 'center', height: 40 }} entering={FadeIn}>
+              <ThemedText size="lg" bold>
+                Select Faction
+              </ThemedText>
+            </Animated.View>
+            <ImageBackground
+              resizeMode="stretch"
+              style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 10, height: 70 }}
+              source={require('../../../../../../images/svgs/scroll_header.png')}>
+              <ThemedText
+                style={{
+                  zIndex: 999,
+                  textAlign: 'center',
+                  fontSize: 20,
+                  color: theme.textInverted,
                 }}
-                key={index}
-                style={{ overflow: 'hidden' }}>
-                <View
-                  style={{
-                    width: activeIndex == index ? THUMBNAIL_WIDTH + 5 : THUMBNAIL_WIDTH + 5,
-                    height: activeIndex == index ? THUMBNAIL_HEIGHT + 20 : THUMBNAIL_HEIGHT + 20,
-                    backgroundColor: theme.background,
-                    borderRadius: 8,
-                    borderColor: activeIndex == index ? theme.warning : theme.background,
-                    borderWidth: 2,
-                    marginRight: SPACING,
-                    overflow: 'hidden',
-                  }}>
-                  <Image
-                    style={[
-                      styles.stretch,
-                      {
-                        width: activeIndex == index ? THUMBNAIL_WIDTH + 5 : THUMBNAIL_WIDTH + 5,
-                        height: activeIndex == index ? THUMBNAIL_HEIGHT - 2 : THUMBNAIL_HEIGHT - 2,
-                      },
-                    ]}
-                    source={factionAssets && factionAssets[0]}
-                  />
+                bold>
+                {factionDetailsFromApi?.name}
+              </ThemedText>
+            </ImageBackground>
+          </View>
+          <ScrollView
+            onStartShouldSetResponder={() => true}
+            contentContainerStyle={{ flexGrow: 1 }}
+            scrollEnabled={true}>
+            {factionDetailsFromApi == null && (
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ThemedText style={{ textAlign: 'center', fontSize: 20 }} bold>
+                  Select a faction
+                </ThemedText>
+              </View>
+            )}
+            {factionDetailsFromApi?.description.map((item, index) => {
+              return (
+                <ThemedText style={{ textAlign: 'center', paddingBottom: 4 }}>{item}</ThemedText>
+              );
+            })}
+          </ScrollView>
+          <View style={{ marginTop: 12 }}>
+            <FlatList
+              ref={thumbRef}
+              horizontal
+              data={ddFactions}
+              // snapToInterval={width / 2 - THUMBNAIL_WIDTH + 5}
+              contentContainerStyle={{
+                paddingHorizontal: SPACING,
+                paddingVertical: 4,
+              }}
+              renderItem={({ item, index }) => {
+                const armyName = item.value ? getKeyByValue(Factions, item?.value as number) : '';
 
-                  <View
-                    style={{
-                      zIndex: 999,
-                      backgroundColor: theme.white,
-                      height: 20,
-                      borderBottomLeftRadius: 8,
-                      borderBottomRightRadius: 8,
-                    }}>
-                    <ThemedText
-                      bold
+                const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setCurrentActiveIndex(index);
+                      setSelectedFactionId(item.value);
+                      console.log(item, 'ITEM');
+                    }}
+                    key={index}
+                    style={{ overflow: 'hidden' }}>
+                    <View
                       style={{
-                        textAlign: 'center',
-                        color: theme.textInverted,
+                        width: activeIndex == index ? THUMBNAIL_WIDTH + 5 : THUMBNAIL_WIDTH + 5,
+                        height:
+                          activeIndex == index ? THUMBNAIL_HEIGHT + 20 : THUMBNAIL_HEIGHT + 20,
+                        backgroundColor: theme.background,
+                        borderRadius: 8,
+                        borderColor: activeIndex == index ? theme.warning : theme.background,
+                        borderWidth: 2,
+                        marginRight: SPACING,
+                        overflow: 'hidden',
                       }}>
-                      {item.label}
-                    </ThemedText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-          ItemSeparatorComponent={() => <View style={{ width: 12 }}></View>}
-        />
-      </View>
+                      <Image
+                        style={[
+                          styles.stretch,
+                          {
+                            width: activeIndex == index ? THUMBNAIL_WIDTH + 5 : THUMBNAIL_WIDTH + 5,
+                            height:
+                              activeIndex == index ? THUMBNAIL_HEIGHT - 2 : THUMBNAIL_HEIGHT - 2,
+                          },
+                        ]}
+                        source={factionAssets && factionAssets[0]}
+                      />
+
+                      <View
+                        style={{
+                          zIndex: 999,
+                          backgroundColor: theme.white,
+                          height: 20,
+                          borderBottomLeftRadius: 8,
+                          borderBottomRightRadius: 8,
+                        }}>
+                        <ThemedText
+                          bold
+                          style={{
+                            textAlign: 'center',
+                            color: theme.textInverted,
+                          }}>
+                          {item.label}
+                        </ThemedText>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+              ItemSeparatorComponent={() => <View style={{ width: 12 }}></View>}
+            />
+          </View>
+        </Animated.View>
+      ) : (
+        <Animated.View entering={FadeInLeft.delay(200)} exiting={FadeOutRight}>
+          <EditArmyV2
+            armyName={formArmyName}
+            onArmyNameChange={setFormArmyName}
+            armyNotes={formArmyNotes}
+            onArmyNotesChange={setFormArmyNotes}
+            theme={theme}
+          />
+        </Animated.View>
+      )}
       <View style={{ paddingTop: 16, flexDirection: 'column' }}>
-        <Button onPress={() => onConfirmCreateArmyPress(true)} variant={'confirm'}>
-          <ThemedText bold style={{ textTransform: 'uppercase', color: theme.black }}>
-            {t('Create', { ns: 'common' })}
-          </ThemedText>
-        </Button>
-        <Button onPress={() => handleDismiss()} variant={'text'}>
+        {selectedFactionId && (
+          <Animated.View entering={FadeIn}>
+            <ThemedButton
+              onPress={handlePrimaryButtonPress}
+              buttonType="primary"
+              variant={showFactionSelection ? 'ghost' : 'filled'}
+              buttonSize={'default'}>
+              {showFactionSelection ? 'Next: Army Name' : 'Create Army'}
+              {/* <ThemedText bold style={{ textTransform: 'uppercase', color: theme.black }}>
+              </ThemedText> */}
+            </ThemedButton>
+          </Animated.View>
+        )}
+        <View style={{ height: 6 }}></View>
+        <ThemedButton
+          onPress={() => (showFactionEditDetails ? handleBack() : handleDismiss())}
+          buttonType="secondary"
+          variant={'text'}
+          buttonSize="default">
+          {showFactionEditDetails ? 'Back' : 'Cancel'}
+          {/* <ThemedText bold style={{ textTransform: 'uppercase', color: theme.black }}>
+              </ThemedText> */}
+        </ThemedButton>
+
+        {/* <Button
+          onPress={() => (showFactionEditDetails ? handleBack() : handleDismiss())}
+          variant={'text'}>
           <ThemedText bold style={{ textTransform: 'uppercase', color: theme.white }}>
-            {t('Cancel', { ns: 'common' })}
+            {showFactionEditDetails ? 'Back' : 'Cancel'}
           </ThemedText>
-        </Button>
+        </Button> */}
       </View>
     </>
   );

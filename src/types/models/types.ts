@@ -17,6 +17,20 @@ export type FactionType = {
 	isCustom?: boolean
 }
 
+export type ArmyListType = {
+	versionNumber?: number;
+	armyId: string;
+	faction: number;
+	name: string;
+	isFavourite: boolean;
+	armyNotes: string;
+	order: number;
+	selectedUnits: UnitDetailsType[];
+	selectedCharacters: CharacterType[];
+	points: number;
+};
+
+
 export type UnitDetailsType = {
 	id: number;
 	name: string;

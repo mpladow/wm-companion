@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useEffect, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { FactionDto } from 'src/types/schema/faction';
 import { AllSpecialRulesType, FactionType } from 'src/types/models/types';
 import empireList from '../data/json/wmr/v3/empire.json';
@@ -6,10 +6,12 @@ import genericRules from '../data/json/wmr/v3/GenericRules/genericRules.json';
 import { Factions } from '@utils/constants';
 
 type FactionContextType = {
-  factionData: FactionType;
+  setFaction: (id?: Factions) => void;
+  factionDetailsFromApi?: FactionDto;
+  factionDetails?: FactionType;
 };
 
-const FactionContext = createContext<FactionContextType>({} as FactionContextType);
+export const FactionContext = createContext<FactionContextType>({} as FactionContextType);
 
 export const FactionProvider = ({ children }: PropsWithChildren) => {
   const [factionDetailsFromApi, setFactionDetailsFromApi] = useState<FactionDto>();
@@ -18,7 +20,8 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
 
   const [factionDetails, setFactionDetails] = useState<FactionType>();
 
-  const setFaction = (faction: Factions) => {
+  const setFaction = (faction?: Factions) => {
+    console.log('🚀 ~ setFaction ~ faction:', faction);
     getUnitsByFaction(faction);
   };
 
@@ -71,7 +74,8 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
     setFactionSpecialRulesFromApi(list);
   };
 
-  const getUnitsByFaction = (faction: Factions) => {
+  const getUnitsByFaction = (faction?: Factions) => {
+    console.log('🚀 ~ getUnitsByFaction ~ faction:', faction);
     // can replace this with an api call
     switch (faction) {
       // case Factions.Bretonnia:
@@ -219,8 +223,22 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
 
       // 	break;
       default:
+        setFactionDetailsFromApi(undefined);
+
         break;
     }
   };
-  return { factionDetailsFromApi, setFaction };
+  return (
+    <FactionContext.Provider value={{ setFaction, factionDetailsFromApi, factionDetails }}>
+      {children}
+    </FactionContext.Provider>
+  );
+};
+
+export const useFactionDataContext = () => {
+  let context = useContext(FactionContext);
+  if (context == null) {
+    throw new Error('NO CONTEXT EXISTS');
+  }
+  return context;
 };

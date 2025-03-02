@@ -1,20 +1,15 @@
-import { get1000PointInterval } from '@navigation/Builder/utils/builderHelpers';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UpgradeTypes } from '@utils/constants';
-import { FactionListProps, UpgradesProps } from '@utils/types';
-import { useFactionUnits } from '@utils/useFactionUnits';
-import { current, produce } from 'immer';
 import { createContext, useCallback, useContext, useEffect, useState, version } from 'react';
 import { useTranslation } from 'react-i18next';
 import uuid from 'uuid-random';
 import Constants from 'expo-constants';
 import _ from 'lodash';
-import magicItemsList from '../data/json/wmr/magic-items.json';
-import { FactionDto } from 'src/types/schema/faction';
-import { AllSpecialRulesType, FactionType } from 'src/types/models/types';
+import { ArmyListPersistenceType, UnitPersistenceType } from 'src/types/models/persistence';
+import { useFactionListsV2 } from '@hooks/useArmyList';
+import { useFactionDataContext } from './FactionDataContext';
 
 export type ArmyListFilters = 'old' | 'losers' | 'all';
 export type ListSections = 'favourites' | 'main';
+
 type ArmyErrorsProps = {
   source?: 'Unit' | 'Upgrade';
   sourceName: string;
@@ -57,55 +52,18 @@ export type ArmyListProps = {
   points: number;
 };
 interface BuilderContextInterface {
-  userArmyLists: ArmyListProps[];
-  getUserArmyLists: (filters?: ArmyListFilters[]) => ArmyListProps[];
-  addUserArmyList: (
+  allArmyLists: ArmyListPersistenceType[];
+  selectedArmyList?: ArmyListPersistenceType;
+  createUserArmyList: (
     faction: number,
     name: string,
+    notes: string,
     autopopulate: boolean,
     versionNumber: number
-  ) => Promise<string>;
-  deleteUserArmyList: (armyId: string) => void;
-  duplicateArmyList: (armyId: string) => void;
-  migrateArmyList: (armyId: string, versionNumber: number) => void;
-
-  setSelectedArmyList: (armyId: string) => void;
-  selectedArmyList?: ArmyListProps;
-  //armyName: string;
-  updateArmyName: (name: string, armyId: string) => void;
-  toggleFavourite: (armyId: string) => void;
-  updateArmyNotes: (armyId: string, notes: string) => void;
-  addUnit: (
-    unitName: string,
-    points?: number,
-    isLeader?: boolean,
-    maxCount?: number,
-    minCount?: number,
-    ignoreBreakPoint?: boolean
   ) => void;
-  removeUnit: (unitId: string) => void;
-  addItem: (
-    unitName: string,
-    type: string,
-    points: number,
-    magicItemName: string,
-    maxCount?: number,
-    armyLimitMaxCount?: number,
-    addOnUpgrades?: string[]
-  ) => void;
-  removeItem: (unitName: string, upgradeId: string) => void;
-  updateUserArmyLists: () => void;
-  setCurrentFaction: (faction: number) => void;
-  currentFaction?: number;
-  calculateCurrentArmyPoints: () => number;
-  factionDetails?: FactionListProps;
-  armyErrors: ArmyErrorsProps[];
-  getArmyByArmyId: (armyId: string) => ArmyListProps | undefined;
-  getUnitCounts: () => string;
-  getMagicItemsForUnit: (unitName: string) => any[];
 }
 
-const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
+const BuilderV2Context = createContext<BuilderContextInterface>({} as BuilderContextInterface);
 
 export const BuilderV2ContextProvider = ({ children }: any) => {
   //
@@ -114,35 +72,83 @@ export const BuilderV2ContextProvider = ({ children }: any) => {
 
   // parse the users army list saved in memory
   //
-    useState<AllSpecialRulesType[]>();
 
-  const [userLists, setUserLists] = useState<>()
+  //   const [userLists, setUserLists] = useState<>()
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
   // const CURRENT_VERSION = 2; // TODO: this should be retrieved by the config
   const { t } = useTranslation(['builder', 'units']);
+  const [allArmyLists, setAllArmyLists] = useState<ArmyListPersistenceType[]>([]);
+  const [userArmy, setUserArmy] = useState<ArmyListPersistenceType>();
+  const { factionDetailsFromApi } = useFactionDataContext();
 
   useEffect(() => {
     //AsyncStorage.removeItem(`userArmies`);
   }, []);
 
-  useEffect(() => {
-    // save changes to local storage
-    updateStorage();
-  }, [userArmyLists]);
+  const createUserArmyList = (
+    faction: number,
+    name: string,
+    notes: string,
+    autopopulate: boolean = true,
+    versionNumber: number
+  ) => {
+    console.log('🚀 ~ BuilderV2ContextProvider ~ newArmy:');
+
+    const newArmy: ArmyListPersistenceType = {
+      armyId: uuid(),
+      faction: faction,
+      name: name,
+      isFavourite: false,
+      armyNotes: notes,
+      order: 0, // todo: get total armies for user, then increment
+      selectedUnits: [],
+      selectedCharacters: [],
+    };
+    if (autopopulate) {
+      const factionUnits = factionDetailsFromApi?.units.filter(
+        (x) => x['min'] != undefined || x['armyMin'] != undefined
+      );
+      factionUnits?.map((item, index) => {
+        // add to newArmy, create a uuid
+        let unit: UnitPersistenceType = {
+          id: uuid(),
+          unitId: item.id,
+          name: item.name,
+          selectedUpgrades: [],
+        };
+        newArmy.selectedUnits.push(unit);
+      });
+      console.log('🚀 ~ BuilderV2ContextProvider ~ created army:', newArmy);
+    }
+    // add this army to the array of user's armies
+  };
+  const updateUserArmy = () => {};
+  const loadUserArmyById = () => {};
+
+  // PERSISTANCE
+  const updateArmyInStorage = () => {
+    // update this army in user storage. may happen when the user navigates out of the app.
+  };
+  const updateUserArmiesInStorage = () => {};
+  // load user army from storage
+
+  const loadUserArmiesfromStorage = () => {
+    // load all from persistant storage
+  };
 
   return (
-    <BuilderContext.Provider
+    <BuilderV2Context.Provider
       value={{
-        selectedArmyList: currentArmyList,
-
-        currentFaction: faction,
+        allArmyLists,
+        selectedArmyList: userArmy,
+        createUserArmyList,
       }}>
       {children}
-    </BuilderContext.Provider>
+    </BuilderV2Context.Provider>
   );
 };
 
-export const useBuilderContext = () => {
-  return useContext(BuilderContext);
+export const useBuilderV2Context = () => {
+  return useContext(BuilderV2Context);
 };

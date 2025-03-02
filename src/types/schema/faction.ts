@@ -36,6 +36,7 @@ export type UnitDto = {
 	upgrades?: string[];
 	/** faction specific upgrades */
 	factionUpgrades?: string[];
+	armyMin?: number;
 	armyMax?: number;
 	/** this unit can only be attached to an existing unit. it takes the armour value for the rest of the uni, either 6+ or 0. This also adds to the unit size. e.g. Skirmishers */
 	attachTo?: string[]

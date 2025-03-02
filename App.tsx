@@ -19,6 +19,7 @@ import * as Font from 'expo-font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { FactionProvider } from '@context/FactionDataContext';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { BuilderV2ContextProvider } from '@context/BuilderV2Context';
 
 const darkTheme = {
   dark: true,
@@ -83,28 +84,32 @@ const App = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <ThemeContextProvider>
-        <BottomSheetModalProvider>
-          <ToastProvider>
-            <UpdateCheckerContextProvider>
-              <SettingsContextProvider>
-                <RootSiblingParent>
-                  <MenuProvider>
-                    <CollectionProvider>
-                      <BuilderContextProvider>
-                        <VPContextProvider>
-                          <NavigationContainer theme={darkTheme}>
-                            <RootStack />
-                            <StatusBar translucent />
-                          </NavigationContainer>
-                        </VPContextProvider>
-                      </BuilderContextProvider>
-                    </CollectionProvider>
-                  </MenuProvider>
-                </RootSiblingParent>
-              </SettingsContextProvider>
-            </UpdateCheckerContextProvider>
-          </ToastProvider>
-        </BottomSheetModalProvider>
+        <ToastProvider>
+          <UpdateCheckerContextProvider>
+            <SettingsContextProvider>
+              <RootSiblingParent>
+                <MenuProvider>
+                  <CollectionProvider>
+                    <FactionProvider>
+                      <BuilderV2ContextProvider>
+                        <BuilderContextProvider>
+                          <VPContextProvider>
+                            <NavigationContainer theme={darkTheme}>
+                              <BottomSheetModalProvider>
+                                <RootStack />
+                                <StatusBar translucent />
+                              </BottomSheetModalProvider>
+                            </NavigationContainer>
+                          </VPContextProvider>
+                        </BuilderContextProvider>
+                      </BuilderV2ContextProvider>
+                    </FactionProvider>
+                  </CollectionProvider>
+                </MenuProvider>
+              </RootSiblingParent>
+            </SettingsContextProvider>
+          </UpdateCheckerContextProvider>
+        </ToastProvider>
       </ThemeContextProvider>
     </GestureHandlerRootView>
   );
