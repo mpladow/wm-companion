@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@hooks/useTheme';
 import { StandardModal, Text, TextBlock } from '@components/index';
@@ -27,6 +27,8 @@ import ArmySectionList, { armySectionListDataProps } from './components/ArmySect
 import AddArmyButton from './components/AddArmyButton';
 import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
+import CreateArmyModalV2 from './components/CreateArmyModalV2/CreateArmyModalV2';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 const BuilderHome = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -74,9 +76,9 @@ const BuilderHome = () => {
     setShowCreateArmy(false);
     setFocusedArmy(undefined);
   };
-  const handleAddArmyPress = () => {
-    setShowCreateArmy(true);
-  };
+  //   const handleAddArmyPress = () => {
+  //     setShowCreateArmy(true);
+  //   };
   const handleEditArmyPress = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
     setShowCreateArmy(!showCreateArmy);
@@ -177,6 +179,17 @@ const BuilderHome = () => {
     );
   };
 
+  const ref = useRef<BottomSheetModal>(null);
+  const handleAddArmyPress = useCallback(() => {
+    console.log('ADD');
+    ref.current?.present();
+  }, []);
+
+  const handleCloseArmyCreationPress = useCallback(() => {
+    console.log('dismiss');
+
+    ref.current?.dismiss();
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <ImageBackground
@@ -235,6 +248,13 @@ const BuilderHome = () => {
         theme={theme}
         focusedArmy={focusedArmy}
         isVisible={showCreateArmy}
+      />
+      <CreateArmyModalV2
+        ref={ref}
+        onChange={handleAddArmyPress}
+        onDismiss={handleCloseArmyCreationPress}
+        focusedArmy={focusedArmy}
+        onConfirm={handleCloseArmyCreationPress}
       />
       <AddArmyButton onAddArmyPress={handleAddArmyPress} theme={theme} buttonName={t('AddArmy')} />
       {/* Army Notes MOdal */}

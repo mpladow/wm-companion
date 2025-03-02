@@ -1,39 +1,37 @@
-import { ArmyListProps, useBuilderContext } from '@context/BuilderContext';
-import { Theme } from '@hooks/useTheme';
-import { DropDownItemProps } from '@navigation/Tracker/screens/Tracker';
-import { Factions } from '@utils/constants';
-import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
-import { Button, Text } from '@components/index';
-import { useFactionUnits } from '@utils/useFactionUnits';
-import Constants from 'expo-constants';
-import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Dimensions,
   FlatList,
+  ImageBackground,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
   TextInput,
-  ImageBackground,
+  TouchableOpacity,
+  Image,
+  View,
 } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Theme } from '@hooks/useTheme';
+import { useTranslation } from 'react-i18next';
+import { useBuilderContext } from '@context/BuilderContext';
 import { useToast } from 'react-native-toast-notifications';
-import fonts from '@utils/fonts';
+import { useFactionUnits } from '@utils/useFactionUnits';
+import { DropDownItemProps } from '@navigation/Tracker/screens/Tracker';
+import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
+import Constants from 'expo-constants';
+import { Factions } from '@utils/constants';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
+import { Button } from '@components/index';
+import { useFactionListsV2 } from '@hooks/useArmyList';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import React from 'react';
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
 const SPACING = 5;
-
-type CreateArmyFormType = {
+type ArmyCreationV2Props = {
   theme: Theme;
   handleDismissModal: () => void;
 };
-const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
+const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
   const builder = useBuilderContext();
 
   const { getFactionUnitsByVersion } = useFactionUnits();
@@ -46,13 +44,19 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
 
   const [factionSelection, setFactionSelection] = useState<number>();
   const [factionDescription, setFactionDescription] = useState([] as string[]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const [selectedFactionId, setSelectedFactionId] = useState<Factions | undefined>(undefined);
+  const { factionDetailsFromApi } = useFactionListsV2(selectedFactionId);
 
   // faction selection
   const setCurrentActiveIndex = (index: number) => {
+    console.log('🚀 ~ setCurrentActiveIndex ~ index:', index);
     if (index !== undefined) {
       setActiveIndex(index);
-      const x = ddFactions[index]?.value;
-      setFactionSelection(x as number);
+      // const x = ddFactions[index]?.value;
+
+      // setFactionSelection(x as number);
     }
     if (index * (THUMBNAIL_WIDTH + 19 + SPACING) - (THUMBNAIL_WIDTH + 19) / 2 > width / 2) {
       thumbRef?.current?.scrollToOffset({
@@ -67,7 +71,6 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
       });
     }
   };
-  const [activeIndex, setActiveIndex] = useState(0);
   const { width, height } = Dimensions.get('screen');
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
@@ -121,34 +124,12 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
 
   return (
     <>
-      <TextInput
-        ref={nameRef}
-        placeholder={t('PlaceholderEnterArmyName', { ns: 'forms' })}
-        onChangeText={(val) => setFactionName(val)}
-        style={[
-          {
-            color: theme.black,
-            fontFamily: fonts.PTSansBold,
-            fontSize: 16,
-            backgroundColor: theme.white,
-            borderRadius: 16,
-            padding: 16,
-          },
-          factionNameError && { borderColor: theme.danger, borderWidth: 4 },
-        ]}>
-        {factionName}
-      </TextInput>
-      {factionNameError && (
-        <Text italic style={{ color: theme.danger }}>
-          An army name is required
-        </Text>
-      )}
-      <View style={{ height: 70, marginVertical: 4, marginTop: 12 }}>
+      <View style={{ height: 70, marginVertical: 4 }}>
         <ImageBackground
           resizeMode="stretch"
-          style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 10 }}
+          style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 10, height: 70 }}
           source={require('../../../../../../images/svgs/scroll_header.png')}>
-          <Text
+          <ThemedText
             style={{
               zIndex: 999,
               textAlign: 'center',
@@ -156,23 +137,23 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
               color: theme.textInverted,
             }}
             bold>
-            {factionSelection && Factions[factionSelection]?.replaceAll('_', ' ')}
-          </Text>
+            {factionDetailsFromApi?.name}
+          </ThemedText>
         </ImageBackground>
       </View>
       <ScrollView
         onStartShouldSetResponder={() => true}
         contentContainerStyle={{ flexGrow: 1 }}
         scrollEnabled={true}>
-        {factionSelection == null && (
+        {factionDetailsFromApi == null && (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ textAlign: 'center', fontSize: 20 }} bold>
+            <ThemedText style={{ textAlign: 'center', fontSize: 20 }} bold>
               Select a faction
-            </Text>
+            </ThemedText>
           </View>
         )}
-        {factionDescription.map((item, index) => {
-          return <Text style={{ textAlign: 'center', paddingBottom: 4 }}>{item}</Text>;
+        {factionDetailsFromApi?.description.map((item, index) => {
+          return <ThemedText style={{ textAlign: 'center', paddingBottom: 4 }}>{item}</ThemedText>;
         })}
       </ScrollView>
       <View style={{ marginTop: 12 }}>
@@ -191,7 +172,11 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
             const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
             return (
               <TouchableOpacity
-                onPress={() => setCurrentActiveIndex(index)}
+                onPress={() => {
+                  setCurrentActiveIndex(index);
+                  setSelectedFactionId(item.value);
+                  console.log(item, 'ITEM');
+                }}
                 key={index}
                 style={{ overflow: 'hidden' }}>
                 <View
@@ -224,14 +209,14 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
                       borderBottomLeftRadius: 8,
                       borderBottomRightRadius: 8,
                     }}>
-                    <Text
+                    <ThemedText
                       bold
                       style={{
                         textAlign: 'center',
                         color: theme.textInverted,
                       }}>
                       {item.label}
-                    </Text>
+                    </ThemedText>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -242,20 +227,22 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
       </View>
       <View style={{ paddingTop: 16, flexDirection: 'column' }}>
         <Button onPress={() => onConfirmCreateArmyPress(true)} variant={'confirm'}>
-          <Text bold style={{ textTransform: 'uppercase', color: theme.black }}>
+          <ThemedText bold style={{ textTransform: 'uppercase', color: theme.black }}>
             {t('Create', { ns: 'common' })}
-          </Text>
+          </ThemedText>
         </Button>
         <Button onPress={() => handleDismiss()} variant={'text'}>
-          <Text bold style={{ textTransform: 'uppercase', color: theme.white }}>
+          <ThemedText bold style={{ textTransform: 'uppercase', color: theme.white }}>
             {t('Cancel', { ns: 'common' })}
-          </Text>
+          </ThemedText>
         </Button>
       </View>
     </>
   );
 };
-export default CreateArmyForm;
+
+export default ArmyCreationV2;
+
 const styles = StyleSheet.create({
   stretch: {
     width: THUMBNAIL_WIDTH,

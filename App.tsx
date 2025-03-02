@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeContextProvider } from '@context/ThemeContext';
@@ -80,7 +81,7 @@ const App = () => {
     return null;
   }
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={styles.container}>
       <ThemeContextProvider>
         <BottomSheetModalProvider>
           <ToastProvider>
@@ -110,3 +111,10 @@ const App = () => {
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'grey',
+  },
+});

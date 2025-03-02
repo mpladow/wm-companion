@@ -1,30 +1,125 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { RefObject, useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import React, { forwardRef, RefObject, useCallback, useEffect } from 'react';
 import BottomSheet, {
+  BottomSheetFooter,
+  BottomSheetHandleProps,
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetProps,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import RNBottomSheet from '@components/BottomSheet/BottomSheet';
+import Button from '@components/button';
+import { ArmyListProps } from '@context/BuilderV2Context';
+import CreateArmyForm from '../CreateArmyModal/components/CreateArmyForm';
+import EditArmyForm from '../CreateArmyModal/components/EditArmyForm';
+import { useTheme } from '@hooks/useTheme';
+import { useTranslation } from 'react-i18next';
+import ThemedText from '@components/ThemedText.tsx/ThemedText';
+import ArmyCreationV2 from '../CreateArmyModal/components/ArmyCreationV2';
 
-type CreateArmyModalV2Type = {
-  ref: RefObject<BottomSheetModal | null>;
+export type CreateArmyModalV2Type = {
   onChange: () => void;
+  onDismiss: () => void;
+  onConfirm: (isNew: boolean) => void;
+  focusedArmy?: ArmyListProps;
 };
-const CreateArmyModalV2 = ({ ref, onChange }: CreateArmyModalV2Type) => {
-  //   useEffect(() => {
-  //     ref.current?.present();
-  //   }, []);
+const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
+  ({ onChange, onDismiss, focusedArmy, onConfirm }: CreateArmyModalV2Type, ref) => {
+    const { theme } = useTheme();
+    const { t } = useTranslation(['builder', 'common', 'forms']);
 
-  return (
-    <BottomSheetModal ref={ref} onChange={onChange}>
-      <BottomSheetView style={styles.contentContainer}>
-        <Text>Awesome 🎉</Text>
-      </BottomSheetView>
-    </BottomSheetModal>
-  );
-};
+    const handleCreateArmy = () => {
+      // handle army creation here
+      // dismiss modal and then navigate to next screen
+    };
+    //   useEffect(() => {
+    //     ref.current?.present();
+    //   }, []);
+
+    // renders
+    const renderFooter = useCallback(
+      (props) => (
+        <BottomSheetFooter {...props} bottomInset={24}>
+          <View style={styles.footerContainer}>
+            <View style={{ paddingTop: 16, flexDirection: 'column' }}>
+              <Button onPress={() => onConfirm(true)} variant={'confirm'}>
+                <ThemedText bold style={{ textTransform: 'uppercase', color: theme.black }}>
+                  {t('Create', { ns: 'common' })}
+                </ThemedText>
+              </Button>
+              <Button onPress={() => onDismiss()} variant={'text'}>
+                <ThemedText bold style={{ textTransform: 'uppercase', color: theme.black }}>
+                  {t('Cancel', { ns: 'common' })}
+                </ThemedText>
+              </Button>
+            </View>
+          </View>
+        </BottomSheetFooter>
+      ),
+      []
+    );
+
+    const renderHandle = useCallback((props: BottomSheetHandleProps) => {
+      return (
+        <View
+          style={{
+            backgroundColor: theme.blueGrey,
+            height: 40,
+            alignItems: 'center',
+            paddingVertical: 12,
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+          }}>
+          <View style={{ backgroundColor: 'white', width: 40, height: 4 }}></View>
+        </View>
+      );
+    }, []);
+
+    return (
+      <RNBottomSheet
+        ref={ref}
+        onChange={() => {
+          console.log('close');
+        }}
+        onDismiss={onDismiss}
+        //   footerComponent={renderFooter}
+        handleComponent={renderHandle}
+        bottomSheetProps={{
+          enableDynamicSizing: true,
+          snapPoints: ['95%'],
+          index: 0,
+          containerStyle: { borderTopLeftRadius: 24 },
+        }}
+        title={'CreateArmy'}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            padding: 12,
+            paddingBottom: 48,
+            backgroundColor: theme.blueGrey,
+          }}>
+          <>
+            <View style={{ flex: 1, justifyContent: 'space-between' }}>
+              {!focusedArmy ? (
+                <ArmyCreationV2 theme={theme} handleDismissModal={onDismiss} />
+              ) : (
+                <EditArmyForm theme={theme} focusedArmy={focusedArmy} onDismiss={onDismiss} />
+              )}
+            </View>
+          </>
+        </View>
+      </RNBottomSheet>
+      //  <BottomSheetModal ref={ref} onChange={onChange}>
+      //    <BottomSheetView style={styles.contentContainer}>
+      //      <Text>Awesome 🎉</Text>
+      //    </BottomSheetView>
+      //  </BottomSheetModal>
+    );
+  }
+);
 
 export default CreateArmyModalV2;
 
@@ -38,5 +133,16 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     alignItems: 'center',
+  },
+  footerContainer: {
+    padding: 12,
+    margin: 12,
+    borderRadius: 12,
+    backgroundColor: '#80f',
+  },
+  footerText: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '800',
   },
 });

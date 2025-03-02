@@ -6,7 +6,8 @@ import genericRules from "../data/json/wmr/v3/GenericRules/genericRules.json";
 import { FactionDto } from 'src/types/schema/faction';
 import { AllSpecialRulesType, FactionType } from 'src/types/types';
 
-export const useFactionListsV2 = (faction: Factions) => {
+/**Gets faction list data from API */
+export const useFactionListsV2 = (faction?: Factions) => {
 	// 
 	const [factionDetailsFromApi, setFactionDetailsFromApi] = useState<FactionDto>()
 	const [factionSpecialRulesFromApi, setFactionSpecialRulesFromApi] = useState<AllSpecialRulesType[]>()
@@ -14,7 +15,8 @@ export const useFactionListsV2 = (faction: Factions) => {
 	const [factionDetails, setFactionDetails] = useState<FactionType>()
 
 	useEffect(() => {
-		getUnitsByFaction()
+		if (faction)
+			getUnitsByFaction()
 	}, [faction])
 
 	useEffect(() => {
@@ -205,6 +207,8 @@ export const useFactionListsV2 = (faction: Factions) => {
 
 			// 	break;
 			default:
+				setFactionDetailsFromApi(undefined)
+
 				break;
 		}
 	}
