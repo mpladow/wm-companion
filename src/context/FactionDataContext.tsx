@@ -2,6 +2,8 @@ import { createContext, PropsWithChildren, useContext, useEffect, useState } fro
 import { FactionDto } from 'src/types/schema/faction';
 import { AllSpecialRulesType, FactionType } from 'src/types/models/types';
 import empireList from '../data/json/wmr/v3/empire.json';
+import albionList from '../data/json/wmr/v3/albion.json';
+
 import genericRules from '../data/json/wmr/v3/GenericRules/genericRules.json';
 import { Factions } from '@utils/constants';
 
@@ -191,12 +193,10 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
       // 	description = lizardmenList.description;
 
       // 	break;
-      // case Factions.Albion:
-      // 	list = albionList.units;
-      // 	factionList = albionList as ArmyReferenceType;
-      // 	description = albionList.description;
+      case Factions.Albion:
+        setFactionDetailsFromApi(albionList as FactionDto);
 
-      // 	break;
+        break;
       // case Factions.Ogre_Kingdoms:
       // 	list = ogresList.units;
       // 	factionList = ogresList as ArmyReferenceType;

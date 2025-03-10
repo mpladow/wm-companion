@@ -5,7 +5,7 @@ export type GenericRules = {
 	description: string[]
 }
 export type FactionSpecialRules = {
-	id: string,
+	id?: string,
 	name: string;
 	order: number,
 	description: string[]

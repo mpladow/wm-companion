@@ -8,7 +8,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "buildDev:ios": "eas build --profile development --platform ios",
-    "build:android": "eas build --platform android",
+    "buildDev:android": "eas build --profile development --platform android",
     "test": "jest",
     "lint": "eslint src"
   },
@@ -59,6 +59,7 @@
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-keyboard-controller": "^1.16.7",
     "react-native-popup-menu": "^0.16.1",
     "react-native-reanimated": "~3.16.1",
     "react-native-root-toast": "^3.4.1",

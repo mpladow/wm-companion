@@ -12,7 +12,7 @@ export type FactionDto = {
 	characters: Character[];
 	/**faction uses magic */
 	magic: boolean;
-	factionSpecialRules: FactionSpecialRules[];
+	factionSpecialRules?: FactionSpecialRules[];
 	spells: Spell[]
 }
 
@@ -42,6 +42,9 @@ export type UnitDto = {
 	attachTo?: string[]
 	/** this unit never counts as a casualty for purposes of issuing orders. */
 	noCount?: boolean;
+	/**List of units that need to be in the army in order to take this unit */
+	requiredUnits?: string[]
+
 }
 
 export type Character = {

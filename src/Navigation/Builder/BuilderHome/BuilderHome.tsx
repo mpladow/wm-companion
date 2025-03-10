@@ -179,16 +179,15 @@ const BuilderHome = () => {
     );
   };
 
-  const ref = useRef<BottomSheetModal>(null);
   const handleAddArmyPress = useCallback(() => {
-    console.log('ADD');
-    ref.current?.present();
+    //  console.log('ADD');
+    //  ref.current?.present();
+    navigation.navigate('ArmyEditorStack');
   }, []);
 
   const handleCloseArmyCreationPress = useCallback(() => {
     console.log('dismiss');
 
-    ref.current?.dismiss();
   }, []);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
@@ -243,19 +242,6 @@ const BuilderHome = () => {
           headerText={t('DeleteArmy', { ns: 'builder' })}
         />
       </ImageBackground>
-      {/* <CreateArmyModal
-        onDismissCreateArmyModal={handleDismissArmyCreateModal}
-        theme={theme}
-        focusedArmy={focusedArmy}
-        isVisible={showCreateArmy}
-      /> */}
-      <CreateArmyModalV2
-        ref={ref}
-        onChange={handleAddArmyPress}
-        onDismiss={handleCloseArmyCreationPress}
-        focusedArmy={focusedArmy}
-        onConfirm={handleCloseArmyCreationPress}
-      />
       <AddArmyButton onAddArmyPress={handleAddArmyPress} theme={theme} buttonName={t('AddArmy')} />
       {/* Army Notes MOdal */}
       <StandardModal

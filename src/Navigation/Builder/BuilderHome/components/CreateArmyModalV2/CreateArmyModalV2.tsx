@@ -77,7 +77,7 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
           </View>
         </BottomSheetFooter>
       ),
-      []
+      [],
     );
 
     const renderHandle = useCallback((props: BottomSheetHandleProps) => {
@@ -96,9 +96,9 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
       );
     }, []);
 
-
     return (
       <RNBottomSheet
+        canScroll
         ref={ref}
         onChange={() => {
           console.log('close');
@@ -123,10 +123,7 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
           }}>
           <>
             <View style={{ flex: 1, justifyContent: 'space-between' }}>
-              <ArmyCreationV2
-                theme={theme}
-                handleDismissModal={onDismiss}
-              />
+              <ArmyCreationV2 theme={theme} handleDismissModal={onDismiss} />
             </View>
           </>
         </View>
@@ -137,7 +134,7 @@ const CreateArmyModalV2 = forwardRef<BottomSheetModal, CreateArmyModalV2Type>(
       //    </BottomSheetView>
       //  </BottomSheetModal>
     );
-  }
+  },
 );
 
 export default CreateArmyModalV2;

@@ -10,6 +10,7 @@ import BottomSheet, {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 type RNBottomSheetType = {
   //   ref: RefObject<BottomSheetModal>;
@@ -69,9 +70,12 @@ const RNBottomSheet = forwardRef<BottomSheetModal, RNBottomSheetType>(
         handleComponent={handleComponent}
         bottomInset={isDetached ? 24 : 0}
         style={[isDetached && styles.detachedBottomSheet]}
+        keyboardBehavior="extend"
         {...bottomSheetProps}>
         {canScroll ? (
-          <BottomSheetScrollView style={styles.contentContainer}>{children}</BottomSheetScrollView>
+          <BottomSheetScrollView keyboardDismissMode="interactive" style={styles.contentContainer}>
+            {children}
+          </BottomSheetScrollView>
         ) : (
           <BottomSheetView style={styles.contentContainer}>{children}</BottomSheetView>
         )}
@@ -85,7 +89,7 @@ export default RNBottomSheet;
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
-   //  alignItems: 'center',
+    //  alignItems: 'center',
     //  backgroundColor: 'blue',
   },
   detachedBottomSheet: {

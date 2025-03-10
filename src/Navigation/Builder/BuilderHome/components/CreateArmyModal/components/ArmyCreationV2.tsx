@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   Image,
   View,
+  Pressable,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Theme } from '@hooks/useTheme';
+import { Theme, useTheme } from '@hooks/useTheme';
 import { useTranslation } from 'react-i18next';
 import { useBuilderContext } from '@context/BuilderContext';
 import { useToast } from 'react-native-toast-notifications';
@@ -27,15 +28,22 @@ import { useBuilderV2Context } from '@context/BuilderV2Context';
 import { useFactionDataContext } from '@context/FactionDataContext';
 import ThemedButton from '@components/Button/ThemedButton';
 import EditArmyV2 from './EditArmyV2';
+import { ArmyEditorStackParamList } from '@navigation/Builder/CreateArmyStack/ArmyEditorStack';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { KeyboardAvoidingView, KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
 const SPACING = 5;
-type ArmyCreationV2Props = {
-  theme: Theme;
-  handleDismissModal: () => void;
-};
-const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
+// type ArmyCreationV2Props = {
+//   theme: Theme;
+//   handleDismissModal: () => void;
+// };
+const ArmyCreationV2 = () => {
+  const { theme } = useTheme();
+  const nav = useNavigation();
   const builder = useBuilderContext();
   const { createUserArmyList } = useBuilderV2Context();
   const { factionDetailsFromApi, setFaction } = useFactionDataContext();
@@ -50,6 +58,7 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
   const [factionDescription, setFactionDescription] = useState([] as string[]);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // all new stuff below
   const [selectedFactionId, setSelectedFactionId] = useState<Factions | undefined>(undefined);
   //   const { factionDetailsFromApi } = useFactionListsV2(selectedFactionId);
 
@@ -60,6 +69,9 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
   const [formArmyNameError, setFormArmyNameError] = useState('');
   const [formArmyNotes, setFormArmyNotes] = useState('');
   const [formArmyNotesError, setFormArmyNotesError] = useState('');
+
+  const [formOneComplete, setFormOneComplete] = useState(false);
+  const [formTwoComplete, setformTwoComplete] = useState(false);
 
   const handleSetFaction = () => {
     setFaction(selectedFactionId);
@@ -111,7 +123,7 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
     } else {
       setFactionNameError(false);
     }
-    if (factionSelection && formArmyName != '') {
+    if (formOneComplete && formTwoComplete) {
       builder
         .addUserArmyList(factionSelection, formArmyName, autopopulate, CURRENT_VERSION)
         .then((result) => {
@@ -126,6 +138,20 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
     }
   };
 
+  useEffect(() => {
+    console.log('🚀 ~ useEffect ~ factionName:', factionName);
+    if (formArmyName == '') {
+      setformTwoComplete(false);
+    } else {
+      setformTwoComplete(true);
+    }
+    if (selectedFactionId) {
+      setFormOneComplete(true);
+    } else {
+      setFormOneComplete(false);
+    }
+  }, [formArmyName, selectedFactionId]);
+
   const resetForm = () => {
     setFactionSelection(undefined);
     setFactionName('');
@@ -133,17 +159,26 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
 
   const handleDismiss = () => {
     resetForm();
-    handleDismissModal();
+    nav.goBack();
   };
+
+  // SUBMISSION
   const handlePrimaryButtonPress = () => {
-    console.log('🚀 ~ handlePrimaryButtonPress ~ showFactionSelection:', selectedFactionId);
     if (showFactionSelection && selectedFactionId !== null) {
       setShowFactionEditDetails(true);
       setShowFactionSelection(false);
     }
-    if (showFactionEditDetails && formArmyName !== '' && selectedFactionId) {
-      console.log('🚀 ~ handlePrimaryButtonPress ~ selectedFactionId:', selectedFactionId);
-      createUserArmyList(selectedFactionId, formArmyName, formArmyNotes, true, 0);
+    if (!formOneComplete) {
+      setShowFactionSelection(true);
+      setShowFactionEditDetails(false);
+    }
+    if (formTwoComplete) {
+      setShowFactionEditDetails(true);
+      setShowFactionSelection(false);
+    }
+    if (formOneComplete && formTwoComplete) {
+      console.log('🚀 ~ CREATING ARMY ~ selectedFactionId:', selectedFactionId);
+      // createUserArmyList(selectedFactionId, formArmyName, formArmyNotes, true, 0);
     }
     createUserArmyList;
   };
@@ -155,35 +190,125 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
   const thumbRef = useRef<FlatList>(null);
   const nameRef = useRef<TextInput>(null);
 
+  const x = useSafeAreaInsets();
+
+  const handleTimelinePress = (index: number) => {
+    if (index == 0) {
+      setShowFactionSelection(true);
+      setShowFactionEditDetails(false);
+    }
+    if (index == 1) {
+      setShowFactionSelection(false);
+      setShowFactionEditDetails(true);
+    }
+  };
+
   return (
-    <>
-      {showFactionSelection ? (
-        <Animated.View entering={FadeInLeft.delay(200)} exiting={FadeOutRight}>
-          <View style={{ height: 120, marginVertical: 4 }}>
-            <Animated.View style={{ alignItems: 'center', height: 40 }} entering={FadeIn}>
+    <View style={{ backgroundColor: theme.blueGrey, paddingHorizontal: 12, flex: 1 }}>
+      {/* /Timeline.tsx */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 12,
+          justifyContent: 'space-evenly',
+        }}>
+        {/*TimelineItem.tsx*/}
+        <Pressable
+          onPress={() => handleTimelinePress(0)}
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {/* //circle.tsx */}
+          <View
+            style={{
+              borderRadius: 50,
+              backgroundColor: showFactionSelection ? theme.accent : 'transparent',
+              width: 25,
+              height: 25,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {formOneComplete ? (
+              <AntDesign
+                name="check"
+                size={14}
+                color={showFactionSelection ? theme.textInverted : theme.text}
+              />
+            ) : (
+              <ThemedText style={{ color: showFactionSelection ? theme.textInverted : theme.text }}>
+                1
+              </ThemedText>
+            )}
+          </View>
+          <View style={{ paddingLeft: 8 }}>
+            <ThemedText style={{ textAlign: 'center' }}>Select Faction</ThemedText>
+          </View>
+        </Pressable>
+        {/*TimelineItem.tsx*/}
+        <Pressable
+          onPress={() => handleTimelinePress(1)}
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {/* //circle.tsx */}
+          <View
+            style={{
+              borderRadius: 50,
+              backgroundColor: showFactionEditDetails ? theme.accent : 'transparent',
+              width: 25,
+              height: 25,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {formTwoComplete ? (
+              <AntDesign
+                name="check"
+                size={14}
+                color={showFactionEditDetails ? theme.textInverted : theme.text}
+              />
+            ) : (
+              <ThemedText
+                style={{ color: showFactionEditDetails ? theme.textInverted : theme.text }}>
+                2
+              </ThemedText>
+            )}
+          </View>
+          <View style={{ paddingLeft: 8 }}>
+            <ThemedText style={{ textAlign: 'center' }}>Edit Details</ThemedText>
+          </View>
+        </Pressable>
+      </View>
+      <View style={{ height: 70, marginVertical: 4 }}>
+        {/* <Animated.View style={{ alignItems: 'center', height: 40 }} entering={FadeIn}>
               <ThemedText size="lg" bold>
                 Select Faction
               </ThemedText>
-            </Animated.View>
-            <ImageBackground
-              resizeMode="stretch"
-              style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 10, height: 70 }}
-              source={require('../../../../../../images/svgs/scroll_header.png')}>
-              <ThemedText
-                style={{
-                  zIndex: 999,
-                  textAlign: 'center',
-                  fontSize: 20,
-                  color: theme.textInverted,
-                }}
-                bold>
-                {factionDetailsFromApi?.name}
-              </ThemedText>
-            </ImageBackground>
-          </View>
+            </Animated.View> */}
+        <ImageBackground
+          resizeMode="stretch"
+          style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 10, height: 70 }}
+          source={require('../../../../../../images/svgs/scroll_header.png')}>
+          <ThemedText
+            style={{
+              zIndex: 999,
+              textAlign: 'center',
+              fontSize: 20,
+              color: theme.textInverted,
+            }}
+            bold>
+            {factionDetailsFromApi?.name}
+          </ThemedText>
+        </ImageBackground>
+      </View>
+      {showFactionSelection ? (
+        <Animated.View
+          entering={FadeInLeft.delay(200)}
+          exiting={FadeOutRight}
+          style={{ paddingVertical: 6 }}>
           <ScrollView
             onStartShouldSetResponder={() => true}
-            contentContainerStyle={{ flexGrow: 1 }}
+            // contentContainerStyle={{ height: 300 }}
+            style={{
+              height: Dimensions.get('screen').height / 2.5,
+              maxHeight: Dimensions.get('screen').height / 2.5,
+            }}
             scrollEnabled={true}>
             {factionDetailsFromApi == null && (
               <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -198,7 +323,7 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
               );
             })}
           </ScrollView>
-          <View style={{ marginTop: 12 }}>
+          <View style={{ marginTop: 12, flexGrow: 1 }}>
             <FlatList
               ref={thumbRef}
               horizontal
@@ -217,6 +342,7 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
                     onPress={() => {
                       setCurrentActiveIndex(index);
                       setSelectedFactionId(item.value);
+                      setFormOneComplete(true);
                       console.log(item, 'ITEM');
                     }}
                     key={index}
@@ -281,7 +407,16 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
           />
         </Animated.View>
       )}
-      <View style={{ paddingTop: 16, flexDirection: 'column' }}>
+      <KeyboardAwareScrollView
+        enabled={false}
+        contentContainerStyle={{
+          paddingTop: 16,
+          flexDirection: 'column',
+          flex: 1,
+          minHeight: 150,
+          justifyContent: 'flex-end',
+          paddingBottom: x.bottom,
+        }}>
         {selectedFactionId && (
           <Animated.View entering={FadeIn}>
             <ThemedButton
@@ -295,26 +430,16 @@ const ArmyCreationV2 = ({ theme, handleDismissModal }: ArmyCreationV2Props) => {
             </ThemedButton>
           </Animated.View>
         )}
-        <View style={{ height: 6 }}></View>
-        <ThemedButton
-          onPress={() => (showFactionEditDetails ? handleBack() : handleDismiss())}
-          buttonType="secondary"
-          variant={'text'}
-          buttonSize="default">
-          {showFactionEditDetails ? 'Back' : 'Cancel'}
-          {/* <ThemedText bold style={{ textTransform: 'uppercase', color: theme.black }}>
-              </ThemedText> */}
-        </ThemedButton>
 
-        {/* <Button
+        <Button
           onPress={() => (showFactionEditDetails ? handleBack() : handleDismiss())}
           variant={'text'}>
           <ThemedText bold style={{ textTransform: 'uppercase', color: theme.white }}>
             {showFactionEditDetails ? 'Back' : 'Cancel'}
           </ThemedText>
-        </Button> */}
-      </View>
-    </>
+        </Button>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 

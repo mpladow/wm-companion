@@ -6,6 +6,7 @@ import ThemedText from '@components/ThemedText.tsx/ThemedText';
 import FormLabel from '@components/forms/FormLabel';
 import { useTranslation } from 'react-i18next';
 import Animated, { FadeIn, FadeInRight } from 'react-native-reanimated';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 type EditArmyV2Props = {
   armyName: string;
@@ -27,12 +28,27 @@ const EditArmyV2 = ({
 }: EditArmyV2Props) => {
   const { t } = useTranslation(['builder', 'common', 'forms']);
   return (
-    <View style={{ flexGrow: 1 }}>
-      <Animated.View style={{ alignItems: 'center', height: 40 }} entering={FadeIn}>
+    <KeyboardAwareScrollView style={{ flexGrow: 1, paddingVertical: 6 }}>
+      {/* <Animated.View style={{ alignItems: 'center', height: 40 }} entering={FadeIn}>
         <ThemedText size="lg" bold>
           Army Details
         </ThemedText>
-      </Animated.View>
+      </Animated.View> */}
+      {/* <BottomSheetTextInput
+        value={armyName}
+        onChangeText={(val) => onArmyNameChange(val)}
+        style={[
+          {
+            color: theme.black,
+            fontFamily: fonts.PTSansBold,
+            fontSize: 16,
+            backgroundColor: theme.white,
+            borderRadius: 16,
+            padding: 16,
+          },
+          factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+        ]}
+      /> */}
       <TextInput
         placeholder={t('PlaceholderEnterArmyName', { ns: 'forms' })}
         value={armyName}
@@ -73,7 +89,7 @@ const EditArmyV2 = ({
           factionNameError && { borderColor: theme.danger, borderWidth: 4 },
         ]}
       />
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

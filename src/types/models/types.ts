@@ -56,6 +56,8 @@ export type UnitDetailsType = {
 	noCount?: boolean;
 	// all special rules for this unit
 	specialRules?: SpecialRulesType[]
+	/**List of units that need to be in the army in order to take this unit */
+	requiredUnits?: string[]
 }
 
 export type CharacterType = {
