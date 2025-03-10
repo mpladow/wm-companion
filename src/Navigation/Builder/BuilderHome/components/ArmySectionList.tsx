@@ -13,6 +13,7 @@ import ArmyListFilter from "./ArmyListFilter";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AnimatedHeader, { AppHeader } from "@components/AnimatedHeader/AnimatedHeader";
 import { HEADER_HEIGHT } from "src/constants/styling";
+import { FadeInRight } from "react-native-reanimated";
 export type armySectionListDataProps = {
 	title: string;
 	data: ArmyListProps[];

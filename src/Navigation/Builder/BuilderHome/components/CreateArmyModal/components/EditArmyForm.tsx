@@ -31,7 +31,6 @@ const EditArmyForm = ({
 			builder.updateArmyNotes(focusedArmy.armyId, factionNotes);
 			handleDismiss();
 		} else {
-			console.error("🚀 ~ onConfirmCreateArmyPress ~ factionName:", factionName);
 			setFactionNameError(true);
 		}
 	};

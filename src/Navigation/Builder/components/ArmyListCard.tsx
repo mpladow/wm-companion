@@ -13,7 +13,6 @@ import MenuOptionButton from "@components/MenuOptionButton";
 import { LinearGradient } from "expo-linear-gradient";
 import { Foundation } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import ArmyListCardImageContainer from "./ArmyListCardImageContainer";
 import { getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
 import Constants from "expo-constants";
 type ArmyListCardProps = {
