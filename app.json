@@ -14,9 +14,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mldevelopment.wmcompanion",
@@ -26,6 +24,7 @@
       }
     },
     "android": {
+      "runtimeVersion": "1.0.0",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -48,8 +47,6 @@
     "updates": {
       "url": "https://u.expo.dev/e7bcb57d-bc08-49e5-a158-b19bd96e432c"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"]
   }
 }
