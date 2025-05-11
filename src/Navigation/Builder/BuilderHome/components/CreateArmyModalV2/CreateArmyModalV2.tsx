@@ -11,7 +11,7 @@ import BottomSheet, {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import RNBottomSheet from '@components/BottomSheet/BottomSheet';
 import Button from '@components/button';
-import { ArmyListProps } from '@context/BuilderV2Context';
+import { ArmyListProps } from '@context/v2/BuilderV2Context';
 import CreateArmyForm from '../CreateArmyModal/components/CreateArmyForm';
 import EditArmyForm from '../CreateArmyModal/components/EditArmyForm';
 import { useTheme } from '@hooks/useTheme';

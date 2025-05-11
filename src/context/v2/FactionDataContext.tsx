@@ -1,10 +1,11 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { FactionDto } from 'src/types/schema/faction';
 import { AllSpecialRulesType, FactionType } from 'src/types/models/types';
-import empireList from '../data/json/wmr/v3/empire.json';
-import albionList from '../data/json/wmr/v3/albion.json';
+import empireList from '../../data/json/wmr/v3/empire.json';
+import albionList from '../../data/json/wmr/v3/albion.json';
+import cathayList from '../../data/json/wmr/v3/cathay.json';
 
-import genericRules from '../data/json/wmr/v3/GenericRules/genericRules.json';
+import genericRules from '../../data/json/wmr/v3/GenericRules/genericRules.json';
 import { Factions } from '@utils/constants';
 
 type FactionContextType = {
@@ -20,11 +21,9 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
   const [factionSpecialRulesFromApi, setFactionSpecialRulesFromApi] =
     useState<AllSpecialRulesType[]>();
 
-  const [factionDetails, setFactionDetails] = useState<FactionType>();
-
-  const setFaction = (faction?: Factions) => {
-    console.log('🚀 ~ setFaction ~ faction:', faction);
-    getUnitsByFaction(faction);
+  const setFaction = (f?: Factions) => {
+    console.log('🚀 ~ setFaction ~ faction:', f);
+    getUnitsByFaction(f);
   };
 
   useEffect(() => {
@@ -33,28 +32,27 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
     }
   }, [factionDetailsFromApi]);
 
-  useEffect(() => {
-    if (factionDetailsFromApi && factionSpecialRulesFromApi) {
-      parseFactionDetails();
-    }
-  }, [factionSpecialRulesFromApi]);
+  //   useEffect(() => {
+  //     if (factionDetailsFromApi && factionSpecialRulesFromApi) {
+  //       parseFactionDetails();
+  //     }
+  //   }, [factionSpecialRulesFromApi]);
 
-  const parseFactionDetails = () => {
-    // set factionDetails - this will return a usuable object that can be easily read
-    if (factionDetailsFromApi && factionSpecialRulesFromApi) {
-      const factionType: FactionType = {
-        name: factionDetailsFromApi?.name,
-        version: factionDetailsFromApi.version,
-        order: factionDetailsFromApi.order,
-        description: factionDetailsFromApi.description,
-        units: factionDetailsFromApi.units,
-        characters: [],
-        allSpecialRules: [],
-        spells: [],
-        magic: false,
-      };
-    }
-  };
+  //   const parseFactionDetails = () => {
+  //     // set factionDetails - this will return a usuable object that can be easily read
+  //     if (factionDetailsFromApi && factionSpecialRulesFromApi) {
+  //       const factionType: FactionType = {
+  //         name: factionDetailsFromApi?.name,
+  //         version: factionDetailsFromApi.version,
+  //         order: factionDetailsFromApi.order,
+  //         description: factionDetailsFromApi.description,
+  //         units: factionDetailsFromApi.units,
+  //         characters: factionDetailsFromApi.characters,
+  //         allSpecialRules: factionDetailsFromApi.factionSpecialRules,
+  //         spells: factionDetailsFromApi.spells,
+  //       };
+  //     }
+  //   };
 
   const getSpecialRulesForFaction = () => {
     // get all generic rules and all
@@ -98,6 +96,10 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
       case Factions.Empire:
         setFactionDetailsFromApi(empireList as FactionDto);
         break;
+      case Factions.Cathay:
+        setFactionDetailsFromApi(cathayList as FactionDto);
+
+        break;
       // case Factions.Skaven:
       // 	list = skavenList.units;
       // 	factionList = skavenList as ArmyReferenceType;
@@ -128,11 +130,7 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
       // 	description = beastmenList.description;
 
       // 	break;
-      // case Factions.Cathay:
-      // 	list = cathayList.units;
-      // 	factionList = cathayList as ArmyReferenceType;
-      // 	description = cathayList.description;
-      // 	break;
+
       // case Factions.Goblins:
       // 	list = nightGoblinsList.units;
       // 	factionList = nightGoblinsList as ArmyReferenceType;
@@ -197,6 +195,7 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
         setFactionDetailsFromApi(albionList as FactionDto);
 
         break;
+
       // case Factions.Ogre_Kingdoms:
       // 	list = ogresList.units;
       // 	factionList = ogresList as ArmyReferenceType;
@@ -229,7 +228,7 @@ export const FactionProvider = ({ children }: PropsWithChildren) => {
     }
   };
   return (
-    <FactionContext.Provider value={{ setFaction, factionDetailsFromApi, factionDetails }}>
+    <FactionContext.Provider value={{ setFaction, factionDetailsFromApi }}>
       {children}
     </FactionContext.Provider>
   );

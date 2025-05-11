@@ -21,11 +21,11 @@ import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from '@util
 import Constants from 'expo-constants';
 import { Factions } from '@utils/constants';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
-import { Button } from '@components/index';
-import { useFactionListsV2 } from '@hooks/useArmyList';
+import { Button, StandardModal } from '@components/index';
+import { useFactionListsV2 } from '@hooks/useFactionLists';
 import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeOutRight } from 'react-native-reanimated';
-import { useBuilderV2Context } from '@context/BuilderV2Context';
-import { useFactionDataContext } from '@context/FactionDataContext';
+import { useBuilderV2Context } from '@context/v2/BuilderV2Context';
+import { useFactionDataContext } from '@context/v2/FactionDataContext';
 import ThemedButton from '@components/Button/ThemedButton';
 import EditArmyV2 from './EditArmyV2';
 import { ArmyEditorStackParamList } from '@navigation/Builder/CreateArmyStack/ArmyEditorStack';
@@ -45,7 +45,7 @@ const ArmyCreationV2 = () => {
   const { theme } = useTheme();
   const nav = useNavigation();
   const builder = useBuilderContext();
-  const { createUserArmyList } = useBuilderV2Context();
+  const { createUserArmyList, handleSetFocusedArmyByArmyId } = useBuilderV2Context();
   const { factionDetailsFromApi, setFaction } = useFactionDataContext();
   const { t } = useTranslation(['builder', 'common', 'forms']);
   const toast = useToast();
@@ -66,19 +66,15 @@ const ArmyCreationV2 = () => {
   const [showFactionEditDetails, setShowFactionEditDetails] = useState(false);
 
   const [formArmyName, setFormArmyName] = useState('');
-  const [formArmyNameError, setFormArmyNameError] = useState('');
   const [formArmyNotes, setFormArmyNotes] = useState('');
-  const [formArmyNotesError, setFormArmyNotesError] = useState('');
 
   const [formOneComplete, setFormOneComplete] = useState(false);
   const [formTwoComplete, setformTwoComplete] = useState(false);
-
-  const handleSetFaction = () => {
-    setFaction(selectedFactionId);
-  };
+  const [creationLoading, setCreationLoading] = useState(false);
 
   useEffect(() => {
-    handleSetFaction();
+    console.log('🚀 ~ ArmyCreationV2 ~ selectedFactionId:', selectedFactionId);
+    setFaction(selectedFactionId);
     // console.log(builder.factionDetails, 'dfd');
   }, [selectedFactionId]);
 
@@ -113,9 +109,18 @@ const ArmyCreationV2 = () => {
   }, []);
 
   useEffect(() => {
-    if (formArmyName != '') setFormArmyNameError('');
-  }, [formArmyName]);
-
+    console.log('🚀 ~ useEffect ~ factionName:', factionName);
+    if (formArmyName == '') {
+      setformTwoComplete(false);
+    } else {
+      setformTwoComplete(true);
+    }
+    if (selectedFactionId) {
+      setFormOneComplete(true);
+    } else {
+      setFormOneComplete(false);
+    }
+  }, [formArmyName, selectedFactionId]);
   const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
     if (formArmyName == '') {
       console.error('🚀 ~ onConfirmCreateArmyPress ~ factionName:', factionName);
@@ -138,20 +143,6 @@ const ArmyCreationV2 = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('🚀 ~ useEffect ~ factionName:', factionName);
-    if (formArmyName == '') {
-      setformTwoComplete(false);
-    } else {
-      setformTwoComplete(true);
-    }
-    if (selectedFactionId) {
-      setFormOneComplete(true);
-    } else {
-      setFormOneComplete(false);
-    }
-  }, [formArmyName, selectedFactionId]);
-
   const resetForm = () => {
     setFactionSelection(undefined);
     setFactionName('');
@@ -163,7 +154,7 @@ const ArmyCreationV2 = () => {
   };
 
   // SUBMISSION
-  const handlePrimaryButtonPress = () => {
+  const handlePrimaryButtonPress = async () => {
     if (showFactionSelection && selectedFactionId !== null) {
       setShowFactionEditDetails(true);
       setShowFactionSelection(false);
@@ -177,10 +168,18 @@ const ArmyCreationV2 = () => {
       setShowFactionSelection(false);
     }
     if (formOneComplete && formTwoComplete) {
-      console.log('🚀 ~ CREATING ARMY ~ selectedFactionId:', selectedFactionId);
-      // createUserArmyList(selectedFactionId, formArmyName, formArmyNotes, true, 0);
+      const newArmy = createUserArmyList(selectedFactionId, formArmyName, formArmyNotes, true, 0);
+      setCreationLoading(true);
+      // dddddddddddddddd
+      handleSetFocusedArmyByArmyId(newArmy.armyId)
+        .then((res) => {
+          nav.navigate('BuilderEdit');
+        })
+        .catch((err) => {})
+        .finally(() => {
+          setCreationLoading(false);
+        });
     }
-    createUserArmyList;
   };
 
   const handleBack = () => {
@@ -340,10 +339,10 @@ const ArmyCreationV2 = () => {
                 return (
                   <TouchableOpacity
                     onPress={() => {
-                      setCurrentActiveIndex(index);
                       setSelectedFactionId(item.value);
+                      setCurrentActiveIndex(index);
                       setFormOneComplete(true);
-                      console.log(item, 'ITEM');
+                      console.log(item, 'ITddfdfEM');
                     }}
                     key={index}
                     style={{ overflow: 'hidden' }}>
@@ -439,6 +438,17 @@ const ArmyCreationV2 = () => {
           </ThemedText>
         </Button>
       </KeyboardAwareScrollView>
+      <StandardModal
+        content={
+          <View>
+            <ThemedText>Creating Army</ThemedText>
+          </View>
+        }
+        visible={creationLoading}
+        heading={'Loading'}
+        onCancel={function (): void {
+          throw new Error('Function not implemented.');
+        }}></StandardModal>
     </View>
   );
 };

@@ -4,6 +4,7 @@ import ArmyCreationV2 from '../BuilderHome/components/CreateArmyModal/components
 import { useTheme } from '@hooks/useTheme';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
+import { BuilderEditorProvider } from '@context/v2/BuilderEditorContext';
 
 export type ArmyEditorStackParamList = {
   ArmyEditor: undefined;

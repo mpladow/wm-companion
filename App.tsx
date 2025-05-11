@@ -17,9 +17,9 @@ import { CollectionProvider } from '@context/CollectionContext';
 import { UpdateCheckerContextProvider } from '@context/UpdateCheckerContext';
 import * as Font from 'expo-font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { FactionProvider } from '@context/FactionDataContext';
+import { FactionProvider } from '@context/v2/FactionDataContext';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { BuilderV2ContextProvider } from '@context/BuilderV2Context';
+import { BuilderV2ContextProvider } from '@context/v2/BuilderV2Context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 const darkTheme = {

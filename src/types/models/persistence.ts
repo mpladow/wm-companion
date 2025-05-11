@@ -6,6 +6,7 @@ import { CharacterType, UnitDetailsType, UpgradeType } from './types';
 // used for storage in memory
 export type ArmyListPersistenceType = {
 	versionNumber?: number;
+	/**Unique ID */
 	armyId: string;
 	faction: number;
 	name: string;
@@ -17,21 +18,26 @@ export type ArmyListPersistenceType = {
 };
 
 export type UnitPersistenceType = {
+	/**Unique ID */
 	id: string;
 	unitId: number;
 	name: string;
+	order: number;
 	selectedUpgrades: UpgradePersistenceType[]
 }
 
 export type CharacterPersistenceType = {
+	/**Unique ID */
 	id: string;
 	characterId: number;
 	name: string;
+	order: number;
 	selectedUpgrades: UpgradePersistenceType[];
 }
 
 
 export type UpgradePersistenceType = {
+	/**Unique ID */
 	id: string;
 	upgradeId: number;
 	name: string;

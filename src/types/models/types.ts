@@ -36,7 +36,8 @@ export type UnitDetailsType = {
 	name: string;
 	order: number;
 	type: UnitType;
-	attack: number;
+	/**if string, it is a special rule */
+	attack: number | string;
 	hits: number;
 	size: number;
 	points: number;

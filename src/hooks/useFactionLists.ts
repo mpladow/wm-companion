@@ -1,6 +1,10 @@
 import { Factions } from '@utils/constants';
 import { useEffect, useState } from 'react';
 import empireList from "../data/json/wmr/v3/empire.json";
+import albionList from "../data/json/wmr/v3/albion.json";
+import cathayList from "../data/json/wmr/v3/cathay.json";
+
+
 import genericRules from "../data/json/wmr/v3/GenericRules/genericRules.json";
 
 import { FactionDto } from 'src/types/schema/faction';
@@ -33,6 +37,16 @@ export const useFactionListsV2 = (faction?: Factions) => {
 		factionSpecialRulesFromApi
 	])
 
+	const getUnitsByFaction = () => {
+		// can replace this with an api call
+		if (faction) {
+			console.log("🚀 ~ getUnitsByFaction ~ faction:", faction)
+
+			const factionList = findListByFaction(faction)
+			setFactionDetailsFromApi(factionList);
+		}
+
+	}
 
 
 	const parseFactionDetails = () => {
@@ -59,9 +73,9 @@ export const useFactionListsV2 = (faction?: Factions) => {
 		setFactionSpecialRulesFromApi(list)
 	}
 
-	const getUnitsByFaction = () => {
-		// can replace this with an api call
-		switch (faction) {
+	const findListByFaction = (_faction: Factions) => {
+		console.log("🚀 ~ findListByFaction ~ faction:", _faction)
+		switch (_faction) {
 			// case Factions.Bretonnia:
 			// 	list = bretonnianList.units;
 			// 	factionList = bretonnianList as ArmyReferenceType;
@@ -77,8 +91,15 @@ export const useFactionListsV2 = (faction?: Factions) => {
 			// 	factionList = tombKingsList as ArmyReferenceType;
 			// 	description = tombKingsList.description;
 			// 	break;
+			case Factions.Albion:
+				return albionList as FactionDto;
+				break;
 			case Factions.Empire:
-				setFactionDetailsFromApi(empireList as FactionDto);
+				return empireList as FactionDto
+				break;
+			case Factions.Cathay:
+				console.log("CATHAYdfdsfd")
+				return cathayList as FactionDto
 				break;
 			// case Factions.Skaven:
 			// 	list = skavenList.units;
@@ -110,11 +131,7 @@ export const useFactionListsV2 = (faction?: Factions) => {
 			// 	description = beastmenList.description;
 
 			// 	break;
-			// case Factions.Cathay:
-			// 	list = cathayList.units;
-			// 	factionList = cathayList as ArmyReferenceType;
-			// 	description = cathayList.description;
-			// 	break;
+
 			// case Factions.Goblins:
 			// 	list = nightGoblinsList.units;
 			// 	factionList = nightGoblinsList as ArmyReferenceType;
@@ -175,10 +192,8 @@ export const useFactionListsV2 = (faction?: Factions) => {
 			// 	description = lizardmenList.description;
 
 			// 	break;
-			// case Factions.Albion:
-			// 	list = albionList.units;
-			// 	factionList = albionList as ArmyReferenceType;
-			// 	description = albionList.description;
+
+
 
 			// 	break;
 			// case Factions.Ogre_Kingdoms:
@@ -212,5 +227,7 @@ export const useFactionListsV2 = (faction?: Factions) => {
 				break;
 		}
 	}
-	return { factionDetailsFromApi }
+
+
+	return { factionDetailsFromApi, findListByFaction }
 }

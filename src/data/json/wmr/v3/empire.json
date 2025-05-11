@@ -218,7 +218,6 @@
   "magic": true,
   "factionSpecialRules": [
     {
-      "id": "3261e61ed127",
       "name": "Handgunners",
       "order": 1,
       "description": [
@@ -226,7 +225,6 @@
       ]
     },
     {
-      "id": "e6c0af946650",
       "name": "Flagellants",
       "order": 2,
       "description": [
@@ -235,7 +233,6 @@
       ]
     },
     {
-      "id": "b0d215c26822",
       "name": "Skirmishers",
       "order": 3,
       "description": [
@@ -243,7 +240,6 @@
       ]
     },
     {
-      "id": "99117a9dcd92",
       "name": "Pistoliers",
       "order": 4,
       "description": [
@@ -251,7 +247,6 @@
       ]
     },
     {
-      "id": "99117a9dcd92",
       "name": "Helblaster",
       "order": 5,
       "description": [
@@ -274,7 +269,6 @@
       ]
     },
     {
-      "id": "5ecb8f11ba74",
       "name": "Steam Tank",
       "order": 6,
       "description": [
@@ -300,7 +294,6 @@
       ]
     },
     {
-      "id": "cbfdd44aab3e",
       "name": "Griffon",
       "order": 7,
       "description": [
@@ -308,7 +301,6 @@
       ]
     },
     {
-      "id": "cbfdd44aab3e",
       "name": "War Altar",
       "order": 8,
       "description": [
