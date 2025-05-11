@@ -3,7 +3,7 @@
 	"version": "Warmaster Revolution",
 	"group": 1,
 	"order": 1,
-	"versionNumber": 2.24,
+	"versionNumber": 2.25,
 	"description": [
 		"The land of Kislev lies in the north-eastern portion of the Old World between towering mountains to the east, the barren wastes of the Troll Country to the west and the borders of the Empire to the south. Dense pine forests give way to scattered birch forests and desolate tundra to the north. It is an old saying that in Kislev the winters are long, the snow lies deep, and enemies are never far away.",
 		"Kislev shares its southern border with the Empire but in every other direction it is surrounded by deadly foes. The eastern mountains are full of goblins and other greenskins whilst beyond the lands are home to savage marauder tribes. To the north-west is the land of Norsca - barbarians in thrall to the Dark Gods. When the armies of Chaos gather Kislev lies directly in their path between the forces of darkness and the lands to the south. With typically grim humour Kislevites describe their land as lying between the hammer and the anvil (meaning Chaos and the Empire).",
@@ -32,7 +32,9 @@
 			"size": 3,
 			"points": 75,
 			"min": 2,
-			"specialRules": ["Horse Archers, Cossacks"]
+			"specialRules": [
+				"Horse Archers, Cossacks"
+			]
 		},
 		{
 			"name": "Cossacks",
@@ -45,7 +47,9 @@
 			"size": 3,
 			"points": 95,
 			"max": 2,
-			"specialRules": ["Horse Archers, Cossacks"]
+			"specialRules": [
+				"Horse Archers, Cossacks"
+			]
 		},
 		{
 			"name": "Bowmen",
@@ -78,7 +82,10 @@
 			"armour": "6+",
 			"size": 3,
 			"points": 45,
-			"min": 2
+			"min": 2,
+			"upgrades": [
+				"Bowmen"
+			]
 		},
 		{
 			"name": "Bears",
@@ -112,7 +119,10 @@
 			"points": 125,
 			"armyMin": 1,
 			"armyMax": 1,
-			"upgrades": ["Bear", "Tzarina"]
+			"upgrades": [
+				"Bear",
+				"Tzarina"
+			]
 		},
 		{
 			"name": "Hero",
@@ -123,7 +133,9 @@
 			"size": 1,
 			"points": 80,
 			"max": 2,
-			"upgrades": ["Bear"]
+			"upgrades": [
+				"Bear"
+			]
 		},
 		{
 			"name": "Shaman",
@@ -134,7 +146,10 @@
 			"size": 1,
 			"points": 45,
 			"max": 1,
-			"upgrades": ["Bear", "Yozhin"]
+			"upgrades": [
+				"Bear",
+				"Yozhin"
+			]
 		}
 	],
 	"upgrades": [
@@ -167,10 +182,27 @@
 				"Wand of Power",
 				"Rod of Repetition"
 			]
+		},
+		{
+			"name": "Bowmen",
+			"order": 3,
+			"type": "Special",
+			"attack": "3/1",
+			"range": "30cm",
+			"hits": 3,
+			"size": 3,
+			"max": 1,
+			"points": 0
 		}
 	],
 	"magic": true,
 	"specialRules": {
+		"Bowmen": {
+			"order": 0,
+			"text": [
+				"One unit of Bowmen per full 1000 points can replace a unit of Axemen while still counting for the Axemen min/max value."
+			]
+		},
 		"Winged Lancers": {
 			"order": 1,
 			"text": [

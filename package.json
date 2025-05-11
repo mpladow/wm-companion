@@ -7,8 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:ios": "eas build --platform ios",
-    "build:android": "eas build --platform android",
+    "buildDev:ios": "eas build --platform ios",
+    "buildDev:android": "eas build --platform android",
     "test": "jest"
   },
   "dependencies": {

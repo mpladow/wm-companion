@@ -1,0 +1,42 @@
+{
+	"version": "1.2.38",
+	"changes": [
+		{
+			"type": "overhaul",
+			"title": "Army lists updated for version 2.25!",
+			"description": [
+				"Apologies for the delay - real life has been a bit hectic with some employment changes!",
+				"You can now create army lists that align wiht version 2.25 of the Warmaster Revolutions Army Book.",
+				"It is highly recommended that you review your existing lists and ensure they align with the new update."
+			]
+		},
+		{
+			"type": "improvement",
+			"title": "UI Improvements",
+			"description": [
+				"Improved screen space on main screens"
+			]
+		},
+		{
+			"type": "improvement",
+			"title": "Allow access to charts from Tracker home screen",
+			"description": [
+				"Improved screen space on main screens"
+			]
+		},
+		{
+			"type": "bug",
+			"title": "Fix to Blunder and Scouting chart navigation",
+			"description": [
+				"The buttons on the Tracker home screen should now navigate to the correct screen."
+			]
+		},
+		{
+			"type": "bug",
+			"title": "Special Rules fixes",
+			"description": [
+				"The preview for some unit's special rules has been fixed."
+			]
+		}
+	]
+}
