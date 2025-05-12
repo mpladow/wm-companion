@@ -34,7 +34,16 @@ export const useFactionUnits = () => {
 		let description: string[] = [];
 		const army = Factions[factionSelection]?.replaceAll("_", " ");
 
-		if (version == 2.24) {
+		if (version == 2.25) {
+			const _factionList = wmrArmiesV2.find((x) => x.name == army);
+			if (_factionList) {
+				factionList = _factionList;
+				list = factionList?.units;
+				// factionList = factionList;
+				description = factionList.description;
+			}
+		}
+		else if (version == 2.24) {
 			const _factionList = wmrArmiesV2.find((x) => x.name == army);
 			if (_factionList) {
 				factionList = _factionList;
