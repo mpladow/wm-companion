@@ -5,6 +5,8 @@ import { UnitType } from '../schema/faction';
 
 export type FactionType = {
 	name: string;
+	factionId: number;
+	factionName: string;
 	version: string;
 	order: number,
 	description: string[],

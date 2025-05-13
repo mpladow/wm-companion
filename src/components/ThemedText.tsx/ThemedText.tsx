@@ -2,6 +2,7 @@ import { StyleSheet, Text, TextProps, View } from 'react-native';
 import React, { useMemo } from 'react';
 import { useTheme } from '@hooks/useTheme';
 import fonts from '@utils/fonts';
+import { invert } from 'lodash';
 
 export type TextVariant = 'bold' | 'heading1' | 'heading2' | 'heading3';
 type CustomTypeProps = {
@@ -10,8 +11,9 @@ type CustomTypeProps = {
   italic?: boolean;
   size?: 'sm' | 'default' | 'lg' | 'xl';
   style?: TextProps;
+  inverted?: boolean;
 } & TextProps;
-const ThemedText = ({ children, variant, bold, italic, size, ...props }: CustomTypeProps) => {
+const ThemedText = ({ children, variant, bold, italic, size, inverted, ...props }: CustomTypeProps) => {
   const { theme } = useTheme();
   const fontSize = useMemo(() => {
     switch (size) {
@@ -58,7 +60,7 @@ const ThemedText = ({ children, variant, bold, italic, size, ...props }: CustomT
       style={[
         {
           fontFamily: setTextFont(),
-          color: theme.text,
+          color: inverted ? theme.textInverted : theme.text,
           fontSize: fontSize,
         },
         props.style,

@@ -1,23 +1,9 @@
-import {
-  Animated,
-  Dimensions,
-  FlatList,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import { Animated, Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@hooks/useTheme';
 import { StandardModal, Text, TextBlock } from '@components/index';
-import {
-  ArmyListFilters,
-  ArmyListProps,
-  ListSections,
-  useBuilderContext,
-} from '@context/BuilderContext';
+import { ArmyListFilters, ArmyListProps, ListSections, useBuilderContext } from '@context/BuilderContext';
 import fonts from '@utils/fonts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import PopupConfirm from '@components/PopupConfirm';
@@ -30,6 +16,7 @@ import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
 import { filter } from 'lodash';
 import AnimatedHeader from '@components/AnimatedHeader/AnimatedHeader';
+import ThemedButton from '@components/Button/ThemedButton';
 
 const BuilderHome = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -39,9 +26,7 @@ const BuilderHome = () => {
   const [showArmyNotes, setShowArmyNotes] = useState(false);
   const [sectionListData, setSectionListData] = useState<armySectionListDataProps[]>([]);
 
-  const [filterFavourites, setFilterFavourites] = useState<ArmyListFilters[]>([
-    'all',
-  ] as ArmyListFilters[]);
+  const [filterFavourites, setFilterFavourites] = useState<ArmyListFilters[]>(['all'] as ArmyListFilters[]);
   const [filterMain, setFilterMain] = useState<ArmyListFilters[]>(['all'] as ArmyListFilters[]);
 
   const { theme } = useTheme();
@@ -171,9 +156,7 @@ const BuilderHome = () => {
           }
           return (
             <TextBlock variant="medium">
-              <Text
-                variant="heading3"
-                style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
+              <Text variant="heading3" style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
                 {x.title}
               </Text>
               {x.description && x.description?.map((d) => <Text>{d}</Text>)}
@@ -186,10 +169,7 @@ const BuilderHome = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
-      <ImageBackground
-        source={require('../../../../assets/images/wmr_bg.png')}
-        resizeMode="cover"
-        style={[styles.image]}>
+      <ImageBackground source={require('../../../../assets/images/wmr_bg.png')} resizeMode="cover" style={[styles.image]}>
         <LinearGradient
           colors={['rgba(31,46,39, 0.4)', 'rgba(6,9,7, 0.9)']}
           start={{ y: 0, x: 0.5 }}
@@ -227,11 +207,7 @@ const BuilderHome = () => {
             setFocusedArmy(undefined);
             setConfirmDialog(false);
           }}
-          text={
-            <Text style={{ color: theme.text, fontSize: 16 }}>
-              Do you want to delete this army?
-            </Text>
-          }
+          text={<Text style={{ color: theme.text, fontSize: 16 }}>Do you want to delete this army?</Text>}
           confirmText={t('DeleteArmy', { ns: 'builder' })}
           cancelText={t('Cancel', { ns: 'common' })}
           headerText={t('DeleteArmy', { ns: 'builder' })}
@@ -243,11 +219,7 @@ const BuilderHome = () => {
         focusedArmy={focusedArmy}
         isVisible={showCreateArmy}
       />
-      <AddArmyButton
-        handleAddArmyPress={handleAddArmyPress}
-        theme={theme}
-        buttonName={t('AddArmy')}
-      />
+      <AddArmyButton handleAddArmyPress={handleAddArmyPress} theme={theme} buttonName={t('AddArmy')} />
       {/* Army Notes MOdal */}
       <StandardModal
         visible={showArmyNotes}
@@ -277,11 +249,7 @@ const BuilderHome = () => {
       />
       <StandardModal
         content={generateContent()}
-        heading={
-          changelog
-            ? `Changelog v${changelog?.version}`
-            : "If you're seeing this, please report a bug :)"
-        }
+        heading={changelog ? `Changelog v${changelog?.version}` : "If you're seeing this, please report a bug :)"}
         onCancel={handleDismissModal}
         visible={showChangeLogModal}
         onSubmit={handleDismissModal}

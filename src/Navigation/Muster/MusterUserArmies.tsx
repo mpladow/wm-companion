@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
 import ArmySectionList, { armySectionListDataProps } from '@navigation/Builder/BuilderHome/components/ArmySectionList';
 import AddArmyButton from '@navigation/Builder/BuilderHome/components/AddArmyButton';
+import ThemedButton from '@components/Button/ThemedButton';
 
 const MusterUserArmies = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -32,8 +33,6 @@ const MusterUserArmies = () => {
   const toast = useToast();
 
   useEffect(() => {
-    console.log('🚀 ~ BuilderHome ~ filterFavourites:', filterFavourites);
-    console.log('🚀 ~ BuilderHome ~ filterMain:', filterMain);
     const favourited = builder.getUserArmyLists(filterFavourites).filter((x) => x.isFavourite);
     const notFavourited = builder.getUserArmyLists(filterMain).filter((x) => !x.isFavourite);
     const sLData: armySectionListDataProps = {
@@ -162,7 +161,7 @@ const MusterUserArmies = () => {
   const handleAddArmyPress = useCallback(() => {
     //  console.log('ADD');
     //  ref.current?.present();
-    navigation.navigate('ArmyEditorStack');
+    navigation.navigate('MusterCreateStack');
   }, []);
 
   return (
@@ -211,7 +210,12 @@ const MusterUserArmies = () => {
         headerText={t('DeleteArmy', { ns: 'builder' })}
       />
       {/* </ImageBackground> */}
-      <AddArmyButton onAddArmyPress={handleAddArmyPress} theme={theme} buttonName={t('AddArmy')} />
+      <View style={{ zIndex: 99999, position: 'absolute', bottom: 30, right: 24 }}>
+        <ThemedButton onPress={handleAddArmyPress} buttonType={'primary'} variant={'filled'} buttonSize={'default'}>
+          {t('AddArmy')}
+        </ThemedButton>
+      </View>
+      {/* <AddArmyButton onAddArmyPress={handleAddArmyPress} theme={theme} buttonName={t('AddArmy')} /> */}
       {/* Army Notes MOdal */}
       <StandardModal
         visible={showArmyNotes}

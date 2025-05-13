@@ -3,7 +3,7 @@ import { FactionSpecialRules } from './specialRules';
 
 export type FactionDto = {
 	name: string;
-	id?: number;
+	id: number;
 	version: string;
 	group: number,
 	order: number,

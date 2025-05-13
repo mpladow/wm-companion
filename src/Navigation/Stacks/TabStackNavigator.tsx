@@ -77,7 +77,8 @@ const TabStackNavigator = () => {
           );
         },
         tabBarStyle: {
-          height: Platform.OS == 'ios' ? 90 : 70,
+         //  height: Platform.OS == 'ios' ? 90 : 70,
+          paddingVertical: 12,
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: theme.backgroundVariant,

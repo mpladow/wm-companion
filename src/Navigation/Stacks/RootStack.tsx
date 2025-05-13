@@ -17,7 +17,7 @@ const RootStack = () => {
 		<Root.Navigator
 			initialRouteName='MainTabs'
 			screenOptions={{
-				headerStyle: { backgroundColor: theme.blueGrey },
+				headerStyle: { backgroundColor: theme.backgroundVariant },
 			}}
 		>
 			<Root.Group screenOptions={{ headerShown: false }}>
