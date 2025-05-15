@@ -11,32 +11,32 @@ import {
   Pressable,
   KeyboardAvoidingView,
   SafeAreaView,
+  Modal,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Theme, useTheme } from '@hooks/useTheme';
 import { useTranslation } from 'react-i18next';
-import { useBuilderContext } from '@context/BuilderContext';
 import { useToast } from 'react-native-toast-notifications';
-import { useFactionUnits } from '@utils/useFactionUnits';
-import { DropDownItemProps } from '@navigation/Tracker/screens/Tracker';
-import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
-import Constants from 'expo-constants';
 import { Factions } from '@utils/constants';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
-import { Button } from '@components/index';
+import { Button, StandardModal } from '@components/index';
 import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeOutRight } from 'react-native-reanimated';
 
 import ThemedButton from '@components/Button/ThemedButton';
-import { ArmyEditorStackParamList } from '@navigation/Builder/CreateArmyStack/ArmyEditorStack';
 import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useBuilderV2Context } from '@context/BuilderV2Context';
 import { useFactionDataContext } from '@context/FactionDataContext';
 import FormSelectFaction from './FormScreens/FormSelectFaction';
 import FormFactionDetails from './FormScreens/FormSetFactionDetails';
-import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
+import { AppDispatch, RootState } from 'src/state/state';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUserArmy } from 'src/state/userArmiesSlice';
+import { ArmyListPersistenceType, CharacterPersistenceType, UnitPersistenceType } from 'src/types/models/persistence';
 
+import uuid from 'uuid-random';
+import { setArmyToEdit } from 'src/state/musteringArmySlice';
+import { ArmyListType, CharacterType } from 'src/types/models/types';
 // type ArmyCreationV2Props = {
 //   theme: Theme;
 //   handleDismissModal: () => void;
@@ -44,9 +44,15 @@ import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboa
 const ArmyCreationForm = () => {
   const { theme } = useTheme();
   const nav = useNavigation();
-  const builder = useBuilderContext();
   const { createUserArmyList } = useBuilderV2Context();
   const { allFactionData, setSelectedFactionByFactionId, selectedFactionData } = useFactionDataContext();
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const userArmies = useSelector((state: RootState) => {
+    return state.userArmies;
+  });
+
   const { t } = useTranslation(['builder', 'common', 'forms']);
   const toast = useToast();
 
@@ -130,15 +136,78 @@ const ArmyCreationForm = () => {
       console.log('🚀 ~ CREATING ARMY ~ selectedFactionId:', selectedFactionId);
       // createUserArmyList(selectedFactionId, formArmyName, formArmyNotes, true, 0);
     }
-    createUserArmyList;
+    if (formOneComplete && formTwoComplete && showFactionEditDetails) {
+      setLoading(true);
+      if (selectedFactionId) {
+        const newUserArmy: ArmyListPersistenceType = {
+          armyId: uuid(),
+          faction: selectedFactionId,
+          name: formArmyName,
+          isFavourite: false,
+          armyNotes: formArmyName,
+          order: userArmies.length + 1,
+          selectedUnits: [],
+          selectedCharacters: [],
+        };
+        // add min units into userARmy
+        const requiredCharacters = selectedFactionData?.characters.filter((x) => x.armyMin !== undefined);
+        const requiredUnits = selectedFactionData?.units.filter((x) => x.min !== undefined);
+        requiredCharacters?.forEach((rc) => {
+          if (rc.armyMin)
+            for (let index = 0; index < rc.armyMin; index++) {
+              const newCharacter: CharacterPersistenceType = {
+                id: uuid(),
+                characterId: rc.id,
+                name: rc.name,
+                selectedUpgrades: [],
+              };
+              newUserArmy.selectedCharacters.push(newCharacter);
+            }
+        });
+        requiredUnits?.forEach((rc) => {
+          if (rc.min)
+            for (let index = 0; index < rc.min; index++) {
+              const newUnit: UnitPersistenceType = {
+                id: uuid(),
+                unitId: rc.id,
+                name: rc.name,
+                selectedUpgrades: [],
+              };
+              newUserArmy.selectedUnits.push(newUnit);
+            }
+        });
+        console.log('🚀 ~ handlePrimaryButtonPress ~ newUserArmy:', newUserArmy);
+
+        dispatch(addUserArmy(newUserArmy));
+        setShowFactionSelection(true);
+        setShowFactionSelection(false);
+
+        // set data to army before navigating
+        const armyToEdit: ArmyListType = {
+          armyId: newUserArmy.armyId,
+          faction: newUserArmy.faction,
+          name: newUserArmy.name,
+          isFavourite: newUserArmy.isFavourite,
+          armyNotes: newUserArmy.armyNotes,
+          order: newUserArmy.order,
+          selectedUnits: requiredUnits ?? [],
+          selectedCharacters: requiredCharacters ?? [],
+          points: 0,
+        };
+        dispatch(setArmyToEdit(armyToEdit));
+
+        setTimeout(() => {
+          setLoading(false);
+          nav.navigate('MusterArmyDetails');
+        }, 500);
+      }
+    }
   };
 
   const handleBack = () => {
     setShowFactionEditDetails(false);
     setShowFactionSelection(true);
   };
-
-  const x = useSafeAreaInsets();
 
   const handleTimelinePress = (index: number) => {
     if (index == 0) {
@@ -255,6 +324,18 @@ const ArmyCreationForm = () => {
           </Button>
         </View>
       </View>
+      <StandardModal
+        visible={loading}
+        content={
+          <View>
+            <ThemedText>Loading...</ThemedText>
+          </View>
+        }
+        heading={'Creating Army...'}
+        onCancel={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
     </SafeAreaView>
   );
 };

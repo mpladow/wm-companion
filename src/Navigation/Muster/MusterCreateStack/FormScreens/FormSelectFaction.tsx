@@ -58,7 +58,7 @@ const FormSelectFaction = ({ onSelectFaction, selectedFactionId }: FormSelectFac
     }
   };
 
-  useFocusEffect(() => {
+  useEffect(() => {
     console.log('🚀 ~ useFocusEffect ~ selectedFactionId:', selectedFactionId);
     if (selectedFactionId) {
       console.log('🚀 ~ testing active index active indexocusEffect ~ ddFactions:', ddFactions);
@@ -68,7 +68,7 @@ const FormSelectFaction = ({ onSelectFaction, selectedFactionId }: FormSelectFac
         setCurrentActiveIndex(index);
       }
     }
-  });
+  }, [selectedFactionId]);
 
   return (
     <Animated.View entering={FadeInLeft.delay(200)} exiting={FadeOutRight} style={{ paddingVertical: 6, flexGrow: 1 }}>

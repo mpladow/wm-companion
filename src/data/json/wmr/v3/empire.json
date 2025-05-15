@@ -72,7 +72,7 @@
       "rangeAttack": 1,
       "range": 30,
       "hits": 3,
-      "armour": null,
+      "armour": 0,
       "size": 3,
       "points": 65,
       "max": 3
@@ -86,7 +86,7 @@
       "rangeAttack": 1,
       "range": 30,
       "hits": 3,
-      "armour": null,
+      "armour": 0,
       "size": 3,
       "points": 55,
       "min": 2,
@@ -99,7 +99,7 @@
       "type": "Infantry",
       "attack": 5,
       "hits": 3,
-      "armour": null,
+      "armour": 0,
       "size": 3,
       "points": 70,
       "max": 1
@@ -111,7 +111,7 @@
       "type": "Infantry",
       "attack": 4,
       "hits": 3,
-      "armour": null,
+      "armour": 0,
       "size": 1,
       "points": 25,
       "attachTo": ["Halberdiers", "Handgunners", "Crossbowmen", "Flagellants"],
@@ -152,6 +152,7 @@
       "rangeAttack": [8, 4, 2],
       "range": 30,
       "hits": 2,
+      "armour": 0,
       "size": 1,
       "points": 50,
       "max": 1,
@@ -166,6 +167,7 @@
       "rangeAttack": 2,
       "range": 60,
       "hits": 2,
+      "armour": 0,
       "size": 2,
       "points": 85,
       "max": 1,
@@ -189,22 +191,27 @@
   ],
   "upgrades": [
     {
+		"id": "f6b370e4d5a3",
       "name": "Griffon",
       "order": 0,
       "type": "Monstrous Mount",
       "attack": 2,
       "points": 80,
-      "max": 1
+      "max": 1,
+      "availableFor": ["General", "Hero", "Wizard"]
     },
     {
+      "id": "46f635365876",
       "name": "War Altar",
       "order": 1,
       "type": "Chariot Mount",
       "attack": 1,
       "points": 15,
-      "armyMax": 1
+      "armyMax": 1,
+      "availableFor": ["Wizard"]
     },
     {
+		"id": "80c8469dab18",
       "name": "Handgunners",
       "order": 2,
       "type": "Special",
@@ -215,7 +222,8 @@
       "size": 3,
       "points": 10,
       "max": 1,
-      "replacesName": true
+      "replacesName": true,
+      "availableFor": ["Crossbowmen"]
     }
   ],
   "magic": true,

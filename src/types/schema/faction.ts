@@ -13,11 +13,12 @@ export type FactionDto = {
 	/**faction uses magic */
 	magic: boolean;
 	factionSpecialRules?: FactionSpecialRules[];
+	upgrades?: Upgrade[] // faction specific upgrades
 	spells: Spell[]
 }
 
 export type UnitDto = {
-	id: number;
+	id: number | string;
 	name: string;
 	order: number;
 	type: UnitType;
@@ -28,7 +29,7 @@ export type UnitDto = {
 	max?: number;
 	rangeAttack?: number | number[];
 	range?: number;
-	armour?: number;
+	armour: number;
 	min?: number;
 	/**Unit cannot receive magic items */
 	noMagic?: boolean
@@ -65,7 +66,7 @@ export type Character = {
 export type Upgrade = {
 	name: string;
 	order: number
-	type: UpgradeType,
+	type: TypeOfUpgrade,
 	attackBonus?: number,
 	points: number,
 	max: number;
@@ -73,6 +74,8 @@ export type Upgrade = {
 	replacesName?: boolean;
 	/** this upgrade will replace the unit type of the attached unit - from Hero to Wizard */
 	replacesType?: boolean;
+	availableFor: string[];
+
 }
 
 export type Spell = {
@@ -83,4 +86,4 @@ export type Spell = {
 }
 
 export type UnitType = "Infantry" | "Cavalry" | "Artillery" | "Machine" | "General" | "Hero" | "Wizard"
-export type UpgradeType = "Monstrous Mount" | "Chariot Mount" | "Special"
+export type TypeOfUpgrade = "Monstrous Mount" | "Chariot Mount" | "Special" | "Magic Standard" | "Magic Weapon" | "Device of Power"

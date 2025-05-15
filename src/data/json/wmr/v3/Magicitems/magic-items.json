@@ -1,0 +1,276 @@
+{
+  "upgrades": [
+    {
+		"id": "2dee1c10-775b-4813-abe6-622b93ca2087",
+      "name": "Battle Banner",
+      "order": "BB",
+      "type": "Magic Standard",
+      "points": 30,
+      "armyMax": 1,
+      "description": [
+        "A unit with this banner increases the Attacks value of each of its stands by +1 during its first Combat engagement of fighting. The effect only lasts for the first combat engagement of the battle, including rounds of pursuit combat during the same engagement and any further engagements which result from an advance."
+      ],
+      "availableFor": ["Infantry", "Cavalry", "Chariot"]
+    },
+    {
+      "id": "127621a3-158c-4663-8e0f-cc96f93edd50",
+      "name": "Banner of Shielding",
+      "order": "BSh",
+      "type": "Magic Standard",
+      "points": {
+        "4": 50,
+        "5": 30,
+        "6": 15,
+        "0": 15
+      },
+      "modifierFor": "armour",
+      "armyMax": 1,
+      "description": [
+        "A unit with this banner has its Armour value increased in effectiveness by +1. If the unit’s Armour value is 5+ then this banner increases it to 4+ and so on. A unit’s Armour value cannot be better than 3+. If a unit already has an Armour value of 3+ then this banner has no effect. This bonus lasts until the unit loses a stand. After the unit has lost a stand, the banner has no further effect."
+      ],
+      "availableFor": ["Infantry", "Cavalry", "Chariot"]
+    },
+    {
+      "id": "0eef4859-ed3f-4b0a-8c18-d034c0c1dad5",
+      "name": "Banner of Fortitude",
+      "order": 21,
+      "type": "Magic Standard",
+      "points": {
+        "4": 50,
+        "3": 30,
+        "2": 30
+      },
+      "modifierFor": "hits",
+      "armyMax": 1,
+      "description": [
+        "A unit with this banner increases the Hits value of each of its stands by +1 during its first Combat engagement of fighting. The effect only lasts for the first combat engagement of the battle, including rounds of pursuit combat during the same engagement and any further engagements which result from an advance. Discard odd hits at the end of the Combat engagement before discounting the effect of the Banner of Fortitude."
+      ],
+      "availableFor": ["Infantry", "Cavalry", "Chariot"]
+    },
+    {
+      "id": "5835f8f2-4c30-4439-a164-f852474e331c",
+      "name": "Banner of Steadfastness",
+      "order": 22,
+      "type": "Magic Standard",
+      "points": {
+        "4": 20,
+        "5": 15,
+        "6": 10
+      },
+      "modifierFor": "armour",
+      "armyMax": 1,
+      "description": [
+        "One shooting hit inflicted on the unit after saves have been taken in each turn is ignored because the missiles are cast aside by the Banner of Steadfastness. This includes hits from magic spells inflicted in the Shooting phase. This effect lasts until the unit loses a stand. After the unit has lost a stand the banner has no further effect."
+      ],
+      "availableFor": ["Infantry", "Cavalry", "Chariot"]
+    },
+    {
+		"id": "6670651d-0eb6-4873-97cb-1a30cbdcc606",
+      "name": "Banner of Fortune",
+      "order": 23,
+      "type": "Magic Standard",
+      "points": 15,
+      "armyMax": 1,
+      "description": [
+        "The player can choose to immediately re-roll all the unit’s Attack dice once in either the Shooting phase or Combat phase should he wish to do so. This includes any bonus attacks from magic items or characters. The player declares that he is unsatisfied with the scores he has rolled, takes all the dice and immediately rolls them all once again. Note that the player must roll all the dice again, including any that have scored hits, so it is possible to be very unfortunate and roll an even worse score! The Banner of Fortune works only once during the entire game."
+      ],
+      "availableFor": ["Infantry", "Cavalry", "Chariot"]
+    },
+    {
+		"id": "7b5c0da5-3514-4c0d-8355-b583c72f59d5",
+      "name": "Sword of Destruction",
+      "order": 24,
+      "type": "Magic Weapon",
+      "points": 10,
+      "armyMax": 1,
+      "description": [
+        "If a unit has this weapon then one enemy unit that it is touching is affected and must re-roll one successful Armour roll in each round of combat. For example, if three hits are scored and one is saved by armour then the successful roll must be taken again. Only one enemy unit can be affected by this."
+      ],
+      "availableFor": ["Infantry", "Cavalry", "Chariot", "General", "Hero", "Wizard"]
+    },
+    {
+		"id": "cb5be601-d8e6-4923-9964-fd818bde598f",
+      "name": "Sword of Fate",
+      "order": 25,
+      "type": "Magic Weapon",
+      "points": 5,
+      "armyMax": 1,
+      "description": [
+        "In the first round of the unit’s first combat, a unit with this sword adds a +1 bonus to the Attack value of one stand in a similar way as the Attack bonus of a character. The Sword of Fate only works once in the entire game. Note that this gives +1 Attack in total and not +1 to each stand!"
+      ],
+      "availableFor": ["Infantry", "Cavalry", "Chariot", "General", "Hero", "Wizard"]
+    },
+    {
+		"id": "62dd2087-2f64-4be9-a961-637881e3a37a",
+      "name": "Sword of Cleaving",
+      "order": 26,
+      "type": "Magic Weapon",
+      "points": 10,
+      "armyMax": 1,
+      "description": ["A unit with this sword can re-roll one unsuccessful Attack dice each round of combat."],
+      "availableFor": ["Infantry", "Cavalry", "Chariot", "General", "Hero", "Wizard"]
+    },
+    {
+		"id": "724f9e0e-d936-4551-8ecb-4104d73820b6",
+      "name": "Sword of Might",
+      "order": 27,
+      "type": "Magic Weapon",
+      "points": 10,
+      "armyMax": 1,
+      "description": [
+        "A unit with this sword adds a +1 bonus to the Attack value of one stand, similar to the Attack bonus of a character. Note that this gives +1 Attack in total, not +1 to each stand!"
+      ],
+		"availableFor": ["Infantry", "Cavalry", "Chariot", "General", "Hero", "Wizard"]
+    },
+    {
+		"id": "43e944ba-57df-49e4-b2c7-b46e698cfb64",
+      "name": "Crown of Command",
+      "order": 28,
+      "type": "Device of Power",
+      "points": 70,
+      "armyMax": 1,
+      "description": [
+        "If the General has this potent magic item he can choose to issue his first order of each turn against an unmodified Command value of 10. No command penalties apply when the Crown of Command is used. This only applies to the General’s first order each turn, subsequent orders must be given normally. Should the General fail to issue his first order, by rolling an 11 or 12, then the Crown of Command ceases to work."
+      ],
+      "availableFor": ["General"]
+    },
+    {
+		"id": "ab9e6706-7b1f-4919-9834-dbb1df6a97a9",
+      "name": "Helm of Dominion",
+      "order": 29,
+      "type": "Device of Power",
+      "points": 40,
+      "armyMax": 1,
+      "description": [
+        "Only a General is allowed to wear the Helm of Dominion (only his head is big enough!). The General’s Command value is increased by +1 up to a maximum value of 10. The Helm of Dominion works for one turn only during the entire battle, the player must specify at the start of the turn if he wishes to employ its powers."
+      ],
+      "availableFor": ["General"]
+    },
+    {
+		"id": "e882b0df-d27d-4cc8-9f8f-7759f07e1b60",
+      "name": "Orb of Majesty",
+      "order": 30,
+      "type": "Device of Power",
+      "points": 30,
+      "armyMax": 1,
+      "description": [
+        "If the General has this magic item he may disregard a single failed Command test and roll it again as if he had a Command value of 8. The usual adjustments are made for Command penalties but note that the previously failed roll is disregarded so it doesn’t count as a penalty. If the re-roll is successful the order is issued and the General can continuing issuing orders in the usual way with his normal Command value.",
+        "",
+        "The Orb of Majesty will only work once in the entire game and only affects an order that has been issued by the General."
+      ],
+      "availableFor": ["General"]
+    },
+    {
+		"id": "bf411575-7b69-4916-90d1-0751d29ce24c",
+      "name": "Ring of Magic",
+      "order": 31,
+      "type": "Device of Power",
+      "points": 30,
+      "armyMax": 1,
+      "description": [
+        "A Wizard with this ring is able to cast a spell without making the usual dice roll to do so. This item will only work once in the entire game."
+      ],
+      "availableFor": ["Wizard"]
+    },
+    {
+		"id": "30b56270-0571-4f31-a62e-e62d1728b4ea",
+      "name": "Staff of Spellbinding",
+      "order": 32,
+      "type": "Device of Power",
+      "points": 30,
+      "armyMax": 1,
+      "description": [
+        "If an enemy Wizard fails to cast a spell, he can be spellbound on the D6 roll of a 4+. A spellbound Wizard suffers a -1 dice penalty each time he tries to cast a spell. The Staff of Spellbinding ceases to work once it has been used successfully. It follows that only one enemy Wizard can be spellbound as a result."
+      ],
+      "availableFor": ["Wizard"]
+    },
+    {
+		"id": "7ef1596f-63cc-4a17-b2e3-70ddf65d8e72",
+      "name": "Sceptre of Sovereignty",
+      "order": 33,
+      "type": "Device of Power",
+      "points": 30,
+      "armyMax": 1,
+      "description": [
+        "If the General carries the Sceptre of Sovereignty, he may ignore one blundered ‘double 6’ roll for an order made by either himself or any of the army’s other characters. If the blunder is made by a subordinate character you can roll to see what the blunder is before deciding whether to use the Sceptre of Sovereignty or not. If ignored, the Command test is passed and the character may continue issuing orders as normal. The steely will of the Sceptre of Sovereignty reaches out and stays the incompetent wretch before the deed is done."
+      ],
+		"availableFor": ["General"]
+    },
+    {
+		"id": "8a4e6a78-ab14-472a-be7b-806fd27b78cf",
+      "name": "Scroll of Dispelling",
+      "order": 34,
+      "type": "Device of Power",
+      "points": 20,
+      "armyMax": 1,
+      "description": [
+        "If a Wizard or a Dwarf Runesmith has the Scroll of Dispelling he can automatically cause an enemy’s spell to fail. The Scroll can only be used once to nullify the effect of a spell an enemy Wizard has successfully cast. In the case of a Runesmith, the Scroll can be used after a normal Dwarf anti-magic roll has failed."
+      ],
+      "availableFor": ["Wizard"]
+    },
+    {
+		"id": "47f6ea10-ee72-44f1-a135-8c926a89dcde",
+      "name": "Wand of Power",
+      "order": 35,
+      "type": "Device of Power",
+      "points": 10,
+      "armyMax": 1,
+      "description": [
+        "A Wizard with the Wand of Power can add +1 to the chance of a spell working once during the game. The player must decide that he is using the Wand of Power before rolling the dice. As always a spell fails on the roll of a 1 even when using the Wand of Power."
+      ],
+      "availableFor": ["Wizard"]
+    },
+    {
+		"id": "34405446-a043-4e7d-8795-8c74ccefbfa9",
+      "name": "Rod of Repetition",
+      "order": 36,
+      "type": "Device of Power",
+      "points": 10,
+      "armyMax": 1,
+      "description": [
+        "If a Wizard casts a spell and succeeds by scoring the required dice roll they can cast another spell, regardless of whether the spell was dispelled or anti-magicked by a Runesmith.",
+        "",
+        "They can only do this once during the entire game.",
+        "",
+        "The spell can be the same spell or a different spell. The target can be the same unit or a different unit.",
+        "",
+        "Note that some spells, such as the Teleport spell, already allow for the possibility of casting a further spell on a random dice roll. In these cases the Rod of Repetition can be used instead of the random dice roll to try and cast the second spell if you prefer, or the Rod of Repetition could be used after the second spell has been cast assuming it is cast successfully. By using the Rod of Repetition with spells of this kind it is possible to cast the spell again, however, you do lose the bonus spell option, effectivly restricting casting to a maximum of 3 spells per turn.",
+        "",
+        "For example: Teleport, 2nd spell, RoR, 3rd spell - or - 1st spell, RoR, Teleport, 3rd spell - supposing the 1st, 2nd or 3rd spell may be a Teleport too."
+      ],
+      "availableFor": ["Wizard"]
+    }
+  ],
+  "upgradeConstraints": [
+    {
+      "unitType": ["Infantry", "Cavalry", "Chariot"],
+      "upgrades": [
+        "Battle Banner",
+        "Banner of Fortune",
+        "Sword of Destruction",
+        "Sword of Fate",
+        "Sword of Cleaving",
+        "Sword of Might",
+        "Banner of Shielding",
+        "Banner of Steadfastness",
+        "Banner of Fortitude"
+      ],
+      "magic": true
+    },
+    {
+      "unitType": ["General", "Hero", "Wizard"],
+      "upgrades": ["Sword of Destruction", "Sword of Fate", "Sword of Cleaving", "Sword of Might"],
+      "magic": true
+    },
+    {
+      "unitType": ["General"],
+      "upgrades": ["Crown of Command", "Helm of Dominion", "Orb of Majesty", "Sceptre of Sovereignty"],
+      "magic": true
+    },
+    {
+      "unitType": ["Wizard"],
+      "upgrades": ["Ring of Magic", "Staff of Spellbinding", "Scroll of Dispelling", "Wand of Power", "Rod of Repetition"],
+      "magic": true
+    }
+  ]
+}

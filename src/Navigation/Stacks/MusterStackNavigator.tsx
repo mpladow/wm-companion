@@ -21,7 +21,6 @@ export const MusterStackNavigator = () => {
         animation: 'slide_from_right',
       }}>
       <Stack.Screen name="MusterUserArmies" component={MusterUserArmies} />
-      <Stack.Screen name="MusterCreateStack" component={MusterCreateStack} options={{ presentation: 'modal', headerShown: false }} />
       <Stack.Screen name="MusterArmyDetails" component={MusterArmyDetails} />
       <Stack.Screen name="MusterQuickView" component={MusterQuickView} />
     </Stack.Navigator>

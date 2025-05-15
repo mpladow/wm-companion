@@ -17,6 +17,8 @@ import { UpdateCheckerContextProvider } from '@context/UpdateCheckerContext';
 import * as Font from 'expo-font';
 import { FactionProvider } from '@context/FactionDataContext';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { Provider } from 'react-redux';
+import { store } from 'src/state/state';
 
 const darkTheme = {
   dark: true,
@@ -79,32 +81,34 @@ const App = () => {
     return null;
   }
   return (
-    <KeyboardProvider>
-      <ThemeContextProvider>
-        <ToastProvider>
-          <UpdateCheckerContextProvider>
-            <SettingsContextProvider>
-              <RootSiblingParent>
-                <MenuProvider>
-                  <CollectionProvider>
-                    <FactionProvider>
-                      <BuilderContextProvider>
-                        <VPContextProvider>
-                          <NavigationContainer theme={darkTheme}>
-                            <RootStack />
-                            <StatusBar translucent />
-                          </NavigationContainer>
-                        </VPContextProvider>
-                      </BuilderContextProvider>
-                    </FactionProvider>
-                  </CollectionProvider>
-                </MenuProvider>
-              </RootSiblingParent>
-            </SettingsContextProvider>
-          </UpdateCheckerContextProvider>
-        </ToastProvider>
-      </ThemeContextProvider>
-    </KeyboardProvider>
+    <Provider store={store}>
+      <KeyboardProvider>
+        <ThemeContextProvider>
+          <ToastProvider>
+            <UpdateCheckerContextProvider>
+              <SettingsContextProvider>
+                <RootSiblingParent>
+                  <MenuProvider>
+                    <CollectionProvider>
+                      <FactionProvider>
+                        <BuilderContextProvider>
+                          <VPContextProvider>
+                            <NavigationContainer theme={darkTheme}>
+                              <RootStack />
+                              <StatusBar translucent />
+                            </NavigationContainer>
+                          </VPContextProvider>
+                        </BuilderContextProvider>
+                      </FactionProvider>
+                    </CollectionProvider>
+                  </MenuProvider>
+                </RootSiblingParent>
+              </SettingsContextProvider>
+            </UpdateCheckerContextProvider>
+          </ToastProvider>
+        </ThemeContextProvider>
+      </KeyboardProvider>
+    </Provider>
   );
 };
 

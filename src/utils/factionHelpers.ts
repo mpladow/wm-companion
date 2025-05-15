@@ -24,7 +24,7 @@ export const getFactionsDropdown = () => {
 	return { ddFactionList: ddFactionList };
 };
 export const getKeyByValue = (object: object, value: number) => {
-	return Object.keys(object).find((key) => object[key] === value);
+	return Object.keys(object).find((key) => object[key as keyof typeof object] === value);
 };
 export const getGenericSpecialRules = () => {
 	return genericSpecialRules;

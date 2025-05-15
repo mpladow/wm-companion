@@ -14,6 +14,16 @@ import { useUpdateChecker } from '@context/UpdateCheckerContext';
 import ArmySectionList, { armySectionListDataProps } from '@navigation/Builder/BuilderHome/components/ArmySectionList';
 import AddArmyButton from '@navigation/Builder/BuilderHome/components/AddArmyButton';
 import ThemedButton from '@components/Button/ThemedButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from 'src/state/state';
+import ThemedText from '@components/ThemedText.tsx/ThemedText';
+import ArmySectionListV2, { ArmySectionListDataV2Props } from './components/ArmySectionListV2';
+import { UserArmiesDto } from 'src/types/models/viewModel';
+import { Factions } from '@utils/constants';
+import { setArmyToEdit } from 'src/state/musteringArmySlice';
+import { ArmyListType } from 'src/types/models/types';
+import { useFactionDataContext } from '@context/FactionDataContext';
+import { useMuster } from '@hooks/useMuster';
 
 const MusterUserArmies = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -21,7 +31,7 @@ const MusterUserArmies = () => {
   const [focusedArmyId, setFocusedArmyId] = useState<string>();
   const [focusedArmy, setFocusedArmy] = useState<ArmyListProps>();
   const [showArmyNotes, setShowArmyNotes] = useState(false);
-  const [sectionListData, setSectionListData] = useState<armySectionListDataProps[]>([]);
+  const [sectionListData, setSectionListData] = useState<ArmySectionListDataV2Props[]>([]);
 
   const [filterFavourites, setFilterFavourites] = useState<ArmyListFilters[]>(['all'] as ArmyListFilters[]);
   const [filterMain, setFilterMain] = useState<ArmyListFilters[]>(['all'] as ArmyListFilters[]);
@@ -31,23 +41,40 @@ const MusterUserArmies = () => {
   const builder = useBuilderContext();
   const { t } = useTranslation(['builder', 'common', 'forms']);
   const toast = useToast();
+  const userArmies = useSelector((state: RootState) => {
+    //TODO
+    state.userArmies.map((ua) => {
+      // map to a view model
+      const vm: UserArmiesDto = {
+        name: ua.name,
+        isFavourite: ua.isFavourite,
+        factionName: ua.faction.toString(),
+        points: '0',
+        image: '',
+      };
+    });
+    return state.userArmies;
+  });
+  const { setSelectedFactionByFactionId } = useFactionDataContext();
+
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const favourited = builder.getUserArmyLists(filterFavourites).filter((x) => x.isFavourite);
-    const notFavourited = builder.getUserArmyLists(filterMain).filter((x) => !x.isFavourite);
-    const sLData: armySectionListDataProps = {
+    const favourited = userArmies.filter((x) => x.isFavourite);
+    const notFavourited = userArmies.filter((x) => !x.isFavourite);
+    const sLData: ArmySectionListDataV2Props = {
       data: favourited,
       title: 'Favourited',
     };
-    const notFavouritedSLData: armySectionListDataProps = {
+    const notFavouritedSLData: ArmySectionListDataV2Props = {
       data: notFavourited,
       title: 'Armies',
     };
-    const arr: armySectionListDataProps[] = [];
+    const arr: ArmySectionListDataV2Props[] = [];
     arr.push(sLData);
     arr.push(notFavouritedSLData);
     setSectionListData(arr);
-  }, [builder.userArmyLists, filterMain, filterFavourites]);
+  }, [userArmies]);
 
   const handleShowArmyNotesModal = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
@@ -63,23 +90,6 @@ const MusterUserArmies = () => {
   const handleEditArmyPress = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
     setShowCreateArmy(!showCreateArmy);
-  };
-  const onArmyListPress = (armyId: string) => {
-    builder.setSelectedArmyList(armyId);
-    setTimeout(() => {
-      navigation.navigate('BuilderEdit');
-    }, 200);
-  };
-  const onDuplicateArmyPress = (armyId: string) => {
-    builder.duplicateArmyList(armyId);
-    toast.show('Army List duplicated!', {
-      type: 'success',
-      duration: 4000,
-    });
-  };
-  const onArmyListDeletePress = (armyId: string) => {
-    setFocusedArmyId(armyId);
-    setConfirmDialog(true);
   };
 
   const { isReady, changelog, dismissChangeLog, recentlyDismissedChangeLog } = useUpdateChecker();
@@ -159,11 +169,28 @@ const MusterUserArmies = () => {
   };
 
   const handleAddArmyPress = useCallback(() => {
-    //  console.log('ADD');
+    console.log('ADD');
     //  ref.current?.present();
     navigation.navigate('MusterCreateStack');
   }, []);
+  const muster = useMuster();
 
+  /**
+   * on list item press, this will convert the persistence model into the working model
+   * @param armyId
+   */
+  const handleArmyListItemPress = (armyId: string) => {
+    const armyToEdit = userArmies.find((x) => x.armyId == armyId);
+    if (armyToEdit) {
+      const armyVm = muster.convertFromArmyPersistenceToViewModel(armyToEdit);
+      console.log("🚀 ~ handleArmyListItemPress ~ armyVm:", armyVm)
+      setSelectedFactionByFactionId(armyToEdit.faction);
+      dispatch(setArmyToEdit(armyVm));
+      navigation.navigate('MusterArmyDetails');
+    }
+  };
+  const handleDuplicateArmyPress = () => {};
+  const handleArmyDeletePress = () => {};
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       {/* <ImageBackground source={require('../../../../../assets/images/wmr_bg.png')} resizeMode="cover" style={[styles.image]}> */}
@@ -180,14 +207,13 @@ const MusterUserArmies = () => {
           zIndex: 9,
         }}
       />
-
-      <ArmySectionList
+      <ArmySectionListV2
         handleFilterChange={handleFilterChange}
         sectionListData={sectionListData}
         handleShowArmyNotesModal={handleShowArmyNotesModal}
-        onDuplicateArmyPress={onDuplicateArmyPress}
-        onArmyListPress={onArmyListPress}
-        onArmyListDeletePress={onArmyListDeletePress}
+        onDuplicateArmyPress={handleDuplicateArmyPress}
+        onArmyListPress={handleArmyListItemPress}
+        onArmyListDeletePress={handleArmyDeletePress}
         handleEditArmyPress={handleEditArmyPress}
         handleToggleFavourite={builder.toggleFavourite}
         handleMigrateArmy={builder.migrateArmyList}

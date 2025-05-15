@@ -1,5 +1,5 @@
 import { SpecialRulesType } from '../data/army';
-import { UnitType } from '../schema/faction';
+import { TypeOfUpgrade, UnitType } from '../schema/faction';
 
 // these are the types that contain the fully hydrated object from the schema. It combines all the relationships into a single entity 
 
@@ -12,6 +12,7 @@ export type FactionType = {
 	description: string[],
 	units: UnitDetailsType[];
 	characters: CharacterType[];
+	allPermittedUpgrades?: UpgradeType[];
 	allSpecialRules: AllSpecialRulesType[];
 	spells: SpellDto[];
 	/**faction uses magic */
@@ -34,18 +35,18 @@ export type ArmyListType = {
 
 
 export type UnitDetailsType = {
-	id: number;
+	id: number | string;
 	name: string;
 	order: number;
 	type: UnitType;
-	attack: number;
+	attack: string | number;
 	hits: number;
 	size: number;
 	points: number;
 	max?: number;
 	rangeAttack?: number | number[];
 	range?: number;
-	armour?: number;
+	armour: number;
 	min?: number;
 	/**Unit cannot receive magic items */
 	noMagic?: boolean
@@ -61,6 +62,9 @@ export type UnitDetailsType = {
 	/**List of units that need to be in the army in order to take this unit */
 	requiredUnits?: string[]
 }
+export type MusterUnitDetailsType = {
+	attachedUpgrades: UpgradeType[]
+} & UnitDetailsType
 
 export type CharacterType = {
 	id: number;
@@ -77,17 +81,28 @@ export type CharacterType = {
 	permittedUpgrades?: string[]
 }
 
+export type MusterCharacterDetailsType = {
+	attachedUpgrades: UpgradeType[]
+} & CharacterType
+
+
 export type UpgradeType = {
 	name: string;
 	order: number
-	type: UpgradeType,
-	attackBonus?: number,
-	points: number,
-	max: number;
+	type: TypeOfUpgrade,
+	attack?: number,
+	points?: number | object,
+	/** Max number per 1000 */
+	max?: number;
+	armyMax?: number
 	/** changes the name of the original unit - this is only for units like Handgunners, who will replace the original unit's name if added. */
 	replacesName?: boolean;
 	/** this upgrade will replace the unit type of the attached unit - from Hero to Wizard */
 	replacesType?: boolean;
+	/** modifies what kind of stat*/
+	modifierFor?: "hits" | "armour";
+	availableFor: string[];
+	addsWizardType?: boolean
 }
 
 export type AllSpecialRulesType = {

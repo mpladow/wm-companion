@@ -18,14 +18,14 @@ export type ArmyListPersistenceType = {
 
 export type UnitPersistenceType = {
 	id: string;
-	unitId: number;
+	unitId: number | string;
 	name: string;
 	selectedUpgrades: UpgradePersistenceType[]
 }
 
 export type CharacterPersistenceType = {
 	id: string;
-	characterId: number;
+	characterId: number | string;
 	name: string;
 	selectedUpgrades: UpgradePersistenceType[];
 }

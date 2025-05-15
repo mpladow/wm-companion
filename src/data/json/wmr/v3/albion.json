@@ -70,6 +70,7 @@
       "type": "Infantry",
       "attack": 2,
       "rangeAttack": 1,
+      "armour": 0,
       "range": 30,
       "hits": 3,
       "size": 3,
@@ -96,6 +97,7 @@
       "type": "Cavalry",
       "attack": 3,
       "hits": 3,
+      "armour": 0,
       "size": 3,
       "points": 40,
       "max": 6
@@ -171,7 +173,8 @@
       "type": "Monstrous Mount",
       "attack": 2,
       "points": 20,
-      "max": 1
+      "max": 1,
+      "availableFor": ["Druid"]
     },
     {
       "name": "Chariot",
@@ -179,7 +182,8 @@
       "type": "Chariot Mount",
       "attack": 1,
       "points": 20,
-      "max": 1
+      "max": 1,
+      "availableFor": ["General", "Hero", "Druid"]
     }
   ],
   "magic": true,
