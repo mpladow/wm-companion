@@ -164,7 +164,7 @@
 			"name": "Stegadon Mount",
 			"order": 0,
 			"type": "Monstrous Mount",
-			"attack": "+5",
+			"attack": "+3",
 			"points": "+90",
 			"max": 1
 		},
