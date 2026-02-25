@@ -1,4 +1,5 @@
 import { SpecialRulesType } from '../data/army';
+import { CharacterCardSchema, TroopCardSchema } from '../modelsv2/schema/unitcard';
 import { TypeOfUpgrade, UnitType } from '../schema/faction';
 
 // these are the types that contain the fully hydrated object from the schema. It combines all the relationships into a single entity 
@@ -28,8 +29,8 @@ export type ArmyListType = {
 	isFavourite: boolean;
 	armyNotes: string;
 	order: number;
-	selectedUnits: UnitDetailsType[];
-	selectedCharacters: CharacterType[];
+	selectedUnits: TroopCardSchema[];
+	selectedCharacters: CharacterCardSchema[];
 	points: number;
 };
 

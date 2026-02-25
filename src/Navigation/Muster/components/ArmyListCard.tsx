@@ -1,19 +1,17 @@
-import { Pressable, StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
-import { useTheme } from '@hooks/useTheme';
-import { ArmyListPersistenceType } from 'src/types/models/persistence';
-import ThemedText from '@components/ThemedText.tsx/ThemedText';
-import { getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
-import { Factions } from '@utils/constants';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
-import { AntDesign, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import MenuOptionButton from '@components/MenuOptionButton';
-import Constants from 'expo-constants';
+import ThemedText from '@components/ThemedText.tsx/ThemedText';
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTheme } from '@hooks/useTheme';
+import { getLocalFactionAssets } from '@utils/factionHelpers';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
+import { UserListVM } from 'src/types/modelsv2/viewmodel/musteruserarmies';
 
 type ArmyListCardV2Prop = {
-  userArmy: ArmyListPersistenceType;
+  userArmy: UserListVM;
   onArmyListCardPress: (armyId: string) => void;
   onToggleFavourite: (armyId: string) => void;
   onDuplicateArmyPress: (armyId: string) => void;
@@ -33,7 +31,7 @@ const ArmyListCardV2 = ({
   const { theme } = useTheme();
   const setImage = () => {
     // const armyName = getKeyByValue(Factions, armyList.faction);
-    const armyName = Factions[userArmy.faction];
+    const armyName = userArmy.FactionName;
     const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
     return (
       <View
@@ -49,7 +47,7 @@ const ArmyListCardV2 = ({
     );
   };
   return (
-    <Pressable key={userArmy.armyId} onPress={() => onArmyListCardPress(userArmy.armyId)}>
+    <Pressable key={userArmy.UserListId} onPress={() => onArmyListCardPress(userArmy.UserListId)}>
       <View
         style={{
           overflow: 'hidden',
@@ -67,12 +65,12 @@ const ArmyListCardV2 = ({
         <View style={{ flex: 3, margin: 16 }}>
           <View style={{ marginBottom: 4, flex: 1, paddingRight: 30 }}>
             <ThemedText variant="heading3" numberOfLines={2} ellipsizeMode="tail" style={{ fontSize: 24 }}>
-              {userArmy.name}
+              {userArmy.Name}
             </ThemedText>
           </View>
 
           <View style={{ marginBottom: 4 }}>
-            <Text>{userArmy.faction && getKeyByValue(Factions, userArmy.faction).replaceAll('_', ' ')} </Text>
+            <Text>{userArmy.FactionName}</Text>
           </View>
           <View style={{ alignItems: 'center', flexDirection: 'row' }}>
             <View>{/* <PointsContainer points={armyList.points} /> */}</View>
@@ -129,29 +127,29 @@ const ArmyListCardV2 = ({
                   maxWidth: 170,
                   backgroundColor: theme.blueGrey,
                 }}>
-                <MenuOption onSelect={() => onToggleFavourite(userArmy.armyId)}>
+                <MenuOption onSelect={() => onToggleFavourite(userArmy.UserListId)}>
                   <MenuOptionButton
                     icon={<AntDesign name="star" size={18} color={theme.warning} />}
                     variant={'outline'}
-                    ButtonText={userArmy.isFavourite ? `${t('RemoveFavourite')}` : `${t('SetFavourite')}`}
+                    ButtonText={userArmy.IsFavourite ? `${t('RemoveFavourite')}` : `${t('SetFavourite')}`}
                   />
                 </MenuOption>
 
-                <MenuOption onSelect={() => onDuplicateArmyPress(userArmy.armyId)}>
+                <MenuOption onSelect={() => onDuplicateArmyPress(userArmy.UserListId)}>
                   <MenuOptionButton
                     icon={<FontAwesome name="copy" size={18} color={theme.text} />}
                     variant={'outline'}
                     ButtonText={t('Duplicate', { ns: 'common' })}
                   />
                 </MenuOption>
-                <MenuOption onSelect={() => onArmyNameChange(userArmy.armyId)}>
+                <MenuOption onSelect={() => onArmyNameChange(userArmy.UserListId)}>
                   <MenuOptionButton
                     icon={<FontAwesome name="pencil" size={18} color={theme.text} />}
                     variant={'outline'}
                     ButtonText={t('Edit', { ns: 'common' })}
                   />
                 </MenuOption>
-                <MenuOption onSelect={() => onDeleteArmyPress(userArmy.armyId)}>
+                <MenuOption onSelect={() => onDeleteArmyPress(userArmy.UserListId)}>
                   <MenuOptionButton
                     icon={<AntDesign name="delete" size={18} color={theme.white} />}
                     variant={'danger'}

@@ -1,29 +1,22 @@
-import { Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from 'react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '@hooks/useTheme';
-import { StandardModal, Text, TextBlock } from '@components/index';
-import { ArmyListFilters, ArmyListProps, ListSections, useBuilderContext } from '@context/BuilderContext';
-import fonts from '@utils/fonts';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import PopupConfirm from '@components/PopupConfirm';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useToast } from 'react-native-toast-notifications';
-import { useTranslation } from 'react-i18next';
-import { useUpdateChecker } from '@context/UpdateCheckerContext';
-import ArmySectionList, { armySectionListDataProps } from '@navigation/Builder/BuilderHome/components/ArmySectionList';
-import AddArmyButton from '@navigation/Builder/BuilderHome/components/AddArmyButton';
 import ThemedButton from '@components/Button/ThemedButton';
+import { StandardModal, Text, TextBlock } from '@components/index';
+import PopupConfirm from '@components/PopupConfirm';
+import { ArmyListFilters, ArmyListProps, ListSections, useBuilderContext } from '@context/BuilderContext';
+import { useFactionDataContext } from '@context/FactionDataContext';
+import { useUpdateChecker } from '@context/UpdateCheckerContext';
+import { useTheme } from '@hooks/useTheme';
+import { useNavigation } from '@react-navigation/native';
+import fonts from '@utils/fonts';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Dimensions, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useToast } from 'react-native-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'src/state/state';
-import ThemedText from '@components/ThemedText.tsx/ThemedText';
+import { UserListVM } from 'src/types/modelsv2/viewmodel/musteruserarmies';
 import ArmySectionListV2, { ArmySectionListDataV2Props } from './components/ArmySectionListV2';
-import { UserArmiesDto } from 'src/types/models/viewModel';
-import { Factions } from '@utils/constants';
-import { setArmyToEdit } from 'src/state/musteringArmySlice';
-import { ArmyListType } from 'src/types/models/types';
-import { useFactionDataContext } from '@context/FactionDataContext';
-import { useMuster } from '@hooks/useMuster';
 
 const MusterUserArmies = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -41,27 +34,29 @@ const MusterUserArmies = () => {
   const builder = useBuilderContext();
   const { t } = useTranslation(['builder', 'common', 'forms']);
   const toast = useToast();
-  const userArmies = useSelector((state: RootState) => {
-    //TODO
-    state.userArmies.map((ua) => {
+  const rawUserArmies = useSelector((state: RootState) => state.userArmies);
+  const userArmies = useMemo(() => {
+    return rawUserArmies.map((ua) => {
       // map to a view model
-      const vm: UserArmiesDto = {
-        name: ua.name,
-        isFavourite: ua.isFavourite,
-        factionName: ua.faction.toString(),
-        points: '0',
-        image: '',
+      const vm: UserListVM = {
+        Name: ua.Name,
+        IsFavourite: ua.IsFavourite,
+        FactionName: '',
+        VersionNumber: 0.1,
+        UserListId: '',
+        Notes: '',
+        CreatedAt: ua.CreatedAt,
       };
+		return vm;
     });
-    return state.userArmies;
-  });
+  }, [rawUserArmies]);
   const { setSelectedFactionByFactionId } = useFactionDataContext();
 
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const favourited = userArmies.filter((x) => x.isFavourite);
-    const notFavourited = userArmies.filter((x) => !x.isFavourite);
+    const favourited = userArmies.filter((x) => x.IsFavourite);
+    const notFavourited = userArmies.filter((x) => !x.IsFavourite);
     const sLData: ArmySectionListDataV2Props = {
       data: favourited,
       title: 'Favourited',
@@ -171,22 +166,22 @@ const MusterUserArmies = () => {
   const handleAddArmyPress = useCallback(() => {
     console.log('ADD');
     //  ref.current?.present();
-    navigation.navigate('MusterCreateStack');
+    navigation.navigate('MusterCreateStack' as never);
   }, []);
-  const muster = useMuster();
+//   const muster = useMuster();
 
   /**
    * on list item press, this will convert the persistence model into the working model
    * @param armyId
    */
   const handleArmyListItemPress = (armyId: string) => {
-    const armyToEdit = userArmies.find((x) => x.armyId == armyId);
+    const armyToEdit = userArmies.find((x) => x.UserListId == armyId);
     if (armyToEdit) {
-      const armyVm = muster.convertFromArmyPersistenceToViewModel(armyToEdit);
-      console.log("🚀 ~ handleArmyListItemPress ~ armyVm:", armyVm)
-      setSelectedFactionByFactionId(armyToEdit.faction);
-      dispatch(setArmyToEdit(armyVm));
-      navigation.navigate('MusterArmyDetails');
+      // const armyVm = muster.convertFromArmyPersistenceToViewModel(armyToEdit);
+//      console.log('🚀 ~ handleArmyListItemPress ~ armyVm:', armyVm);
+  //    setSelectedFactionByFactionId(armyToEdit.faction);
+    //  dispatch(setArmyToEdit(armyVm));
+      navigation.navigate('MusterArmyDetails' as never);
     }
   };
   const handleDuplicateArmyPress = () => {};

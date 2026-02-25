@@ -1,24 +1,19 @@
-import { Animated, Pressable, SectionList, View } from 'react-native';
+import CustomText from '@components/CustomText';
+import { StandardModal, Text, TextBlock } from '@components/index';
+import LogoWmr from '@components/SVGS/LogoWmr';
 import { ArmyListFilters, ArmyListProps, ListSections } from '@context/BuilderContext';
 import { useTheme } from '@hooks/useTheme';
-import ArmyListCard from '@navigation/Builder/components/ArmyListCard';
-import { Button, StandardModal, Text, TextBlock } from '@components/index';
-import React, { useRef, useState } from 'react';
 import Constants from 'expo-constants';
-import CustomText from '@components/CustomText';
-import { useToast } from 'react-native-toast-notifications';
-import LogoWmr from '@components/SVGS/LogoWmr';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import AnimatedHeader, { AppHeader } from '@components/AnimatedHeader/AnimatedHeader';
+import { Animated, SectionList, View } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
 import { HEADER_HEIGHT } from 'src/constants/styling';
-import { ArmyListPersistenceType } from 'src/types/models/persistence';
-import ThemedText from '@components/ThemedText.tsx/ThemedText';
-import MusterUnitCard from './MusterUnitCard';
+import { UserListVM } from 'src/types/modelsv2/viewmodel/musteruserarmies';
 import ArmyListCardV2 from './ArmyListCard';
 export type ArmySectionListDataV2Props = {
   title: string;
-  data: ArmyListPersistenceType[];
+  data: UserListVM[];
 };
 
 export type BuilderHomeListProps = {
@@ -129,7 +124,7 @@ const ArmySectionListV2 = ({
               nativeEvent: { contentOffset: { y: scrollOffsetY } },
             },
           ],
-          { useNativeDriver: false }
+          { useNativeDriver: false },
         )}
         bounces={false}
         alwaysBounceVertical={false}

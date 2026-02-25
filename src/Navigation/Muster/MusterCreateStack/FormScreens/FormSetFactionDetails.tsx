@@ -1,13 +1,12 @@
-import { Dimensions, FlatList, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
-import { Theme, useTheme } from '@hooks/useTheme';
-import fonts from '@utils/fonts';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
 import FormLabel from '@components/forms/FormLabel';
+import { useTheme } from '@hooks/useTheme';
+import fonts from '@utils/fonts';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Animated, { FadeIn, FadeInLeft, FadeInRight, FadeOutRight } from 'react-native-reanimated';
+import { Dimensions, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { Picker } from '@react-native-picker/picker';
+import Animated, { FadeInLeft, FadeOutRight } from 'react-native-reanimated';
 
 type FormFactionDetailsProps = {
   armyName: string;

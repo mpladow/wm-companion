@@ -1,22 +1,19 @@
-import { Animated, Dimensions, FlatList, ImageBackground, ScrollView, StyleSheet, TextInput, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '@hooks/useTheme';
 import { StandardModal, Text, TextBlock } from '@components/index';
-import { ArmyListFilters, ArmyListProps, ListSections, useBuilderContext } from '@context/BuilderContext';
-import fonts from '@utils/fonts';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import PopupConfirm from '@components/PopupConfirm';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useToast } from 'react-native-toast-notifications';
-import { useTranslation } from 'react-i18next';
-import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
-import AddArmyButton from './components/AddArmyButton';
-import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
+import { ArmyListFilters, ArmyListProps, ListSections, useBuilderContext } from '@context/BuilderContext';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
-import { filter } from 'lodash';
-import AnimatedHeader from '@components/AnimatedHeader/AnimatedHeader';
-import ThemedButton from '@components/Button/ThemedButton';
+import { useTheme } from '@hooks/useTheme';
+import { useNavigation } from '@react-navigation/native';
+import fonts from '@utils/fonts';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Animated, Dimensions, ImageBackground, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useToast } from 'react-native-toast-notifications';
+import AddArmyButton from './components/AddArmyButton';
+import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
+import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
 
 const BuilderHome = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -93,8 +90,7 @@ const BuilderHome = () => {
   const [showChangeLogModal, setShowChangeLogModal] = useState(false);
   useEffect(() => {
     setTimeout(() => {
-      console.log('🚀 ~ setTimeout ~ recentlyDismissedChangeLog:', recentlyDismissedChangeLog);
-      console.log('🚀 ~ setTimeout ~ changelog:', changelog);
+
       if (changelog && recentlyDismissedChangeLog) {
         if (changelog.version !== recentlyDismissedChangeLog) {
           setShowChangeLogModal(true);

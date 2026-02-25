@@ -1,5 +1,4 @@
 import MusterArmyDetails from '@navigation/Muster/MusterArmyDetails/MusterArmyDetails';
-import MusterCreateStack from '@navigation/Muster/MusterCreateStack/MusterCreateStack';
 import MusterQuickView from '@navigation/Muster/MusterQuickView';
 import MusterUserArmies from '@navigation/Muster/MusterUserArmies';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

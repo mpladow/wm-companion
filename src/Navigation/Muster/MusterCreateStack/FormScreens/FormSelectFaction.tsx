@@ -1,12 +1,11 @@
-import { StyleSheet, Image, View, ImageBackground, ScrollView, FlatList, TextInput, Dimensions, TouchableOpacity } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import Animated, { FadeInLeft, FadeOutRight } from 'react-native-reanimated';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
-import { useTheme } from '@hooks/useTheme';
 import { useFactionDataContext } from '@context/FactionDataContext';
+import { useTheme } from '@hooks/useTheme';
 import { DropDownItemProps } from '@navigation/Tracker/screens/Tracker';
 import { getLocalFactionAssets } from '@utils/factionHelpers';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Dimensions, FlatList, Image, ImageBackground, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeInLeft, FadeOutRight } from 'react-native-reanimated';
 
 type FormSelectFactionType = {
   onSelectFaction: (factionId: number, factionName: string) => void;
@@ -30,7 +29,7 @@ const FormSelectFaction = ({ onSelectFaction, selectedFactionId }: FormSelectFac
     const factionDropDown = allFactionData
       .sort((x, y) => x.name.localeCompare(y.name, undefined, { sensitivity: 'base' }))
       .map((x) => {
-        return { label: x.name, value: x.factionId } as DropDownItemProps;
+        return { label: x.name, value: x.id } as DropDownItemProps;
       });
     setDdFactions(factionDropDown);
   }, []);

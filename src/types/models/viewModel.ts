@@ -1,5 +1,5 @@
 // models specific to certain pages. this may not be necessary
-export type UserArmiesDto = {
+export type UserArmiesDtoOLD = {
 	name: string,
 	isFavourite: boolean
 	factionName: string;

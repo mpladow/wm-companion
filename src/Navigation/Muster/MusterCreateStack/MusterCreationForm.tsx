@@ -1,42 +1,28 @@
-import {
-  Dimensions,
-  FlatList,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  View,
-  Pressable,
-  KeyboardAvoidingView,
-  SafeAreaView,
-  Modal,
-} from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { Theme, useTheme } from '@hooks/useTheme';
-import { useTranslation } from 'react-i18next';
-import { useToast } from 'react-native-toast-notifications';
-import { Factions } from '@utils/constants';
 import ThemedText from '@components/ThemedText.tsx/ThemedText';
 import { Button, StandardModal } from '@components/index';
-import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeOutRight } from 'react-native-reanimated';
+import { useTheme } from '@hooks/useTheme';
+import { Factions } from '@utils/constants';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, SafeAreaView, View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { useToast } from 'react-native-toast-notifications';
 
 import ThemedButton from '@components/Button/ThemedButton';
-import { useNavigation } from '@react-navigation/native';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { useBuilderV2Context } from '@context/BuilderV2Context';
 import { useFactionDataContext } from '@context/FactionDataContext';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from 'src/state/state';
+import { addUserArmy } from 'src/state/userArmiesSlice';
 import FormSelectFaction from './FormScreens/FormSelectFaction';
 import FormFactionDetails from './FormScreens/FormSetFactionDetails';
-import { AppDispatch, RootState } from 'src/state/state';
-import { useDispatch, useSelector } from 'react-redux';
-import { addUserArmy } from 'src/state/userArmiesSlice';
-import { ArmyListPersistenceType, CharacterPersistenceType, UnitPersistenceType } from 'src/types/models/persistence';
 
-import uuid from 'uuid-random';
 import { setArmyToEdit } from 'src/state/musteringArmySlice';
-import { ArmyListType, CharacterType } from 'src/types/models/types';
+import { ArmyListType } from 'src/types/models/types';
+import { PersistenceUnitCard, UserList } from 'src/types/modelsv2/persistence/userlist';
+import uuid from 'uuid-random';
 // type ArmyCreationV2Props = {
 //   theme: Theme;
 //   handleDismissModal: () => void;
@@ -76,6 +62,7 @@ const ArmyCreationForm = () => {
   const [formTwoComplete, setformTwoComplete] = useState(false);
 
   const handleSetFaction = (factionId: number, factionName: string) => {
+    console.log('🚀 ~ handleSetFaction ~ factionId:', factionId);
     setSelectedFactionByFactionId(factionId);
     setSelectedFactionId(factionId);
     setFormOneComplete(true);
@@ -136,44 +123,49 @@ const ArmyCreationForm = () => {
       console.log('🚀 ~ CREATING ARMY ~ selectedFactionId:', selectedFactionId);
       // createUserArmyList(selectedFactionId, formArmyName, formArmyNotes, true, 0);
     }
+    // CREATE NEW ARMY AND THEN NAVIGATE TO THE MUSTER EDIT SCREEN WITH THE NEW ARMY LOADED IN
     if (formOneComplete && formTwoComplete && showFactionEditDetails) {
       setLoading(true);
       if (selectedFactionId) {
-        const newUserArmy: ArmyListPersistenceType = {
-          armyId: uuid(),
-          faction: selectedFactionId,
-          name: formArmyName,
-          isFavourite: false,
-          armyNotes: formArmyName,
-          order: userArmies.length + 1,
-          selectedUnits: [],
-          selectedCharacters: [],
+        const newUserArmy: UserList = {
+          UserListId: uuid(),
+          FactionId: selectedFactionId,
+          Name: formArmyName,
+          IsFavourite: false,
+          Notes: formArmyNotes,
+          Order: userArmies.length + 1,
+          UnitCards: [],
+          VersionNumber: 1,
+          CreatedAt: new Date(),
         };
+
         // add min units into userARmy
-        const requiredCharacters = selectedFactionData?.characters.filter((x) => x.armyMin !== undefined);
-        const requiredUnits = selectedFactionData?.units.filter((x) => x.min !== undefined);
+        const requiredCharacters = selectedFactionData?.characterCards.filter((x) => x.armyMin !== undefined);
         requiredCharacters?.forEach((rc) => {
           if (rc.armyMin)
             for (let index = 0; index < rc.armyMin; index++) {
-              const newCharacter: CharacterPersistenceType = {
-                id: uuid(),
-                characterId: rc.id,
-                name: rc.name,
-                selectedUpgrades: [],
+              const newCharacter: PersistenceUnitCard = {
+                PersistenceUnitCardId: uuid(),
+                UnitId: rc.id,
+                UpgradeIds: [],
+                CreatedAt: new Date(),
               };
-              newUserArmy.selectedCharacters.push(newCharacter);
+              newUserArmy.UnitCards.push(newCharacter);
             }
         });
+
+        // add required units, where there is a min
+        const requiredUnits = selectedFactionData?.troopCards.filter((x) => x.min !== undefined);
         requiredUnits?.forEach((rc) => {
           if (rc.min)
             for (let index = 0; index < rc.min; index++) {
-              const newUnit: UnitPersistenceType = {
-                id: uuid(),
-                unitId: rc.id,
-                name: rc.name,
-                selectedUpgrades: [],
+              const newUnit: PersistenceUnitCard = {
+                PersistenceUnitCardId: uuid(),
+                UnitId: rc.id,
+                UpgradeIds: [],
+                CreatedAt: new Date(),
               };
-              newUserArmy.selectedUnits.push(newUnit);
+              newUserArmy.UnitCards.push(newUnit);
             }
         });
         console.log('🚀 ~ handlePrimaryButtonPress ~ newUserArmy:', newUserArmy);
@@ -182,14 +174,14 @@ const ArmyCreationForm = () => {
         setShowFactionSelection(true);
         setShowFactionSelection(false);
 
-        // set data to army before navigating
+        // set data to army before navigating - this needs to be transformed into the ArmyListType that MusterArmyDetails is expecting
         const armyToEdit: ArmyListType = {
-          armyId: newUserArmy.armyId,
-          faction: newUserArmy.faction,
-          name: newUserArmy.name,
-          isFavourite: newUserArmy.isFavourite,
-          armyNotes: newUserArmy.armyNotes,
-          order: newUserArmy.order,
+          armyId: newUserArmy.UserListId,
+          faction: newUserArmy.FactionId,
+          name: newUserArmy.Name,
+          isFavourite: newUserArmy.IsFavourite,
+          armyNotes: newUserArmy.Notes,
+          order: newUserArmy.Order,
           selectedUnits: requiredUnits ?? [],
           selectedCharacters: requiredCharacters ?? [],
           points: 0,
@@ -198,7 +190,7 @@ const ArmyCreationForm = () => {
 
         setTimeout(() => {
           setLoading(false);
-          nav.navigate('MusterArmyDetails');
+          nav.navigate('MusterArmyDetails' as never);
         }, 500);
       }
     }
@@ -282,7 +274,7 @@ const ArmyCreationForm = () => {
         ) : (
           <FormFactionDetails
             armyName={formArmyName}
-            faction={selectedFactionData?.factionName ?? ''}
+            faction={selectedFactionData?.name ?? ''}
             onArmyNameChange={setFormArmyName}
             armyNotes={formArmyNotes}
             onArmyNotesChange={setFormArmyNotes}

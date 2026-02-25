@@ -1,16 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { RefObject, useEffect, forwardRef, ReactNode, PropsWithChildren, useCallback } from 'react';
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetProps,
-  BottomSheetScrollView,
-  BottomSheetView,
+import {
+	BottomSheetBackdrop,
+	BottomSheetBackdropProps,
+	BottomSheetModal,
+	BottomSheetProps,
+	BottomSheetScrollView,
+	BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { forwardRef, PropsWithChildren, useCallback } from 'react';
+import { StyleSheet } from 'react-native';
 
 type RNBottomSheetType = {
   //   ref: RefObject<BottomSheetModal>;
