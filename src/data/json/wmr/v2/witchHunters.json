@@ -137,7 +137,8 @@
 			"command": 7,
 			"size": 1,
 			"points": 55,
-			"max": 1
+			"max": 1,
+			"upgrades": ["War Altar"]
 		}
 	],
 	"magic": true,
@@ -182,6 +183,16 @@
 			"order": 6
 		}
 	},
+	"upgrades": [
+			{
+			"name": "War Altar",
+			"order": 1,
+			"type": "Chariot Mount",
+			"attack": "+2",
+			"points": 15,
+			"armyMax": 1
+		}
+	],
 	"spells": [
 		{
 			"name": "Sanctuary",

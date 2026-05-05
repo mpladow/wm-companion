@@ -123,17 +123,17 @@
 			"noMagic": true
 		},
 		{
-			"name": "Orc General",
-			"order": 10,
-			"type": "General",
-			"attack": "+2",
-			"command": 8,
-			"size": 1,
-			"points": 95,
-			"armyMin": 1,
-			"armyMax": 1,
-			"upgrades": ["Wyvern", "Chariot"]
-		},
+      "name": "Orc General",
+      "order": 10,
+      "type": "General",
+      "attack": "+2",
+      "command": 8,
+      "size": 1,
+      "points": 95,
+      "armyMin": 1,
+      "armyMax": 1,
+      "upgrades": ["Wyvern", "Chariot"]
+    },
 		{
 			"name": "Orc Hero",
 			"order": 11,
@@ -203,9 +203,13 @@
 			"order": 1,
 			"text": ["A Goblin unit is allowed to shoot as if it had bows but its range is reduced to 15cm."]
 		},
+		"Orc General": {
+			"order": 2,
+			"text": ["Once per game, at any point in the Command Phase, the Orc General whip his troops and force them forwards. For the remainder of that Command phase, the Orc General ignores the Command Penalty for having an enemy within 20cm of a unit."]
+		},
 		"Trolls": {
 			"order": 2,
-			"text": [
+		"text": [
 				"When trying to issue an order to a unit of Trolls or to a brigade that contains a unit of Trolls, any Command penalty applied for distance between the character and the Troll unit is always doubled. So at 20cm no penalty applies, at 40cm -2, at 60cm -4, and so on. Trolls can regenerate wounds - in each round of combat after whole stands have been removed Trolls automatically regenerate one outstanding hit. If no hits are left over after removing whole stands then regeneration has no effect. Regenerated hits still count towards the combat result for the round."
 			]
 		},
