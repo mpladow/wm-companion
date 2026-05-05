@@ -1,31 +1,31 @@
-import { ArmyReferenceType } from "src/types/data/army";
-import { Factions } from "./constants";
-import bretonnianList from "../data/json/wmr/bretonnian.json";
-import orcList from "../data/json/wmr/orks.json";
-import tombKingsList from "../data/json/wmr/tombKings.json";
-import empireList from "../data/json/wmr/empire.json";
-import skavenList from "../data/json/wmr/skaven.json";
-import chaosList from "../data/json/wmr/chaos.json";
-import woodElvesList from "../data/json/wmr/woodElves.json";
-import vampireCountsList from "../data/json/wmr/vampireCounts.json";
-import beastmenList from "../data/json/wmr/beastmen.json";
-import cathayList from "../data/json/wmr/cathay.json";
-import nightGoblinsList from "../data/json/wmr/nightGoblins.json";
-import dwarvesList from "../data/json/wmr/dwarves.json";
-import darkElvesList from "../data/json/wmr/darkelves.json";
-import highElvesList from "../data/json/wmr/highElves.json";
-import daemonsList from "../data/json/wmr/daemons.json";
-import nipponList from "../data/json/wmr/nippon.json";
-import chaosDwarvesList from "../data/json/wmr/chaosDwarves.json";
-import dogsOfWarList from "../data/json/wmr/dogsOfWar.json";
-import arabyList from "../data/json/wmr/araby.json";
-import lizardmenList from "../data/json/wmr/lizardmen.json";
-import albionList from "../data/json/wmr/albion.json";
-import ogresList from "../data/json/wmr/ogres.json";
-import kislevList from "../data/json/wmr/kislev.json";
-import norseList from "../data/json/wmr/norse.json";
-import witchHunterList from "../data/json/wmr/witchHunters.json";
 import { wmrArmiesV2 } from "src/data/json/wmr/v2/_armies";
+import { ArmyReferenceType } from "src/types/data/army";
+import albionList from "../data/json/wmr/albion.json";
+import arabyList from "../data/json/wmr/araby.json";
+import beastmenList from "../data/json/wmr/beastmen.json";
+import bretonnianList from "../data/json/wmr/bretonnian.json";
+import cathayList from "../data/json/wmr/cathay.json";
+import chaosList from "../data/json/wmr/chaos.json";
+import chaosDwarvesList from "../data/json/wmr/chaosDwarves.json";
+import daemonsList from "../data/json/wmr/daemons.json";
+import darkElvesList from "../data/json/wmr/darkelves.json";
+import dogsOfWarList from "../data/json/wmr/dogsOfWar.json";
+import dwarvesList from "../data/json/wmr/dwarves.json";
+import empireList from "../data/json/wmr/empire.json";
+import highElvesList from "../data/json/wmr/highElves.json";
+import kislevList from "../data/json/wmr/kislev.json";
+import lizardmenList from "../data/json/wmr/lizardmen.json";
+import nightGoblinsList from "../data/json/wmr/nightGoblins.json";
+import nipponList from "../data/json/wmr/nippon.json";
+import norseList from "../data/json/wmr/norse.json";
+import ogresList from "../data/json/wmr/ogres.json";
+import orcList from "../data/json/wmr/orks.json";
+import skavenList from "../data/json/wmr/skaven.json";
+import tombKingsList from "../data/json/wmr/tombKings.json";
+import vampireCountsList from "../data/json/wmr/vampireCounts.json";
+import witchHunterList from "../data/json/wmr/witchHunters.json";
+import woodElvesList from "../data/json/wmr/woodElves.json";
+import { Factions } from "./constants";
 
 export const useFactionUnits = () => {
 	const getFactionUnitsByVersion = (factionSelection: number, version?: number) => {
@@ -34,7 +34,7 @@ export const useFactionUnits = () => {
 		let description: string[] = [];
 		const army = Factions[factionSelection]?.replaceAll("_", " ");
 
-		if (version == 2.25) {
+		if (version == 2.25 || version == 2.26) {
 			const _factionList = wmrArmiesV2.find((x) => x.name == army);
 			if (_factionList) {
 				factionList = _factionList;

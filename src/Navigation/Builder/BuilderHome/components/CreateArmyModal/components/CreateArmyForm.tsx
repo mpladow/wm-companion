@@ -1,9 +1,10 @@
-import { ArmyListProps, useBuilderContext } from "@context/BuilderContext";
+import { Button, Text } from "@components/index";
+import { useBuilderContext } from "@context/BuilderContext";
 import { Theme } from "@hooks/useTheme";
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 import { Factions } from "@utils/constants";
 import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from "@utils/factionHelpers";
-import { Button, Text } from "@components/index";
+import fonts from "@utils/fonts";
 import { useFactionUnits } from "@utils/useFactionUnits";
 import Constants from "expo-constants";
 import { useEffect, useRef, useState } from "react";
@@ -11,16 +12,15 @@ import { useTranslation } from "react-i18next";
 import {
 	Dimensions,
 	FlatList,
+	Image,
+	ImageBackground,
 	ScrollView,
 	StyleSheet,
+	TextInput,
 	TouchableOpacity,
 	View,
-	Image,
-	TextInput,
-	ImageBackground,
 } from "react-native";
 import { useToast } from "react-native-toast-notifications";
-import fonts from "@utils/fonts";
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
@@ -65,7 +65,7 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
 		}
 	};
 	const [activeIndex, setActiveIndex] = useState(0);
-	const { width, height } = Dimensions.get("screen");
+	const { width } = Dimensions.get("screen");
 	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
 	useEffect(() => {
