@@ -296,7 +296,7 @@
     "Warhawk": {
       "order": 12,
       "text": [
-        "General, Nobles and Spell Weavers may ride a Warhawk. The Warhawk can fly, increasing its rider’s move from 60cm to 100cm, and it adds +1 Attack to those of its rider."
+        "Generals, Nobles and Spell Weavers may ride a Warhawk. The Warhawk can fly, increasing its rider’s move from 60cm to 100cm, and it adds +1 Attack to those of its rider."
       ]
     },
     "Forest Dragon": {
@@ -312,7 +312,7 @@
       "roll": 4,
       "range": "30cm",
       "text": [
-        "The Spell Weaver calls force a mass of tangling branches to surround ther troops, protecting them form harm.",
+        "*The Spell Weaver calls force a mass of tangling branches to surround ther troops, protecting them form harm.*",
         "",
         "This spell may be cast upon a single unengaged friendly Infantry unit within range, regardless of whether the caster can see them or not. The spell lasts until the start of the caster‘s next turn, or until the target unit moves in any way. The target Infantry unit counts as Defended, even if it is in open terrain."
       ]
@@ -322,8 +322,9 @@
       "roll": 4,
       "range": "30cm",
       "text": [
-        "*The Spellweaver shrouds a friendly unit in nightmarish shadows, filling the enemy with fear.*", 
-		  "This spell can only be cast on any friendly unit within range regardless of whether the Spellweaver can see it or not. The unit counts as causing terror for the duration of the Combat phase."
+        "*The Spellweaver shrouds a friendly unit in nightmarish shadows, filling the enemy with fear.*",
+        "",
+        "This spell can only be cast on any friendly unit within range regardless of whether the Spellweaver can see it or not. The unit counts as causing terror for the duration of the Combat phase."
       ]
     },
     {
@@ -332,6 +333,7 @@
       "range": "30cm",
       "text": [
         "*The Spell Weaver‘s voice sings out across the battlefield directing troops above the tumult of combat with the magical Call of the Hunt.*",
+        "",
         "The spell can be cast on any unengaged friendly unit within range regardless of whether the Wizard can see it or not. The spell affects only a single unit, never a brigade and there is no supporting charge possible.",
         "The target unit must make a charge move into base contact with the nearest visible enemy unit in the same way as when charging, so all normal charge rules apply.",
         "A unit moved by means of the spell cannot be affected by stand and shoot attacks until the end of the shooting phase.",
@@ -344,6 +346,7 @@
       "range": "60cm",
       "text": [
         "*The spellweaver awakens the fury of the forest to purge the enemy from their soil.*",
+        "",
         "The spell makes three shooting attacks on all enemy units within 10cm of chosen wooded terrain piece. Units get no armour save if within wooded terrain.",
         "",
         "The spell can be cast upon any terrain piece in range that is designated as woods. All enemy units within 10cm of chosen wooded terrain piece take 3 shooting attacks worked out in the normal way.",

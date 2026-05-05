@@ -1,3 +1,15 @@
+import { Button, CustomCheckbox, Text } from "@components/index";
+import { SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
+import { useSettingsContext } from "@context/SettingsContext";
+import { Entypo } from "@expo/vector-icons";
+import { useTheme } from "@hooks/useTheme";
+import { Factions } from "@utils/constants";
+import { getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
+import { UnitProps, UpgradesProps } from "@utils/types";
+import { useFactionUnits } from "@utils/useFactionUnits";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
 	Dimensions,
 	FlatList,
@@ -8,29 +20,14 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { SelectedUnitProps, useBuilderContext } from "@context/BuilderContext";
-import { useTheme } from "@hooks/useTheme";
-import { Button, CustomCheckbox, Text, TextBlock } from "@components/index";
-import { getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
-import { UnitProps, UpgradesProps } from "@utils/types";
-import { Entypo } from "@expo/vector-icons";
-import UnitDetailsCard from "./components/UnitDetailsCard";
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
+import ArmyPointsCount from "./components/ArmyPointsCount";
 import SpecialRulesCollapsible from "./components/SpecialRulesCollapsible";
-import { Factions } from "@utils/constants";
 import SpellBookModal from "./components/SpellBookModal";
 import UnitPreview from "./components/UnitCardPreview/UnitPreview";
+import UnitDetailsCard from "./components/UnitDetailsCard";
 import UpgradePreview from "./components/UpgradePreview";
-import ArmyPointsCount from "./components/ArmyPointsCount";
-import { LinearGradient } from "expo-linear-gradient";
-import AllSelectedUpgradesModal from "./components/Modals/AllSelectedUpgradesModal";
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { getUpgradeDetailsByName } from "./utils/builderHelpers";
-import _ from "lodash";
-import { useTranslation } from "react-i18next";
-import { useSettingsContext } from "@context/SettingsContext";
-import { useFactionUnits } from "@utils/useFactionUnits";
 
 export type sectionListDataProps = {
 	title: string;
@@ -66,8 +63,6 @@ const BuilderEdit = ({ navigation }: any) => {
 		);
 		setFactionUnits(factionListData?.factionList?.units);
 		// get all units for selected army list
-		console.log("hitting use effect");
-		console.log("builder.selectedArmyList?.name --", builder.selectedArmyList?.name);
 		if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
 			navigation.setOptions({
 				title: builder.selectedArmyList?.name,
@@ -176,19 +171,14 @@ const BuilderEdit = ({ navigation }: any) => {
 				const _allGenericSpecialRules = getGenericSpecialRules();
 				//@ts-ignore
 				const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
-				console.log("🚀 ~ handleOnUnitCardPress ~ unitName:", unitName);
-				console.log("🚀 ~ handleOnUnitCardPress ~ _genericSpecialRulesExist:", _genericSpecialRulesExist);
 				if (_specialRulesForUnit) {
 					if (_specialRulesForUnit.text) _unit.specialRules.push(_specialRulesForUnit);
 					// setSpecialRules(_specialRules);
 				}
 				if (_genericSpecialRulesExist != undefined) {
-					console.log("handleOnUnitCardPress:: generic special rule found");
 					_unit.specialRules.push(_genericSpecialRulesExist);
 				}
 				if (rawUnitData?.specialRules && rawUnitData.specialRules?.length > 0) {
-					console.log("handleOnUnitCardPress:: special rule for UNIT UPGRADE");
-
 					rawUnitData.specialRules?.map((x) => {
 						if (builder.factionDetails?.specialRules) {
 							const specialRule = builder.factionDetails?.specialRules[x];

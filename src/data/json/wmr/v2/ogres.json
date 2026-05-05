@@ -254,7 +254,7 @@
 			"name": "Bull Gorger",
 			"roll": 4,
 			"text": [
-				"*The Butcher greedily devours the heart of a Bull Rhinox, no doubt enjoying the feast of healthy blood and muscle whilst he imbues himself and his charges with the strength of a charging Rhinox.",
+				"*The Butcher greedily devours the heart of a Bull Rhinox, no doubt enjoying the feast of healthy blood and muscle whilst he imbues himself and his charges with the strength of a charging Rhinox.*",
 				"",
 				"This spell can be cast if the Butcher has joined a unit in combat. The spell affects the unit he has joined. The effect lasts for the duration of the following Combat phase. Every stand in the unit, including characters that have joined the unit, adds +1 to its Attacks value.",
 				"As the Butcher must join the unit to cast the spell this includes the Butcher himself, but it is possible for other characters to join the unit as well, in which case the +1 is applied to whichever character fights."

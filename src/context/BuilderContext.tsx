@@ -3,12 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UpgradeTypes } from '@utils/constants';
 import { FactionListProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
-import { current, produce } from 'immer';
-import { createContext, useCallback, useContext, useEffect, useState, version } from 'react';
+import Constants from 'expo-constants';
+import { produce } from 'immer';
+import _ from 'lodash';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import uuid from 'uuid-random';
-import Constants from 'expo-constants';
-import _ from 'lodash';
 import magicItemsList from '../data/json/wmr/magic-items.json';
 
 export type ArmyListFilters = 'old' | 'losers' | 'all';
@@ -566,7 +566,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 
     const errors: ArmyErrorsProps[] = [];
     let currentUnits = factionDetails?.units;
-    console.log('🚀 ~ calculateArmyErrors ~ factionDetails:', factionDetails);
     // count all magic items in army
     const itemCounts: any = {};
     if (currentArmyList?.selectedUpgrades)
