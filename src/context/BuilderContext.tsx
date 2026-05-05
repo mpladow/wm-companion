@@ -173,7 +173,7 @@ export const BuilderContextProvider = ({ children }: any) => {
           const newArmy = Object.assign({}, armyToMigrate);
           newArmy.armyId = uuid();
           newArmy.versionNumber = versionNumber;
-          newArmy.armyNotes = 'Migrated from version 1';
+          newArmy.armyNotes = 'Migrated from different version - please check all units and upgrades';
           // upgrade equipment
           newArmy.selectedUpgrades = [];
           // populate selected units
