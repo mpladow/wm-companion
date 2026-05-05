@@ -206,13 +206,13 @@
 		"Winged Lancers": {
 			"order": 1,
 			"text": [
-				"If a unit of Winged Lancers is charging against an enemy in the open it receives an additional +1 Attack modifier in the same way as chariots and monsters."
+				"Winged Lancers receive +1 Attack in the first round of every combat when fighting to the front and are Immune to Terror."
 			]
 		},
 		"Horse Archers": {
 			"order": 2,
 			"text": [
-				"Kislevite Horsemen have only a short range (15cm). They can shoot behind or to the side without turning stands to face their target. Just measure the range from any stand edge, front, side or rear."
+				"Kislevite Horsemen have only a short range (15cm) and 360 degree vision. They can shoot behind or to the side without turning stands to face their target. Just measure the range from any stand edge, front, side or rear. Note that this unit still needs Line of Sight from i ts front edge to charge an enemy."
 			]
 		},
 		"Cossacks": {
