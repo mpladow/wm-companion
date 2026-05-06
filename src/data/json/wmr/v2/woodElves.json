@@ -102,7 +102,8 @@
       "armour": "6+",
       "size": 3,
       "points": 85,
-      "max": 1
+      "max": 1,
+      "noMagic": true
     },
     {
       "name": "Treekin",
@@ -126,7 +127,8 @@
       "size": 1,
       "points": 130,
       "max": 1,
-      "specialRules": ["Forest Spirits"]
+      "specialRules": ["Forest Spirits"],
+      "noMagic": true
     },
     {
       "name": "General",
@@ -221,7 +223,7 @@
   ],
   "magic": true,
   "armyRules": [
-    "**Woodland Folk.** Due to living amongst the forests of Loren all Wood Elf infantry does not suffer the usual -1 Command penalty when within woodland."
+    "__Woodland Folk.__ Due to living amongst the forests of Loren all Wood Elf infantry does not suffer the usual -1 Command penalty when within woodland."
   ],
   "specialRules": {
     "Glade Guard": {
@@ -240,8 +242,9 @@
       "order": 3,
       "text": [
         "Famous for their bow skills even by a Wood Elf standards, Waywatchers shoot the enemy with terrifying accuracy. They add +1 to their dice roll when making shooting attacks and these attacks are resolved at -1 Armor value for the enemy.",
-        "",
+        "---",
         "Waywatchers can also ambush. Individual units can be infiltrated onto the battlefield once the game has begun. To infiltrate a unit, the Wood Elf player nominates the point where he wants the Waywatchers to appear and issues an 'infiltration' order from any character. The character does not have to be within his normal command range to issue an infiltration order - the character's command range is considered to extend over the entire tabletop when issuing an infiltration order. Treat the order as issued to the nominated point, and apply any modifiers for distance and proximity of enemy, but ignore penalties of dense terrain. The nominated point must lie either on the table within dense terrain or on any base edge other than the enemy player's own table edge. If successful, place one stand on the nominated spot and arrange the rest of the unit around it. The infiltrated unit cannot be placed so that it touches an enemy unit. Once deployed, orders can be given to the unit by the same character that gave the infiltration order if he is within his normal command range, the infiltrating unit is considered to have used its first order to deploy. If the infiltration order is failed the unit is not deployed and cannot infiltrate that turn, it can attempt to infiltrate in a subsequent turn at the same or a different place.",
+        "---",
         "Waywatchers do not suffer the -1 Command penalty for Dense Terrain."
       ]
     },

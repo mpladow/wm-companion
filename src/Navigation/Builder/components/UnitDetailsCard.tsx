@@ -1,19 +1,18 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
-import { UnitProps } from "@utils/types";
+import AnimatedView from "@components/Animated/AnimatedView";
 import { Text } from "@components/index";
-import { AntDesign } from "@expo/vector-icons";
-import { useTheme } from "@hooks/useTheme";
 import PointsContainer from "@components/pointsContainer";
-import { SelectedUpgradesProps } from "@context/BuilderContext";
 import UnitIcon from "@components/UnitCards/UnitIcon";
 import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
-import { get1000PointInterval } from "../utils/builderHelpers";
-import { current } from "@reduxjs/toolkit";
-import UnitDetailsMenu from "./UnitDetailsMenu";
-import AnimatedView from "@components/Animated/AnimatedView";
-import QuickviewProfileHeading from "./UnitDetailsCard/QuickviewProfileHeading";
+import { SelectedUpgradesProps } from "@context/BuilderContext";
+import { AntDesign } from "@expo/vector-icons";
+import { useTheme } from "@hooks/useTheme";
+import { UnitProps } from "@utils/types";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { get1000PointInterval } from "../utils/builderHelpers";
+import QuickviewProfileHeading from "./UnitDetailsCard/QuickviewProfileHeading";
+import UnitDetailsMenu from "./UnitDetailsMenu";
 
 type UnitCardDetailsProps = {
 	unit: UnitProps;
@@ -137,7 +136,7 @@ const UnitDetailsCard = ({
 							</View>
 						</View>
 						<UnitDetailsMenu
-							noMagic={unit.noMagic}
+							noMagic={unit.noMagic || unit.canFly}
 							onAddUnit={() =>
 								onAddUnit(
 									unit.name,

@@ -87,6 +87,7 @@
 			"name": "Pegasus Knights",
 			"order": 6,
 			"type": "Monster",
+			"canFly": true,
 			"attack": 2,
 			"hits": 3,
 			"armour": "5+",

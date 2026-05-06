@@ -120,13 +120,13 @@
 			"size": 1,
 			"points": 80,
 			"max": 1,
-			"upgrades": ["Daemonic Wings", "Favour of the Gods"]
+			"upgrades": ["Daemonic Wings", "Favour of the Gods", "Chariot"]
 		},
 		{
 			"name": "Daemon Sorcerer",
 			"order": 10,
 			"type": "Wizard",
-			"attack": "+1",
+			"attack": "+1", 
 			"command": 8,
 			"size": 1,
 			"points": 90,

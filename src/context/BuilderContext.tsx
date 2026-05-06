@@ -794,6 +794,12 @@ export const BuilderContextProvider = ({ children }: any) => {
     });
     const unitDetails = factionUnits?.find((x) => x.name == unitName);
     const upgradesForUnitStrings = unitDetails?.upgrades;
+
+    // flying units cannot use magic items.
+    if (unitDetails?.canFly) {
+      return;
+    }
+
     let specificUpgradesForUnitArr: UpgradesProps[] = [];
     // filter faction upgrades to only upgrades specific to this unit
     upgradesForUnitStrings &&
@@ -822,8 +828,15 @@ export const BuilderContextProvider = ({ children }: any) => {
         }
         // add usualy upgrades
       });
+      // WIPfind faction specific wizard upgrades
+      // const factionLammasuUpgrade = factionUpgrades?.find((x) => x.name == 'Lammasu');
+
+      // if (factionLammasuUpgrade !== null) {
+      //   permittedUpgrades.push(factionLammasuUpgrade);
+      // }
     } else {
       permittedUpgrades = magicItemConstraints.map((ui) => {
+        // check the rest of the upgrades
         const upgradePermitted = ui.unitType.some((x) => x.includes(unitDetails.type));
         if (upgradePermitted) {
           return ui.upgrades;
@@ -841,34 +854,37 @@ export const BuilderContextProvider = ({ children }: any) => {
     // to here
     // find upgrades from this permittedUpgrades list
 
-    let upgadesToRemove: string[] = [];
+    let upgradesToRemove: string[] = [];
     // console.log(specificUpgradesForUnitArr, "specific upgrades");
     const unitHasArmour: string = unitDetails?.armour ? unitDetails?.armour : '-';
     const unitHits = unitDetails?.hits ? unitDetails?.hits : null;
     const unitAttacks: string = unitDetails?.attack ? unitDetails?.attack : null;
-    console.log("🚀 ~ getMagicItemsForUnit ~ unitAttacks:", unitAttacks)
     specificUpgradesForUnitArr.forEach((up) => {
       let pointsCost;
       if (up.points == undefined) {
-        console.error(up.name, 'UPGRAADE WITH UNDEFINED');
+        console.error(up.name, 'UPGRADE WITH UNDEFINED');
       }
       if (up.name == 'Battle Banner' || up.name == 'Banner of Fortune') {
         pointsCost = up.points[unitAttacks];
       }
       if (up.name == 'Banner of Shielding') {
-			// check if the key for this exists. if it doesn't then we should ensure this upgrade cannot be added.
-        pointsCost = up.points[unitHasArmour];
-      }
-      if (up.name == 'Banner of Steadfastness') {
-        if (unitHasArmour !== '0' && unitHasArmour !== '-') {
+        // check if the key for this exists. if it doesn't then we should ensure this upgrade cannot be added.
+        if (unitHasArmour !== '4+') {
+          console.log(up.points[unitHasArmour]);
           pointsCost = up.points[unitHasArmour];
         } else {
-          upgadesToRemove.push(up.name);
+          upgradesToRemove.push(up.name);
         }
       }
+      if (up.name == 'Banner of Steadfastness') {
+        pointsCost = up.points[unitHasArmour];
+      }
+
       if (up.name == 'Banner of Fortitude') {
-        if (unitHits) {
+        if (unitHits == '3') {
           pointsCost = up.points[unitHits];
+        } else {
+          upgradesToRemove.push(up.name);
         }
       }
 
@@ -876,13 +892,16 @@ export const BuilderContextProvider = ({ children }: any) => {
         up.points = pointsCost;
       }
     });
+    // remove upgrades for specific factions. This would be better handled in the magic items constraints but this is a quick fix to remove them from the UI for now.
+    if (factionDetails?.name == 'High Elves' || factionDetails?.name == 'Dark Elves') {
+      upgradesToRemove.push('Orb of Majesty');
+      upgradesToRemove.push('Sceptre of Sovereignty');
+    }
 
     // check unit upgrades and add additional items to generic magic items
     if (unitDetails?.upgrades && unitDetails?.upgrades?.length > 0) {
       unitDetails?.upgrades?.map((unitUpgrade) => {
         const magicItemToAdd = itemsArray.find((u) => u.name == unitUpgrade);
-        console.log('🚀 ~ unitDetails?.upgrades?.map ~ unitUpgrade:', unitUpgrade);
-        console.log('🚀 ~ unitDetails?.upgrades?.map ~ magicItemToAdd:', magicItemToAdd);
         const upgradeAlreadyExists = specificUpgradesForUnitArr.find(
           (exUp) => exUp.name == unitUpgrade,
         );
@@ -891,7 +910,7 @@ export const BuilderContextProvider = ({ children }: any) => {
       });
     }
     specificUpgradesForUnitArr = specificUpgradesForUnitArr.filter((x) => {
-      return !upgadesToRemove.includes(x?.name);
+      return !upgradesToRemove.includes(x?.name);
     });
     return specificUpgradesForUnitArr;
   };
@@ -904,7 +923,6 @@ export const BuilderContextProvider = ({ children }: any) => {
         return filteredByVersion;
       }
     } else {
-      console.log('getUserARmyLists _ RETURNING ALL LISDTS');
       const filteredByVersion = userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
       return filteredByVersion;
     }

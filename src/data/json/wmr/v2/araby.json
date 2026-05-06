@@ -78,6 +78,7 @@
 			"name": "Magic Carpets",
 			"order": 6,
 			"type": "Cavalry",
+			"canFly": true,
 			"attack": "1/2",
 			"range": "15cm",
 			"hits": 3,

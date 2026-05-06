@@ -179,7 +179,7 @@
 	],
 	"magic": true,
 	"armyRules": [
-		"__Dense Terrain.__ No command penalty is applied to any units in the Lizardmen army on account of dense terrain. The Lizardmen's ruin infested jungle homeland is mostly dense terrain and they are used to communicating through thick jungle and narrow tunnels by a mix of instinct and bizarre sub-sonic noises inaudible to other races."
+		"__Born in Jungle.__ No command penalty is applied to any units in the Lizardmen army on account of dense terrain. The Lizardmen's ruin-infested jungle homeland is mostly dense terrain and they are used to communicating through thick jungle and narrow tunnels by a mix of instinct and bizarre sub-sonic noises inaudible to other races."
 	],
 	"specialRules": {
 		"Skinks": {
@@ -214,13 +214,13 @@
 			"order": 5,
 			"text": [
 				"The model must be mounted onto a base 40mm frontage and 60mm depth - note that this is equivalent to three standard sized Warmaster bases glued together.",
-				"",
+				"---",
 				"The Stegadon causes terror in its foes.",
-				"",
+				"---",
 				"The Stegadon can only be brigaded with Skink units. It cannot be brigaded with Skink units that have attached Salamanders. It cannot be brigaded with any other units including with other Stegadons.",
-				"",
+				"---",
 				"The Stegadon's crew has a shooting range of 15cm. However, they can shoot from any edge without turning stands to face their target. Just measure the range from any stand edge, front, side or rear. Note that this enables them to shoot at enemies charging them from any direction.",
-				"",
+				"---",
 				"Because the Stegadon has so many hits we must consider the possibility of hurting the beast and reducing its effectiveness. Therefore, if a Stegadon has accumulated 6-9 hits by the end of the Shooting or Combat phase and is no longer engaged in combat it is deemed to have been badly hurt. Once a Stegadon is badly hurt all accumulated hits are discounted and its Hits and Attack values are halved for the remainder of the battle to 5/2 Attacks and 5 Hits."
 			]
 		},

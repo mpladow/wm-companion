@@ -107,7 +107,8 @@
       "armour": "4+",
       "size": 1,
       "points": 125,
-      "max": 1
+      "max": 1,
+      "noMagic": true
     },
     {
       "name": "Screaming Bell",
