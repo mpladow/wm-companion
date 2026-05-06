@@ -4,10 +4,15 @@
 			"name": "Battle Banner",
 			"order": "BB",
 			"type": "Magic Standard",
-			"points": "+30",
+			"points": {
+				"4": "+30",
+				"3": "+20",
+				"2": "+15"
+			},
+			"pointsValue": "attack",
 			"armyMax": 1,
 			"text": [
-				"A unit with this banner increases the Attacks value of each of its stands by +1 during its first Combat engagement of fighting. The effect only lasts for the first combat engagement of the battle, including rounds of pursuit combat during the same engagement and any further engagements which result from an advance."
+				"A unit with this banner increases the close combat Attacks of each of its stands by +1. Every time a stand of the unit is removed roll a dice. On the roll of 1, 2 or 3 the banner is lost."
 			]
 		},
 		{
@@ -15,15 +20,14 @@
 			"order": "BSh",
 			"type": "Magic Standard",
 			"points": {
-				"4+": "+50",
 				"5+": "+30",
-				"6+": "+15",
-				"-": "+15"
+				"6+": "+20",
+				"-": "+20"
 			},
 			"pointsValue": "armour",
 			"armyMax": 1,
 			"text": [
-				"A unit with this banner has its Armour value increased in effectiveness by +1. If the unit’s Armour value is 5+ then this banner increases it to 4+ and so on. A unit’s Armour value cannot be better than 3+. If a unit already has an Armour value of 3+ then this banner has no effect. This bonus lasts until the unit loses a stand. After the unit has lost a stand, the banner has no further effect."
+				"A unit with this banner has its Armour increased in effectiveness by +1. If the unit’s Armour is 5+ then this banner increases it to 4+ and so on. Every time a stand of the unit is removed roll a dice. On the roll of 1, 2 or 3 the banner is lost."
 			]
 		},
 		{
@@ -31,14 +35,12 @@
 			"order": "BFd",
 			"type": "Magic Standard",
 			"points": {
-				"4": "+50",
-				"3": "+30",
-				"2": "+30"
+				"3": "+30"
 			},
 			"pointsValue": "hits",
 			"armyMax": 1,
 			"text": [
-				"A unit with this banner increases the Hits value of each of its stands by +1 during its first Combat engagement of fighting. The effect only lasts for the first combat engagement of the battle, including rounds of pursuit combat during the same engagement and any further engagements which result from an advance. Discard odd hits at the end of the Combat engagement before discounting the effect of the Banner of Fortitude."
+				"A unit with this banner increases the Hit of each of its stands by +1. Every time a stand of the unit is removed roll a dice. On the roll of 1, 2 or 3 the banner is lost."
 			]
 		},
 		{
@@ -46,21 +48,27 @@
 			"order": "BSt",
 			"type": "Magic Standard",
 			"points": {
-				"4+": "+20",
-				"5+": "+15",
-				"6+": "+10"
+				"4+": "+15",
+				"5+": "+10",
+				"6+": "+5",
+				"-": "+5"
 			},
 			"pointsValue": "armour",
 			"armyMax": 1,
 			"text": [
-				"One shooting hit inflicted on the unit after saves have been taken in each turn is ignored because the missiles are cast aside by the Banner of Steadfastness. This includes hits from magic spells inflicted in the Shooting phase. This effect lasts until the unit loses a stand. After the unit has lost a stand the banner has no further effect."
+				"One shooting hit inflicted on the unit after saves have been taken in each turn is ignored because the missiles are cast aside by the Banner of Steadfastness. This includes hits from magic spells inflicted in the Shooting phase. Every time a stand of the unit is removed roll a dice. On the roll of 1, 2 or 3 the banner is lost."
 			]
 		},
 		{
 			"name": "Banner of Fortune",
 			"order": "BFn",
 			"type": "Magic Standard",
-			"points": "+15",
+			"points": {
+				"4": "+15",
+				"3": "+10",
+				"2": "+5"
+			},
+			"pointsValue": "attack",
 			"armyMax": 1,
 			"text": [
 				"The player can choose to immediately re-roll all the unit’s Attack dice once in either the Shooting phase or Combat phase should he wish to do so. This includes any bonus attacks from magic items or characters. The player declares that he is unsatisfied with the scores he has rolled, takes all the dice and immediately rolls them all once again. Note that the player must roll all the dice again, including any that have scored hits, so it is possible to be very unfortunate and roll an even worse score! The Banner of Fortune works only once during the entire game."
@@ -133,7 +141,9 @@
 			"text": [
 				"If the General has this magic item he may disregard a single failed Command test and roll it again as if he had a Command value of 8. The usual adjustments are made for Command penalties but note that the previously failed roll is disregarded so it doesn’t count as a penalty. If the re-roll is successful the order is issued and the General can continuing issuing orders in the usual way with his normal Command value.",
 				"",
-				"The Orb of Majesty will only work once in the entire game and only affects an order that has been issued by the General."
+				"The Orb of Majesty will only work once in the entire game and only affects an order that has been issued by the General.",
+				"",
+				"The Orb of Majesty cannot by used by Dark Elf and High Elf generals."
 			]
 		},
 		{
@@ -143,7 +153,7 @@
 			"points": "+30",
 			"armyMax": 1,
 			"text": [
-				"A Wizard with this ring is able to cast a spell without making the usual dice roll to do so. This item will only work once in the entire game."
+				"A wizard with this ring is able to cast a spell on the roll of 2+. This item will only work once in the entire game and when used it cannot be combined with any other item granting spell casting bonus."
 			]
 		},
 		{
@@ -163,7 +173,9 @@
 			"points": "+30",
 			"armyMax": 1,
 			"text": [
-				"If the General carries the Sceptre of Sovereignty, he may ignore one blundered ‘double 6’ roll for an order made by either himself or any of the army’s other characters. If the blunder is made by a subordinate character you can roll to see what the blunder is before deciding whether to use the Sceptre of Sovereignty or not. If ignored, the Command test is passed and the character may continue issuing orders as normal. The steely will of the Sceptre of Sovereignty reaches out and stays the incompetent wretch before the deed is done."
+				"If the General carries the Sceptre of Sovereignty, he may ignore one blundered ‘double 6’ roll for an order made by either himself or any of the army’s other characters. If the blunder is made by a subordinate character you can roll to see what the blunder is before deciding whether to use the Sceptre of Sovereignty or not. If ignored, the Command test is passed and the character may continue issuing orders as normal. The steely will of the Sceptre of Sovereignty reaches out and stays the incompetent wretch before the deed is done.",
+				"",
+				"The Scepter cannot by used by Dark Elf and High Elf generals."
 			]
 		},
 		{
@@ -173,7 +185,7 @@
 			"points": "+20",
 			"armyMax": 1,
 			"text": [
-				"If a Wizard or a Dwarf Runesmith has the Scroll of Dispelling he can automatically cause an enemy’s spell to fail. The Scroll can only be used once to nullify the effect of a spell an enemy Wizard has successfully cast. In the case of a Runesmith, the Scroll can be used after a normal Dwarf anti-magic roll has failed."
+				"If a Wizard or a Dwarf Runesmith has the Scroll of Dispelling he can cause an enemy’s spell to fail on the roll of 2+. The Scroll can only be used once to nullify the effect of a spell an enemy Wizard has successfully cast. In the case of a Runesmith, the Scroll can be used after a normal Dwarf anti-magic roll has failed."
 			]
 		},
 		{

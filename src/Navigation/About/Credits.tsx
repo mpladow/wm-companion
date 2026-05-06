@@ -1,13 +1,8 @@
-import { ImageBackground, StyleSheet, Image, TouchableOpacity, View, Dimensions } from "react-native";
-import React from "react";
-import LogoWmr from "@components/SVGS/LogoWmr";
-import { Text, TextBlock } from "@components/index";
-import { margin } from "@utils/constants";
-import { useTranslation } from "react-i18next";
-import { LinearGradient } from "expo-linear-gradient";
-import MainContainer from "@components/MainContainerWithImage";
 import MainContainerWithImage from "@components/MainContainerWithImage";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, TextBlock } from "@components/index";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 
 const Credits = () => {
 	const { t } = useTranslation(["home", "common"]);

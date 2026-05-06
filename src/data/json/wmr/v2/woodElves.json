@@ -39,7 +39,7 @@
       "hits": 3,
       "armour": "-/5+",
       "size": "+1",
-      "points": 30,
+      "points": 25,
       "max": 4,
       "augendUnits": ["Glade Guard", "Eternal Guard"],
       "noCount": true,
