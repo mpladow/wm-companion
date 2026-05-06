@@ -3,7 +3,7 @@
 	"version": "Warmaster Revolution",
 	"group": 1,
 	"order": 3,
-	"versionNumber": 2.24,
+	"versionNumber": 2.261,
 	"description": [
 		"The world is awash with unseen magic that comes from the dark dimension between time and space. It was introduced into the world when the great intra-spatial gateways of the Old Ones collapsed, creating a rift in space and spewing magically volatile warp-matter over the whole planet. Magic is a malleable energy that can be harnessed and wielded, but the very act of doing so reshapes and changes everyone and everything it comes into contact with. Whether used for good or ill, magic is ultimately corrupting and dangerous."
 	],
@@ -109,7 +109,7 @@
 			"points": 125,
 			"armyMin": 1,
 			"armyMax": 1,
-			"upgrades": ["Daemonic Wings", "Favour of the Gods", "Wizard"]
+			"upgrades": ["Daemonic Wings", "Favour of the Gods", "Wizard", "Chariot"]
 		},
 		{
 			"name": "Daemon Lord Hero",
@@ -120,18 +120,18 @@
 			"size": 1,
 			"points": 80,
 			"max": 1,
-			"upgrades": ["Daemonic Wings", "Favour of the Gods"]
+			"upgrades": ["Daemonic Wings", "Favour of the Gods", "Chariot"]
 		},
 		{
 			"name": "Daemon Sorcerer",
 			"order": 10,
 			"type": "Wizard",
-			"attack": "+1",
+			"attack": "+1", 
 			"command": 8,
 			"size": 1,
 			"points": 90,
 			"max": 1,
-			"upgrades": ["Daemonic Wings", "Favour of the Gods"]
+			"upgrades": ["Daemonic Wings", "Favour of the Gods", "Chariot"]
 		}
 	],
 	"upgrades": [
@@ -148,6 +148,14 @@
 			"type": "Special",
 			"attack": "+1",
 			"points": "+50",
+			"max": 1
+		},
+				{
+			"name": "Chariot",
+			"order": 1,
+			"type": "Chariot Mount",
+			"attack": "+1",
+			"points": "+5",
 			"max": 1
 		},
 		{

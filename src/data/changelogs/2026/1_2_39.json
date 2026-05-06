@@ -1,0 +1,13 @@
+{
+  "version": "1.2.39",
+  "changes": [
+    {
+      "type": "improvement",
+      "title": "Army lists updated for version 2.26!",
+      "description": [
+        "You can now create army lists that align with version 2.26 of the Warmaster Revolutions Army Book.",
+			"All lists will now reflect the new changes, so be aware some old lists may no longer be valid. It is highly recommended that you review your existing lists and ensure they align with the new update."
+      ]
+    }
+  ]
+}

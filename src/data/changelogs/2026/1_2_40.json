@@ -1,0 +1,17 @@
+{
+  "version": "1.2.40",
+  "changes": [
+    {
+      "type": "improvement",
+      "title": "Army lists updated for version 2.26!",
+      "description": [
+        "Hotfixes for all 2.26 army lists!",
+		  "",
+		  "Readjusted points costs for most units in all factions, specifically chariots.",
+		  "Magic Items have been updated to reflect the new changes, specifically the new points costs for banners.",
+		  "__It is highly recommended that you review your existing lists and ensure they align with the new update.__",
+		  "If an existing list does not reflect the new points cost then please create a new list."
+      ]
+    }
+  ]
+}

@@ -82,4 +82,5 @@ export type UnitProps = {
 	specialRulesExpanded?: any[];
 	noMagic?: boolean;
 	noCount?: boolean;
+	canFly?: boolean;
 };
