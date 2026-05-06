@@ -1,5 +1,5 @@
-import { Factions } from "./constants";
 import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
+import { Factions } from "./constants";
 
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 
@@ -79,21 +79,20 @@ export const getLocalFactionAssets = (faction: string) => {
 			return [require("../../assets/images/wm-lizardmen1.jpeg")];
 
 		case "Albion":
-			return [require("../../assets/images/wm-albion-default.png")];
+			return [require("../../assets/images/wm-albion.png")];
 
 		case "Ogre_Kingdoms":
 			return [require("../../assets/images/wm-ogres.jpg")];
 		case "Kislev":
 			return [require("../../assets/images/wm-kislev-default.png")];
 
-		case "Norse":
-			return [require("../../assets/images/wm-norse-default.png")];
-
 		case "Witch_Hunters":
 			return [require("../../assets/images/wm-witchhunters-default.png")];
 
 		case "Cathay":
 			return [require("../../assets/images/wm-cathay-default.png")];
+		case "Norse":
+			return [require("../../assets/images/wm-norse.png")];
 		default:
 			return [require("../../assets/images/wm-genericarmy-2.png")];
 			break;
