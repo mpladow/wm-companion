@@ -1,35 +1,37 @@
 import {
-  Animated,
-  Dimensions,
-  FlatList,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '@hooks/useTheme';
-import { StandardModal, Text, TextBlock } from '@components/index';
-import {
-  ArmyListFilters,
-  ArmyListProps,
-  ListSections,
-  useBuilderContext,
-} from '@context/BuilderContext';
-import fonts from '@utils/fonts';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+	BottomSheetHandle,
+	StandardModal,
+	Text,
+	TextBlock
+} from '@components/index';
 import PopupConfirm from '@components/PopupConfirm';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useToast } from 'react-native-toast-notifications';
-import { useTranslation } from 'react-i18next';
-import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
-import AddArmyButton from './components/AddArmyButton';
-import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
+import {
+	ArmyListFilters,
+	ArmyListProps,
+	ListSections,
+	useBuilderContext,
+} from '@context/BuilderContext';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
-import { filter } from 'lodash';
-import AnimatedHeader from '@components/AnimatedHeader/AnimatedHeader';
+import { useTheme } from '@hooks/useTheme';
+import { useNavigation } from '@react-navigation/native';
+import fonts from '@utils/fonts';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+	Animated,
+	Dimensions,
+	ImageBackground,
+	ScrollView,
+	StyleSheet,
+	TextInput,
+	View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useToast } from 'react-native-toast-notifications';
+import AddArmyButton from './components/AddArmyButton';
+import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
+import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
 
 const BuilderHome = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -43,9 +45,10 @@ const BuilderHome = () => {
     'all',
   ] as ArmyListFilters[]);
   const [filterMain, setFilterMain] = useState<ArmyListFilters[]>(['all'] as ArmyListFilters[]);
+  const [showPopupMenu, setShowPopupMenu] = useState(false);
 
   const { theme } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const builder = useBuilderContext();
   const { t } = useTranslation(['builder', 'common', 'forms']);
   const toast = useToast();
@@ -53,8 +56,6 @@ const BuilderHome = () => {
   const scrollY = useRef(new Animated.Value(0));
 
   useEffect(() => {
-    console.log('🚀 ~ BuilderHome ~ filterFavourites:', filterFavourites);
-    console.log('🚀 ~ BuilderHome ~ filterMain:', filterMain);
     const favourited = builder.getUserArmyLists(filterFavourites).filter((x) => x.isFavourite);
     const notFavourited = builder.getUserArmyLists(filterMain).filter((x) => !x.isFavourite);
     const sLData: armySectionListDataProps = {
@@ -82,6 +83,36 @@ const BuilderHome = () => {
   const handleAddArmyPress = () => {
     setShowCreateArmy(true);
   };
+  const handleOpenPopupMenu = () => {
+    if (!showPopupMenu) setShowPopupMenu(true);
+    else {
+      setShowPopupMenu(false);
+    }
+  };
+  const handleDismissPopupMenu = () => {
+    setShowPopupMenu(false);
+  };
+  const popupMenuItems = [
+    {
+      id: 'option-1',
+      label: 'Option 1',
+      description: 'Example popup menu item',
+      onPress: () =>
+        toast.show('Option 1 selected', {
+          type: 'success',
+          duration: 3000,
+        }),
+    },
+    {
+      id: 'option-2',
+      label: 'Option 2',
+      onPress: () =>
+        toast.show('Option 2 selected', {
+          type: 'success',
+          duration: 3000,
+        }),
+    },
+  ];
   const handleEditArmyPress = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
     setShowCreateArmy(!showCreateArmy);
@@ -108,8 +139,6 @@ const BuilderHome = () => {
   const [showChangeLogModal, setShowChangeLogModal] = useState(false);
   useEffect(() => {
     setTimeout(() => {
-      console.log('🚀 ~ setTimeout ~ recentlyDismissedChangeLog:', recentlyDismissedChangeLog);
-      console.log('🚀 ~ setTimeout ~ changelog:', changelog);
       if (changelog && recentlyDismissedChangeLog) {
         if (changelog.version !== recentlyDismissedChangeLog) {
           setShowChangeLogModal(true);
@@ -131,7 +160,6 @@ const BuilderHome = () => {
   // 	setFilterFavourites([...filterFavourites, newFilter]);
   // };
   const handleFilterChange = (newFilter: ArmyListFilters, section: ListSections) => {
-    console.log('🚀 ~ handleFilterChange ~ section:', section);
     if (section == 'main') {
       setFilterMain((filters) => {
         if (filters.find((x) => x == newFilter)) {
@@ -141,7 +169,6 @@ const BuilderHome = () => {
         }
       });
     } else {
-      console.log('setting filters');
       setFilterFavourites((filters) => {
         if (filters.find((x) => x == newFilter)) {
           return filters.filter((x) => x !== newFilter);
@@ -184,6 +211,15 @@ const BuilderHome = () => {
     );
   };
 
+  const bottomSheetModalRef = useRef<BottomSheetHandle>(null);
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handle sheet changes', index);
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <ImageBackground
@@ -203,7 +239,16 @@ const BuilderHome = () => {
             zIndex: 9,
           }}
         />
-
+        {/* <Button onPress={handleOpenPopupMenu} variant={'text'}>
+          <Text>Open popup menu</Text>
+        </Button> */}
+        {/* <BottomSheetPopupMenu
+          visible={showPopupMenu}
+          onDismiss={handleDismissPopupMenu}
+          title="Popup Menu"
+          items={popupMenuItems}
+          snapPoints={['28%']}
+        /> */}
         <ArmySectionList
           handleFilterChange={handleFilterChange}
           sectionListData={sectionListData}

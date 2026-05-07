@@ -4,6 +4,7 @@ import { SettingsContextProvider } from '@context/SettingsContext';
 import { ThemeContextProvider } from '@context/ThemeContext';
 import { UpdateCheckerContextProvider } from '@context/UpdateCheckerContext';
 import { VPContextProvider } from '@context/VPContext';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import RootStack from '@navigation/Stacks/RootStack';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import * as Font from 'expo-font';
@@ -77,28 +78,30 @@ const App = () => {
     return null;
   }
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeContextProvider>
-        <ToastProvider>
-          <UpdateCheckerContextProvider>
-            <SettingsContextProvider>
-              <RootSiblingParent>
-                <MenuProvider>
-                  <CollectionProvider>
-                    <BuilderContextProvider>
-                      <VPContextProvider>
-                        <NavigationContainer theme={darkTheme}>
-                          <RootStack />
-                          <StatusBar translucent />
-                        </NavigationContainer>
-                      </VPContextProvider>
-                    </BuilderContextProvider>
-                  </CollectionProvider>
-                </MenuProvider>
-              </RootSiblingParent>
-            </SettingsContextProvider>
-          </UpdateCheckerContextProvider>
-        </ToastProvider>
+        <BottomSheetModalProvider>
+          <ToastProvider>
+            <UpdateCheckerContextProvider>
+              <SettingsContextProvider>
+                <RootSiblingParent>
+                  <MenuProvider>
+                    <CollectionProvider>
+                      <BuilderContextProvider>
+                        <VPContextProvider>
+                          <NavigationContainer theme={darkTheme}>
+                            <RootStack />
+                            <StatusBar translucent />
+                          </NavigationContainer>
+                        </VPContextProvider>
+                      </BuilderContextProvider>
+                    </CollectionProvider>
+                  </MenuProvider>
+                </RootSiblingParent>
+              </SettingsContextProvider>
+            </UpdateCheckerContextProvider>
+          </ToastProvider>
+        </BottomSheetModalProvider>
       </ThemeContextProvider>
     </GestureHandlerRootView>
   );
