@@ -80,28 +80,28 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeContextProvider>
-        <BottomSheetModalProvider>
-          <ToastProvider>
-            <UpdateCheckerContextProvider>
-              <SettingsContextProvider>
-                <RootSiblingParent>
-                  <MenuProvider>
+        <MenuProvider>
+          <BottomSheetModalProvider>
+            <ToastProvider>
+              <UpdateCheckerContextProvider>
+                <SettingsContextProvider>
+                  <RootSiblingParent>
                     <CollectionProvider>
                       <BuilderContextProvider>
                         <VPContextProvider>
                           <NavigationContainer theme={darkTheme}>
                             <RootStack />
-                            <StatusBar translucent />
+                            <StatusBar />
                           </NavigationContainer>
                         </VPContextProvider>
                       </BuilderContextProvider>
                     </CollectionProvider>
-                  </MenuProvider>
-                </RootSiblingParent>
-              </SettingsContextProvider>
-            </UpdateCheckerContextProvider>
-          </ToastProvider>
-        </BottomSheetModalProvider>
+                  </RootSiblingParent>
+                </SettingsContextProvider>
+              </UpdateCheckerContextProvider>
+            </ToastProvider>
+          </BottomSheetModalProvider>
+        </MenuProvider>
       </ThemeContextProvider>
     </GestureHandlerRootView>
   );

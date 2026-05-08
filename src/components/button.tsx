@@ -1,6 +1,6 @@
-import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native";
-import React, { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "@hooks/useTheme";
+import React, { ReactNode, useEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 type variant =
 	| "default"
@@ -41,13 +41,23 @@ const Button = ({ children, onPress, variant, circle, disabled, size, style }: b
 			case "secondary":
 				return { backgroundColor: theme.secondary };
 			case "outline-dark":
-				return { backgroundColor: "transparent", borderColor: theme.blueGrey, borderWidth: 2 };
+				return {
+          backgroundColor: 'transparent',
+          borderColor: theme.blueGrey,
+          borderWidth: 2,
+          boxShadow: 'none',
+        };
 			case "outline-light":
-				return { backgroundColor: "transparent", borderColor: theme.white, borderWidth: 2 };
+				return {
+          backgroundColor: 'transparent',
+          borderColor: theme.white,
+          borderWidth: 2,
+          boxShadow: 'none',
+        };
 			case "navigation-button":
 				return { backgroundColor: theme.white };
 			case "text":
-				return { backgroundColor: "transparent", border: 0 };
+				return { backgroundColor: "transparent", border: 0, boxShadow: "none" };
 			default:
 				return { backgroundColor: theme.secondary };
 		}
@@ -82,7 +92,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		backgroundColor: "grey",
 		borderRadius: 28,
-		boxShadow: `0px 0px 18px 8px rgba(0, 0, 0, 0.80)`,
+		boxShadow: `0px 0px 12px 8px rgba(0, 0, 0, 0.20)`,
 		alignItems: "center",
 		justifyContent: "center",
 		zIndex: 999,

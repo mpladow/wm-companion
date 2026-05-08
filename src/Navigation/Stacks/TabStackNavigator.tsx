@@ -1,16 +1,14 @@
-import { Dimensions, Platform, StyleSheet, View } from "react-native";
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "@navigation/About/Home";
+import { Text } from "@components/index";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "@hooks/useTheme";
-import { AntDesign } from "@expo/vector-icons";
-import { Button, Text, TextBlock } from "@components/index";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import fonts from "@utils/fonts";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
+import AboutStackNavigator from "./AboutStackNavigator";
 import BuilderStackNavigator from "./BuilderStackNavigator";
 import TrackerStackNavigator from "./TrackerStackNavigator";
-import AboutStackNavigator from "./AboutStackNavigator";
-import fonts from "@utils/fonts";
-import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator();
 export const navigatorOptions = {};
@@ -62,7 +60,7 @@ const TabStackNavigator = () => {
 						case "About":
 							label = t("About");
 							icon = (
-								<AntDesign name='infocirlceo' size={24} color={focused ? theme.warning : theme.text} />
+								<AntDesign name='info-circle' size={24} color={focused ? theme.warning : theme.text} />
 							);
 							break;
 						default:

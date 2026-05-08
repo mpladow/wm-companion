@@ -1,13 +1,13 @@
 import CustomText from "@components/CustomText";
 import { AntDesign } from "@expo/vector-icons";
-import { Pressable, View } from "react-native";
 import { useTheme } from "@hooks/useTheme";
+import { Pressable, View } from "react-native";
 
 type StandardModalHeaderTypes = { title: string; onClose: () => void };
 const StandardModalHeader = ({ title, onClose }: StandardModalHeaderTypes) => {
 	const { theme } = useTheme();
 	return (
-		<View style={{ flexDirection: "row", width: "100%", justifyContent: "center", paddingBottom: 24 }}>
+		<View style={{ paddingTop: 20,flexDirection: "row", width: "100%", justifyContent: "center", paddingBottom: 24 }}>
 			<View style={{ justifyContent: "center", alignSelf: "center", alignContent: "center" }}>
 				<CustomText variant='heading1' style={{ fontSize: 20 }}>
 					{title}

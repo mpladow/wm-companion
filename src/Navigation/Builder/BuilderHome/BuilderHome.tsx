@@ -1,9 +1,4 @@
-import {
-	BottomSheetHandle,
-	StandardModal,
-	Text,
-	TextBlock
-} from '@components/index';
+import { BottomSheetHandle, StandardModal, Text, TextBlock } from '@components/index';
 import PopupConfirm from '@components/PopupConfirm';
 import {
 	ArmyListFilters,
@@ -31,7 +26,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from 'react-native-toast-notifications';
 import AddArmyButton from './components/AddArmyButton';
 import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
-import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
 
 const BuilderHome = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -81,7 +75,7 @@ const BuilderHome = () => {
     setFocusedArmy(undefined);
   };
   const handleAddArmyPress = () => {
-    setShowCreateArmy(true);
+    navigation.navigate('BuilderCreationStackNavigator', { screen: 'CreateArmy' });
   };
   const handleOpenPopupMenu = () => {
     if (!showPopupMenu) setShowPopupMenu(true);
@@ -131,6 +125,7 @@ const BuilderHome = () => {
     });
   };
   const onArmyListDeletePress = (armyId: string) => {
+    console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
     setFocusedArmyId(armyId);
     setConfirmDialog(true);
   };
@@ -277,17 +272,17 @@ const BuilderHome = () => {
               Do you want to delete this army?
             </Text>
           }
-          confirmText={t('DeleteArmy', { ns: 'builder' })}
-          cancelText={t('Cancel', { ns: 'common' })}
-          headerText={t('DeleteArmy', { ns: 'builder' })}
+          confirmText={''}
+          cancelText={''}
+          headerText={''}
         />
       </ImageBackground>
-      <CreateArmyModal
+      {/* <CreateArmyModal
         onDismissCreateArmyModal={handleDismissArmyCreateModal}
         theme={theme}
         focusedArmy={focusedArmy}
         isVisible={showCreateArmy}
-      />
+      /> */}
       <AddArmyButton
         handleAddArmyPress={handleAddArmyPress}
         theme={theme}

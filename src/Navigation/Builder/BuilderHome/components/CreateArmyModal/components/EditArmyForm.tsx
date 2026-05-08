@@ -5,7 +5,7 @@ import { Theme } from "@hooks/useTheme";
 import fonts from "@utils/fonts";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { ScrollView, TextInput, View } from "react-native";
 
 const EditArmyForm = ({
 	focusedArmy,
@@ -54,7 +54,6 @@ const EditArmyForm = ({
 	return (
 		<>
 			<ScrollView
-				onStartShouldSetResponder={() => true}
 				contentContainerStyle={{ flexGrow: 1 }}
 				scrollEnabled={false}
 			>
