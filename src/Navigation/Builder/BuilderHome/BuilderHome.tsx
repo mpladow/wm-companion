@@ -241,13 +241,7 @@ const BuilderHome = () => {
         {/* <Button onPress={handleOpenPopupMenu} variant={'text'}>
           <Text>Open popup menu</Text>
         </Button> */}
-        {/* <BottomSheetPopupMenu
-          visible={showPopupMenu}
-          onDismiss={handleDismissPopupMenu}
-          title="Popup Menu"
-          items={popupMenuItems}
-          snapPoints={['28%']}
-        /> */}
+
         <ArmySectionList
           handleFilterChange={handleFilterChange}
           sectionListData={sectionListData}

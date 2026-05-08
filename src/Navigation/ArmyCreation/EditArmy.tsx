@@ -121,6 +121,7 @@ const EditArmy = () => {
         }}
         contentContainerStyle={{ flexGrow: 1 }}>
         <FactionImages factionId={parseInt(factionSelection)} />
+        <View style={{ height: 2, backgroundColor: theme.white, width: '100%' }}></View>
         <KeyboardAvoidingView style={{ flex: 1, padding: 16 }}>
           <Text variant="heading3" style={{ marginBottom: 8, fontSize: 32 }}>
             {getKeyByValue(Factions, parseInt(factionSelection))}
@@ -174,6 +175,7 @@ const EditArmy = () => {
           ) : (
             <View style={{ flex: 1 }}>
               <Button
+                disabled={factionName == null || factionName == ''}
                 onPress={() => onConfirmCreateArmyPress(true)}
                 variant={'confirm'}
                 style={{ flexDirection: 'row', gap: 8 }}>

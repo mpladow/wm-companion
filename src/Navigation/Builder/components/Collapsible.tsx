@@ -13,10 +13,18 @@ const CollapsibleComponent = ({headerLeftComponent, collapsableContent}: Collaps
     const [toggleVisible, setToggleVisible] = useState(true)
     const {theme} = useTheme();
 	return (
-		<View style={{ padding: 12, margin: 12, borderRadius: 12, backgroundColor: theme.white }}>
-			<TouchableOpacity onPress={() => setToggleVisible(!toggleVisible)}>
-				<View style={{ flexDirection: "row", alignItems: "center" }}>
-					{/* <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
+    <View
+      style={{
+        padding: 12,
+        margin: 12,
+        borderRadius: 12,
+        backgroundColor: theme.white,
+        borderWidth: 2,
+        borderColor: theme.backgroundVariant3,
+      }}>
+      <TouchableOpacity onPress={() => setToggleVisible(!toggleVisible)}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {/* <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
 						<View style={{ marginRight: 4 }}>
 							<Feather name='book-open' size={20} color='black' />
 						</View>
@@ -24,24 +32,24 @@ const CollapsibleComponent = ({headerLeftComponent, collapsableContent}: Collaps
 							{title}
 						</Text>
 					</View> */}
-                    {headerLeftComponent}
-					<View>
-						{!toggleVisible ? (
-							<AntDesign name='caret-up' size={12} color='black' />
-						) : (
-							<AntDesign name='caret-down' size={12} color='black' />
-						)}
-					</View>
-					{/*Heading of Single Collapsible*/}
-				</View>
-			</TouchableOpacity>
+          {headerLeftComponent}
+          <View>
+            {!toggleVisible ? (
+              <AntDesign name="caret-up" size={12} color="black" />
+            ) : (
+              <AntDesign name="caret-down" size={12} color="black" />
+            )}
+          </View>
+          {/*Heading of Single Collapsible*/}
+        </View>
+      </TouchableOpacity>
 
-			<Collapsible collapsed={toggleVisible} align='center'>
-				{collapsableContent}
-				{/* <View style={{ paddingVertical: 4, paddingTop: 8 }}>{contents}</View> */}
-			</Collapsible>
-		</View>
-	);
+      <Collapsible collapsed={toggleVisible} align="center">
+        {collapsableContent}
+        {/* <View style={{ paddingVertical: 4, paddingTop: 8 }}>{contents}</View> */}
+      </Collapsible>
+    </View>
+  );
 };
 
 export default CollapsibleComponent;

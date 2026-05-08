@@ -1,21 +1,21 @@
 import FactionImages from '@components/FactionImages';
-import { Button, CustomCheckbox, Text } from '@components/index';
+import { BottomSheetPopupMenu, CustomCheckbox, Text } from '@components/index';
 import { SelectedUnitProps, useBuilderContext } from '@context/BuilderContext';
 import { useSettingsContext } from '@context/SettingsContext';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
+import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useTheme } from '@hooks/useTheme';
 import { Factions } from '@utils/constants';
 import { getGenericSpecialRules, getKeyByValue } from '@utils/factionHelpers';
 import { UnitProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	Dimensions,
 	FlatList,
 	Modal,
-	SafeAreaView,
 	SectionList,
 	StyleSheet,
 	TouchableOpacity,
@@ -23,12 +23,12 @@ import {
 } from 'react-native';
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import ArmyPointsCount from './components/ArmyPointsCount';
+import CollapsibleComponent from './components/Collapsible';
 import SpecialRulesCollapsible from './components/SpecialRulesCollapsible';
-import SpellBookModal from './components/SpellBookModal';
 import UnitPreview from './components/UnitCardPreview/UnitPreview';
 import UnitDetailsCard from './components/UnitDetailsCard';
 import UpgradePreview from './components/UpgradePreview';
-import { getUpgradeDetailsByName } from './utils/builderHelpers';
+import { getUpgradeDetailsByName, sanitizeText } from './utils/builderHelpers';
 
 export type sectionListDataProps = {
   title: string;
@@ -42,9 +42,26 @@ const BuilderEdit = ({ navigation }: any) => {
   const { settings, setShowStatlineSetting } = useSettingsContext();
   //modals
   const [errorsVisible, setErrorsVisible] = useState(false);
-  const [spellsVisible, setSpellsVisible] = useState(false);
   const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
   const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
+  const spellsBottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const renderDiceIcon = (value?: number) => {
+    switch (value) {
+      case 2:
+        return <FontAwesome5 name="dice-two" size={16} color="black" />;
+      case 3:
+        return <FontAwesome5 name="dice-three" size={16} color="black" />;
+      case 4:
+        return <FontAwesome5 name="dice-four" size={16} color="black" />;
+      case 5:
+        return <FontAwesome5 name="dice-five" size={16} color="black" />;
+      case 6:
+        return <FontAwesome5 name="dice-six" size={16} color="black" />;
+      default:
+        return <FontAwesome5 name="dice-d6" size={16} color="black" />;
+    }
+  };
   // show statline
   const [currentPoints, setCurrentPoints] = useState(0);
   const [totalPoints, setTotalPoints] = useState(1000); // this state will update itself as the current points exceeds the previous value
@@ -52,6 +69,7 @@ const BuilderEdit = ({ navigation }: any) => {
   const [showFactionInfo, setShowFactionInfo] = useState(false);
   const [selectedUnitDetails, setSelectedUnitDetails] = useState<UnitProps>();
   const [currentUpgradeDetails, setCurrentUpgradeDetails] = useState<UpgradesProps | undefined>();
+  const [showSpells, setShowSpells] = useState(false);
 
   const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 
@@ -264,197 +282,294 @@ const BuilderEdit = ({ navigation }: any) => {
   }, [builder.calculateCurrentArmyPoints(), totalPoints]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundVariant2 }}>
-      {/* list all units */}
-      {builder.factionDetails?.armyRules ? (
-        <View style={{ paddingTop: 8, paddingHorizontal: 8 }}>
-          <SpecialRulesCollapsible
-            toggleVisible={() => setShowFactionInfo(!showFactionInfo)}
-            visible={!showFactionInfo}
-            title={t('ArmySpecialRules')}
-            contents={builder.factionDetails.armyRules}
-          />
-        </View>
-      ) : null}
-      {/* Spell list, break point */}
-
-      <LinearGradient
-        colors={['rgba(31,46,39, 0.1)', 'rgba(6,9,7, 0.3)']}
-        start={{ y: 0, x: 0.5 }}
-        end={{ y: 0.5, x: 0 }}
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: -0,
-          height: Dimensions.get('screen').height,
-          zIndex: 9,
-        }}></LinearGradient>
-
-      <View
-        style={{
-          zIndex: 9,
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: 12,
-          paddingVertical: 8,
-        }}>
-        <View>
-          <Text style={{ fontSize: 16 }}>{builder.getUnitCounts()}</Text>
-        </View>
-        <CustomCheckbox
-          onValueChange={() => setShowStatlineSetting()}
-          value={settings.showStatline}
-          label={t('ShowStatline')}
-        />
-        <View>
-          {builder.factionDetails?.name !== 'Dwarfs' &&
-          builder.factionDetails?.name !== 'Nippon' ? (
-            <Button onPress={() => setSpellsVisible(!spellsVisible)} variant={'default'}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ marginRight: 8 }}>
-                  <Entypo name="open-book" size={20} color={theme.white} />
-                </View>
-                <Text bold>{t('Spells')}</Text>
-              </View>
-            </Button>
+    <>
+      <View style={{ flex: 1, backgroundColor: theme.backgroundVariant2 }}>
+        {/* list all units */}
+        <>
+          {builder.factionDetails?.armyRules ? (
+            <View style={{ paddingTop: 8, paddingHorizontal: 8 }}>
+              <SpecialRulesCollapsible
+                toggleVisible={() => setShowFactionInfo(!showFactionInfo)}
+                visible={!showFactionInfo}
+                title={t('ArmySpecialRules')}
+                contents={builder.factionDetails.armyRules}
+              />
+            </View>
           ) : null}
-        </View>
-      </View>
-      <SectionList
-        ListHeaderComponent={
-          <FactionImages
-            factionId={parseInt(builder.selectedArmyList?.faction)}
-            imageStyle={{ height: 150 }}
-          />
-        }
-        style={{ zIndex: 9 }}
-        ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
-        sections={sectionListData}
-        renderSectionHeader={({ section: { title } }) => (
+          {/* Spell list, break point */}
+
+          <LinearGradient
+            colors={['rgba(31,46,39, 0.1)', 'rgba(6,9,7, 0.3)']}
+            start={{ y: 0, x: 0.5 }}
+            end={{ y: 0.5, x: 0 }}
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: -0,
+              height: Dimensions.get('screen').height,
+              zIndex: 9,
+            }}></LinearGradient>
+
           <View
             style={{
-              alignItems: 'center',
-              padding: 12,
-              backgroundColor: theme.backgroundVariant2,
-              flexDirection: 'row',
+              zIndex: 9,
               justifyContent: 'space-between',
-            }}>
-            <Text variant="heading3" style={{ fontSize: 20, textTransform: 'uppercase' }}>
-              {title}
-            </Text>
-            {/* //TODO: Extract into seperate button */}
-            <TouchableOpacity
-              onPress={() => navigation.navigate('AddUnit', { addingUnits: title != 'Leaders' })}>
-              <View style={{ backgroundColor: theme.accent, borderRadius: 4, padding: 4 }}>
-                <Entypo name="plus" size={24} color="black" />
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
-        ItemSeparatorComponent={() => <View style={{ height: 2, backgroundColor: 'black' }}></View>}
-        renderItem={({ item, index }) => {
-          // get total unit count
-          const unitDetails = factionUnits?.find((x) => x.name == item.unitName);
-          if (unitDetails) {
-            return (
-              <>
-                <UnitDetailsCard
-                  key={`unitDetails_${item.id}`}
-                  existingUnits={item.currentCount}
-                  unit={unitDetails}
-                  unitUpgrades={item.attachedItems}
-                  onShowUnitDetails={() => console.log('showUnitDetails')}
-                  onAddUnit={handleAddUnitToArmyPress}
-                  onDeleteUnit={() => handleRemoveUnit(item.id)}
-                  onAddUpgrade={() =>
-                    navigation.navigate('AddItem', {
-                      unitName: item.unitName,
-                      unitType: unitDetails.type,
-                    })
-                  }
-                  onRemoveUpgrade={handleRemoveUpgrade}
-                  onUnitCardPress={handleOnUnitCardPress}
-                  onUpgradePress={handleOnUpgradePress}
-                  currentArmyCount={builder.calculateCurrentArmyPoints()}
-                  hasError={builder.armyErrors.findIndex((x) => x.sourceName == item.unitName) > -1}
-                  unitDetailsExpanded={getUnitDetailsByUnitName(item.unitName)}
-                  showStatline={settings.showStatline}
-                />
-              </>
-            );
-          } else {
-            return <Text>NOT FOUND</Text>;
-          }
-        }}
-      />
-      {/* // points verification container */}
-      <View style={{ zIndex: 9, position: 'absolute', bottom: 10, left: 20, flexDirection: 'row' }}>
-        {/* TODO extract out  */}
-        <ArmyPointsCount
-          armyErrorsCount={builder.armyErrors.length}
-          setVisibility={(visibility) => setErrorsVisible(visibility)}
-          armyCount={armyCount}
-        />
-      </View>
-      <View style={{ position: 'absolute', bottom: 10, right: 20, flexDirection: 'row' }}>
-        {/* TODO extract out  */}
-      </View>
-      {/* {All selected upgrades modal} */}
-      {/* <AllSelectedUpgradesModal
-				setVisible={(vis) => setAllSelectedUpgradesVisible(vis)}
-				visible={allSelectedUpgradesVisible}
-				headerTitle={"Selected Upgrades"}
-				upgrades={magicItems}
-				selectedUpgrades={builder.selectedArmyList?.selectedUpgrades}
-			/> */}
-      {/* // add new new */}
-      <UpgradePreview
-        handleSetVisible={(visibility) => setUpgradePreviewVisible(visibility)}
-        visible={upgradePreviewVisible}
-        selectedUpgradeDetails={currentUpgradeDetails}
-      />
-      {selectedUnitDetails ? (
-        <UnitPreview
-          handleSetVisible={(visibility) => setUnitPreviewVisible(visibility)}
-          visible={unitPreviewVisible}
-          selectedUnitDetails={selectedUnitDetails}
-        />
-      ) : null}
-      {builder.factionDetails?.spells ? (
-        <SpellBookModal
-          handleSetVisible={(visibility) => setSpellsVisible(visibility)}
-          visible={spellsVisible}
-          spells={builder.factionDetails?.spells}
-        />
-      ) : null}
-      <Modal animationType="fade" visible={errorsVisible} transparent={true}>
-        <View style={styles.modalOverlay} onTouchStart={() => setErrorsVisible(!errorsVisible)}>
-          <View
-            style={{
-              marginTop: 500,
+              flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: theme.text,
-              padding: 16,
-              margin: 12,
-              borderRadius: 20,
+              paddingHorizontal: 12,
+              paddingVertical: 8,
             }}>
-            <FlatList
-              data={builder.armyErrors}
-              renderItem={({ item }) => {
-                return (
-                  <View>
-                    <Text style={{ color: theme.black }}>{item.error}</Text>
-                  </View>
-                );
-              }}
+            <View>
+              <Text style={{ fontSize: 16 }}>{builder.getUnitCounts()}</Text>
+            </View>
+            <CustomCheckbox
+              onValueChange={() => setShowStatlineSetting()}
+              value={settings.showStatline}
+              label={t('ShowStatline')}
             />
           </View>
+        </>
+        <SectionList
+          ListHeaderComponent={
+            <FactionImages
+              factionId={parseInt(builder.selectedArmyList?.faction)}
+              imageStyle={{ height: 150 }}
+            />
+          }
+          style={{ zIndex: 9 }}
+          ListFooterComponent={() => <View style={{ padding: 40 }}></View>}
+          sections={sectionListData}
+          renderSectionHeader={({ section: { title } }) => (
+            <View
+              style={{
+                alignItems: 'center',
+                padding: 12,
+                backgroundColor: theme.backgroundVariant2,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text variant="heading3" style={{ fontSize: 20, textTransform: 'uppercase' }}>
+                {title}
+              </Text>
+              {/* //TODO: Extract into seperate button */}
+              <TouchableOpacity
+                onPress={() => navigation.navigate('AddUnit', { addingUnits: title != 'Leaders' })}>
+                <View style={{ backgroundColor: theme.accent, borderRadius: 4, padding: 4 }}>
+                  <Entypo name="plus" size={24} color="black" />
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: 2, backgroundColor: 'black' }}></View>
+          )}
+          renderItem={({ item, index }) => {
+            // get total unit count
+            const unitDetails = factionUnits?.find((x) => x.name == item.unitName);
+            if (unitDetails) {
+              return (
+                <>
+                  <UnitDetailsCard
+                    key={`unitDetails_${item.id}`}
+                    existingUnits={item.currentCount}
+                    unit={unitDetails}
+                    unitUpgrades={item.attachedItems}
+                    onShowUnitDetails={() => console.log('showUnitDetails')}
+                    onAddUnit={handleAddUnitToArmyPress}
+                    onDeleteUnit={() => handleRemoveUnit(item.id)}
+                    onAddUpgrade={() =>
+                      navigation.navigate('AddItem', {
+                        unitName: item.unitName,
+                        unitType: unitDetails.type,
+                      })
+                    }
+                    onRemoveUpgrade={handleRemoveUpgrade}
+                    onUnitCardPress={handleOnUnitCardPress}
+                    onUpgradePress={handleOnUpgradePress}
+                    currentArmyCount={builder.calculateCurrentArmyPoints()}
+                    hasError={
+                      builder.armyErrors.findIndex((x) => x.sourceName == item.unitName) > -1
+                    }
+                    unitDetailsExpanded={getUnitDetailsByUnitName(item.unitName)}
+                    showStatline={settings.showStatline}
+                  />
+                </>
+              );
+            } else {
+              return <Text>NOT FOUND</Text>;
+            }
+          }}
+        />
+        {/* // points verification container */}
+        <View
+          style={{
+            zIndex: 9,
+            position: 'absolute',
+            bottom: 10,
+            left: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: Dimensions.get('screen').width - 40,
+          }}>
+          {/* TODO extract out  */}
+          <ArmyPointsCount
+            armyErrorsCount={builder.armyErrors.length}
+            setVisibility={(visibility) => setErrorsVisible(visibility)}
+            armyCount={armyCount}
+          />
+          <View>
+            {builder.factionDetails?.name !== 'Dwarfs' &&
+            builder.factionDetails?.name !== 'Nippon' ? (
+              <TouchableOpacity
+                onPress={() => setShowSpells(!showSpells)}
+                style={{
+                  backgroundColor: theme.success,
+                  paddingVertical: 8,
+                  paddingHorizontal: 12,
+                  borderRadius: 4,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 4, height: 4 },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                }}>
+                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                  <View>
+                    <Entypo name="open-book" size={40} color={theme.white} />
+                  </View>
+                  <Text bold>{t('Spells')}</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </View>
-      </Modal>
-    </SafeAreaView>
+        {/* {All selected upgrades modal} */}
+        <UpgradePreview
+          handleSetVisible={(visibility) => setUpgradePreviewVisible(visibility)}
+          visible={upgradePreviewVisible}
+          selectedUpgradeDetails={currentUpgradeDetails}
+        />
+        {selectedUnitDetails ? (
+          <UnitPreview
+            handleSetVisible={(visibility) => setUnitPreviewVisible(visibility)}
+            visible={unitPreviewVisible}
+            selectedUnitDetails={selectedUnitDetails}
+          />
+        ) : null}
+
+        <Modal animationType="fade" visible={errorsVisible} transparent={true}>
+          <View style={styles.modalOverlay} onTouchStart={() => setErrorsVisible(!errorsVisible)}>
+            <View
+              style={{
+                marginTop: 500,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: theme.text,
+                padding: 16,
+                margin: 12,
+                borderRadius: 20,
+              }}>
+              <FlatList
+                data={builder.armyErrors}
+                renderItem={({ item }) => {
+                  return (
+                    <View>
+                      <Text style={{ color: theme.black }}>{item.error}</Text>
+                    </View>
+                  );
+                }}
+              />
+            </View>
+          </View>
+        </Modal>
+        {builder.factionDetails?.spells ? (
+          <>
+            <BottomSheetPopupMenu
+              visible={showSpells}
+              ref={spellsBottomSheetRef}
+              onDismiss={() => setShowSpells(!showSpells)}
+              title={`Spells of ${builder.factionDetails.name}`}
+              titleStyle={{ color: theme.black, paddingHorizontal: 16 }}
+              overDragResistanceFactor={6}
+              enableOverDrag={false}
+              enableDismissOnClose={true}
+              snapPoints={['70%']}
+              handleStyle={{ backgroundColor: theme.background }}
+              index={0}
+              containerStyle={{ overflow: 'scroll' }}
+              handleIndicatorStyle={{ backgroundColor: theme.text }}
+              enableDynamicSizing={false}
+              enableHandlePanningGesture
+              sheetStyle={{ paddingHorizontal: 0 }}>
+              <BottomSheetScrollView
+                scrollEnabled={true}
+                style={{ overflow: 'scroll' }}
+                showsVerticalScrollIndicator
+                nestedScrollEnabled
+                contentContainerStyle={{
+                  overflow: 'scroll',
+                  flexGrow: 1, // alignContent: 'flex-start',
+                }}>
+                <>
+                  {builder.factionDetails?.spells.map((item) => (
+                    <CollapsibleComponent
+                      headerLeftComponent={
+                        <View
+                          style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <View style={{ flex: 1 }}>
+                            <View style={{ flexDirection: 'column' }}>
+                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                {renderDiceIcon(item.roll)}
+                                <View style={{ marginLeft: 8 }}>
+                                  <Text style={{ fontSize: 16, color: theme.black }}>
+                                    {item.roll}+
+                                  </Text>
+                                </View>
+                              </View>
+                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Entypo name="ruler" size={16} color="black" />
+                                <View style={{ marginLeft: 8 }}>
+                                  <Text style={{ color: theme.black }}>
+                                    {item.range ? item.range : '-'}
+                                  </Text>
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                          <View style={{ flex: 2, justifyContent: 'flex-start' }}>
+                            <Text bold style={{ fontSize: 16, color: theme.black }}>
+                              {item.name}
+                            </Text>
+                          </View>
+                        </View>
+                      }
+                      collapsableContent={
+                        <View style={{ flexDirection: 'column', marginVertical: 12 }}>
+                          {item.text?.map((x) => {
+                            let _item = x;
+                            const sanitized = sanitizeText(_item, theme.black);
+                            return <Text style={{ color: theme.black }}>{sanitized}</Text>;
+                          })}
+                        </View>
+                      }
+                    />
+                  ))}
+                </>
+              </BottomSheetScrollView>
+            </BottomSheetPopupMenu>
+          </>
+        ) : null}
+      </View>
+    </>
   );
 };
 
