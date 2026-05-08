@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MenuProvider } from 'react-native-popup-menu';
 import { RootSiblingParent } from 'react-native-root-siblings';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from 'react-native-toast-notifications';
 import './src/i18n/i18n';
 
@@ -79,30 +80,32 @@ const App = () => {
   }
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeContextProvider>
-        <MenuProvider>
-          <BottomSheetModalProvider>
-            <ToastProvider>
-              <UpdateCheckerContextProvider>
-                <SettingsContextProvider>
-                  <RootSiblingParent>
-                    <CollectionProvider>
-                      <BuilderContextProvider>
-                        <VPContextProvider>
-                          <NavigationContainer theme={darkTheme}>
-                            <RootStack />
-                            <StatusBar />
-                          </NavigationContainer>
-                        </VPContextProvider>
-                      </BuilderContextProvider>
-                    </CollectionProvider>
-                  </RootSiblingParent>
-                </SettingsContextProvider>
-              </UpdateCheckerContextProvider>
-            </ToastProvider>
-          </BottomSheetModalProvider>
-        </MenuProvider>
-      </ThemeContextProvider>
+      <SafeAreaProvider>
+        <ThemeContextProvider>
+          <MenuProvider>
+            <BottomSheetModalProvider>
+              <ToastProvider>
+                <UpdateCheckerContextProvider>
+                  <SettingsContextProvider>
+                    <RootSiblingParent>
+                      <CollectionProvider>
+                        <BuilderContextProvider>
+                          <VPContextProvider>
+                            <NavigationContainer theme={darkTheme}>
+                              <RootStack />
+                              <StatusBar />
+                            </NavigationContainer>
+                          </VPContextProvider>
+                        </BuilderContextProvider>
+                      </CollectionProvider>
+                    </RootSiblingParent>
+                  </SettingsContextProvider>
+                </UpdateCheckerContextProvider>
+              </ToastProvider>
+            </BottomSheetModalProvider>
+          </MenuProvider>
+        </ThemeContextProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 };

@@ -1,12 +1,9 @@
-import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import React from "react";
-import { useTheme } from "@hooks/useTheme";
-import { Feather } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import Collapsible from "react-native-collapsible";
 import { Text } from "@components/index";
-import reactStringReplace from "react-string-replace";
-import { asterixRegex, asterixSingleRegex, underscoreRegex } from "@utils/constants";
+import { AntDesign, Feather } from "@expo/vector-icons";
+import { useTheme } from "@hooks/useTheme";
+import React from "react";
+import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import Collapsible from "react-native-collapsible";
 import { sanitizeText } from "../utils/builderHelpers";
 
 type SpecialRulesCollapsibleProps = {
@@ -19,7 +16,7 @@ const SpecialRulesCollapsible = ({ visible, title, contents, toggleVisible }: Sp
 	const { theme } = useTheme();
 
 	return (
-		<View style={{ zIndex: 99, padding: 12, margin: 12, borderRadius: 12, backgroundColor: theme.white }}>
+		<View style={{ zIndex: 99, padding: 12, borderRadius: 12, backgroundColor: theme.white }}>
 			<TouchableOpacity onPress={() => toggleVisible()}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
 					<View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
@@ -32,9 +29,9 @@ const SpecialRulesCollapsible = ({ visible, title, contents, toggleVisible }: Sp
 					</View>
 					<View>
 						{!visible ? (
-							<AntDesign name='caretup' size={12} color='black' />
+							<AntDesign name='caret-up' size={12} color='black' />
 						) : (
-							<AntDesign name='caretdown' size={12} color='black' />
+							<AntDesign name='caret-down' size={12} color='black' />
 						)}
 					</View>
 					{/*Heading of Single Collapsible*/}

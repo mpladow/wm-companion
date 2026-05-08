@@ -1,7 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@hooks/useTheme";
 import { AntDesign } from "@expo/vector-icons";
+import { useTheme } from "@hooks/useTheme";
+import React, { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Collapsible from "react-native-collapsible";
 
 type CollapsibleProps = {
@@ -27,9 +27,9 @@ const CollapsibleComponent = ({headerLeftComponent, collapsableContent}: Collaps
                     {headerLeftComponent}
 					<View>
 						{!toggleVisible ? (
-							<AntDesign name='caretup' size={12} color='black' />
+							<AntDesign name='caret-up' size={12} color='black' />
 						) : (
-							<AntDesign name='caretdown' size={12} color='black' />
+							<AntDesign name='caret-down' size={12} color='black' />
 						)}
 					</View>
 					{/*Heading of Single Collapsible*/}

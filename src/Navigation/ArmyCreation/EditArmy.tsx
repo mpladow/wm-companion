@@ -1,7 +1,10 @@
-import { Button, Text } from '@components/index';
+import { Button, FactionImages, Text } from '@components/index';
 import { useBuilderContext } from '@context/BuilderContext';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Factions } from '@utils/constants';
+import { getKeyByValue } from '@utils/factionHelpers';
 import fonts from '@utils/fonts';
 import Constants from 'expo-constants';
 import React, { useEffect, useRef, useState } from 'react';
@@ -22,7 +25,7 @@ const EditArmy = () => {
 
   const currentArmy = builder.getArmyByArmyId(armyId);
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
-  
+
   // Keyboard visibility state
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
@@ -76,6 +79,8 @@ const EditArmy = () => {
       toast.show(`Army updated!`);
     }
   };
+  const [createdArmyId, setCreatedArmyId] = useState<string | null>(null);
+
   const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
     if (factionName == '') {
       console.error('🚀 ~ onConfirmCreateArmyPress ~ factionName:', factionName);
@@ -87,25 +92,39 @@ const EditArmy = () => {
       builder
         .addUserArmyList(parseInt(factionSelection), factionName, autopopulate, CURRENT_VERSION)
         .then((result) => {
+          console.log('🚀 ~ onConfirmCreateArmyPress ~ result:', result);
+          setCreatedArmyId(result);
           builder.setSelectedArmyList(result);
         })
         .catch(() => {})
         .finally(() => {
-          (navigation as any).navigate('BuilderEdit');
-          toast.show(`New army created!`);
+          setTimeout(() => {
+            // (navigation as any).navigate('BuilderEdit');
+            toast.show(`New army created!`);
+          }, 1000);
         });
     }
   };
+  useEffect(() => {
+    if (createdArmyId) {
+      // army has been created - set the current army list
+      builder.setSelectedArmyList(createdArmyId);
+      (navigation as any).navigate('BuilderEdit');
+    }
+  }, [createdArmyId]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background, padding: 12 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <ScrollView
-        style={{ 
-          flex: isKeyboardVisible ? 0.6 : 1, 
-          backgroundColor: 'blue' 
+        style={{
+          flex: isKeyboardVisible ? 0.6 : 1,
         }}
         contentContainerStyle={{ flexGrow: 1 }}>
-        <KeyboardAvoidingView style={{ flex: 1 }}>
+        <FactionImages factionId={parseInt(factionSelection)} />
+        <KeyboardAvoidingView style={{ flex: 1, padding: 16 }}>
+          <Text variant="heading3" style={{ marginBottom: 8, fontSize: 32 }}>
+            {getKeyByValue(Factions, parseInt(factionSelection))}
+          </Text>
           <TextInput
             ref={nameRef}
             placeholder={t('PlaceholderEnterArmyName', { ns: 'forms' })}
@@ -129,7 +148,21 @@ const EditArmy = () => {
             </Text>
           )}
         </KeyboardAvoidingView>
-        <View style={{ paddingTop: 16, flexDirection: 'row', alignSelf: 'flex-end', gap: 12 }}>
+        <View
+          style={{
+            paddingTop: 16,
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+            gap: 12,
+            padding: 16,
+          }}>
+          <View>
+            <Button onPress={() => navigation.goBack()} variant={'secondary'}>
+              <Text bold style={{ textTransform: 'uppercase', color: theme.white }}>
+                Back
+              </Text>
+            </Button>
+          </View>
           {armyId !== undefined ? (
             <View style={{ flex: 1 }}>
               <Button onPress={onConfirmEditArmyPress} variant={'confirm'}>
@@ -140,7 +173,12 @@ const EditArmy = () => {
             </View>
           ) : (
             <View style={{ flex: 1 }}>
-              <Button onPress={() => onConfirmCreateArmyPress(true)} variant={'confirm'}>
+              <Button
+                onPress={() => onConfirmCreateArmyPress(true)}
+                variant={'confirm'}
+                style={{ flexDirection: 'row', gap: 8 }}>
+                <Ionicons name="checkmark-circle" size={16} color={theme.black} />
+
                 <Text bold style={{ textTransform: 'uppercase', color: theme.black }}>
                   Create Army
                 </Text>

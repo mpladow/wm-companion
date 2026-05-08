@@ -1,5 +1,4 @@
 import { BottomSheetHandle, StandardModal, Text, TextBlock } from '@components/index';
-import PopupConfirm from '@components/PopupConfirm';
 import {
 	ArmyListFilters,
 	ArmyListProps,
@@ -125,10 +124,15 @@ const BuilderHome = () => {
     });
   };
   const onArmyListDeletePress = (armyId: string) => {
-    console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
     setFocusedArmyId(armyId);
-    setConfirmDialog(true);
+    setTimeout(() => {
+      console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
+      setConfirmDialog(true);
+    }, 1000);
   };
+  useEffect(() => {
+    console.log(confirmDialog);
+  }, [confirmDialog]);
 
   const { isReady, changelog, dismissChangeLog, recentlyDismissedChangeLog } = useUpdateChecker();
   const [showChangeLogModal, setShowChangeLogModal] = useState(false);
@@ -257,7 +261,8 @@ const BuilderHome = () => {
           favouritesFilters={filterFavourites}
           mainFilters={filterMain}
         />
-        <PopupConfirm
+
+        {/* <PopupConfirm
           visible={confirmDialog}
           onConfirm={() => {
             focusedArmyId && builder.deleteUserArmyList(focusedArmyId);
@@ -275,7 +280,7 @@ const BuilderHome = () => {
           confirmText={''}
           cancelText={''}
           headerText={''}
-        />
+        /> */}
       </ImageBackground>
       {/* <CreateArmyModal
         onDismissCreateArmyModal={handleDismissArmyCreateModal}
@@ -315,7 +320,7 @@ const BuilderHome = () => {
         heading={t('ArmyNotes', { ns: 'builder' })}
         onCancel={() => setShowArmyNotes(false)}
       />
-      <StandardModal
+      {/* <StandardModal
         content={generateContent()}
         heading={
           changelog
@@ -326,6 +331,14 @@ const BuilderHome = () => {
         visible={showChangeLogModal}
         onSubmit={handleDismissModal}
         submitText={'Understood!'}
+      /> */}
+      <StandardModal
+        content={<Text>Are you sure you want to delete this army?</Text>}
+        heading={'POO'}
+        onCancel={() => setConfirmDialog(false)}
+        visible={confirmDialog}
+        onSubmit={handleDismissModal}
+        submitText={'YES!'}
       />
     </SafeAreaView>
   );
@@ -344,12 +357,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width,
   },
   modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    //backgroundColor: 'blue',
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

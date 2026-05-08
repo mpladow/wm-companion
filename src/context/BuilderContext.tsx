@@ -357,7 +357,6 @@ export const BuilderContextProvider = ({ children }: any) => {
   const setSelectedArmyList = (armyId: string, faction?: number) => {
     // once user selects army, set selectedUnits, name,
     const selectedList = userArmyLists.find((x) => x.armyId == armyId);
-    console.log('🚀 ~ setSelectedArmyList ~ selectedList:', selectedList);
     if (selectedList) {
       // get list version
       selectedList.points = calculateCurrentArmyPoints(selectedList);
@@ -735,7 +734,6 @@ export const BuilderContextProvider = ({ children }: any) => {
     currentArmyList?.selectedUnits?.map((unit) => {
       // check max count
 
-      console.log('🚀 ~ currentArmyList?.selectedUnits?.map ~ unit:', unit);
       if (unit.maxCount) {
         const maxCountPer1000Points = unit.maxCount * currentArmyPointsLimit;
         if (unit.currentCount > maxCountPer1000Points) {

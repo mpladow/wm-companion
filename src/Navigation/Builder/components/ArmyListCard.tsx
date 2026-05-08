@@ -276,7 +276,6 @@ const ArmyListCard = ({
                   maxWidth: 170,
                   backgroundColor: theme.blueGrey,
                 }}>
-
                 <MenuOption onSelect={() => handleDuplicateArmyPress(armyList.armyId)}>
                   <MenuOptionButton
                     icon={<FontAwesome name="copy" size={18} color={theme.text} />}

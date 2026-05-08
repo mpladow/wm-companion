@@ -24,7 +24,7 @@ const PopupConfirm = ({
 }: PopupConfirmProps) => {
 	const { theme } = useTheme();
 	return (
-		<Modal animationType='fade' visible={false} transparent={true} style={{ elevation: 20 }}>
+		<Modal animationType='fade' visible={visible} transparent={true} style={{ elevation: 100 }}>
 			<View style={styles.modalOverlay} onTouchStart={() => onCancel()}></View>
 			<View
 				style={{

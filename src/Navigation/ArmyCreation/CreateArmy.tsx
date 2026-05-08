@@ -204,14 +204,14 @@ const CreateArmy = () => {
         </Button> */}
         <View>
           <Button onPress={() => navigation.goBack()} variant={'text'}>
-            <Text bold style={{ textTransform: 'uppercase', color: theme.black }}>
+            <Text bold style={{ textTransform: 'uppercase', color: theme.white }}>
               Close
             </Text>
           </Button>
         </View>
         <View style={{ flex: 1 }}>
           <Button onPress={() => onNextStopPress()} variant={'secondary'}>
-            <Text bold style={{ textTransform: 'uppercase', color: theme.black }}>
+            <Text bold style={{ textTransform: 'uppercase', color: theme.white }}>
               Next
             </Text>
           </Button>
