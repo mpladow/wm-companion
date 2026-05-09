@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 import { FontAwesome } from '@expo/vector-icons';
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { IconImageProps } from "./types";
 
 
@@ -9,7 +9,7 @@ const Machine = ({ size, color }: IconImageProps) => {
 		<View
 			style={{
 				width: 28,
-				height: 28,
+				height: 40,
 				alignItems: "center",
 				justifyContent: "center",
 				backgroundColor: "#e3d9bc",

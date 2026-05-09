@@ -465,7 +465,7 @@ const BuilderEdit = ({ navigation }: any) => {
                 </>
               );
             } else {
-              return <Text>NOT FOUND</Text>;
+              return <Text>Unit Not Found - create a new list</Text>;
             }
           }}
         />

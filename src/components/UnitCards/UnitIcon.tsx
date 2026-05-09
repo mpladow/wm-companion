@@ -1,17 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useMemo } from "react";
-import { UnitTypes } from "@utils/constants";
-import Infantry from "./Infantry";
-import Cavalry from "./Cavalry";
 import { useTheme } from "@hooks/useTheme";
-import Chariot from "./Chariot";
+import { UnitTypes } from "@utils/constants";
+import React, { useMemo } from "react";
+import { StyleSheet, View } from "react-native";
+import Archery from "./Archery";
 import Artillery from "./Artillery";
-import Monster from "./Monster";
+import Cavalry from "./Cavalry";
+import Chariot from "./Chariot";
 import General from "./General";
 import Hero from "./Hero";
-import Wizard from "./Wizard";
-import Archery from "./Archery";
+import Infantry from "./Infantry";
 import Machine from "./Machine";
+import Monster from "./Monster";
+import Wizard from "./Wizard";
 
 type UnitIconProps = {
 	noCount?: boolean;

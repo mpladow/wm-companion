@@ -289,40 +289,6 @@ const ArmyListCard = ({
                 </TouchableOpacity>
               </View>
             </Popover>
-
-            {/* <Menu style={{ zIndex: 99 }}>
-              <MenuTrigger>
-                <MaterialCommunityIcons name="dots-vertical" size={24} color={theme.text} />
-              </MenuTrigger>
-              <MenuOptions
-                optionsContainerStyle={{
-                  borderRadius: 8,
-                  maxWidth: 170,
-                  backgroundColor: theme.blueGrey,
-                }}>
-                <MenuOption onSelect={() => handleDuplicateArmyPress(armyList.armyId)}>
-                  <MenuOptionButton
-                    icon={<FontAwesome name="copy" size={18} color={theme.text} />}
-                    variant={'outline'}
-                    ButtonText={t('Duplicate', { ns: 'common' })}
-                  />
-                </MenuOption>
-                <MenuOption onSelect={() => handleArmyNameChange(armyList.armyId)}>
-                  <MenuOptionButton
-                    icon={<FontAwesome name="pencil" size={18} color={theme.text} />}
-                    variant={'outline'}
-                    ButtonText={t('Edit', { ns: 'common' })}
-                  />
-                </MenuOption>
-                <MenuOption onSelect={() => handleDeleteArmyPress(armyList.armyId)}>
-                  <MenuOptionButton
-                    icon={<AntDesign name="delete" size={18} color={theme.white} />}
-                    variant={'danger'}
-                    ButtonText={t('Delete', { ns: 'common' })}
-                  />
-                </MenuOption>
-              </MenuOptions>
-            </Menu> */}
           </View>
         </View>
       </View>
@@ -342,7 +308,9 @@ const styles = StyleSheet.create({
   },
   menuButtons: {
     paddingLeft: 12,
-	 paddingRight: 24,
-	 borderRadius: 16
+    paddingRight: 44,
+    borderRadius: 16,
+    minHeight: 40,
+	 alignItems: "center"
   },
 });

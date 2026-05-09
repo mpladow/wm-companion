@@ -1,22 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { IconImageProps } from "./types";
+import UnitIconContainer from './UnitIconContainer';
 
 
 const Cavalry = ({ size = 20, color = "black" }: IconImageProps) => {
 	return (
-		<View
-			style={{
-				alignItems: "center",
-				justifyContent: "center",
-				backgroundColor: "#e3d9bc",
-				width: 28,
-				height: 28,
-			}}
-		>
+		<UnitIconContainer isLeader={false}		>
 			<MaterialCommunityIcons name='horse-variant' size={size} color={color} />
-		</View>
+		</UnitIconContainer>
 	);
 };
 

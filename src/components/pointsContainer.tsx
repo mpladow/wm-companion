@@ -1,7 +1,7 @@
-import { StyleSheet, View } from "react-native";
-import React from "react";
+import { Text } from '@components/index';
 import { useTheme } from "@hooks/useTheme";
-import {Text} from '@components/index';
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 type PointsContainerProps = {
 	points?: number | string ;
@@ -11,7 +11,6 @@ const pointsContainer = ({ points }: PointsContainerProps) => {
 	return (
 		<View
 			style={{
-				flex: 1,
 				padding: 4,
 				paddingHorizontal: 8,
 				borderRadius: 4,
