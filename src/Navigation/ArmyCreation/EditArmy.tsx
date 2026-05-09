@@ -92,7 +92,6 @@ const EditArmy = () => {
       builder
         .addUserArmyList(parseInt(factionSelection), factionName, autopopulate, CURRENT_VERSION)
         .then((result) => {
-          console.log('🚀 ~ onConfirmCreateArmyPress ~ result:', result);
           setCreatedArmyId(result);
           builder.setSelectedArmyList(result);
         })

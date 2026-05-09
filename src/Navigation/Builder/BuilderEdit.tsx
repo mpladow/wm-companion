@@ -1,20 +1,22 @@
 import FactionImages from '@components/FactionImages';
 import { BottomSheetPopupMenu, CustomCheckbox, Text } from '@components/index';
+import UnitIcon from '@components/UnitCards/UnitIcon';
 import { SelectedUnitProps, useBuilderContext } from '@context/BuilderContext';
 import { useSettingsContext } from '@context/SettingsContext';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
-import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useTheme } from '@hooks/useTheme';
 import { Factions } from '@utils/constants';
 import { getGenericSpecialRules, getKeyByValue } from '@utils/factionHelpers';
 import { UnitProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	Dimensions,
 	FlatList,
+	ImageBackground,
 	Modal,
 	SectionList,
 	StyleSheet,
@@ -22,13 +24,16 @@ import {
 	View,
 } from 'react-native';
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ArmyPointsCount from './components/ArmyPointsCount';
 import CollapsibleComponent from './components/Collapsible';
 import SpecialRulesCollapsible from './components/SpecialRulesCollapsible';
-import UnitPreview from './components/UnitCardPreview/UnitPreview';
+import StatContainer from './components/UnitCardPreview/StatContainer';
 import UnitDetailsCard from './components/UnitDetailsCard';
 import UpgradePreview from './components/UpgradePreview';
 import { getUpgradeDetailsByName, sanitizeText } from './utils/builderHelpers';
+
+const unitPreviewBackground = require('../../../assets/images/wm-bg2.jpeg');
 
 export type sectionListDataProps = {
   title: string;
@@ -45,6 +50,7 @@ const BuilderEdit = ({ navigation }: any) => {
   const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
   const [upgradePreviewVisible, setUpgradePreviewVisible] = useState(false);
   const spellsBottomSheetRef = useRef<BottomSheetModal>(null);
+  const unitPreviewBottomSheetRef = useRef<BottomSheetModal>(null);
 
   const renderDiceIcon = (value?: number) => {
     switch (value) {
@@ -177,6 +183,15 @@ const BuilderEdit = ({ navigation }: any) => {
     }
   }, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
 
+  useEffect(() => {
+    console.log('🚀 ~ BuilderEdit ~ unitPreviewVisible:', unitPreviewVisible);
+    if (unitPreviewVisible) {
+      unitPreviewBottomSheetRef.current?.present();
+    } else {
+      unitPreviewBottomSheetRef.current?.dismiss;
+    }
+  }, [unitPreviewVisible]);
+
   const handleRemoveUnit = (unitId: string) => {
     builder.removeUnit(unitId);
   };
@@ -281,6 +296,59 @@ const BuilderEdit = ({ navigation }: any) => {
     return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
   }, [builder.calculateCurrentArmyPoints(), totalPoints]);
 
+  const renderBackdrop = useCallback(
+    (props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />,
+    [],
+  );
+
+  const renderItem = useCallback(
+    (item) => (
+      <CollapsibleComponent
+        headerLeftComponent={
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+            }}>
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'column' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {renderDiceIcon(item.roll)}
+                  <View style={{ marginLeft: 8 }}>
+                    <Text style={{ fontSize: 16, color: theme.black }}>{item.roll}+</Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Entypo name="ruler" size={16} color="black" />
+                  <View style={{ marginLeft: 8 }}>
+                    <Text style={{ color: theme.black }}>{item.range ? item.range : '-'}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={{ flex: 2, justifyContent: 'flex-start' }}>
+              <Text bold style={{ fontSize: 16, color: theme.black }}>
+                {item.name}
+              </Text>
+            </View>
+          </View>
+        }
+        collapsableContent={
+          <View style={{ flexDirection: 'column', marginVertical: 12 }}>
+            {item.text?.map((x) => {
+              let _item = x;
+              const sanitized = sanitizeText(_item, theme.black);
+              return <Text style={{ color: theme.black }}>{sanitized}</Text>;
+            })}
+          </View>
+        }
+      />
+    ),
+    [],
+  );
+  const insets = useSafeAreaInsets();
   return (
     <>
       <View style={{ flex: 1, backgroundColor: theme.backgroundVariant2 }}>
@@ -411,7 +479,7 @@ const BuilderEdit = ({ navigation }: any) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            width: Dimensions.get('screen').width - 40,
+            // width: Dimensions.get('screen').width - 40,
           }}>
           {/* TODO extract out  */}
           <ArmyPointsCount
@@ -419,6 +487,17 @@ const BuilderEdit = ({ navigation }: any) => {
             setVisibility={(visibility) => setErrorsVisible(visibility)}
             armyCount={armyCount}
           />
+        </View>
+        <View
+          style={{
+            zIndex: 9,
+            position: 'absolute',
+            bottom: 10,
+            right: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
           <View>
             {builder.factionDetails?.name !== 'Dwarfs' &&
             builder.factionDetails?.name !== 'Nippon' ? (
@@ -454,11 +533,212 @@ const BuilderEdit = ({ navigation }: any) => {
           selectedUpgradeDetails={currentUpgradeDetails}
         />
         {selectedUnitDetails ? (
-          <UnitPreview
-            handleSetVisible={(visibility) => setUnitPreviewVisible(visibility)}
-            visible={unitPreviewVisible}
-            selectedUnitDetails={selectedUnitDetails}
-          />
+          <BottomSheetModal
+            ref={unitPreviewBottomSheetRef}
+            index={0}
+            enablePanDownToClose={true}
+            detached
+            enableDynamicSizing
+            backdropComponent={renderBackdrop}
+            containerStyle={{ marginHorizontal: 8, borderRadius: 24 }}
+            bottomInset={insets.bottom}
+            topInset={insets.top}
+            style={{ borderRadius: 24 }}
+            onDismiss={() => {
+              setUnitPreviewVisible(false);
+              console.log('DISMIGGING');
+            }}
+            backgroundStyle={{ backgroundColor: theme.backgroundVariant3, borderRadius: 32 }}>
+            <BottomSheetScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{ paddingBottom: 32 }}
+              showsVerticalScrollIndicator>
+              <View style={{ flexDirection: 'column' }}>
+                <View
+                  style={{
+                    flex: 1,
+                    marginBottom: 8,
+                  }}>
+                  <ImageBackground
+                    source={unitPreviewBackground}
+                    resizeMode="cover"
+                    style={[
+                      styles.image,
+                      { paddingVertical: 12 },
+                      {
+                        borderTopWidth: 2,
+                        borderBottomWidth: 2,
+                        borderTopColor: theme.white,
+                        borderBottomColor: theme.white,
+                      },
+                    ]}>
+                    <LinearGradient
+                      colors={['rgba(31,46,39, 0.4)', 'rgba(6,9,7, 0.9)']}
+                      start={{ y: 0, x: 0.5 }}
+                      end={{ y: 0.5, x: 0 }}
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        bottom: -1,
+                        // height: Dimensions.get('screen').height / 2,
+                        height: 300,
+                        zIndex: 9,
+                      }}
+                    />
+                    <View
+                      style={{
+                        paddingHorizontal: 12,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}>
+                      <View>
+                        <Text
+                          bold
+                          variant="heading3"
+                          style={{
+                            fontSize: 24,
+                            color: theme.white,
+                            zIndex: 9999,
+                          }}>
+                          {selectedUnitDetails.name}
+                        </Text>
+                        <Text
+                          variant="heading3"
+                          style={{
+                            fontSize: 16,
+                            color: theme.white,
+                            zIndex: 9999,
+                          }}>
+									Bases: {selectedUnitDetails.size}
+                        </Text>
+                      </View>
+                      <View style={{ justifyContent: 'flex-end' }}>
+                        <View
+                          style={{
+                            zIndex: 99,
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                          }}>
+                          <UnitIcon
+                            size={'large'}
+                            type={selectedUnitDetails.type}
+                            canShoot={selectedUnitDetails.range == undefined ? false : true}
+                          />
+                          <Text bold style={{ fontSize: 16 }}>
+                            {selectedUnitDetails.type}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </ImageBackground>
+                </View>
+                <View
+                  style={{
+                    borderRadius: 12,
+                    paddingVertical: 8,
+                    padding: 8,
+                  }}>
+                  {selectedUnitDetails.command ? (
+                    <View
+                      style={{
+                        flex: 3,
+                        marginBottom: 8,
+                        justifyContent: 'center',
+                        flexDirection: 'row',
+                      }}>
+                      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                        <StatContainer
+                          statName={'Command'}
+                          statValue={selectedUnitDetails.command.toString()}
+                        />
+                      </View>
+                      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                        <StatContainer
+                          statName={'Attack Bonus'}
+                          statValue={selectedUnitDetails.attack?.toString()}
+                        />
+                      </View>
+                    </View>
+                  ) : (
+                    <>
+                      <View
+                        style={{
+                          flex: 3,
+                          marginBottom: 8,
+                          justifyContent: 'center',
+                          flexDirection: 'row',
+                        }}>
+                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                          <StatContainer
+                            statName={t('Attack', { ns: 'builder' })}
+                            statValue={selectedUnitDetails.attack?.toString()}
+                          />
+                        </View>
+                        {selectedUnitDetails.range ? (
+                          <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                            <StatContainer
+                              statName={t('Range', { ns: 'builder' })}
+                              statValue={selectedUnitDetails.range?.toString() || '-'}
+                            />
+                          </View>
+                        ) : null}
+                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                          <StatContainer
+                            statName={t('Hits', { ns: 'builder' })}
+                            statValue={selectedUnitDetails.hits?.toString() || '-'}
+                          />
+                        </View>
+                      </View>
+                      <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                          <StatContainer
+                            statName={t('Armour', { ns: 'builder' })}
+                            statValue={selectedUnitDetails.armour?.toString() || '-'}
+                          />
+                        </View>
+                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                          <StatContainer
+                            statName={'Size'}
+                            statValue={selectedUnitDetails.size?.toString() || '-'}
+                          />
+                        </View>
+                      </View>
+                    </>
+                  )}
+                </View>
+                {selectedUnitDetails.specialRules && selectedUnitDetails.specialRules.length > 0 ? (
+                  <View
+                    style={{
+                      flex: 3,
+                      justifyContent: 'center',
+                      flexDirection: 'column',
+                      padding: 12,
+                    }}>
+                    <View style={{ flex: 1, flexDirection: 'column' }}>
+                      <View style={{ marginTop: 8 }}>
+                        <Text bold style={{ fontSize: 20, marginBottom: 8 }}>
+                          {t('SpecialRules')}
+                        </Text>
+                        {selectedUnitDetails.specialRules?.map((x) => {
+                          return x?.text?.map((rule, index) => {
+                            let sanitized = sanitizeText(rule, theme.text);
+                            return (
+                              <View key={index} style={{ marginBottom: 8 }}>
+                                <Text style={{ color: theme.text }}>{sanitized}</Text>
+                              </View>
+                            );
+                          });
+                        })}
+                      </View>
+                    </View>
+                  </View>
+                ) : null}
+              </View>
+            </BottomSheetScrollView>
+          </BottomSheetModal>
         ) : null}
 
         <Modal animationType="fade" visible={errorsVisible} transparent={true}>
@@ -492,79 +772,98 @@ const BuilderEdit = ({ navigation }: any) => {
               visible={showSpells}
               ref={spellsBottomSheetRef}
               onDismiss={() => setShowSpells(!showSpells)}
-              title={`Spells of ${builder.factionDetails.name}`}
-              titleStyle={{ color: theme.black, paddingHorizontal: 16 }}
-              overDragResistanceFactor={6}
+              //   title={`Spells of ${builder.factionDetails.name}`}
               enableOverDrag={false}
-              enableDismissOnClose={true}
-              snapPoints={['70%']}
-              handleStyle={{ backgroundColor: theme.background }}
               index={0}
-              containerStyle={{ overflow: 'scroll' }}
-              handleIndicatorStyle={{ backgroundColor: theme.text }}
-              enableDynamicSizing={false}
-              enableHandlePanningGesture
-              sheetStyle={{ paddingHorizontal: 0 }}>
-              <BottomSheetScrollView
-                scrollEnabled={true}
-                style={{ overflow: 'scroll' }}
-                showsVerticalScrollIndicator
-                nestedScrollEnabled
-                contentContainerStyle={{
-                  overflow: 'scroll',
-                  flexGrow: 1, // alignContent: 'flex-start',
-                }}>
-                <>
-                  {builder.factionDetails?.spells.map((item) => (
-                    <CollapsibleComponent
-                      headerLeftComponent={
-                        <View
+              snapPoints={['80%']}
+              enablePanDownToClose={true}
+              detached
+              backdropComponent={renderBackdrop}
+              containerStyle={{ marginHorizontal: 8 }}
+              bottomInset={insets.bottom}
+              topInset={insets.top}
+              // onDismiss={() => {
+              //   setUnitPreviewVisible(false);
+              //   console.log('DISMIGGING');
+              // }}
+              backgroundStyle={{
+                backgroundColor: theme.backgroundVariant3,
+                borderRadius: 32,
+                paddingLeft: 40,
+              }}>
+              <View>
+                <BottomSheetScrollView
+                  scrollEnabled
+                  style={{ height: Dimensions.get('window').height * 0.8 }}
+                  contentContainerStyle={{
+                    //   paddingTop: 16,
+                    flexGrow: 1,
+                  }}>
+                  <View
+                    style={{
+                      marginBottom: 8,
+                    }}>
+                    <ImageBackground
+                      source={unitPreviewBackground}
+                      resizeMode="cover"
+                      style={[
+                        styles.image,
+                        { paddingVertical: 12 },
+                        {
+                          borderTopWidth: 2,
+                          borderBottomWidth: 2,
+                          borderTopColor: theme.white,
+                          borderBottomColor: theme.white,
+                        },
+                      ]}>
+                      <LinearGradient
+                        colors={['rgba(31,46,39, 0.4)', 'rgba(6,9,7, 0.9)']}
+                        start={{ y: 0, x: 0.5 }}
+                        end={{ y: 0.5, x: 0 }}
+                        style={{
+                          position: 'absolute',
+                          left: 0,
+                          right: 0,
+                          bottom: -1,
+                          // height: Dimensions.get('screen').height / 2,
+                          height: 200,
+                          zIndex: 9,
+                        }}
+                      />
+                      <View
+                        style={{
+                          paddingHorizontal: 12,
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text
+                          bold
+                          variant="heading3"
                           style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
+                            fontSize: 24,
+                            color: theme.white,
+                            zIndex: 9999,
                           }}>
-                          <View style={{ flex: 1 }}>
-                            <View style={{ flexDirection: 'column' }}>
-                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                {renderDiceIcon(item.roll)}
-                                <View style={{ marginLeft: 8 }}>
-                                  <Text style={{ fontSize: 16, color: theme.black }}>
-                                    {item.roll}+
-                                  </Text>
-                                </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Entypo name="ruler" size={16} color="black" />
-                                <View style={{ marginLeft: 8 }}>
-                                  <Text style={{ color: theme.black }}>
-                                    {item.range ? item.range : '-'}
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                          </View>
-                          <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text bold style={{ fontSize: 16, color: theme.black }}>
-                              {item.name}
-                            </Text>
+                          Spells
+                        </Text>
+                        <View style={{ justifyContent: 'flex-end' }}>
+                          <View
+                            style={{
+                              zIndex: 99,
+                              flex: 1,
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}>
+                            {/* insert right */}
                           </View>
                         </View>
-                      }
-                      collapsableContent={
-                        <View style={{ flexDirection: 'column', marginVertical: 12 }}>
-                          {item.text?.map((x) => {
-                            let _item = x;
-                            const sanitized = sanitizeText(_item, theme.black);
-                            return <Text style={{ color: theme.black }}>{sanitized}</Text>;
-                          })}
-                        </View>
-                      }
-                    />
-                  ))}
-                </>
-              </BottomSheetScrollView>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                  <>{builder.factionDetails?.spells.map(renderItem)}</>
+                </BottomSheetScrollView>
+              </View>
             </BottomSheetPopupMenu>
           </>
         ) : null}
@@ -582,7 +881,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    //backgroundColor: 'blue',
     backgroundColor: 'rgba(0,0,0,0.1)',
+  },
+  image: {
+    //  justifyContent: 'center',
+    //  top: 0,
+    minHeight: 16,
   },
 });

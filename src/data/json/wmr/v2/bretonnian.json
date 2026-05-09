@@ -133,7 +133,7 @@
       "size": 1,
       "points": 80,
       "max": 2,
-      "upgrades": ["Pegasus"]
+      "upgrades": ["Pegasus", "Hippogriff"]
     },
     {
       "name": "Enchantress",

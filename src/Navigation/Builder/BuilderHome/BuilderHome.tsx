@@ -125,14 +125,20 @@ const BuilderHome = () => {
   };
   const onArmyListDeletePress = (armyId: string) => {
     setFocusedArmyId(armyId);
-    setTimeout(() => {
-      console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
-      setConfirmDialog(true);
-    }, 1000);
+     setTimeout(() => {
+       console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
+       setConfirmDialog(true);
+     }, 500);
   };
-  useEffect(() => {
-    console.log(confirmDialog);
-  }, [confirmDialog]);
+//   useEffect(() => {
+//     console.log('🚀 ~ BuilderHome ~ focusedArmyId:', focusedArmyId);
+//     if (focusedArmyId) {
+//       setTimeout(() => {
+//         setConfirmDialog(true);
+//       }, 500);
+//     }
+//     console.log(confirmDialog);
+//   }, [focusedArmyId]);
 
   const { isReady, changelog, dismissChangeLog, recentlyDismissedChangeLog } = useUpdateChecker();
   const [showChangeLogModal, setShowChangeLogModal] = useState(false);
@@ -153,6 +159,11 @@ const BuilderHome = () => {
   const handleDismissModal = () => {
     dismissChangeLog();
     setShowChangeLogModal(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    focusedArmyId && builder.deleteUserArmyList(focusedArmyId);
+    setConfirmDialog(false);
   };
 
   // const handleFilterFavouritesChange = (newFilter: ArmyListFilters) => {
@@ -328,11 +339,14 @@ const BuilderHome = () => {
       /> */}
       <StandardModal
         content={<Text>Are you sure you want to delete this army?</Text>}
-        heading={'POO'}
-        onCancel={() => setConfirmDialog(false)}
+        heading={`Delete army`}
+        onCancel={() => {
+          setFocusedArmy(undefined);
+          setConfirmDialog(false);
+        }}
         visible={confirmDialog}
-        onSubmit={handleDismissModal}
-        submitText={'YES!'}
+        onSubmit={handleDeleteConfirm}
+        submitText={'Delete Army'}
       />
     </SafeAreaView>
   );

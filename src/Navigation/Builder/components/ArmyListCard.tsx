@@ -190,6 +190,7 @@ const ArmyListCard = ({
               isVisible={showPopover}
               placement={PopoverPlacement.LEFT}
               onRequestClose={() => setShowPopover(false)}
+              popoverStyle={{ borderRadius: 24 }}
               arrowSize={{ width: 0, height: 0 }}
               from={
                 <View>
@@ -200,69 +201,92 @@ const ArmyListCard = ({
               }>
               <View
                 style={{
-                  paddingHorizontal: 20,
+                  paddingHorizontal: 10,
                   paddingVertical: 10,
                   maxWidth: 200,
-                  backgroundColor: theme.blueGrey,
+                  backgroundColor: theme.backgroundVariant,
                   flex: 1,
+                  borderRadius: 24,
+                  overflow: 'hidden',
+						gap: 12
                 }}>
-                <Pressable
+                <TouchableOpacity
                   onPress={() => {
                     setShowPopover(false);
                     handleToggleFavourite(armyList.armyId);
                   }}
-                  style={{ flexDirection: 'row', paddingVertical: 8 }}>
+                  style={[
+                    { flex: 1, flexDirection: 'row', paddingVertical: 8 },
+                    styles.menuButtons,
+                  ]}>
                   <View style={{ marginRight: 8 }}>
                     <AntDesign name="star" size={18} color={theme.warning} />
                   </View>
                   <Text>{armyList.isFavourite ? 'Remove Favourite' : 'Set Favourite'}</Text>
-                </Pressable>
+                </TouchableOpacity>
                 {armyList.versionNumber !== CURRENT_VERSION && (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={() => {
                       setShowPopover(false);
                       handleMigrateArmyPress(armyList.armyId);
                     }}
-                    style={{ flex: 1, flexDirection: 'row', paddingVertical: 8 }}>
+                    style={[
+                      { flex: 1, flexDirection: 'row', paddingVertical: 8 },
+                      styles.menuButtons,
+                    ]}>
                     <View style={{ marginRight: 8 }}>
                       <MaterialCommunityIcons name="transfer-right" size={18} color={theme.text} />
                     </View>
                     <Text>{t('Migrate', { ns: 'common' })}</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 )}
-                <Pressable
+                <TouchableOpacity
                   onPress={() => {
                     setShowPopover(false);
                     handleDuplicateArmyPress(armyList.armyId);
                   }}
-                  style={{ flex: 1, flexDirection: 'row', paddingVertical: 8 }}>
+                  style={[
+                    { flex: 1, flexDirection: 'row', paddingVertical: 8 },
+                    styles.menuButtons,
+                  ]}>
                   <View style={{ marginRight: 8 }}>
                     <FontAwesome name="copy" size={18} color={theme.text} />
                   </View>
                   <Text>{t('Duplicate', { ns: 'common' })}</Text>
-                </Pressable>
-                <Pressable
+                </TouchableOpacity>
+                <TouchableOpacity
                   onPress={() => {
                     setShowPopover(false);
                     handleArmyNameChange(armyList.armyId);
                   }}
-                  style={{ flexDirection: 'row', paddingVertical: 8 }}>
+                  style={[
+                    { flex: 1, flexDirection: 'row', paddingVertical: 8 },
+                    styles.menuButtons,
+                  ]}>
                   <View style={{ marginRight: 10 }}>
                     <FontAwesome name="pencil" size={18} color={theme.text} />
                   </View>
                   <Text>{t('Edit', { ns: 'common' })}</Text>
-                </Pressable>
-                <Pressable
+                </TouchableOpacity>
+                <TouchableOpacity
                   onPress={() => {
                     setShowPopover(false);
                     handleDeleteArmyPress(armyList.armyId);
                   }}
-                  style={{ flexDirection: 'row', paddingVertical: 8 }}>
+                  style={[
+                    {
+                      flex: 1,
+                      flexDirection: 'row',
+                      paddingVertical: 8,
+                      backgroundColor: theme.danger,
+                    },
+                    styles.menuButtons,
+                  ]}>
                   <View style={{ marginRight: 8 }}>
                     <AntDesign name="delete" size={18} color={theme.text} />
                   </View>
                   <Text>{t('Delete', { ns: 'common' })}</Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </Popover>
 
@@ -315,5 +339,10 @@ const styles = StyleSheet.create({
     height: 150,
     // resizeMode: "contain",
     marginTop: -8,
+  },
+  menuButtons: {
+    paddingLeft: 12,
+	 paddingRight: 24,
+	 borderRadius: 16
   },
 });

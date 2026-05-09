@@ -42,7 +42,7 @@ const BottomSheetPopupMenu = React.forwardRef<BottomSheetHandle, BottomSheetPopu
       itemStyle,
       titleStyle,
       enableDynamicSizing,
-		...rest
+      ...rest
     },
     ref,
   ) => {
@@ -73,10 +73,11 @@ const BottomSheetPopupMenu = React.forwardRef<BottomSheetHandle, BottomSheetPopu
         snapPoints={snapPoints}
         enableBackdrop
         sheetViewStyle={[styles.sheet, sheetStyle]}
-        enableDynamicSizing={enableDynamicSizing} {...rest}>
+        enableDynamicSizing={enableDynamicSizing}
+        {...rest}>
         {title ? <Text style={[styles.title, titleStyle]}>{title}</Text> : null}
         {header}
-		  {children}
+        {children}
       </BottomSheet>
     );
   },
@@ -85,13 +86,13 @@ const BottomSheetPopupMenu = React.forwardRef<BottomSheetHandle, BottomSheetPopu
 const styles = StyleSheet.create({
   sheet: {
     paddingBottom: 16,
+    paddingHorizontal: 0,
   },
   menuContainer: {
     width: '100%',
   },
   menuItem: {
     borderRadius: 12,
-    paddingHorizontal: 16,
     paddingVertical: 14,
     backgroundColor: 'rgba(255,255,255,0.08)',
     marginBottom: 8,

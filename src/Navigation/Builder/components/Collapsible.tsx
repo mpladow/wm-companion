@@ -1,18 +1,17 @@
-import { AntDesign } from "@expo/vector-icons";
-import { useTheme } from "@hooks/useTheme";
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import Collapsible from "react-native-collapsible";
+import { AntDesign } from '@expo/vector-icons';
+import { useTheme } from '@hooks/useTheme';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import Collapsible from 'react-native-collapsible';
 
 type CollapsibleProps = {
-    headerLeftComponent: JSX.Element,
-    collapsableContent: JSX.Element
-
-}
-const CollapsibleComponent = ({headerLeftComponent, collapsableContent}: CollapsibleProps) => {
-    const [toggleVisible, setToggleVisible] = useState(true)
-    const {theme} = useTheme();
-	return (
+  headerLeftComponent: JSX.Element;
+  collapsableContent: JSX.Element;
+};
+const CollapsibleComponent = ({ headerLeftComponent, collapsableContent }: CollapsibleProps) => {
+  const [toggleVisible, setToggleVisible] = useState(true);
+  const { theme } = useTheme();
+  return (
     <View
       style={{
         padding: 12,
@@ -45,7 +44,9 @@ const CollapsibleComponent = ({headerLeftComponent, collapsableContent}: Collaps
       </TouchableOpacity>
 
       <Collapsible collapsed={toggleVisible} align="center">
-        {collapsableContent}
+        <TouchableOpacity onPress={() => setToggleVisible(!toggleVisible)}>
+          {collapsableContent}
+        </TouchableOpacity>
         {/* <View style={{ paddingVertical: 4, paddingTop: 8 }}>{contents}</View> */}
       </Collapsible>
     </View>
