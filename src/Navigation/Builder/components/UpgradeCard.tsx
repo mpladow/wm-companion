@@ -1,13 +1,12 @@
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
-import React from "react";
-import { UnitProps, UpgradesProps } from "@utils/types";
-import { Button, Text } from "@components/index";
-import { useTheme } from "@hooks/useTheme";
+import { Text } from "@components/index";
 import PointsContainer from "@components/pointsContainer";
-import { Entypo } from "@expo/vector-icons";
 import UpgradeIcon from "@components/UnitCards/UpgradeIcon";
+import { Entypo } from "@expo/vector-icons";
+import { useTheme } from "@hooks/useTheme";
 import { UpgradeTypes } from "@utils/constants";
-import { current } from "@reduxjs/toolkit";
+import { UpgradesProps } from "@utils/types";
+import React from "react";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 
 type UpgradeCardProps = {
 	upgrade: UpgradesProps;
@@ -43,7 +42,7 @@ const UpgradeCard = ({
 				alignItems: "center",
 				justifyContent: "center",
 				marginBottom: 8,
-				backgroundColor: theme.blueGrey,
+				backgroundColor: theme.grey3,
 				padding: 8,
 			}}
 		>

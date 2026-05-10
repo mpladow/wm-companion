@@ -1,6 +1,6 @@
 import FactionImages from '@components/FactionImages';
+import HeaderMenu from '@components/HeaderMenu';
 import { BottomSheetPopupMenu, CustomCheckbox, Text } from '@components/index';
-import UnitIcon from '@components/UnitCards/UnitIcon';
 import { SelectedUnitProps, useBuilderContext } from '@context/BuilderContext';
 import { useSettingsContext } from '@context/SettingsContext';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
@@ -23,12 +23,11 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ArmyPointsCount from './components/ArmyPointsCount';
 import CollapsibleComponent from './components/Collapsible';
 import SpecialRulesCollapsible from './components/SpecialRulesCollapsible';
-import StatContainer from './components/UnitCardPreview/StatContainer';
+import UnitPreview from './components/UnitCardPreview/UnitPreview';
 import UnitDetailsCard from './components/UnitDetailsCard';
 import UpgradePreview from './components/UpgradePreview';
 import { getUpgradeDetailsByName, sanitizeText } from './utils/builderHelpers';
@@ -80,7 +79,7 @@ const BuilderEdit = ({ navigation }: any) => {
   const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 
   const { getFactionUnitsByVersion } = useFactionUnits();
-
+  const [showPopover, setShowPopover] = useState(false);
   useLayoutEffect(() => {
     const factionListData = getFactionUnitsByVersion(
       builder.selectedArmyList?.faction,
@@ -92,23 +91,40 @@ const BuilderEdit = ({ navigation }: any) => {
       navigation.setOptions({
         title: builder.selectedArmyList?.name,
         headerRight: () => (
-          <Menu>
-            <MenuTrigger>
-              <Entypo name="dots-three-vertical" size={20} color={theme.text} />
-            </MenuTrigger>
-            <MenuOptions>
-              <MenuOption onSelect={() => navigation.navigate('BuilderQuickView')}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={{ flex: 1 }}>
-                    <Entypo name="export" size={20} color="black" />
-                  </View>
-                  <View style={{ flex: 5, padding: 4, paddingVertical: 8 }}>
-                    <Text style={{ color: theme.black }}>{t('ExportList')}</Text>
-                  </View>
-                </View>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
+          //  <Popover
+          //    isVisible={showPopover}
+          //    placement={PopoverPlacement.LEFT}
+          //    onRequestClose={() => setShowPopover(false)}
+          //    popoverStyle={{ borderRadius: 24 }}
+          //    arrowSize={{ width: 0, height: 0 }}
+          //    onOpenStart={() => console.log('OPENING')}
+          //    from={
+          //      <Pressable onPress={() => setShowPopover(!showPopover)}>
+          //        <Entypo name="dots-three-vertical" size={20} color={theme.text} />
+          //      </Pressable>
+          //    }>
+          //    <View
+          //      style={{
+          //        paddingHorizontal: 10,
+          //        paddingVertical: 10,
+          //        maxWidth: 200,
+          //        backgroundColor: theme.backgroundVariant,
+          //        flex: 1,
+          //        borderRadius: 24,
+          //        overflow: 'hidden',
+          //        gap: 12,
+          //      }}>
+          //      <TouchableOpacity
+          //        onPress={() => navigation.navigate('BuilderQuickView')}
+          //        style={[{ flex: 1, flexDirection: 'row', paddingVertical: 8 }, styles.menuButtons]}>
+          //        <View style={{ marginRight: 8 }}>
+          //          <Entypo name="export" size={20} color="black" />
+          //        </View>
+          //        <Text>{t('ExportList')}</Text>
+          //      </TouchableOpacity>
+          //    </View>
+          //  </Popover>
+          <HeaderMenu />
         ),
         headerTitle: () => (
           <View style={{ width: 250 }}>
@@ -123,7 +139,7 @@ const BuilderEdit = ({ navigation }: any) => {
         ),
       });
     }
-  }, [navigation, builder.selectedArmyList, builder.selectedArmyList?.name]);
+  }, [navigation, builder.selectedArmyList]);
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -182,15 +198,6 @@ const BuilderEdit = ({ navigation }: any) => {
       setSectionListData(_sectionListData);
     }
   }, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
-
-  useEffect(() => {
-    console.log('🚀 ~ BuilderEdit ~ unitPreviewVisible:', unitPreviewVisible);
-    if (unitPreviewVisible) {
-      unitPreviewBottomSheetRef.current?.present();
-    } else {
-      unitPreviewBottomSheetRef.current?.dismiss;
-    }
-  }, [unitPreviewVisible]);
 
   const handleRemoveUnit = (unitId: string) => {
     builder.removeUnit(unitId);
@@ -296,11 +303,6 @@ const BuilderEdit = ({ navigation }: any) => {
     return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
   }, [builder.calculateCurrentArmyPoints(), totalPoints]);
 
-  const renderBackdrop = useCallback(
-    (props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />,
-    [],
-  );
-
   const renderItem = useCallback(
     (item) => (
       <CollapsibleComponent
@@ -346,6 +348,10 @@ const BuilderEdit = ({ navigation }: any) => {
         }
       />
     ),
+    [],
+  );
+  const renderBackdrop = useCallback(
+    (props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />,
     [],
   );
   const insets = useSafeAreaInsets();
@@ -533,212 +539,13 @@ const BuilderEdit = ({ navigation }: any) => {
           selectedUpgradeDetails={currentUpgradeDetails}
         />
         {selectedUnitDetails ? (
-          <BottomSheetModal
-            ref={unitPreviewBottomSheetRef}
-            index={0}
-            enablePanDownToClose={true}
-            detached
-            enableDynamicSizing
-            backdropComponent={renderBackdrop}
-            containerStyle={{ marginHorizontal: 8, borderRadius: 24 }}
-            bottomInset={insets.bottom}
-            topInset={insets.top}
-            style={{ borderRadius: 24 }}
-            onDismiss={() => {
-              setUnitPreviewVisible(false);
-              console.log('DISMIGGING');
+          <UnitPreview
+            handleSetVisible={() => {
+              return setUnitPreviewVisible(!unitPreviewVisible);
             }}
-            backgroundStyle={{ backgroundColor: theme.backgroundVariant3, borderRadius: 32 }}>
-            <BottomSheetScrollView
-              style={{ flex: 1 }}
-              contentContainerStyle={{ paddingBottom: 32 }}
-              showsVerticalScrollIndicator>
-              <View style={{ flexDirection: 'column' }}>
-                <View
-                  style={{
-                    flex: 1,
-                    marginBottom: 8,
-                  }}>
-                  <ImageBackground
-                    source={unitPreviewBackground}
-                    resizeMode="cover"
-                    style={[
-                      styles.image,
-                      { paddingVertical: 12 },
-                      {
-                        borderTopWidth: 2,
-                        borderBottomWidth: 2,
-                        borderTopColor: theme.white,
-                        borderBottomColor: theme.white,
-                      },
-                    ]}>
-                    <LinearGradient
-                      colors={['rgba(31,46,39, 0.4)', 'rgba(6,9,7, 0.9)']}
-                      start={{ y: 0, x: 0.5 }}
-                      end={{ y: 0.5, x: 0 }}
-                      style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        bottom: -1,
-                        // height: Dimensions.get('screen').height / 2,
-                        height: 300,
-                        zIndex: 9,
-                      }}
-                    />
-                    <View
-                      style={{
-                        paddingHorizontal: 12,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                      <View>
-                        <Text
-                          bold
-                          variant="heading3"
-                          style={{
-                            fontSize: 24,
-                            color: theme.white,
-                            zIndex: 9999,
-                          }}>
-                          {selectedUnitDetails.name}
-                        </Text>
-                        <Text
-                          variant="heading3"
-                          style={{
-                            fontSize: 16,
-                            color: theme.white,
-                            zIndex: 9999,
-                          }}>
-									Bases: {selectedUnitDetails.size}
-                        </Text>
-                      </View>
-                      <View style={{ justifyContent: 'flex-end' }}>
-                        <View
-                          style={{
-                            zIndex: 99,
-                            flex: 1,
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                          }}>
-                          <UnitIcon
-                            size={'large'}
-                            type={selectedUnitDetails.type}
-                            canShoot={selectedUnitDetails.range == undefined ? false : true}
-                          />
-                          <Text bold style={{ fontSize: 16 }}>
-                            {selectedUnitDetails.type}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </ImageBackground>
-                </View>
-                <View
-                  style={{
-                    borderRadius: 12,
-                    paddingVertical: 8,
-                    padding: 8,
-                  }}>
-                  {selectedUnitDetails.command ? (
-                    <View
-                      style={{
-                        flex: 3,
-                        marginBottom: 8,
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                      }}>
-                      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                        <StatContainer
-                          statName={'Command'}
-                          statValue={selectedUnitDetails.command.toString()}
-                        />
-                      </View>
-                      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                        <StatContainer
-                          statName={'Attack Bonus'}
-                          statValue={selectedUnitDetails.attack?.toString()}
-                        />
-                      </View>
-                    </View>
-                  ) : (
-                    <>
-                      <View
-                        style={{
-                          flex: 3,
-                          marginBottom: 8,
-                          justifyContent: 'center',
-                          flexDirection: 'row',
-                        }}>
-                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                          <StatContainer
-                            statName={t('Attack', { ns: 'builder' })}
-                            statValue={selectedUnitDetails.attack?.toString()}
-                          />
-                        </View>
-                        {selectedUnitDetails.range ? (
-                          <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                            <StatContainer
-                              statName={t('Range', { ns: 'builder' })}
-                              statValue={selectedUnitDetails.range?.toString() || '-'}
-                            />
-                          </View>
-                        ) : null}
-                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                          <StatContainer
-                            statName={t('Hits', { ns: 'builder' })}
-                            statValue={selectedUnitDetails.hits?.toString() || '-'}
-                          />
-                        </View>
-                      </View>
-                      <View style={{ flexDirection: 'row' }}>
-                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                          <StatContainer
-                            statName={t('Armour', { ns: 'builder' })}
-                            statValue={selectedUnitDetails.armour?.toString() || '-'}
-                          />
-                        </View>
-                        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                          <StatContainer
-                            statName={'Size'}
-                            statValue={selectedUnitDetails.size?.toString() || '-'}
-                          />
-                        </View>
-                      </View>
-                    </>
-                  )}
-                </View>
-                {selectedUnitDetails.specialRules && selectedUnitDetails.specialRules.length > 0 ? (
-                  <View
-                    style={{
-                      flex: 3,
-                      justifyContent: 'center',
-                      flexDirection: 'column',
-                      padding: 12,
-                    }}>
-                    <View style={{ flex: 1, flexDirection: 'column' }}>
-                      <View style={{ marginTop: 8 }}>
-                        <Text bold style={{ fontSize: 20, marginBottom: 8 }}>
-                          {t('SpecialRules')}
-                        </Text>
-                        {selectedUnitDetails.specialRules?.map((x) => {
-                          return x?.text?.map((rule, index) => {
-                            let sanitized = sanitizeText(rule, theme.text);
-                            return (
-                              <View key={index} style={{ marginBottom: 8 }}>
-                                <Text style={{ color: theme.text }}>{sanitized}</Text>
-                              </View>
-                            );
-                          });
-                        })}
-                      </View>
-                    </View>
-                  </View>
-                ) : null}
-              </View>
-            </BottomSheetScrollView>
-          </BottomSheetModal>
+            visible={unitPreviewVisible}
+            selectedUnitDetails={selectedUnitDetails}
+          />
         ) : null}
 
         <Modal animationType="fade" visible={errorsVisible} transparent={true}>
@@ -787,7 +594,7 @@ const BuilderEdit = ({ navigation }: any) => {
               //   console.log('DISMIGGING');
               // }}
               backgroundStyle={{
-                backgroundColor: theme.backgroundVariant3,
+                backgroundColor: theme.success,
                 borderRadius: 32,
                 paddingLeft: 40,
               }}>
@@ -887,5 +694,12 @@ const styles = StyleSheet.create({
     //  justifyContent: 'center',
     //  top: 0,
     minHeight: 16,
+  },
+  menuButtons: {
+    paddingLeft: 12,
+    paddingRight: 44,
+    borderRadius: 16,
+    minHeight: 40,
+    alignItems: 'center',
   },
 });

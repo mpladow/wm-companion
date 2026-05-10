@@ -268,7 +268,7 @@ const UnitDetailsCard = ({
             <View key={item.id} style={{ flex: 1, flexDirection: 'row', padding: 4, marginTop: 4 }}>
               <View
                 style={{
-                  backgroundColor: theme.black,
+                  backgroundColor: theme.grey3,
                   padding: 8,
                   paddingHorizontal: 12,
                   borderRadius: 16,

@@ -83,4 +83,5 @@ export type UnitProps = {
 	noMagic?: boolean;
 	noCount?: boolean;
 	canFly?: boolean;
+	requiredUnits?: string[];
 };

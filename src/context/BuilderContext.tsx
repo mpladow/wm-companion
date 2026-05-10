@@ -798,7 +798,7 @@ export const BuilderContextProvider = ({ children }: any) => {
       return;
     }
 
-    const specificUpgradesForUnitArr: UpgradesProps[] = [];
+    let specificUpgradesForUnitArr: UpgradesProps[] = [];
     // filter faction upgrades to only upgrades specific to this unit
     upgradesForUnitStrings &&
       upgradesForUnitStrings.map((upgrade) => {

@@ -79,10 +79,10 @@ const App = () => {
     return null;
   }
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <ThemeContextProvider>
-          <MenuProvider>
+    <MenuProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <ThemeContextProvider>
             <BottomSheetModalProvider>
               <ToastProvider>
                 <UpdateCheckerContextProvider>
@@ -103,10 +103,10 @@ const App = () => {
                 </UpdateCheckerContextProvider>
               </ToastProvider>
             </BottomSheetModalProvider>
-          </MenuProvider>
-        </ThemeContextProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+          </ThemeContextProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </MenuProvider>
   );
 };
 

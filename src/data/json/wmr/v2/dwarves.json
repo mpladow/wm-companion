@@ -172,7 +172,11 @@
     "Handgunners": {
       "order": 1,
       "text": [
-        "A handgun shot can pierce armour far more easily than an arrow or a crossbow bolt. Therefore, count enemy Armour values as one worse than normal when shot by a handgun. One unit of Handgunners per full 1000 points can replace a unit of Warriors while still counting for the Warrior min/max value. Note that this unit still counts for max value of Handgunners."
+        "A handgun shot can pierce armour far more easily than an arrow or a crossbow bolt. Therefore, count enemy Armour values as one worse than normal when shot by a handgun.",
+        "---",
+        "One unit of Handgunners per full 1000 points can replace a unit of Warriors while still counting for the Warrior min/max value.",
+        "Note that this unit still counts for max value of Handgunners.",
+        "*Select the Handgunners upgrade option in the Warriors unit to replace the Warriors unit with Handgunners*"
       ]
     },
     "Rangers": {
@@ -230,7 +234,10 @@
     "Runesmith": {
       "order": 7,
       "text": [
-        "Although they are not wizards and cannot therefore cast spells, Dwarf Runesmiths can combat the magic of their enemies. If an enemy Wizard who is within 50cm of the Runesmith casts a spell the Runesmith can attempt to 'antimagic' it. Note that it does not matter what the spell is or where it is cast, the Runesmith can 'anti-magic' it so long as the caster is with 50cm. To determine if this works roll a D6 - on the score of 4, 5 or 6 the Runesmith has succeeded and the spell doesn't work, it is dispelled by the Runesmith's defiant efforts. If he fails then the Runesmith's efforts come to nothing and the spell works as normal. A Runesmith can attempt to anti-magic any number of spells in a turn, but only one attempt can be made to anti-magic any individual spell - even if the army includes more than one Runesmith and several are in range of the enemy Wizard."
+        "Although they are not wizards and cannot therefore cast spells, Dwarf Runesmiths can combat the magic of their enemies. If an enemy Wizard who is within 50cm of the Runesmith casts a spell the Runesmith can attempt to 'antimagic' it.",
+        "Note that it does not matter what the spell is or where it is cast, the Runesmith can 'anti-magic' it so long as the caster is with 50cm.",
+        "To determine if this works roll a D6 - on the score of 4, 5 or 6 the Runesmith has succeeded and the spell doesn't work, it is dispelled by the Runesmith's defiant efforts. If he fails then the Runesmith's efforts come to nothing and the spell works as normal.",
+        "A Runesmith can attempt to anti-magic any number of spells in a turn, but only one attempt can be made to anti-magic any individual spell - even if the army includes more than one Runesmith and several are in range of the enemy Wizard."
       ]
     },
     "Anvil": {

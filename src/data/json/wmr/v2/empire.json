@@ -193,7 +193,11 @@
     "Handgunners": {
       "order": 1,
       "text": [
-        "Count enemy Armour values as one worse than normal when shot by a handgun. So an armour value of 3+ counts as 4+, 4+ as 5+, and 5+ as 6+, whilst an Armour value of 6+ can't save against a handgun. One unit of Crossbowmen per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Crossbowmen min/max value. Note that this unit also counts for min/max value of Handgunners."
+        "Count enemy Armour values as one worse than normal when shot by a handgun. So an armour value of 3+ counts as 4+, 4+ as 5+, and 5+ as 6+, whilst an Armour value of 6+ can't save against a handgun.",
+        "-----",
+        "One unit of Crossbowmen per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Crossbowmen min/max value.",
+        "Note that this unit also counts for min/max value of Handgunners.",
+        "*Select the Handgunners upgrade option in a Crossbow unit to replace unit with Handgunners*"
       ]
     },
     "Flagellants": {
