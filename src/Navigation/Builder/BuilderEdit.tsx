@@ -90,42 +90,7 @@ const BuilderEdit = ({ navigation }: any) => {
     if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
       navigation.setOptions({
         title: builder.selectedArmyList?.name,
-        headerRight: () => (
-          //  <Popover
-          //    isVisible={showPopover}
-          //    placement={PopoverPlacement.LEFT}
-          //    onRequestClose={() => setShowPopover(false)}
-          //    popoverStyle={{ borderRadius: 24 }}
-          //    arrowSize={{ width: 0, height: 0 }}
-          //    onOpenStart={() => console.log('OPENING')}
-          //    from={
-          //      <Pressable onPress={() => setShowPopover(!showPopover)}>
-          //        <Entypo name="dots-three-vertical" size={20} color={theme.text} />
-          //      </Pressable>
-          //    }>
-          //    <View
-          //      style={{
-          //        paddingHorizontal: 10,
-          //        paddingVertical: 10,
-          //        maxWidth: 200,
-          //        backgroundColor: theme.backgroundVariant,
-          //        flex: 1,
-          //        borderRadius: 24,
-          //        overflow: 'hidden',
-          //        gap: 12,
-          //      }}>
-          //      <TouchableOpacity
-          //        onPress={() => navigation.navigate('BuilderQuickView')}
-          //        style={[{ flex: 1, flexDirection: 'row', paddingVertical: 8 }, styles.menuButtons]}>
-          //        <View style={{ marginRight: 8 }}>
-          //          <Entypo name="export" size={20} color="black" />
-          //        </View>
-          //        <Text>{t('ExportList')}</Text>
-          //      </TouchableOpacity>
-          //    </View>
-          //  </Popover>
-          <HeaderMenu />
-        ),
+        headerRight: () => <HeaderMenu />,
         headerTitle: () => (
           <View style={{ width: 250 }}>
             <Text numberOfLines={1} variant="heading1" style={{ fontSize: 20 }}>
@@ -134,6 +99,8 @@ const BuilderEdit = ({ navigation }: any) => {
             <Text>
               {builder.selectedArmyList?.name &&
                 getKeyByValue(Factions, builder.selectedArmyList.faction)?.replaceAll('_', ' ')}
+              {builder.selectedArmyList?.pointsLimit &&
+                ` - ${builder.selectedArmyList?.pointsLimit}pts`}
             </Text>
           </View>
         ),
@@ -143,6 +110,10 @@ const BuilderEdit = ({ navigation }: any) => {
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
+    if (builder.selectedArmyList?.pointsLimit != undefined) {
+      setTotalPoints(parseInt(builder.selectedArmyList.pointsLimit));
+      return;
+    }
     if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000)
       setTotalPoints(2000);
     if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000)
@@ -150,7 +121,7 @@ const BuilderEdit = ({ navigation }: any) => {
     if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
     if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
     if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
-  }, [builder.calculateCurrentArmyPoints()]);
+  }, [builder.calculateCurrentArmyPoints(), builder.selectedArmyList?.pointsLimit]);
 
   const handleAddUnitToArmyPress = (
     unitName: string,
@@ -322,7 +293,7 @@ const BuilderEdit = ({ navigation }: any) => {
                     <Text style={{ fontSize: 16, color: theme.black }}>{item.roll}+</Text>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingRight: 12 }}>
                   <Entypo name="ruler" size={16} color="black" />
                   <View style={{ marginLeft: 8 }}>
                     <Text style={{ color: theme.black }}>{item.range ? item.range : '-'}</Text>
@@ -330,7 +301,7 @@ const BuilderEdit = ({ navigation }: any) => {
                 </View>
               </View>
             </View>
-            <View style={{ flex: 2, justifyContent: 'flex-start' }}>
+            <View style={{ flex: 2, justifyContent: 'flex-start', paddingLeft: 8 }}>
               <Text bold style={{ fontSize: 16, color: theme.black }}>
                 {item.name}
               </Text>
@@ -467,6 +438,7 @@ const BuilderEdit = ({ navigation }: any) => {
                     }
                     unitDetailsExpanded={getUnitDetailsByUnitName(item.unitName)}
                     showStatline={settings.showStatline}
+                    pointsLimit={builder.selectedArmyList?.pointsLimit}
                   />
                 </>
               );

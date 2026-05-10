@@ -8,13 +8,21 @@ import { Factions } from '@utils/constants';
 import { getKeyByValue } from '@utils/factionHelpers';
 import fonts from '@utils/fonts';
 import Constants from 'expo-constants';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Keyboard, KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	StyleSheet,
+	TextInput,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from 'react-native-toast-notifications';
 
+export type PointsLimitType = undefined | '1000' | '2000';
 const EditArmy = () => {
   const { theme } = useTheme();
   const route = useRoute();
@@ -22,10 +30,11 @@ const EditArmy = () => {
   const builder = useBuilderContext();
   const toast = useToast();
   const { factionSelection, armyId } = route.params as { factionSelection: string; armyId: string };
-
   const currentArmy = builder.getArmyByArmyId(armyId);
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
-
+  const [pointsLimitSelection, setPointsLimitSelection] = useState<PointsLimitType>(
+    currentArmy?.pointsLimit,
+  );
   // Keyboard visibility state
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
@@ -48,12 +57,14 @@ const EditArmy = () => {
   const [factionName, setFactionName] = useState<string>(currentArmy?.name || '');
   const [factionNotes, setFactionNotes] = useState<string>(currentArmy?.armyNotes);
   const [setFactionNotesError, setSetFactionNotesError] = useState();
+  const [createdArmyId, setCreatedArmyId] = useState<string | null>(null);
 
   const nameRef = useRef<TextInput>(null);
   const { t } = useTranslation(['builder', 'common', 'forms']);
 
   useEffect(() => {
-    if (armyId !== null) {
+    console.log('🚀 ~ EditArmy ~ armyId:', armyId);
+    if (armyId !== undefined) {
       navigation.setOptions({ title: 'Edit Army' });
     } else {
       navigation.setOptions({ title: 'Finalise Army' });
@@ -64,9 +75,17 @@ const EditArmy = () => {
     if (factionName == '') {
       setFactionNameError(true);
     } else {
+      console.log('🚀 ~ onConfirmEditArmyPress ~ pointsLimitSelection:', pointsLimitSelection);
       setFactionNameError(false);
       builder.updateArmyName(factionName, armyId);
-		builder.updateArmyNotes(armyId, factionNotes);
+      if (factionNotes !== '') {
+        setTimeout(() => {
+          builder.updateArmyNotes(armyId, factionNotes);
+        }, 500);
+      }
+      setTimeout(() => {
+        builder.updatePointsLimit(armyId, pointsLimitSelection);
+      }, 500);
       // Navigate to BuilderEdit screen by resetting navigation stack
       (navigation as any).reset({
         index: 0,
@@ -74,7 +93,7 @@ const EditArmy = () => {
           {
             name: 'MainTabs',
             params: {
-              screen: 'BuilderHome'
+              screen: 'BuilderHome',
             },
           },
         ],
@@ -82,7 +101,6 @@ const EditArmy = () => {
       toast.show(`Army updated!`);
     }
   };
-  const [createdArmyId, setCreatedArmyId] = useState<string | null>(null);
 
   const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
     if (factionName == '') {
@@ -92,8 +110,16 @@ const EditArmy = () => {
       setFactionNameError(false);
     }
     if (factionSelection && factionName != '') {
+      console.log('🚀 ~ onConfirmCreateArmyPress ~ CURRENT_VERSION:', CURRENT_VERSION);
       builder
-        .addUserArmyList(parseInt(factionSelection), factionName, autopopulate, CURRENT_VERSION)
+        .addUserArmyList(
+          parseInt(factionSelection),
+          factionName,
+          factionNotes,
+          pointsLimitSelection,
+          autopopulate,
+          CURRENT_VERSION,
+        )
         .then((result) => {
           setCreatedArmyId(result);
           builder.setSelectedArmyList(result);
@@ -114,6 +140,32 @@ const EditArmy = () => {
       (navigation as any).navigate('BuilderEdit');
     }
   }, [createdArmyId]);
+
+  const determineToggleStyle = useCallback(
+    (value: any) => {
+      if (value == pointsLimitSelection) {
+        return { backgroundColor: theme.secondary };
+      } else {
+        return { backgroundColor: theme.grey3 };
+      }
+    },
+    [pointsLimitSelection],
+  );
+  const onPointsLimitSelection = (value: PointsLimitType) => {
+    setPointsLimitSelection(value);
+  };
+
+  const renderPointsLimitDetails = useCallback(() => {
+    if (pointsLimitSelection == undefined) {
+      return `${t('BuilderDefaultPointsRestrictions')}`;
+    }
+    if (pointsLimitSelection == '1000') {
+      return `${t('BuilderPointsRestrictions')}`;
+    }
+    if (pointsLimitSelection == '2000') {
+      return `${t('BuilderPointsRestrictions')}`;
+    }
+  }, [pointsLimitSelection]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
@@ -153,7 +205,7 @@ const EditArmy = () => {
           <FormLabel label={t('Notes', { ns: 'builder' })} />
           <TextInput
             multiline
-            maxLength={200}
+            maxLength={150}
             value={factionNotes}
             onChangeText={(val) => setFactionNotes(val)}
             style={[
@@ -165,11 +217,38 @@ const EditArmy = () => {
                 borderRadius: 16,
                 padding: 16,
                 paddingTop: 16,
-                height: 100,
+                height: 80,
               },
               factionNameError && { borderColor: theme.danger, borderWidth: 4 },
             ]}
           />
+          <FormLabel label={'Points Limit'} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
+            <View style={{ flex: 1 }}>
+              <TouchableOpacity
+                onPress={() => onPointsLimitSelection(undefined)}
+                style={[styles.pointsCostToggle, determineToggleStyle(undefined)]}>
+                <Text>Dynamic</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1 }}>
+              <TouchableOpacity
+                onPress={() => onPointsLimitSelection('1000')}
+                style={[styles.pointsCostToggle, determineToggleStyle('1000')]}>
+                <Text>1000</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1 }}>
+              <TouchableOpacity
+                onPress={() => onPointsLimitSelection('2000')}
+                style={[styles.pointsCostToggle, determineToggleStyle('2000')]}>
+                <Text>2000</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ paddingTop: 8, alignItems: 'center' }}>
+            <Text>{renderPointsLimitDetails()}</Text>
+          </View>
         </KeyboardAvoidingView>
         <View
           style={{
@@ -217,4 +296,12 @@ const EditArmy = () => {
 
 export default EditArmy;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  pointsCostToggle: {
+    padding: 8,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxShadow: `0px 0px 12px 8px rgba(0, 0, 0, 0.20)`,
+  },
+});

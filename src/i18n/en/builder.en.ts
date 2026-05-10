@@ -47,6 +47,7 @@ export default {
 	SpawnLeaders: "Spawn Leaders",
 	SpawnUnits: "Spawn Units",
 	Export: "Export",
-	DeleteArmy: "Delete Army"
-
+	DeleteArmy: "Delete Army",
+	BuilderPointsRestrictions: "Your required unit restrictions will be set to this limit",
+	BuilderDefaultPointsRestrictions: "The points limit will increase and decrease as you add more units. This is the default behavior."
 };

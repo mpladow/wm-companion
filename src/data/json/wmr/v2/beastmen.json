@@ -148,7 +148,7 @@
       "command": 6,
       "size": 1,
       "points": 80,
-      "armyMax": 1
+		"max": 1
     },
     {
       "name": "Wargor",

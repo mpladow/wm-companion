@@ -55,6 +55,7 @@ const ArmyListCard = ({
     );
   };
 
+  console.log('🚀 ~ ArmyListCard ~ armyList.pointsLimit:', armyList.pointsLimit);
   return (
     <TouchableOpacity key={armyList.armyId} onPress={() => handleArmyListPress(armyList.armyId)}>
       <View
@@ -90,7 +91,7 @@ const ArmyListCard = ({
           </View>
           <View style={{ alignItems: 'center', flexDirection: 'row' }}>
             <View>
-              <PointsContainer points={armyList.points} />
+              <PointsContainer points={armyList.points} maxPoints={armyList.pointsLimit} />
             </View>
             {armyList.armyNotes !== '' && armyList.armyNotes !== undefined ? (
               <TouchableOpacity

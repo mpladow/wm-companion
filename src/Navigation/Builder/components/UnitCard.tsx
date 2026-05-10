@@ -3,6 +3,7 @@ import PointsContainer from '@components/pointsContainer';
 import UnitIcon from '@components/UnitCards/UnitIcon';
 import { Entypo } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
+import { PointsLimitType } from '@navigation/ArmyCreation/EditArmy';
 import { UnitProps } from '@utils/types';
 import React from 'react';
 import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -22,6 +23,7 @@ type UnitCardProps = {
   currentCount?: number; // get current count of units in army
   onUnitCardPress: (unitName: string) => void;
   currentArmyCount: number;
+  pointsLimit?: PointsLimitType;
 };
 const UnitCard = ({
   unit,
@@ -30,11 +32,14 @@ const UnitCard = ({
   currentCount,
   currentArmyCount,
   onUnitCardPress,
+  pointsLimit,
 }: UnitCardProps) => {
   const { theme } = useTheme();
 
   const getUnitArmyMax = () => {
-    const interval = get1000PointInterval(currentArmyCount);
+    const interval = get1000PointInterval(
+      pointsLimit != undefined ? parseInt(pointsLimit) : currentArmyCount,
+    );
     let currentMax: string | undefined = '';
     if (unit.armyMax) {
       currentMax = unit.armyMax.toString();

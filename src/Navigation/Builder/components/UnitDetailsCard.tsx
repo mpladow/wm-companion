@@ -6,8 +6,9 @@ import UpgradeIcon from '@components/UnitCards/UpgradeIcon';
 import { SelectedUpgradesProps } from '@context/BuilderContext';
 import { AntDesign } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
+import { PointsLimitType } from '@navigation/ArmyCreation/EditArmy';
 import { UnitProps } from '@utils/types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { get1000PointInterval } from '../utils/builderHelpers';
@@ -37,6 +38,7 @@ type UnitCardDetailsProps = {
   hasError: boolean;
   unitDetailsExpanded: UnitProps | undefined;
   showStatline: boolean;
+  pointsLimit?: PointsLimitType;
 };
 const UnitDetailsCard = ({
   unit,
@@ -54,24 +56,42 @@ const UnitDetailsCard = ({
   hasError,
   unitDetailsExpanded,
   showStatline,
+  pointsLimit,
 }: UnitCardDetailsProps) => {
   const { theme } = useTheme();
   const { t } = useTranslation(['common', 'builder']);
   const [showMenu, setShowMenu] = useState(false);
 
-  const getUnitArmyMax = () => {
-    const interval = get1000PointInterval(currentArmyCount);
+  const interval = useMemo(() => {
+    return get1000PointInterval(
+      pointsLimit != undefined ? parseInt(pointsLimit) : currentArmyCount,
+    );
+  }, [pointsLimit, currentArmyCount]);
+
+  const getUnitArmyMin = useMemo(() => {
+    let currentMin: string | undefined = '';
+    if (unit.armyMin) {
+      return (currentMin = unit.armyMin.toString());
+    }
+    if (unit.min) {
+      return (currentMin = (unit.min * interval).toString());
+    } else {
+      return (currentMin = '-');
+    }
+  }, [interval]);
+
+  const getUnitArmyMax = useMemo(() => {
+    console.log('🚀 ~ getUnitArmyMax ~ interval:', interval);
     let currentMax: string | undefined = '';
     if (unit.armyMax) {
-      currentMax = unit.armyMax.toString();
+      return (currentMax = unit.armyMax.toString());
     }
     if (unit.max) {
-      currentMax = (unit.max * interval).toString();
+      return (currentMax = (unit.max * interval).toString());
     } else {
-      currentMax = '-';
+      return (currentMax = '-');
     }
-    return currentMax;
-  };
+  }, [interval]);
   const [triggerScale, setTriggerScale] = useState(false);
   useEffect(() => {
     if (triggerScale) {
@@ -140,7 +160,7 @@ const UnitDetailsCard = ({
               </View>
               <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', width: 40 }}>
                 <Text>
-                  {unit.armyMin ? unit.armyMax : unit.min} / <Text bold>{getUnitArmyMax()}</Text>
+                  {getUnitArmyMin} / <Text bold>{getUnitArmyMax}</Text>
                 </Text>
               </View>
             </View>

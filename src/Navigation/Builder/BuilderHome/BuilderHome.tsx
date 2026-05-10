@@ -253,10 +253,6 @@ const BuilderHome = () => {
             zIndex: 9,
           }}
         />
-        {/* <Button onPress={handleOpenPopupMenu} variant={'text'}>
-          <Text>Open popup menu</Text>
-        </Button> */}
-
         <ArmySectionList
           handleFilterChange={handleFilterChange}
           sectionListData={sectionListData}
@@ -270,33 +266,8 @@ const BuilderHome = () => {
           favouritesFilters={filterFavourites}
           mainFilters={filterMain}
         />
-
-        {/* <PopupConfirm
-          visible={confirmDialog}
-          onConfirm={() => {
-            focusedArmyId && builder.deleteUserArmyList(focusedArmyId);
-            setConfirmDialog(false);
-          }}
-          onCancel={() => {
-            setFocusedArmy(undefined);
-            setConfirmDialog(false);
-          }}
-          text={
-            <Text style={{ color: theme.text, fontSize: 16 }}>
-              Do you want to delete this army?
-            </Text>
-          }
-          confirmText={''}
-          cancelText={''}
-          headerText={''}
-        /> */}
       </ImageBackground>
-      {/* <CreateArmyModal
-        onDismissCreateArmyModal={handleDismissArmyCreateModal}
-        theme={theme}
-        focusedArmy={focusedArmy}
-        isVisible={showCreateArmy}
-      /> */}
+
       <AddArmyButton
         handleAddArmyPress={handleAddArmyPress}
         theme={theme}

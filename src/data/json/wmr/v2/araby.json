@@ -221,7 +221,7 @@
     {
       "name": "Sand Storm",
       "roll": 4,
-      "range": "– affects enemy within 30cm",
+      "range": "Affects enemy within 30cm",
       "text": [
         "*The sorcerer commands the desert spirits to engulf his foes in a swirling cloud of choking sand and dust.*",
         "",

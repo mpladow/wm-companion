@@ -1,3 +1,4 @@
+import { PointsLimitType } from '@navigation/ArmyCreation/EditArmy';
 import { get1000PointInterval } from '@navigation/Builder/utils/builderHelpers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UpgradeTypes } from '@utils/constants';
@@ -54,7 +55,7 @@ export type ArmyListProps = {
   selectedUnits: SelectedUnitProps[];
   selectedUpgrades: SelectedUpgradesProps[];
   points: number;
-  pointsLimit?: number;
+  pointsLimit?: PointsLimitType;
 };
 interface BuilderContextInterface {
   userArmyLists: ArmyListProps[];
@@ -62,6 +63,8 @@ interface BuilderContextInterface {
   addUserArmyList: (
     faction: number,
     name: string,
+    notes: string,
+    pointsLimit: PointsLimitType,
     autopopulate: boolean,
     versionNumber: number,
   ) => Promise<string>;
@@ -103,6 +106,7 @@ interface BuilderContextInterface {
   getArmyByArmyId: (armyId: string) => ArmyListProps | undefined;
   getUnitCounts: () => string;
   getMagicItemsForUnit: (unitName: string) => any[];
+  updatePointsLimit: (armyId: string, limit: PointsLimitType) => void;
 }
 
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
@@ -115,6 +119,7 @@ export const BuilderContextProvider = ({ children }: any) => {
   const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
 
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+  console.log('🚀 ~ BuilderContextProvider ~ CURRENT_VERSION:', CURRENT_VERSION);
 
   // const CURRENT_VERSION = 2; // TODO: this should be retrieved by the config
   const { t } = useTranslation(['builder', 'units']);
@@ -261,9 +266,12 @@ export const BuilderContextProvider = ({ children }: any) => {
   const addUserArmyList = async (
     faction: number,
     name: string,
-    autopopulate: boolean,
+    notes: string,
+    pointsLimit: PointsLimitType,
+    autopopulate: boolean = true,
     versionNumber: number,
   ) => {
+    console.log(versionNumber, 'versionNumber');
     const newArmyList: ArmyListProps = {
       armyId: uuid(),
       faction: faction,
@@ -274,7 +282,8 @@ export const BuilderContextProvider = ({ children }: any) => {
       selectedUpgrades: [],
       versionNumber: versionNumber,
       points: 0,
-      armyNotes: '',
+      armyNotes: notes,
+      pointsLimit: pointsLimit,
     };
     // autopopulate if true
     const _factionDetails = getFactionUnitsByVersion(faction, versionNumber);
@@ -285,14 +294,20 @@ export const BuilderContextProvider = ({ children }: any) => {
       const factionUnits = _factionDetails.factionList?.units?.filter(
         (x) => x['min'] != undefined || x['armyMin'] != undefined,
       );
-      // find min requirements
+      // find min requirements - take into account fixed points limit if this is set during army creation.
       const defaultUnits: SelectedUnitProps[] = [];
       factionUnits.forEach((x) => {
         let max;
         if (x.max) max = x.max;
+        if (pointsLimit != undefined && max != undefined) {
+          max = (max * parseInt(pointsLimit)) / 1000;
+        }
         if (x.armyMax) max = x.armyMax;
         let min;
         if (x.min) min = x.min;
+        if (pointsLimit != undefined && min != undefined) {
+          min = (min * parseInt(pointsLimit)) / 1000;
+        }
         if (x.armyMin) min = x.armyMin;
 
         const _newUnit: SelectedUnitProps = {
@@ -360,12 +375,9 @@ export const BuilderContextProvider = ({ children }: any) => {
     // once user selects army, set selectedUnits, name,
     let selectedList = userArmyLists.find((x) => x.armyId == armyId);
     let selectedListClone = { ...selectedList };
-    console.log('🚀 ~ setSelectedArmyList ~ selectedList:1');
     if (selectedListClone) {
       // get list version
-      console.log('🚀 ~ setSelectedArmyList ~ selectedList.points: 2', selectedListClone.points);
       selectedListClone.points = calculateCurrentArmyPoints(selectedList);
-      console.log('🚀 did we reach this?');
       const _factionDetails = getFactionUnitsByVersion(
         selectedListClone.faction,
         selectedListClone.versionNumber,
@@ -404,6 +416,15 @@ export const BuilderContextProvider = ({ children }: any) => {
       }),
     );
   };
+
+  const updatePointsLimit = (armyId: string, pointsLimit: PointsLimitType) => {
+    setUserArmyLists(
+      produce((draft) => {
+        const armyList = draft.find((x) => x.armyId == armyId);
+        if (armyList) armyList.pointsLimit = pointsLimit;
+      }),
+    );
+  };
   // COMPLETED REFACTOR
   const addUnit = (
     unitName: string,
@@ -428,13 +449,10 @@ export const BuilderContextProvider = ({ children }: any) => {
       ignoreBreakPoint: ignoreBreakPoint,
       requiredUnits: currentUnit.requiredUnits,
     };
-    console.log('🚀 ~ BuilderContextProvider ~ factionDetails:', factionDetails);
 
     setCurrentArmyList(
       produce((draft) => {
         const unit = draft?.selectedUnits.find((u) => u.unitName == unitName);
-        console.log('🚀 ~ produce ~ unit:', unit);
-
         if (unit && unit.currentCount) {
           unit.currentCount = unit.currentCount + 1;
         } else {
@@ -571,7 +589,11 @@ export const BuilderContextProvider = ({ children }: any) => {
   const calculateArmyErrors = () => {
     const POINTS_LEEWAY = 5;
     // get the current army points for
-    let currentArmyPointsLimit = get1000PointInterval(calculateCurrentArmyPoints());
+    let currentArmyPointsLimit = get1000PointInterval(
+      currentArmyList?.pointsLimit !== undefined
+        ? parseInt(currentArmyList?.pointsLimit)
+        : calculateCurrentArmyPoints(),
+    );
 
     const errors: ArmyErrorsProps[] = [];
     let currentUnits = factionDetails?.units;
@@ -709,15 +731,16 @@ export const BuilderContextProvider = ({ children }: any) => {
             })}`,
           });
         }
-      } else {
-        errors.push({
-          sourceName: u.name,
-          error: `${t('MinimumUnitsRequired', {
-            minCount: u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min,
-            unit: u.name,
-          })}`,
-        });
       }
+      //  else {
+      //   errors.push({
+      //     sourceName: u.name,
+      //     error: `${t('MinimumUnitsRequired', {
+      //       minCount: u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min,
+      //       unit: u.name,
+      //     })}`,
+      //   });
+      // }
     });
     // check unit with army MAx Count
     unitsWithArmyMax?.map((u) => {
@@ -962,6 +985,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         getUnitCounts,
         getMagicItemsForUnit,
         migrateArmyList,
+        updatePointsLimit,
       }}>
       {children}
     </BuilderContext.Provider>
