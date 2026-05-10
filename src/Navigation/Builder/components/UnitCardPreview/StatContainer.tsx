@@ -1,7 +1,7 @@
-import { StyleSheet, View } from "react-native";
-import React from "react";
-import { useTheme } from "@hooks/useTheme";
 import { Text } from "@components/index";
+import { useTheme } from "@hooks/useTheme";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 type StatContainerProps = {
 	statName: string;
@@ -17,7 +17,7 @@ const StatContainer = ({ statName, statValue }: StatContainerProps) => {
 			<View
 				style={[
 					{
-						borderRadius: 2,
+						borderRadius: 12,
 						marginTop: 4,
 						backgroundColor: theme.white,
 						padding: 4,

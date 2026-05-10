@@ -1,3 +1,4 @@
+import FormLabel from '@components/forms/FormLabel';
 import { Button, FactionImages, Text } from '@components/index';
 import { useBuilderContext } from '@context/BuilderContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,7 +22,6 @@ const EditArmy = () => {
   const builder = useBuilderContext();
   const toast = useToast();
   const { factionSelection, armyId } = route.params as { factionSelection: string; armyId: string };
-  console.log('🚀 ~ EditArmy ~ armyId:', armyId);
 
   const currentArmy = builder.getArmyByArmyId(armyId);
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
@@ -46,6 +46,9 @@ const EditArmy = () => {
   // form data
   const [factionNameError, setFactionNameError] = useState(false);
   const [factionName, setFactionName] = useState<string>(currentArmy?.name || '');
+  const [factionNotes, setFactionNotes] = useState<string>(currentArmy?.armyNotes);
+  const [setFactionNotesError, setSetFactionNotesError] = useState();
+
   const nameRef = useRef<TextInput>(null);
   const { t } = useTranslation(['builder', 'common', 'forms']);
 
@@ -63,6 +66,7 @@ const EditArmy = () => {
     } else {
       setFactionNameError(false);
       builder.updateArmyName(factionName, armyId);
+		builder.updateArmyNotes(armyId, factionNotes);
       // Navigate to BuilderEdit screen by resetting navigation stack
       (navigation as any).reset({
         index: 0,
@@ -70,8 +74,7 @@ const EditArmy = () => {
           {
             name: 'MainTabs',
             params: {
-              screen: 'ArmyBuilder',
-              params: { screen: 'BuilderEdit' },
+              screen: 'BuilderHome'
             },
           },
         ],
@@ -147,6 +150,26 @@ const EditArmy = () => {
               An army name is required
             </Text>
           )}
+          <FormLabel label={t('Notes', { ns: 'builder' })} />
+          <TextInput
+            multiline
+            maxLength={200}
+            value={factionNotes}
+            onChangeText={(val) => setFactionNotes(val)}
+            style={[
+              {
+                color: theme.black,
+                fontFamily: fonts.PTSansBold,
+                fontSize: 16,
+                backgroundColor: theme.white,
+                borderRadius: 16,
+                padding: 16,
+                paddingTop: 16,
+                height: 100,
+              },
+              factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+            ]}
+          />
         </KeyboardAvoidingView>
         <View
           style={{

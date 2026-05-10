@@ -94,6 +94,7 @@ const ArmyListCard = ({
             </View>
             {armyList.armyNotes !== '' && armyList.armyNotes !== undefined ? (
               <TouchableOpacity
+                hitSlop={18}
                 style={{ marginLeft: 12 }}
                 onPress={() => handleOpenArmyNotes(armyList.armyId)}>
                 <Foundation name="clipboard-notes" size={24} color={theme.white} />
@@ -208,7 +209,7 @@ const ArmyListCard = ({
                   flex: 1,
                   borderRadius: 24,
                   overflow: 'hidden',
-						gap: 12
+                  gap: 12,
                 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -311,6 +312,6 @@ const styles = StyleSheet.create({
     paddingRight: 44,
     borderRadius: 16,
     minHeight: 40,
-	 alignItems: "center"
+    alignItems: 'center',
   },
 });

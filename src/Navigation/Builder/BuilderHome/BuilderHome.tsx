@@ -108,6 +108,10 @@ const BuilderHome = () => {
   ];
   const handleEditArmyPress = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
+    navigation.navigate('BuilderCreationStackNavigator', {
+      screen: 'EditArmy',
+      params: { armyId: armyId },
+    });
     setShowCreateArmy(!showCreateArmy);
   };
   const onArmyListPress = (armyId: string) => {
@@ -125,20 +129,20 @@ const BuilderHome = () => {
   };
   const onArmyListDeletePress = (armyId: string) => {
     setFocusedArmyId(armyId);
-     setTimeout(() => {
-       console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
-       setConfirmDialog(true);
-     }, 500);
+    setTimeout(() => {
+      console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
+      setConfirmDialog(true);
+    }, 500);
   };
-//   useEffect(() => {
-//     console.log('🚀 ~ BuilderHome ~ focusedArmyId:', focusedArmyId);
-//     if (focusedArmyId) {
-//       setTimeout(() => {
-//         setConfirmDialog(true);
-//       }, 500);
-//     }
-//     console.log(confirmDialog);
-//   }, [focusedArmyId]);
+  //   useEffect(() => {
+  //     console.log('🚀 ~ BuilderHome ~ focusedArmyId:', focusedArmyId);
+  //     if (focusedArmyId) {
+  //       setTimeout(() => {
+  //         setConfirmDialog(true);
+  //       }, 500);
+  //     }
+  //     console.log(confirmDialog);
+  //   }, [focusedArmyId]);
 
   const { isReady, changelog, dismissChangeLog, recentlyDismissedChangeLog } = useUpdateChecker();
   const [showChangeLogModal, setShowChangeLogModal] = useState(false);

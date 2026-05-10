@@ -54,6 +54,7 @@ export type ArmyListProps = {
   selectedUnits: SelectedUnitProps[];
   selectedUpgrades: SelectedUpgradesProps[];
   points: number;
+  pointsLimit?: number;
 };
 interface BuilderContextInterface {
   userArmyLists: ArmyListProps[];
@@ -225,6 +226,7 @@ export const BuilderContextProvider = ({ children }: any) => {
               });
             }
           });
+          console.log('HELLo');
           newArmy.points = calculateCurrentArmyPoints(newArmy);
 
           draft.push(newArmy);
@@ -356,13 +358,17 @@ export const BuilderContextProvider = ({ children }: any) => {
 
   const setSelectedArmyList = (armyId: string, faction?: number) => {
     // once user selects army, set selectedUnits, name,
-    const selectedList = userArmyLists.find((x) => x.armyId == armyId);
-    if (selectedList) {
+    let selectedList = userArmyLists.find((x) => x.armyId == armyId);
+    let selectedListClone = { ...selectedList };
+    console.log('🚀 ~ setSelectedArmyList ~ selectedList:1');
+    if (selectedListClone) {
       // get list version
-      selectedList.points = calculateCurrentArmyPoints(selectedList);
+      console.log('🚀 ~ setSelectedArmyList ~ selectedList.points: 2', selectedListClone.points);
+      selectedListClone.points = calculateCurrentArmyPoints(selectedList);
+      console.log('🚀 did we reach this?');
       const _factionDetails = getFactionUnitsByVersion(
-        selectedList?.faction,
-        selectedList.versionNumber,
+        selectedListClone.faction,
+        selectedListClone.versionNumber,
       );
       // set faction upgrade tails
       factionDetails && setFactionDetails(_factionDetails.factionList);
@@ -547,15 +553,18 @@ export const BuilderContextProvider = ({ children }: any) => {
     if (armyList)
       armyList?.selectedUnits?.map((unit) => {
         // add points for selectedUnits
-        const amountToAdd = unit.points * unit.currentCount;
-        arrayOfPoints = arrayOfPoints + amountToAdd;
-        //add points for selected items
-        unit.attachedItems.map((up) => {
-          const amountToAdd = up.points * up.currentCount;
+        if (unit.points && unit.currentCount) {
+          const amountToAdd = unit.points * unit.currentCount;
           arrayOfPoints = arrayOfPoints + amountToAdd;
-        });
+          //add points for selected items
+          unit.attachedItems.map((up) => {
+            if (up.currentCount) {
+              const amountToAdd = up.points * up.currentCount;
+              arrayOfPoints = arrayOfPoints + amountToAdd;
+            }
+          });
+        }
       });
-    currentArmyList?.points;
     return arrayOfPoints;
   };
 
