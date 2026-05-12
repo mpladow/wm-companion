@@ -1,0 +1,121 @@
+{
+  "name": "Regiments_of_Renown",
+  "version": "Warmaster Revolution",
+  "id": 2,
+  "group": 0,
+  "order": 15,
+  "versionNumber": 2.261,
+  "description": [
+    "Mercenaries are a common sight on the battlefields of the Warhammer world. Not all of them are human although most are. Amongst the Dogs of War, freebooters from the frozen wastes of Norsca rub shoulders with Corsairs from Araby and mysterious warrior monks from the east.",
+    "",
+    "Sellswords are assured of ready and profitable employment. The demand for soldiery in the Warhammer world has led to the establishment of numerous mercenary bands – soldiers who sold their services to whichever general happened to require them. Although some generals are willing to hire mercenary troops on a more or less permanent basis, most mercenaries are hired only when needed. Besides, the fees charged by the very best fighters are far too high for ordinary generals to pay on a long-term basis. The most successful mercenary captains become rich and influential in their own right, and their services are soon in demand throughout the Old World and beyond."
+  ],
+  "units": [
+    {
+      "name": "Pirazzos Lost Legion",
+      "order": 0,
+      "type": "Infantry",
+      "replacesUnit": [],
+      "replacesType": ["Infantry"],
+      "countsAsMonster": ["Tomb Kings"],
+      "attack": "3/1",
+      "hits": 3,
+      "armour": "6+",
+      "size": 3,
+      "points": 85,
+      "armyMax": 1,
+      "noMagic": true,
+      "specialRules": ["Pikemen"],
+      "quoteOne": "And as the Skinks sank back into the Swamps in defeat, Lord Xtloli instructed his Temple Guards to attack once more...This time a cloud of shards from the plunderer's machines slung our warriors like clouds of enraged hornets and they too were forced to retreat.",
+      "quoteOneAuthor": "Skink Scribe Manquixipolata on the Lizardmen's battle against Pirazzo's Lost Legion",
+      "description": [
+        "Pirazzo's Lost Legion is a famous mercenary company known for surviving an expedition to the dangerous jungle continent of Lustria—something very few armies in the Known World have achieved. Their commander, Fernando Pirazzo, returned immensely wealthy after claiming treasure there and later became a sought-after mercenary leader serving powerful clients across the Old World."
+      ],
+      "forbiddenFactions": ["Lizardmen"],
+      "forbiddenRoRUnits": ["Tichi-Huichi's Raiders"]
+    },
+    {
+      "name": "Tichi-Huichi's Raiders",
+      "order": 1,
+      "type": "Cavalry",
+      "replacesUnit": [{ "faction": "Dwarfs", "type": "Infantry", "name": "Rangers" }],
+      "replacesType": ["Cavalry", "Chariot"],
+      "countsAsMonster": [],
+      "attack": "3/1",
+      "hits": 3,
+      "armour": "6+",
+      "size": 3,
+      "points": 85,
+      "armyMax": 1,
+      "noMagic": true,
+      "specialRules": ["Light Cavalry"],
+      "quoteOne": "By Grungni! Great value for money these lizards. They fight for only a couple of mere strips of gold!",
+      "quoteOneAuthor": "Dwarf Lord Borik, on hiring Tichi-Huichi's Raiders",
+      "description": [
+        "Tichi-Huichi's Raiders are a renowned mercenary band from the Southlands, made up entirely of Skink warriors mounted on swift Cold Ones. Known for their speed in battle, they are led by Tichi-Huichi, the last survivor of the city of Enxilada who later became guardian to a new generation of Lizardmen offspring.",
+        "Tichi-Huichi and Tichi-Huichi's Raiders were sent by the Slann to travel across the Old World recovering the lost Golden Plaques of the Lizardmen. These sacred tablets contain ancient prophecies about the future of Lustria and the world. The Raiders only serve rulers who possess these plaques, valuing them far above gold, which ensures they are constantly sought after as mercenaries."
+      ],
+      "forbiddenFactions": [
+        "Chaos",
+        "Orcs",
+        "Skaven",
+        "Bretonnia",
+        "Dark_Elves",
+        "Daemons",
+        "Vampire_Counts",
+        "Goblins",
+        "Chaos_Dwarfs",
+        "Beastmen",
+        "Norse",
+        "Nippon"
+      ],
+      "forbiddenRoRUnits": ["Pirazzos Lost Legion"]
+    }
+  ],
+  "upgrades": [
+    {
+      "name": "Wyvern",
+      "order": 0,
+      "type": "Monstrous Mount",
+      "attack": "+2",
+      "points": "+80",
+      "max": 1
+    },
+    {
+      "name": "Chariot",
+      "order": 1,
+      "type": "Chariot Mount",
+      "attack": "+1",
+      "points": "+5",
+      "max": 1
+    }
+  ],
+  "magic": true,
+  "specialRules": {
+    "Pirazzos Lost Legion": {
+      "order": 1,
+      "text": [
+        "Count as one highest point value limited infantry type unit. If not available, hiring does not restrict taking other units. Count as 1 of any monster type in Tomb Kings army. Lost Legion can not be hired together with Tichi-Huichi‘s Raiders."
+      ]
+    },
+    "Pikemen": {
+      "order": 2,
+      "text": [
+        "The pike is the traditional weapon of the mercenaries of Tilea. Twice as long as a spear and even longer than a cavalryman’s lance this is truly fearsome although rather unwieldy weapon. Due to this Pikemen never benefit from defended or fortified status when in dense terrain (even partially) or on fortress walls etc. They still may be in defended position on higher ground or behind low obstacle as usual. Pikemen count as defended against charging cavalry or chariots to their front. The bonus only applies in the first combat round of an engagement. Note that the rule doesn't apply when pikemen are partially in dense terrain. Pikemen should be based as cavalry - i.e. the models are orientated towards the narrow edge of the base. Pikemen stands may only give or receive support by other infantry or Pikemen stands that are facing the same direction and touch their flank with the whole of their own flank. Any support behind or in front of Pikemen stand is not allowed. In all other respects they count as infantry (movement/pursuit etc.)."
+      ]
+    },
+    "Tichi-Huichi‘s Raiders": {
+      "order": 1,
+      "text": [
+        "Count as one highest point value limited cavalry or chariot unit type. Count as one Ranger unit in Dwarf army. Raiders can not be hired together with Pirazzo‘s Lost Legion."
+      ]
+    },
+    "Light Cavalry": {
+      "order": 2,
+      "text": [
+        "Light cavalry formations have a great use among the mercenaries. They are experts at outmaneuvering an enemy and harrying his flanks. Light cavalry has a shooting range of only 15cm and 360° vision - stands in this unit can draw line of sight from all edges for the purpose of evading and shooting, including shooting at charging enemies.",
+        "Note that this unit still needs Line of Sight from its front edge to charge an enemy."
+      ]
+    }
+  }
+}

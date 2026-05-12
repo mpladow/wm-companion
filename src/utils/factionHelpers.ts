@@ -21,6 +21,8 @@ export const getFactionsDropdown = () => {
 		}
 		return 0;
 	});
+	// exclude regiments of renown faction
+	ddFactionList = ddFactionList.filter(x => x.label !== "Regiments Of Renown")
 	return { ddFactionList: ddFactionList };
 };
 export const getKeyByValue = (object: object, value: number) => {

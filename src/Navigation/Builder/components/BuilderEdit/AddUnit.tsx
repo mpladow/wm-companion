@@ -1,15 +1,14 @@
 import { Button, Text } from '@components/index';
 import MainContainerWithBlankBG from '@components/MainContainerWithBlankBG';
 import { useBuilderContext } from '@context/BuilderContext';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Factions } from '@utils/constants';
 import { getGenericSpecialRules } from '@utils/factionHelpers';
 import { UnitProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
-import Constants from 'expo-constants';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Modal, StyleSheet, View } from 'react-native';
 import { sectionListDataProps } from '../../BuilderEdit';
@@ -28,18 +27,12 @@ const AddUnit = () => {
   const navigation = useNavigation();
   const builder = useBuilderContext();
   const [factionUnits, setFactionUnits] = useState<UnitProps[] | undefined>(); //TODO: we NEED to strongly type this data
+  const [regimentsOfRenown, setRegimentsOfRenown] = useState<UnitProps[] | undefined>();
   const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
   const [selectedUnitDetails, setSelectedUnitDetails] = useState<UnitProps>();
   const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
   const [totalPoints, setTotalPoints] = useState(1000);
   const [errorsVisible, setErrorsVisible] = useState(false);
-
-  const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
-
-  const armyCount = useMemo(() => {
-    return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
-  }, [builder.calculateCurrentArmyPoints(), totalPoints]);
-  const { getFactionUnitsByVersion } = useFactionUnits();
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -52,7 +45,7 @@ const AddUnit = () => {
     if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
   }, [builder.calculateCurrentArmyPoints()]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // get all units for selected army list
     let title;
     if (addingUnits) {
@@ -108,6 +101,12 @@ const AddUnit = () => {
     }
   }, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
 
+  const armyCount = useMemo(() => {
+    return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
+  }, [builder.calculateCurrentArmyPoints(), totalPoints]);
+
+  const { getFactionUnitsByVersion } = useFactionUnits();
+
   const handleViewPreview = (unitName: string) => {
     const rawUnitData = factionUnits?.find((x) => x.name == unitName);
     let _unit = Object.assign({}, rawUnitData);
@@ -117,29 +116,29 @@ const AddUnit = () => {
         //@ts-ignore - TODO: need to check typing
         const _specialRulesForUnit = builder.factionDetails?.specialRules[unitName];
         const _allGenericSpecialRules = getGenericSpecialRules();
+        if (_specialRulesForUnit) {
+          if (_specialRulesForUnit.text && _specialRulesForUnit.text != '') {
+            _unit.specialRules.push({ ..._specialRulesForUnit, label: _unit.name });
+          } else {
+            _unit.specialRules.push(_specialRulesForUnit);
+          }
+          
+        }
         //@ts-ignore
         const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
-        if (_specialRulesForUnit) {
-          console.log('handleOnUnitCardPress:: special rule for UNIT NAME');
-          if (_specialRulesForUnit.text) _unit.specialRules.push(_specialRulesForUnit);
-          // setSpecialRules(_specialRules);
-        }
+   
         if (_genericSpecialRulesExist != undefined) {
-          console.log('handleOnUnitCardPress:: generic special rule found');
-          _unit.specialRules.push(_genericSpecialRulesExist);
+          _unit.specialRules.push({ ..._genericSpecialRulesExist, label: unitName });
         }
-        console.log(rawUnitData?.specialRules, 'special rules found');
         if (rawUnitData?.specialRules && rawUnitData.specialRules?.length > 0) {
-          console.log('handleOnUnitCardPress:: special rule for UNIT UPGRADE');
-
           rawUnitData.specialRules?.map((x) => {
             if (builder.factionDetails?.specialRules) {
               const specialRule = builder.factionDetails?.specialRules[x];
-              _unit.specialRules?.push(specialRule);
+              _unit.specialRules?.push({ ...specialRule, label: x });
             }
             const genericSpecialRuleFound = _allGenericSpecialRules[x];
             if (genericSpecialRuleFound) {
-              _unit.specialRules?.push(genericSpecialRuleFound);
+              _unit.specialRules?.push({ ...genericSpecialRuleFound, label: _unit.name });
             }
           });
         }
@@ -161,6 +160,20 @@ const AddUnit = () => {
               ? factionUnits?.filter((x) => !x.command && x.command != 0)
               : factionUnits?.filter((x) => x.command || x.command == 0)
           }
+          ListFooterComponentStyle={{ marginTop: 16 }}
+          ListFooterComponent={() => (
+            <View>
+              <Button
+                onPress={() => navigation.navigate('AddRegimentsOfRenown')}
+                variant={'confirm'}
+                style={{ flexDirection: 'row' }}>
+                <View style={{ marginRight: 8 }}>
+                  <FontAwesome5 name="coins" size={16} color={theme.textInverted} />
+                </View>
+                <Text style={{ color: theme.textInverted }}>Add Regiments of Renown</Text>
+              </Button>
+            </View>
+          )}
           renderItem={({ item, index }) => {
             const units = addingUnits
               ? sectionListData?.find((x) => x.title == 'Units')?.data
@@ -228,7 +241,8 @@ const AddUnit = () => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: 4,
+              paddingHorizontal: 4,
+              paddingRight: 12,
             }}>
             <Entypo name="chevron-left" size={16} color={theme.text} />
             <Text bold>Back</Text>

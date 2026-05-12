@@ -63,7 +63,6 @@ const EditArmy = () => {
   const { t } = useTranslation(['builder', 'common', 'forms']);
 
   useEffect(() => {
-    console.log('🚀 ~ EditArmy ~ armyId:', armyId);
     if (armyId !== undefined) {
       navigation.setOptions({ title: 'Edit Army' });
     } else {
@@ -75,7 +74,6 @@ const EditArmy = () => {
     if (factionName == '') {
       setFactionNameError(true);
     } else {
-      console.log('🚀 ~ onConfirmEditArmyPress ~ pointsLimitSelection:', pointsLimitSelection);
       setFactionNameError(false);
       builder.updateArmyName(factionName, armyId);
       if (factionNotes !== '') {
@@ -110,7 +108,6 @@ const EditArmy = () => {
       setFactionNameError(false);
     }
     if (factionSelection && factionName != '') {
-      console.log('🚀 ~ onConfirmCreateArmyPress ~ CURRENT_VERSION:', CURRENT_VERSION);
       builder
         .addUserArmyList(
           parseInt(factionSelection),
@@ -178,7 +175,7 @@ const EditArmy = () => {
         <View style={{ height: 2, backgroundColor: theme.white, width: '100%' }}></View>
         <KeyboardAvoidingView style={{ flex: 1, padding: 16 }}>
           <Text variant="heading3" style={{ marginBottom: 8, fontSize: 32 }}>
-            {getKeyByValue(Factions, parseInt(factionSelection))}
+            {getKeyByValue(Factions, parseInt(factionSelection))?.replace('_', ' ')}
           </Text>
           <TextInput
             ref={nameRef}

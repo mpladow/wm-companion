@@ -81,7 +81,6 @@ const UnitDetailsCard = ({
   }, [interval]);
 
   const getUnitArmyMax = useMemo(() => {
-    console.log('🚀 ~ getUnitArmyMax ~ interval:', interval);
     let currentMax: string | undefined = '';
     if (unit.armyMax) {
       return (currentMax = unit.armyMax.toString());

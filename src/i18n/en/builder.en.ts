@@ -49,5 +49,6 @@ export default {
 	Export: "Export",
 	DeleteArmy: "Delete Army",
 	BuilderPointsRestrictions: "Your required unit restrictions will be set to this limit",
-	BuilderDefaultPointsRestrictions: "The points limit will increase and decrease as you add more units. This is the default behavior."
+	BuilderDefaultPointsRestrictions: "The points limit will increase and decrease as you add more units. This is the default behavior.",
+	PlayersNeedToAgreeOnUsingRegimentsOfRenownMessage: "Players need to agree on using Regiments of Renown before a battle."
 };

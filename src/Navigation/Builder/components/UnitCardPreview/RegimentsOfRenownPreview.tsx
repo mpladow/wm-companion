@@ -3,21 +3,25 @@ import UnitIcon from '@components/UnitCards/UnitIcon';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useTheme } from '@hooks/useTheme';
 import { sanitizeText } from '@navigation/Builder/utils/builderHelpers';
-import { UnitProps } from '@utils/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import StatContainer from './StatContainer';
 const unitPreviewBackground = require('../../../../../assets/images/wm-bg2.jpeg');
 
-type UnitPreviewProps = {
+type RegimentsOfRenownPreviewProps = {
   handleSetVisible: (visible: boolean) => void;
   visible: boolean;
-  selectedUnitDetails: UnitProps;
+  selectedUnitDetails: RegimentOfRenownUnitReferenceType;
 };
-const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPreviewProps) => {
+const RegimentsOfRenownPreview = ({
+  handleSetVisible,
+  visible,
+  selectedUnitDetails,
+}: RegimentsOfRenownPreviewProps) => {
   const { theme } = useTheme();
   const { t } = useTranslation(['common', 'builder']);
 
@@ -144,6 +148,14 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
                   </View>
                 </View>
               </View>
+              <View style={{ zIndex: 99, paddingHorizontal: 16 }}>
+                <Text italic style={{ color: theme.text }}>
+                  "{selectedUnitDetails.quoteOne}"
+                </Text>
+                <Text style={{ color: theme.text, marginLeft: 20 }}>
+                  - {selectedUnitDetails.quoteOneAuthor}
+                </Text>
+              </View>
             </ImageBackground>
           </View>
           <View
@@ -166,41 +178,11 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
               <Text italic variant="heading3" style={{ fontSize: 16, color: theme.blueGrey }}>
                 Selection Limits
               </Text>
-              {renderArmyMinMaxText ? (
-                <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
-                  Only {selectedUnitDetails.armyMax} can exist in a list.
-                </Text>
-              ) : null}
-              {!renderArmyMinMaxText && selectedUnitDetails.armyMin ? (
-                <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
-                  A minimum of {selectedUnitDetails.armyMax} is required in a list.
-                </Text>
-              ) : null}
-              {selectedUnitDetails.min ? (
-                <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
-                  A minimum of {selectedUnitDetails.min} is required per 1000 points
-                </Text>
-              ) : null}
-              {selectedUnitDetails.max ? (
-                <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
-                  A maximum of {selectedUnitDetails.max} is permitted per 1000 points
-                </Text>
-              ) : null}
-              {selectedUnitDetails.min == null &&
-              selectedUnitDetails.max == null &&
-              selectedUnitDetails.armyMax == null &&
-              selectedUnitDetails.armyMin == null ? (
-                <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
-                  You can select as many as you want.
-                </Text>
-              ) : null}
-              {selectedUnitDetails.requiredUnits !== null
-                ? selectedUnitDetails.requiredUnits?.map((item) => (
-                    <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
-                      A/An {item} must also be in this list to include this unit.
-                    </Text>
-                  ))
-                : null}
+              <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
+                Count as one highest point value limited infantry type unit. If not available,
+                hiring does not restrict taking other units. Count as 1 of any monster type in Tomb
+                Kings army. Lost Legion can not be hired together with Tichi- Huichi‘s Raiders.
+              </Text>
             </View>
           </View>
           <View
@@ -296,7 +278,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
                       return (
                         <View key={index} style={{ marginBottom: 8 }}>
                           <Text style={{ color: theme.text }}>
-                            {index == 0 && x.label && rule !== '' && <Text bold>{x.label}: </Text>}
+                            {index == 0 && x.label && <Text bold>{x.label}: </Text>}
                             {sanitized}
                           </Text>
                         </View>
@@ -313,7 +295,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
   );
 };
 
-export default UnitPreview;
+export default RegimentsOfRenownPreview;
 const styles = StyleSheet.create({
   image: {
     flex: 1,

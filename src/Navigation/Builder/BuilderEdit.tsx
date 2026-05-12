@@ -24,9 +24,11 @@ import {
 	View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import ArmyPointsCount from './components/ArmyPointsCount';
 import CollapsibleComponent from './components/Collapsible';
 import SpecialRulesCollapsible from './components/SpecialRulesCollapsible';
+import RegimentsOfRenownPreview from './components/UnitCardPreview/RegimentsOfRenownPreview';
 import UnitPreview from './components/UnitCardPreview/UnitPreview';
 import UnitDetailsCard from './components/UnitDetailsCard';
 import UpgradePreview from './components/UpgradePreview';
@@ -71,14 +73,20 @@ const BuilderEdit = ({ navigation }: any) => {
   const [currentPoints, setCurrentPoints] = useState(0);
   const [totalPoints, setTotalPoints] = useState(1000); // this state will update itself as the current points exceeds the previous value
   const [factionUnits, setFactionUnits] = useState<UnitProps[] | undefined>(); //TODO: we NEED to strongly type this data
+  const [regimentsOfRenown, setRegimentsOfRenown] = useState<RegimentOfRenownUnitReferenceType[]>();
   const [showFactionInfo, setShowFactionInfo] = useState(false);
   const [selectedUnitDetails, setSelectedUnitDetails] = useState<UnitProps>();
+  const [selectedRoRDetails, setSelectedRoRDetails] = useState<RegimentOfRenownUnitReferenceType>();
   const [currentUpgradeDetails, setCurrentUpgradeDetails] = useState<UpgradesProps | undefined>();
   const [showSpells, setShowSpells] = useState(false);
 
   const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
 
-  const { getFactionUnitsByVersion } = useFactionUnits();
+  const {
+    getFactionUnitsByVersion,
+    getRegimentsOfRenownForFaction,
+    getRegimentsOfRenownFactionData,
+  } = useFactionUnits();
   const [showPopover, setShowPopover] = useState(false);
   useLayoutEffect(() => {
     const factionListData = getFactionUnitsByVersion(
@@ -86,6 +94,8 @@ const BuilderEdit = ({ navigation }: any) => {
       builder.selectedArmyList?.versionNumber,
     );
     setFactionUnits(factionListData?.factionList?.units);
+    const RoRData = getRegimentsOfRenownForFaction(builder.selectedArmyList?.faction);
+    setRegimentsOfRenown(RoRData);
     // get all units for selected army list
     if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
       navigation.setOptions({
@@ -178,29 +188,33 @@ const BuilderEdit = ({ navigation }: any) => {
     const rawUnitData = factionUnits?.find((x) => x.name == unitName);
     let _unit = Object.assign({}, rawUnitData);
     _unit.specialRules = [];
-    if (_unit) {
+    if (rawUnitData) {
       if (builder.factionDetails?.specialRules && _unit?.name) {
         //@ts-ignore - TODO: need to check typing
         const _specialRulesForUnit = builder.factionDetails?.specialRules[unitName];
         const _allGenericSpecialRules = getGenericSpecialRules();
+        if (_specialRulesForUnit) {
+          if (_specialRulesForUnit.text && _specialRulesForUnit.text != '') {
+            _unit.specialRules.push({ ..._specialRulesForUnit, label: _unit.name });
+          } else {
+            _unit.specialRules.push(_specialRulesForUnit);
+          }
+        }
         //@ts-ignore
         const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
-        if (_specialRulesForUnit) {
-          if (_specialRulesForUnit.text) _unit.specialRules.push(_specialRulesForUnit);
-          // setSpecialRules(_specialRules);
-        }
+
         if (_genericSpecialRulesExist != undefined) {
-          _unit.specialRules.push(_genericSpecialRulesExist);
+          _unit.specialRules.push({ ..._genericSpecialRulesExist, label: unitName });
         }
         if (rawUnitData?.specialRules && rawUnitData.specialRules?.length > 0) {
           rawUnitData.specialRules?.map((x) => {
             if (builder.factionDetails?.specialRules) {
               const specialRule = builder.factionDetails?.specialRules[x];
-              _unit.specialRules?.push(specialRule);
+              _unit.specialRules?.push({ ...specialRule, label: x });
             }
             const genericSpecialRuleFound = _allGenericSpecialRules[x];
             if (genericSpecialRuleFound) {
-              _unit.specialRules?.push(genericSpecialRuleFound);
+              _unit.specialRules?.push({ ...genericSpecialRuleFound, label: _unit.name });
             }
           });
         }
@@ -209,14 +223,55 @@ const BuilderEdit = ({ navigation }: any) => {
       setSelectedUnitDetails(_unit);
       setUnitPreviewVisible(true);
     } else {
-      console.error(`UNIT NOT FOUND for ${unitName}`);
+      // find details for RoR unit
+      const rawUnitData = regimentsOfRenown?.find((x) => x.name == unitName);
+      let _unit = Object.assign({}, rawUnitData);
+      _unit.specialRules = [];
+      if (_unit) {
+        if (regimentsOfRenown && _unit?.name) {
+          // get special rules for units name.
+          //@ts-ignore - TODO: need to check typing
+          const data = getRegimentsOfRenownFactionData();
+          const _specialRulesForUnit = data?.specialRules[unitName];
+          const _allGenericSpecialRules = getGenericSpecialRules();
+          //@ts-ignore
+          const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
+          if (_specialRulesForUnit) {
+            if (_specialRulesForUnit.text && _specialRulesForUnit.text != '') {
+              _unit.specialRules.push({ ..._specialRulesForUnit, label: _unit.name });
+            } else {
+              _unit.specialRules.push(_specialRulesForUnit);
+            }
+            // setSpecialRules(_specialRules);
+          }
+          if (_genericSpecialRulesExist != undefined) {
+            _unit.specialRules.push(_genericSpecialRulesExist);
+          }
+          if (rawUnitData?.specialRules && rawUnitData.specialRules?.length > 0) {
+            rawUnitData.specialRules?.map((x) => {
+              if (data?.specialRules) {
+                const specialRule = data?.specialRules[x];
+                _unit.specialRules?.push({ ...specialRule, label: x });
+              }
+              const genericSpecialRuleFound = _allGenericSpecialRules[x];
+              if (genericSpecialRuleFound && genericSpecialRuleFound !== '') {
+                _unit.specialRules?.push({ ...genericSpecialRuleFound, label: _unit.name });
+              } else {
+                _unit.specialRules?.push(genericSpecialRuleFound);
+              }
+            });
+          }
+        }
+        setSelectedRoRDetails(_unit);
+        setUnitPreviewVisible(true);
+      }
     }
   };
   const getUnitDetailsByUnitName = (unitName: string) => {
     const rawUnitData = factionUnits?.find((x) => x.name == unitName);
     let _unit = Object.assign({}, rawUnitData);
 
-    if (_unit) {
+    if (rawUnitData) {
       if (builder.factionDetails?.specialRules && _unit?.name) {
         const _specialRules = builder.factionDetails?.specialRules[unitName];
         const _allGenericSpecialRules = getGenericSpecialRules();
@@ -243,7 +298,46 @@ const BuilderEdit = ({ navigation }: any) => {
         return _unitAdditionalDate;
       }
     } else {
-      console.error(`UNIT NOT FOUND for ${unitName}`);
+      // find details for RoR unit
+      const rawUnitData = regimentsOfRenown?.find((x) => x.name == unitName);
+      let _unit = Object.assign({}, rawUnitData);
+      _unit.specialRules = [];
+      if (_unit) {
+        if (regimentsOfRenown && _unit?.name) {
+          // get special rules for units name.
+          //@ts-ignore - TODO: need to check typing
+          const data = getRegimentsOfRenownFactionData();
+          const _specialRulesForUnit = data?.specialRules[unitName];
+          const _allGenericSpecialRules = getGenericSpecialRules();
+          //@ts-ignore
+          const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
+          if (_specialRulesForUnit) {
+            if (_specialRulesForUnit.text && _specialRulesForUnit.text != '') {
+              _unit.specialRules.push({ ..._specialRulesForUnit, label: _unit.name });
+            } else {
+              _unit.specialRules.push(_specialRulesForUnit);
+            }
+            // setSpecialRules(_specialRules);
+          }
+          if (_genericSpecialRulesExist != undefined) {
+            _unit.specialRules.push(_genericSpecialRulesExist);
+          }
+          if (rawUnitData?.specialRules && rawUnitData.specialRules?.length > 0) {
+            rawUnitData.specialRules?.map((x) => {
+              if (data?.specialRules) {
+                const specialRule = data?.specialRules[x];
+                _unit.specialRules?.push({ ...specialRule, label: x });
+              }
+              const genericSpecialRuleFound = _allGenericSpecialRules[x];
+              if (genericSpecialRuleFound && genericSpecialRuleFound !== '') {
+                _unit.specialRules?.push({ ...genericSpecialRuleFound, label: _unit.name });
+              } else {
+                _unit.specialRules?.push(genericSpecialRuleFound);
+              }
+            });
+          }
+        }
+      }
     }
   };
   const handleOnUpgradePress = (upgradeName: string) => {
@@ -412,6 +506,9 @@ const BuilderEdit = ({ navigation }: any) => {
           renderItem={({ item, index }) => {
             // get total unit count
             const unitDetails = factionUnits?.find((x) => x.name == item.unitName);
+            const regimentOfRenown = getRegimentsOfRenownForFaction().find(
+              (x) => x.name == item.unitName,
+            );
             if (unitDetails) {
               return (
                 <>
@@ -427,6 +524,36 @@ const BuilderEdit = ({ navigation }: any) => {
                       navigation.navigate('AddItem', {
                         unitName: item.unitName,
                         unitType: unitDetails.type,
+                      })
+                    }
+                    onRemoveUpgrade={handleRemoveUpgrade}
+                    onUnitCardPress={handleOnUnitCardPress}
+                    onUpgradePress={handleOnUpgradePress}
+                    currentArmyCount={builder.calculateCurrentArmyPoints()}
+                    hasError={
+                      builder.armyErrors.findIndex((x) => x.sourceName == item.unitName) > -1
+                    }
+                    unitDetailsExpanded={getUnitDetailsByUnitName(item.unitName)}
+                    showStatline={settings.showStatline}
+                    pointsLimit={builder.selectedArmyList?.pointsLimit}
+                  />
+                </>
+              );
+            } else if (regimentOfRenown) {
+              return (
+                <>
+                  <UnitDetailsCard
+                    key={`unitDetails_${item.id}`}
+                    existingUnits={item.currentCount}
+                    unit={regimentOfRenown}
+                    unitUpgrades={item.attachedItems}
+                    onShowUnitDetails={() => console.log('showUnitDetails')}
+                    onAddUnit={handleAddUnitToArmyPress}
+                    onDeleteUnit={() => handleRemoveUnit(item.id)}
+                    onAddUpgrade={() =>
+                      navigation.navigate('AddItem', {
+                        unitName: item.unitName,
+                        unitType: regimentOfRenown.type,
                       })
                     }
                     onRemoveUpgrade={handleRemoveUpgrade}
@@ -513,10 +640,20 @@ const BuilderEdit = ({ navigation }: any) => {
         {selectedUnitDetails ? (
           <UnitPreview
             handleSetVisible={() => {
+              setSelectedUnitDetails(undefined);
               return setUnitPreviewVisible(!unitPreviewVisible);
             }}
             visible={unitPreviewVisible}
             selectedUnitDetails={selectedUnitDetails}
+          />
+        ) : selectedRoRDetails ? (
+          <RegimentsOfRenownPreview
+            handleSetVisible={() => {
+              setSelectedUnitDetails(undefined);
+              return setUnitPreviewVisible(!unitPreviewVisible);
+            }}
+            visible={unitPreviewVisible}
+            selectedUnitDetails={selectedRoRDetails}
           />
         ) : null}
 

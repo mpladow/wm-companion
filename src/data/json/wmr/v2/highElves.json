@@ -191,9 +191,6 @@
         "Dragons can make a fiery breath. This applies both to a unit of Dragon Riders and to Dragons ridden by characters that have joined a unit of troops. Dragon fire works as follows. The fire breath has a range of 20cm. Breath can be directed against one target as for normal shooting and has 3 Attacks that are worked out in the usual way at 4+ to hit."
       ]
     },
-    "Elven Bolt Thrower": {
-      "order": 4
-    },
     "Wizard": {
       "order": 5,
       "text": [

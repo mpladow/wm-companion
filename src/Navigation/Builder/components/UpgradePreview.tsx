@@ -32,7 +32,6 @@ const UpgradePreview = ({
   );
 
   useEffect(() => {
-    console.log('🚀 ~ BuilderEdit ~ unitPreviewVisible:', visible);
     if (visible) {
       bottomSheetRef.current?.present();
     } else {

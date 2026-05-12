@@ -1,5 +1,6 @@
-import arabyListv2 from "./araby.json";
+import { ArmyReferenceType, RegimentOfRenownArmyReferenceType } from "src/types/data/army";
 import albionListv2 from "./albion.json";
+import arabyListv2 from "./araby.json";
 import beastmenListv2 from "./beastmen.json";
 import bretonianListv2 from "./bretonnian.json";
 import cathayListV2 from "./cathay.json";
@@ -18,12 +19,12 @@ import nipponListV2 from "./nippon.json";
 import norseListV2 from "./norse.json";
 import ogresListV2 from "./ogres.json";
 import orcsListV2 from "./orks.json";
+import regimentsOfRenownList from "./regimentsofrenown.json";
 import skavenListV2 from "./skaven.json";
-import vampireCountsListV2 from "./vampireCounts.json";
-import woodElvesListV2 from "./woodElves.json";
 import tombKingsListV2 from "./tombKings.json";
-import witchHuntersListV2 from "./witchHunters.json"
-import { ArmyReferenceType } from "src/types/data/army";
+import vampireCountsListV2 from "./vampireCounts.json";
+import witchHuntersListV2 from "./witchHunters.json";
+import woodElvesListV2 from "./woodElves.json";
 
 export const wmrArmiesV2: ArmyReferenceType[] = [
 	arabyListv2,
@@ -50,5 +51,8 @@ export const wmrArmiesV2: ArmyReferenceType[] = [
 	vampireCountsListV2,
 	woodElvesListV2,
 	tombKingsListV2,
-	witchHuntersListV2
-];
+	witchHuntersListV2];
+
+export const regimentsOfReknownListV1: RegimentOfRenownArmyReferenceType[] = [
+	regimentsOfRenownList
+]

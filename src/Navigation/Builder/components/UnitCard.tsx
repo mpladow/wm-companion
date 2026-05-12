@@ -90,9 +90,7 @@ const UnitCard = ({
             flexDirection: 'row',
           }}>
           <View style={{ padding: 8, flexDirection: 'row' }}>
-            <Text>
-              {unit.armyMin ? unit.armyMax : unit.min} / {getUnitArmyMax()}
-            </Text>
+            <Text>Max 1</Text>
           </View>
           <TouchableOpacity
             onPress={() =>

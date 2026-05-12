@@ -1,5 +1,5 @@
-import { wmrArmiesV2 } from "src/data/json/wmr/v2/_armies";
-import { ArmyReferenceType } from "src/types/data/army";
+import { regimentsOfReknownListV1, wmrArmiesV2 } from "src/data/json/wmr/v2/_armies";
+import { ArmyReferenceType, RegimentOfRenownUnitReferenceType } from "src/types/data/army";
 import albionList from "../data/json/wmr/albion.json";
 import arabyList from "../data/json/wmr/araby.json";
 import beastmenList from "../data/json/wmr/beastmen.json";
@@ -28,6 +28,28 @@ import woodElvesList from "../data/json/wmr/woodElves.json";
 import { Factions } from "./constants";
 
 export const useFactionUnits = () => {
+	const getRegimentsOfRenownUnitsForFaction = (factionSelection?: number) => {
+		const regimentsOfRenownPermittedList: RegimentOfRenownUnitReferenceType[] = [];
+		const regimentsOfRenownList = regimentsOfReknownListV1.find((a => a.name == "Regiments_of_Renown"));
+		if (regimentsOfRenownList) {
+			if (factionSelection == undefined) {
+				return regimentsOfRenownList.units;
+			}
+			// iterate over all units and check the forbiddenFactions array and ensure this factionSelection is not included.
+			regimentsOfRenownList.units.forEach((item, index) => {
+				const unitIsForbiddenFromFaction = item.forbiddenFactions.includes(Factions[factionSelection])
+				if (!unitIsForbiddenFromFaction) {
+					regimentsOfRenownPermittedList.push(item);
+				}
+			})
+		}
+		return regimentsOfRenownPermittedList;
+	}
+
+	const getRegimentsOfRenownFactionData = () => {
+		return regimentsOfReknownListV1.find((a => a.name == "Regiments_of_Renown"));
+
+	}
 	const getFactionUnitsByVersion = (factionSelection: number, version?: number) => {
 		let list: any[] = [];
 		let factionList: ArmyReferenceType = {} as ArmyReferenceType;
@@ -211,5 +233,5 @@ export const useFactionUnits = () => {
 		return { ddFactionUnits: ddFactionUnits, factionList: factionList, description: description };
 	};
 
-	return { getFactionUnitsByVersion };
+	return { getFactionUnitsByVersion, getRegimentsOfRenownForFaction: getRegimentsOfRenownUnitsForFaction, getRegimentsOfRenownFactionData };
 };

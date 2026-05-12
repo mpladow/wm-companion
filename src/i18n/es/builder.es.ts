@@ -42,5 +42,7 @@ export default {
 	Export: "Exportar",
 	ArmyNotes: "Notas del ejército",
 	BuilderPointsRestrictions: "Las restricciones de unidades requeridas se establecerán en este límite.",
-	BuilderDefaultPointsRestrictions: "El límite de puntos aumentará y disminuirá a medida que agregue más unidades. Este es el comportamiento predeterminado."
+	BuilderDefaultPointsRestrictions: "El límite de puntos aumentará y disminuirá a medida que agregue más unidades. Este es el comportamiento predeterminado.",
+	PlayersNeedToAgreeOnUsingRegimentsOfRenownMessage: "Los jugadores deben acordar el uso de Regimientos de Renombre antes de una batalla."
+
 };

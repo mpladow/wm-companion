@@ -130,7 +130,6 @@ const BuilderHome = () => {
   const onArmyListDeletePress = (armyId: string) => {
     setFocusedArmyId(armyId);
     setTimeout(() => {
-      console.log('🚀 ~ onArmyListDeletePress ~ armyId:', armyId);
       setConfirmDialog(true);
     }, 500);
   };
