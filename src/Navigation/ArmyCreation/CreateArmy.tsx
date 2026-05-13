@@ -143,7 +143,6 @@ const CreateArmy = () => {
           }}
           renderItem={({ item, index }) => {
             const armyName = item.value ? getKeyByValue(Factions, item?.value as number) : '';
-
             const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
             return (
               <TouchableOpacity

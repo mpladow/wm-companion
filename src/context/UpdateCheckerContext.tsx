@@ -1,10 +1,9 @@
 import { useChangeLogs } from "@hooks/getChangelogs";
-import { createContext, useContext, useEffect, useState } from "react";
-import Constants from "expo-constants";
-import { ChangeLog } from "src/types/data/changelog";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+import { createContext, useContext, useEffect, useState } from "react";
 import { CHANGE_LOG_DISMISSED } from "src/constants/persistenceKeys";
-import { current } from "immer";
+import { ChangeLog } from "src/types/data/changelog";
 
 type UpdateCheckerContextType = {
 	changelog?: ChangeLog;
@@ -26,7 +25,6 @@ export const UpdateCheckerContextProvider = ({ children }: { children: React.Rea
 	// on load, check local storage for whether changelog has already been dismissed
 	useEffect(() => {
 		setIsReady(false);
-		console.log("🚀 ~ useEffect ~ getStorageItems:");
 
 		getStorageItems();
 	}, [version]);
@@ -49,24 +47,6 @@ export const UpdateCheckerContextProvider = ({ children }: { children: React.Rea
 			});
 		}
 	};
-
-	// useEffect(() => {
-	// 	console.log("🚀 ~ useEffect ~ changelog:", changelog);
-	// 	if (changelog) {
-	// 		getRecentCLDismissed().then((res) => {
-	// 			console.log("🚀 ~ getRecentCLDismissed ~ res:", res);
-	// 			if (res) {
-	// 				const resObj = JSON.parse(res);
-	// 				setChangelogDismissed(resObj);
-	// 			}
-	// 			const currentCLVersion = changelog?.version;
-	// 			const currentLogDismissed = currentCLVersion !== res;
-	// 			console.log("🚀 ~ getRecentCLDismissed ~ currentCLVersion:", currentCLVersion);
-	// 			console.log("🚀 ~ getRecentCLDismissed ~ res:", res);
-	// 			setShowChangeLog(currentLogDismissed);
-	// 		});
-	// 	}
-	// }, [changelog]);
 
 	// if dismissed is false AND current version has a change log, then show cl
 	const dismissChangeLog = () => {

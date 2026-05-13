@@ -4,9 +4,9 @@ import { StyleSheet } from 'react-native';
 import { IconImageProps } from './types';
 import UnitIconContainer from './UnitIconContainer';
 
-const Archery = ({ size, color }: IconImageProps) => {
+const Archery = ({ size, color, isUnique }: IconImageProps) => {
   return (
-    <UnitIconContainer isLeader={false}>
+    <UnitIconContainer isLeader={false} isUnique={isUnique}>
       <MaterialCommunityIcons name="bow-arrow" size={size} color={color} />
     </UnitIconContainer>
   );

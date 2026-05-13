@@ -5,9 +5,9 @@ import { IconImageProps } from "./types";
 import UnitIconContainer from './UnitIconContainer';
 
 
-const Cavalry = ({ size = 20, color = "black" }: IconImageProps) => {
+const Cavalry = ({ size = 20, color = "black", isUnique = false }: IconImageProps) => {
 	return (
-		<UnitIconContainer isLeader={false}		>
+		<UnitIconContainer isLeader={false} isUnique={isUnique}>
 			<MaterialCommunityIcons name='horse-variant' size={size} color={color} />
 		</UnitIconContainer>
 	);

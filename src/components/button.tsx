@@ -14,7 +14,7 @@ type variant =
   | 'outline-light'
   | 'navigation-button';
 export type size = 'sm' | 'lg';
-type buttonProps = {
+export type buttonProps = {
   onPress: () => void;
   style?: any;
   variant: variant;
@@ -35,7 +35,7 @@ const Button = ({ children, onPress, variant, circle, disabled, size, style }: b
       case 'confirm':
         return { backgroundColor: theme.warning, color: theme.black };
       case 'danger':
-        return { backgroundColor: 'red' };
+        return { backgroundColor: theme.danger };
       case 'warning':
         return { backgroundColor: theme.warning };
       case 'secondary':

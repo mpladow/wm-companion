@@ -41,7 +41,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Orcs":
 			return [require("../../assets/images/wm-orcs.jpg")];
 		case "Tomb_Kings":
-			return [require("../../assets/images/wm-tombkings-default.png")];
+			return [require("../../assets/images/wm-tombkings.png")];
 
 		case "Empire":
 			return [require("../../assets/images/wm-empire2.jpeg")];

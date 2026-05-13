@@ -1,8 +1,17 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-type UnitIconContainerProps = { isLeader: boolean } & PropsWithChildren;
-const UnitIconContainer = ({ isLeader, children }: UnitIconContainerProps) => {
+type UnitIconContainerProps = { isLeader: boolean; isUnique?: boolean } & PropsWithChildren;
+const UnitIconContainer = ({ isLeader, isUnique = false, children }: UnitIconContainerProps) => {
+  const backgroundColor = useMemo(() => {
+    if (isLeader) {
+      return '#fabb0c';
+    }
+    if (isUnique) {
+      return '#a5b6e2';
+    }
+    return '#e3d9bc';
+  }, []);
   return (
     <View
       style={{
@@ -12,7 +21,7 @@ const UnitIconContainer = ({ isLeader, children }: UnitIconContainerProps) => {
         height: 36,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: isLeader ? '#fabb0c' : '#e3d9bc',
+        backgroundColor: backgroundColor,
         padding: 0,
       }}>
       {children}

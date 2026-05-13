@@ -5,7 +5,7 @@ import { Entypo } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { PointsLimitType } from '@navigation/ArmyCreation/EditArmy';
 import { UnitProps } from '@utils/types';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { get1000PointInterval } from '../utils/builderHelpers';
 
@@ -19,11 +19,13 @@ type UnitCardProps = {
     maxCount?: number,
     minCount?: number,
     ignoreBreakPoint?: boolean,
+    isUnique?: boolean,
   ) => void;
   currentCount?: number; // get current count of units in army
   onUnitCardPress: (unitName: string) => void;
   currentArmyCount: number;
   pointsLimit?: PointsLimitType;
+  isUnique?: boolean;
 };
 const UnitCard = ({
   unit,
@@ -33,6 +35,7 @@ const UnitCard = ({
   currentArmyCount,
   onUnitCardPress,
   pointsLimit,
+  isUnique,
 }: UnitCardProps) => {
   const { theme } = useTheme();
 
@@ -41,16 +44,38 @@ const UnitCard = ({
       pointsLimit != undefined ? parseInt(pointsLimit) : currentArmyCount,
     );
     let currentMax: string | undefined = '';
+    console.log('🚀 ~ getUnitArmyMax ~ unit.armyMax:', unit.armyMax);
     if (unit.armyMax) {
       currentMax = unit.armyMax.toString();
-    }
-    if (unit.max) {
+    } else if (unit.max) {
       currentMax = (unit.max * interval).toString();
     } else {
       currentMax = '-';
     }
     return currentMax;
   };
+
+  const getUnitArmyMin = () => {
+    const interval = get1000PointInterval(
+      pointsLimit != undefined ? parseInt(pointsLimit) : currentArmyCount,
+    );
+    let currentMin: string | undefined = '';
+    if (unit.armyMin) {
+      currentMin = unit.armyMin.toString();
+    } else if (unit.min) {
+      currentMin = (unit.min * interval).toString();
+    } else {
+      currentMin = '-';
+    }
+    return currentMin;
+  };
+
+  const totalUnitsCount = useMemo(() => {
+    if (unit.armyMin == undefined && unit.armyMax) {
+      return `Max ${unit.armyMax}`;
+    }
+    return `${getUnitArmyMin()} / ${getUnitArmyMax()}`;
+  }, []);
   return (
     <Pressable
       onPress={() => onUnitCardPress(unit.name)}
@@ -69,6 +94,7 @@ const UnitCard = ({
           type={unit.type}
           canShoot={unit.range == undefined ? false : true}
           size={'large'}
+          isUnique={isUnique ?? false}
         />
       </View>
       <View style={{ flex: 2 }}>
@@ -90,7 +116,7 @@ const UnitCard = ({
             flexDirection: 'row',
           }}>
           <View style={{ padding: 8, flexDirection: 'row' }}>
-            <Text>Max 1</Text>
+            <Text>{totalUnitsCount}</Text>
           </View>
           <TouchableOpacity
             onPress={() =>

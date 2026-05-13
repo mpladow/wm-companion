@@ -269,6 +269,7 @@ const AddRegimentsOfRenown = () => {
                     ? parseInt(builder.selectedArmyList?.pointsLimit)
                     : builder.calculateCurrentArmyPoints()
                 }
+					 isUnique
               />
             );
           }}

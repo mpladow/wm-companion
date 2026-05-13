@@ -39,6 +39,7 @@ type UnitCardDetailsProps = {
   unitDetailsExpanded: UnitProps | undefined;
   showStatline: boolean;
   pointsLimit?: PointsLimitType;
+  isUnique?: boolean;
 };
 const UnitDetailsCard = ({
   unit,
@@ -57,6 +58,7 @@ const UnitDetailsCard = ({
   unitDetailsExpanded,
   showStatline,
   pointsLimit,
+  isUnique,
 }: UnitCardDetailsProps) => {
   const { theme } = useTheme();
   const { t } = useTranslation(['common', 'builder']);
@@ -121,7 +123,11 @@ const UnitDetailsCard = ({
           <TouchableOpacity onPress={() => onUnitCardPress(unit.name)}>
             <View style={{ flex: 3, flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ marginRight: 8 }}>
-                <UnitIcon type={unit.type} canShoot={unit.range == undefined ? false : true} />
+                <UnitIcon
+                  type={unit.type}
+                  canShoot={unit.range == undefined ? false : true}
+                  isUnique={isUnique} // lets change this in the ffutre.....
+                />
               </View>
               <AnimatedView animate={triggerScale}>
                 <Text bold variant="heading3" style={{ fontSize: 18 }}>

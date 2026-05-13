@@ -141,6 +141,7 @@ const RegimentsOfRenownPreview = ({
                       size={'large'}
                       type={selectedUnitDetails.type}
                       canShoot={selectedUnitDetails.range == undefined ? false : true}
+                      isUnique={selectedUnitDetails.quoteOneAuthor !== null} // lets change this in the ffutre.....
                     />
                     <Text bold style={{ fontSize: 16 }}>
                       {selectedUnitDetails.type}

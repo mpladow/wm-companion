@@ -321,6 +321,7 @@ const BuilderHome = () => {
         visible={confirmDialog}
         onSubmit={handleDeleteConfirm}
         submitText={'Delete Army'}
+		  variant="danger"
       />
     </SafeAreaView>
   );

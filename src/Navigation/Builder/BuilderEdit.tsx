@@ -566,6 +566,7 @@ const BuilderEdit = ({ navigation }: any) => {
                     unitDetailsExpanded={getUnitDetailsByUnitName(item.unitName)}
                     showStatline={settings.showStatline}
                     pointsLimit={builder.selectedArmyList?.pointsLimit}
+                    isUnique={true}
                   />
                 </>
               );
