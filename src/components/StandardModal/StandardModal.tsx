@@ -31,7 +31,7 @@ const StandardModal = ({
         <View style={styles.modalOverlay} onTouchStart={onCancel}></View>
         <View
           style={{
-            marginTop: Dimensions.get('screen').height / 3,
+            marginTop: Dimensions.get('screen').height / 4,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: theme.blueGrey,

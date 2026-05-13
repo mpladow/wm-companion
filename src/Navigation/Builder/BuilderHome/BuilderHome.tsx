@@ -23,6 +23,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from 'react-native-toast-notifications';
+import { sanitizeText } from '../utils/builderHelpers';
 import AddArmyButton from './components/AddArmyButton';
 import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
 
@@ -175,6 +176,7 @@ const BuilderHome = () => {
   const handleFilterChange = (newFilter: ArmyListFilters, section: ListSections) => {
     if (section == 'main') {
       setFilterMain((filters) => {
+        r;
         if (filters.find((x) => x == newFilter)) {
           return filters.filter((x) => x !== newFilter);
         } else {
@@ -216,7 +218,11 @@ const BuilderHome = () => {
                 style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
                 {x.title}
               </Text>
-              {x.description && x.description?.map((d) => <Text>{d}</Text>)}
+              {x.description &&
+                x.description?.map((d) => {
+                  const sanitized = sanitizeText(d, theme.text);
+                  return <Text style={{ color: theme.text }}>{sanitized}</Text>;
+                })}
             </TextBlock>
           );
         })}
@@ -299,7 +305,7 @@ const BuilderHome = () => {
         heading={t('ArmyNotes', { ns: 'builder' })}
         onCancel={() => setShowArmyNotes(false)}
       />
-      {/* <StandardModal
+      <StandardModal
         content={generateContent()}
         heading={
           changelog
@@ -310,7 +316,7 @@ const BuilderHome = () => {
         visible={showChangeLogModal}
         onSubmit={handleDismissModal}
         submitText={'Understood!'}
-      /> */}
+      />
       <StandardModal
         content={<Text>Are you sure you want to delete this army?</Text>}
         heading={`Delete army`}
@@ -321,7 +327,7 @@ const BuilderHome = () => {
         visible={confirmDialog}
         onSubmit={handleDeleteConfirm}
         submitText={'Delete Army'}
-		  variant="danger"
+        variant="danger"
       />
     </SafeAreaView>
   );
