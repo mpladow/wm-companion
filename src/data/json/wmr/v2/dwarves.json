@@ -21,7 +21,7 @@
       "size": 3,
       "points": 110,
       "min": 2,
-      "upgrades": ["Handgunners"]
+      "upgrades": ["Replace with Handgunners"]
     },
     {
       "name": "Handgunners",
@@ -150,7 +150,7 @@
       "armyMax": 1
     },
     {
-      "name": "Handgunners",
+      "name": "Replace with Handgunners",
       "order": 1,
       "type": "Special",
       "attack": "3/1",
@@ -159,7 +159,8 @@
       "armour": "6+",
       "size": 3,
       "points": "-20",
-      "max": 1
+      "max": 1,
+      "replacesUnit": true
     },
     {
       "name": "Oathstone",
@@ -171,6 +172,12 @@
   ],
   "magic": true,
   "specialRules": {
+    "Replace with Handgunners": {
+      "text": [
+        "One unit of Crossbowmen per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Crossbowmen min/max value.",
+        "*Select the Handgunners upgrade option in a Crossbow unit to replace unit with Handgunners*"
+      ]
+    },
     "Handgunners": {
       "order": 1,
       "text": [
@@ -190,7 +197,7 @@
         "If the infiltration order is failed the unit is not deployed and cannot infiltrate that turn, it can attempt to infiltrate in a subsequent turn at the same or a different place.",
         "----",
         "Although they are infantry the exceptional mobility of Dwarf Rangers means that they can pursue any type of retreating enemy.",
-		  "----",
+        "----",
         "Rangers do not suffer the -1 Command penalty for Dense Terrain."
       ]
     },

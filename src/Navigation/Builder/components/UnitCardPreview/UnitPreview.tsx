@@ -115,15 +115,6 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
                     }}>
                     {selectedUnitDetails.name}
                   </Text>
-                  <Text
-                    variant="heading3"
-                    style={{
-                      fontSize: 16,
-                      color: theme.white,
-                      zIndex: 9999,
-                    }}>
-                    Bases: {selectedUnitDetails.size}
-                  </Text>
                 </View>
                 <View style={{ justifyContent: 'flex-end' }}>
                   <View
@@ -152,7 +143,7 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
               backgroundColor: theme.white,
               marginHorizontal: 12,
               paddingVertical: 12,
-              paddingHorizontal: 8,
+              paddingHorizontal: 4,
               borderRadius: 12,
             }}>
             <View

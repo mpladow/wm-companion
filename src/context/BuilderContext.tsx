@@ -31,6 +31,7 @@ export type SelectedUpgradesProps = {
   maxCount?: number;
   armyLimitMaxCount?: number; // hard limit
   addOnUpgrades?: string[];
+  replacesUnit?: boolean;
 };
 export type SelectedUnitProps = {
   id: string;
@@ -103,6 +104,7 @@ interface BuilderContextInterface {
     maxCount?: number,
     armyLimitMaxCount?: number,
     addOnUpgrades?: string[],
+    replacesUnit?: boolean,
   ) => void;
   removeItem: (unitName: string, upgradeId: string) => void;
   updateUserArmyLists: () => void;
@@ -508,6 +510,7 @@ export const BuilderContextProvider = ({ children }: any) => {
     maxCount?: number,
     armyLimitMaxCount?: number,
     addOnUpgrades?: string[],
+    replacesUnit?: boolean,
   ) => {
     const newUpgrade: SelectedUpgradesProps = {
       id: uuid(),
@@ -519,6 +522,7 @@ export const BuilderContextProvider = ({ children }: any) => {
       maxCount: maxCount,
       armyLimitMaxCount: armyLimitMaxCount,
       addOnUpgrades: addOnUpgrades,
+      replacesUnit: replacesUnit,
     };
 
     setCurrentArmyList(
@@ -704,7 +708,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         });
       }
     }
-
+    const unitsThatHaveItemsThatReplaceUnits: SelectedUpgradesProps[] = [];
     // check that allocated items don't exceed number of units
     currentArmyList?.selectedUnits.map((x) => {
       if (x.attachedItems.length > 0) {
@@ -725,6 +729,8 @@ export const BuilderContextProvider = ({ children }: any) => {
             error: `Unit: ${x.currentCount} ${x.unitName} can have a maximum of ${x.currentCount} magic items.`,
           });
         }
+        const _attachedItemsThatReplaceUnits = x.attachedItems.filter((x) => x.replacesUnit);
+        unitsThatHaveItemsThatReplaceUnits.push(..._attachedItemsThatReplaceUnits);
       }
     });
     // get all the units that this RoR unit replaces.
@@ -737,8 +743,17 @@ export const BuilderContextProvider = ({ children }: any) => {
     unitsWithArmyMin?.map((u) => {
       const unitExists = currentArmyList?.selectedUnits?.find((x) => x.unitName == u.name);
       if (unitExists) {
+        // check for units that have a unit replacement up[grade]
+
+        const upgradeHasReplacesUnit = unitsThatHaveItemsThatReplaceUnits.find(
+          (up) => up.attachedToName == u.unitName,
+        );
+        console.log('🚀 ~ calculateArmyErrors ~ upgradeHasReplacesUnit:', upgradeHasReplacesUnit);
+        // check for any RoR units that replace other units eg dwarven rangers
         const hasRoRUnit =
-          currentArmyList?.selectedUnits?.filter((x) => x.replacesUnit == u.unitName).length ?? 0;
+          currentArmyList?.selectedUnits?.filter(
+            (x) => x.replacesUnit && x.replacesUnit == u.unitName,
+          ).length ?? 0;
         // if any of thse RoR units have a replacingUnitType, then
         const isValid =
           unitExists.currentCount + hasRoRUnit >= u.armyMin ||
@@ -798,96 +813,95 @@ export const BuilderContextProvider = ({ children }: any) => {
 
     regimentsOfRenownUnitsInList?.forEach((roRUnit, i) => {
       // find the HIGHEST unit in this faction for the type the RoR unit replaces. (NOTE this currently only works when there is only one replacing type. won't work if the RoR unit replaces both cavalry or chariots).
-      const highestPointUnitsInFactionByType = factionDetails?.units
-        ?.filter(
-          (u) =>
-            roRUnit.replacesType?.includes(u.type) &&
-            u.max !== null &&
-            u.unitName != roRUnit.unitName,
-        )
-        .reduce((prev, current) => {
+      const hasUnitTypeInFaction = factionDetails?.units?.filter(
+        (u) =>
+          roRUnit.replacesType?.includes(u.type) &&
+          u.max !== null &&
+          u.unitName != roRUnit.unitName,
+      );
+      if (hasUnitTypeInFaction && hasUnitTypeInFaction.length > 0) {
+        const highestPointUnitsInFactionByType = hasUnitTypeInFaction?.reduce((prev, current) => {
           return prev.points > current.points ? prev : current;
         });
 
-      // check if this unit exists in the currentArmyList's selected units.
-      const unitOfSameRoRTypeInCurrentList = currentArmyList?.selectedUnits.find(
-        (x) => x.unitName == highestPointUnitsInFactionByType.name,
-      );
+        // check if this unit exists in the currentArmyList's selected units.
+        const unitOfSameRoRTypeInCurrentList = currentArmyList?.selectedUnits.find(
+          (x) => x.unitName == highestPointUnitsInFactionByType.name,
+        );
 
-      // const unitOfSameRoRType = currentArmyList?.selectedUnits.filter((u) => {
-      //   return (
-      //     roRUnit.replacesType?.includes(u.type) && u.max !== null && u.unitName != roRUnit.unitName
-      //   );
-      // });
-      if (unitOfSameRoRTypeInCurrentList !== undefined) {
-        //   const highestPointsValue = unitOfSameRoRType.reduce((prev, current) => {
-        //     return prev.max > current.max ? prev : current;
-        //   });
-        //   .reduce((prev, current) => {
-        //     return prev.max > current.max ? prev : current;
-        //   });
-        if (unitOfSameRoRTypeInCurrentList && unitOfSameRoRTypeInCurrentList.maxCount) {
-          const maxCountPer1000Points =
-            unitOfSameRoRTypeInCurrentList.maxCount * currentArmyPointsLimit;
-          if (unitOfSameRoRTypeInCurrentList?.currentCount + 1 > maxCountPer1000Points) {
-            // then adding this unit will not be permitted.
-            errors.push({
-              sourceName: roRUnit.unitName,
-              error: `Adding ${roRUnit.unitName} pushes the max limit for ${unitOfSameRoRTypeInCurrentList.unitName}.`,
-            });
+        // const unitOfSameRoRType = currentArmyList?.selectedUnits.filter((u) => {
+        //   return (
+        //     roRUnit.replacesType?.includes(u.type) && u.max !== null && u.unitName != roRUnit.unitName
+        //   );
+        // });
+        if (unitOfSameRoRTypeInCurrentList !== undefined) {
+          //   const highestPointsValue = unitOfSameRoRType.reduce((prev, current) => {
+          //     return prev.max > current.max ? prev : current;
+          //   });
+          //   .reduce((prev, current) => {
+          //     return prev.max > current.max ? prev : current;
+          //   });
+          if (unitOfSameRoRTypeInCurrentList && unitOfSameRoRTypeInCurrentList.maxCount) {
+            const maxCountPer1000Points =
+              unitOfSameRoRTypeInCurrentList.maxCount * currentArmyPointsLimit;
+            if (unitOfSameRoRTypeInCurrentList?.currentCount + 1 > maxCountPer1000Points) {
+              // then adding this unit will not be permitted.
+              errors.push({
+                sourceName: roRUnit.unitName,
+                error: `Adding ${roRUnit.unitName} pushes the max limit for ${unitOfSameRoRTypeInCurrentList.unitName}.`,
+              });
+            }
           }
         }
       }
-
-      // CHECK - special check for units that have the countsAsMonster value - for now this is just for Tomb Kings
-      regimentsOfRenownUnitsInList.map((u) => {
-        if (u.countsAsMonster && u.countsAsMonster?.length > 0) {
-          u.countsAsMonster.map((unitType) =>
-            // if current list matches this value, then this unit is considered one of the monster types of this faction.
-            {
-              if (
-                unitType ==
-                getKeyByValue(Factions, parseInt(currentArmyList?.faction))?.replace('_', ' ')
-              ) {
-                // get total count of monsters in this faction list.
-                const totalUnitTypesInFaction = factionDetails?.units.filter(
-                  (x) => x.type == 'Monster',
-                ).length;
-
-                const totalUnitTypesInList = currentArmyList?.selectedUnits.filter(
-                  (x) => x.type == 'Monster',
-                );
-                // check if any units of this type ACTUALLY exist. if not, then continue.
-                if (totalUnitTypesInList && totalUnitTypesInFaction) {
-                  const totalNumberOfUnitInstancesOFTypeInList = totalUnitTypesInList.reduce(
-                    (accumulator, currentItem) => {
-                      return accumulator + currentItem.currentCount;
-                    },
-                    0,
-                  ); // Note: 0 is the initial value
-                  if (
-                    totalNumberOfUnitInstancesOFTypeInList ==
-                    totalUnitTypesInFaction * currentArmyPointsLimit
-                  ) {
-                    errors.push({
-                      sourceName: u.unitName,
-                      error: `${u.unitName} takes up a Monster slot and the total allowance for monsters has been reached.`,
-                    });
-                  }
-                }
-
-                // total monster count vs total monster count in current list
-              }
-            },
-          );
-        }
-      });
 
       // check if this unit has already exceeded its max.
       // if it has, then this unit cannot be taken.
       // if it hasn't then the RoR unit can be included.
     });
-	 
+    // CHECK - special check for units that have the countsAsMonster value - for now this is just for Tomb Kings
+    regimentsOfRenownUnitsInList?.map((u) => {
+      if (u.countsAsMonster && u.countsAsMonster?.length > 0) {
+        u.countsAsMonster.map((unitType) =>
+          // if current list matches this value, then this unit is considered one of the monster types of this faction.
+          {
+            if (
+              unitType ==
+              getKeyByValue(Factions, parseInt(currentArmyList?.faction))?.replace('_', ' ')
+            ) {
+              // get total count of monsters in this faction list.
+              const totalUnitTypesInFaction = factionDetails?.units.filter(
+                (x) => x.type == 'Monster',
+              ).length;
+
+              const totalUnitTypesInList = currentArmyList?.selectedUnits.filter(
+                (x) => x.type == 'Monster',
+              );
+              // check if any units of this type ACTUALLY exist. if not, then continue.
+              if (totalUnitTypesInList && totalUnitTypesInFaction) {
+                const totalNumberOfUnitInstancesOFTypeInList = totalUnitTypesInList.reduce(
+                  (accumulator, currentItem) => {
+                    return accumulator + currentItem.currentCount;
+                  },
+                  0,
+                ); // Note: 0 is the initial value
+                if (
+                  totalNumberOfUnitInstancesOFTypeInList ==
+                  totalUnitTypesInFaction * currentArmyPointsLimit
+                ) {
+                  errors.push({
+                    sourceName: u.unitName,
+                    error: `${u.unitName} takes up a Monster slot and the total allowance for monsters has been reached.`,
+                  });
+                }
+              }
+
+              // total monster count vs total monster count in current list
+            }
+          },
+        );
+      }
+    });
     // CHECK - that only one unique regiment of renown is included in this list.
     if (regimentsOfRenownUnitsInList.length > 0) {
       regimentsOfRenownUnitsInList.map((d, i) => {

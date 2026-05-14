@@ -135,6 +135,7 @@ const CentreSection = ({
           popoverStyle={{ borderRadius: 24 }}
           arrowSize={{ width: 0, height: 0 }}
           onOpenStart={() => console.log('OPENING')}
+			 animationConfig={{duration: 0}}
           from={
             <Pressable onPress={() => setShowPopover(true)}>
               <Entypo name="dots-three-vertical" size={20} color={theme.text} />

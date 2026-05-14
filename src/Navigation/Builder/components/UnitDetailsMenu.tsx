@@ -30,6 +30,7 @@ const UnitDetailsMenu = ({
       onRequestClose={() => setOpened(!opened)}
       popoverStyle={{ borderRadius: 24 }}
       arrowSize={{ width: 0, height: 0 }}
+      animationConfig={{ duration: 0.5 }}
       from={
         <View>
           <Pressable onPress={() => setOpened(!opened)} hitSlop={36}>

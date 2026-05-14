@@ -31,6 +31,7 @@ export type UpgradesProps = {
 	pointsValue?: string | undefined;
 	text: string[];
 	addOnUpgrades: string[];
+	replacesUnit?: boolean
 };
 export type SpellsProps = {
 	name?: string;
