@@ -66,6 +66,8 @@ const BuilderHome = () => {
     setSectionListData(arr);
   }, [builder.userArmyLists, filterMain, filterFavourites]);
 
+
+
   const handleShowArmyNotesModal = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
     setShowArmyNotes(true);
@@ -86,27 +88,7 @@ const BuilderHome = () => {
   const handleDismissPopupMenu = () => {
     setShowPopupMenu(false);
   };
-  const popupMenuItems = [
-    {
-      id: 'option-1',
-      label: 'Option 1',
-      description: 'Example popup menu item',
-      onPress: () =>
-        toast.show('Option 1 selected', {
-          type: 'success',
-          duration: 3000,
-        }),
-    },
-    {
-      id: 'option-2',
-      label: 'Option 2',
-      onPress: () =>
-        toast.show('Option 2 selected', {
-          type: 'success',
-          duration: 3000,
-        }),
-    },
-  ];
+
   const handleEditArmyPress = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
     navigation.navigate('BuilderCreationStackNavigator', {
@@ -176,7 +158,6 @@ const BuilderHome = () => {
   const handleFilterChange = (newFilter: ArmyListFilters, section: ListSections) => {
     if (section == 'main') {
       setFilterMain((filters) => {
-        r;
         if (filters.find((x) => x == newFilter)) {
           return filters.filter((x) => x !== newFilter);
         } else {
@@ -322,6 +303,20 @@ const BuilderHome = () => {
         heading={`Delete army`}
         onCancel={() => {
           setFocusedArmy(undefined);
+          setConfirmDialog(false);
+        }}
+        visible={confirmDialog}
+        onSubmit={handleDeleteConfirm}
+        submitText={'Delete Army'}
+        variant="danger"
+      />
+      <StandardModal
+        content={
+          <Text>Updates found - please wait. App will reset after updates are complete.</Text>
+        }
+        heading={`Updates Permitted`}
+        onCancel={() => {
+          setUpdates(undefined);
           setConfirmDialog(false);
         }}
         visible={confirmDialog}

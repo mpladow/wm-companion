@@ -7,6 +7,7 @@ import { SelectedUpgradesProps } from '@context/BuilderContext';
 import { AntDesign } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { PointsLimitType } from '@navigation/ArmyCreation/EditArmy';
+import { UpgradeTypes } from '@utils/constants';
 import { UnitProps } from '@utils/types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -306,7 +307,7 @@ const UnitDetailsCard = ({
                   style={{ flexDirection: 'row', alignItems: 'center' }}
                   onPress={() => onUpgradePress(item.upgradeName)}>
                   <View style={{ marginRight: 8 }}>
-                    <UpgradeIcon type={item.type} />
+                    <UpgradeIcon type={item.type as UpgradeTypes} />
                   </View>
 
                   <Text>{item.currentCount} x </Text>
