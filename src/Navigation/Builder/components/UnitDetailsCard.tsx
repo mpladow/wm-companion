@@ -184,6 +184,7 @@ const UnitDetailsCard = ({
               }
               onAddUpgrade={() => onAddUpgrade(key)}
               onDeleteUnit={() => onDeleteUnit(key)}
+              permitAddUnit={!isUnique}
             />
           </View>
         </View>

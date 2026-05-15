@@ -176,7 +176,7 @@
 		"Leadbelchers": {
 			"order": 2,
 			"text": [
-				"Leadbelchers have a shooting range of 15cm. The unit has 2 shooting attacks per stand, it may roll both attacks (per stand) as part of a Stand and Shoot action. Units receiving a shooting attack from Leadbelchers receive a -1 penalty for their armour rolls."
+				"Leadbelchers have a shooting range of 15cm. The unit has 2 shooting attacks per stand. Leadbelchers shooting attacks impose a -1 penalty to armour rolls."
 			]
 		},
 		"Yhetees": {

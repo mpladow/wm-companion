@@ -1,6 +1,7 @@
 import { Text } from '@components/index';
 import UnitIcon from '@components/UnitCards/UnitIcon';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { useBottomSheetBack } from '@hooks/useBottomSheetBackHandler';
 import { useTheme } from '@hooks/useTheme';
 import { sanitizeText } from '@navigation/Builder/utils/builderHelpers';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -47,6 +48,9 @@ const RegimentsOfRenownPreview = ({
       }
     }
   }, [selectedUnitDetails]);
+
+  useBottomSheetBack(visible, unitPreviewBottomSheetRef, () => handleSetVisible(false));
+
   return (
     <BottomSheetModal
       ref={unitPreviewBottomSheetRef}
@@ -180,9 +184,11 @@ const RegimentsOfRenownPreview = ({
                 Selection Limits
               </Text>
               <Text italic style={{ fontSize: 16, color: theme.blueGrey }}>
-                Count as one highest point value limited infantry type unit. If not available,
-                hiring does not restrict taking other units. Count as 1 of any monster type in Tomb
-                Kings army. Lost Legion can not be hired together with Tichi- Huichi‘s Raiders.
+                {selectedUnitDetails.specialRules
+                  .find((x) => x.label == selectedUnitDetails.name)
+                  .text.map((rule) => {
+                    return rule;
+                  })}
               </Text>
             </View>
           </View>

@@ -26,6 +26,8 @@ type UnitCardProps = {
   currentArmyCount: number;
   pointsLimit?: PointsLimitType;
   isUnique?: boolean;
+  onDeleteUnit: () => void;
+  uniqueSelectedUnitId?: string;
 };
 const UnitCard = ({
   unit,
@@ -36,7 +38,10 @@ const UnitCard = ({
   onUnitCardPress,
   pointsLimit,
   isUnique,
+  onDeleteUnit,
 }: UnitCardProps) => {
+  console.log('🚀 ~ UnitCard ~ isUnique:', isUnique);
+  console.log('🚀 ~ UnitCard ~ currentCount:', currentCount);
   const { theme } = useTheme();
 
   const getUnitArmyMax = () => {
@@ -44,7 +49,6 @@ const UnitCard = ({
       pointsLimit != undefined ? parseInt(pointsLimit) : currentArmyCount,
     );
     let currentMax: string | undefined = '';
-    console.log('🚀 ~ getUnitArmyMax ~ unit.armyMax:', unit.armyMax);
     if (unit.armyMax) {
       currentMax = unit.armyMax.toString();
     } else if (unit.max) {
@@ -106,38 +110,78 @@ const UnitCard = ({
           <Text>{currentCount} x units in force</Text>
         </View>
       </View>
-      <View style={{ flex: 1, justifyContent: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', marginLeft: 8 }}>
         <View
           style={{
             flex: 1,
-            marginBottom: 4,
             alignItems: 'center',
-            justifyContent: 'flex-end',
+            justifyContent: 'center',
             flexDirection: 'row',
           }}>
           <View style={{ padding: 8, flexDirection: 'row' }}>
             <Text>{totalUnitsCount}</Text>
           </View>
-          <TouchableOpacity
-            onPress={() =>
-              onAddUnitPress(
-                unit.name,
-                unit.points,
-                unit.command ? true : false,
-                unit.armyMax ? unit.armyMax : unit.max,
-                unit.armyMin ? unit.armyMin : unit.min,
-                unit.noCount,
-              )
-            }>
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 4 }}>
-              <View style={{ backgroundColor: theme.warning, borderRadius: 4, padding: 4 }}>
-                <Entypo name="plus" size={24} color="black" />
-              </View>
+          <View
+            style={{
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+              flex: 1,
+            }}>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                marginBottom: 8,
+                flexDirection: 'row',
+                gap: 8,
+              }}>
+              {currentCount && currentCount > 0 && (
+                <TouchableOpacity onPress={() => onDeleteUnit()}>
+                  {/* Delete button */}
+                  <View style={{ backgroundColor: theme.danger, borderRadius: 4, padding: 4 }}>
+                    <Entypo name="minus" size={24} color="black" />
+                  </View>
+                </TouchableOpacity>
+              )}
+              {isUnique == true && currentCount == 0 && (
+                <TouchableOpacity
+                  onPress={() =>
+                    onAddUnitPress(
+                      unit.name,
+                      unit.points,
+                      unit.command ? true : false,
+                      unit.armyMax ? unit.armyMax : unit.max,
+                      unit.armyMin ? unit.armyMin : unit.min,
+                      unit.noCount,
+                    )
+                  }>
+                  <View style={{ backgroundColor: theme.warning, borderRadius: 4, padding: 4 }}>
+                    <Entypo name="plus" size={24} color="black" />
+                  </View>
+                </TouchableOpacity>
+              )}
+              {!isUnique && (
+                <TouchableOpacity
+                  onPress={() =>
+                    onAddUnitPress(
+                      unit.name,
+                      unit.points,
+                      unit.command ? true : false,
+                      unit.armyMax ? unit.armyMax : unit.max,
+                      unit.armyMin ? unit.armyMin : unit.min,
+                      unit.noCount,
+                    )
+                  }>
+                  <View style={{ backgroundColor: theme.warning, borderRadius: 4, padding: 4 }}>
+                    <Entypo name="plus" size={24} color="black" />
+                  </View>
+                </TouchableOpacity>
+              )}
             </View>
-            <View style={{ alignItems: 'flex-start' }}>
+            <View style={{ alignItems: 'flex-end' }}>
               <PointsContainer points={unit.points} />
             </View>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Pressable>

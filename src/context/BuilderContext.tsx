@@ -748,7 +748,6 @@ export const BuilderContextProvider = ({ children }: any) => {
         const upgradeHasReplacesUnit = unitsThatHaveItemsThatReplaceUnits.find(
           (up) => up.attachedToName == u.unitName,
         );
-        console.log('🚀 ~ calculateArmyErrors ~ upgradeHasReplacesUnit:', upgradeHasReplacesUnit);
         // check for any RoR units that replace other units eg dwarven rangers
         const hasRoRUnit =
           currentArmyList?.selectedUnits?.filter(
@@ -784,9 +783,6 @@ export const BuilderContextProvider = ({ children }: any) => {
     unitsWithArmyMax?.map((u) => {
       const unitExists = currentArmyList?.selectedUnits?.find(
         (x) => x.unitName == u.name || x.replacesUnit == u.name,
-      );
-      const huh = currentArmyList?.selectedUnits?.filter(
-        (x) => x.replacesUnit != null && x.replacesUnit == u.unitName,
       );
       const hasRoRUnit =
         currentArmyList?.selectedUnits?.filter(
@@ -906,13 +902,19 @@ export const BuilderContextProvider = ({ children }: any) => {
     if (regimentsOfRenownUnitsInList.length > 0) {
       regimentsOfRenownUnitsInList.map((d, i) => {
         if (d?.currentCount > 1) {
-          console.log('🚀 ~ cd dsfdsfsdfalculateArmyErrors ~ d:', d);
           errors.push({
             sourceName: d.unitName,
             error: `You can only have 1 ${d.unitName} in a list.`,
           });
         }
       });
+      // CHECK - max of one RoR unit per 1000pts
+      if (regimentsOfRenownUnitsInList.length > currentArmyPointsLimit) {
+        errors.push({
+          sourceName: regimentsOfRenownUnitsInList[0].unitName,
+          error: `You can only have 1 Regiment of Renown per 1000pts`,
+        });
+      }
     }
     // filter out the above
     currentUnits = currentUnits?.filter((u) => {

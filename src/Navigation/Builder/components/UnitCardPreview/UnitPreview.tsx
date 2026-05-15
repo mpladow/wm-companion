@@ -1,6 +1,7 @@
 import { Text } from '@components/index';
 import UnitIcon from '@components/UnitCards/UnitIcon';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { useBottomSheetBack } from '@hooks/useBottomSheetBackHandler';
 import { useTheme } from '@hooks/useTheme';
 import { sanitizeText } from '@navigation/Builder/utils/builderHelpers';
 import { UnitProps } from '@utils/types';
@@ -43,6 +44,8 @@ const UnitPreview = ({ handleSetVisible, visible, selectedUnitDetails }: UnitPre
       }
     }
   }, [selectedUnitDetails]);
+
+  useBottomSheetBack(visible, unitPreviewBottomSheetRef, () => handleSetVisible(false));
   return (
     <BottomSheetModal
       ref={unitPreviewBottomSheetRef}

@@ -12,6 +12,7 @@ type unitDetailsMenuProps = {
   onAddUpgrade: () => void;
   onDeleteUnit: () => void;
   onPress: () => void;
+  permitAddUnit?: boolean;
 };
 const UnitDetailsMenu = ({
   noMagic,
@@ -19,6 +20,7 @@ const UnitDetailsMenu = ({
   onAddUpgrade,
   onDeleteUnit,
   onPress,
+  permitAddUnit,
 }: unitDetailsMenuProps) => {
   const { theme } = useTheme();
   const [opened, setOpened] = useState(false);
@@ -51,15 +53,20 @@ const UnitDetailsMenu = ({
           gap: 12,
         }}>
         <TouchableOpacity
-          onPress={() => onAddUnit()}
+          disabled={!permitAddUnit}
+          onPress={permitAddUnit == true ? () => onAddUnit() : () => {}}
           style={[
             { flex: 1, flexDirection: 'row', paddingVertical: 8, alignItems: 'center' },
             styles.menuButtons,
           ]}>
-          <View style={{ marginRight: 8 }}>
-            <Entypo name="plus" size={24} color={theme.white} />
-          </View>
-          <Text>{t('AddUnit', { ns: 'builder' })}</Text>
+          {permitAddUnit && (
+            <View style={{ marginRight: 8 }}>
+              <Entypo name="plus" size={24} color={theme.white} />
+            </View>
+          )}
+          <Text italic={!permitAddUnit}>
+            {permitAddUnit ? t('AddUnit', { ns: 'builder' }) : 'Only one unit permitted'}
+          </Text>
         </TouchableOpacity>
         {!noMagic || noMagic == undefined ? (
           <TouchableOpacity

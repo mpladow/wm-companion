@@ -122,11 +122,10 @@ const AddUnit = () => {
           } else {
             _unit.specialRules.push(_specialRulesForUnit);
           }
-          
         }
         //@ts-ignore
         const _genericSpecialRulesExist = _allGenericSpecialRules[unitName];
-   
+
         if (_genericSpecialRulesExist != undefined) {
           _unit.specialRules.push({ ..._genericSpecialRulesExist, label: unitName });
         }
@@ -193,6 +192,7 @@ const AddUnit = () => {
                     ? parseInt(builder.selectedArmyList?.pointsLimit)
                     : builder.calculateCurrentArmyPoints()
                 }
+                onDeleteUnit={() => builder.removeUnit(_unit?.id)}
               />
             );
           }}

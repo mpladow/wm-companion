@@ -136,7 +136,6 @@ const AddRegimentsOfRenown = () => {
             }
           });
         }
-        console.log('🚀 ~ handleViewPreview ~ _unit:', _unit);
       }
 
       setSelectedUnitDetails(_unit);
@@ -269,7 +268,8 @@ const AddRegimentsOfRenown = () => {
                     ? parseInt(builder.selectedArmyList?.pointsLimit)
                     : builder.calculateCurrentArmyPoints()
                 }
-					 isUnique
+                isUnique
+                onDeleteUnit={() => builder.removeUnit(_unit?.id)}
               />
             );
           }}

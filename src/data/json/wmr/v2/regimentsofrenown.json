@@ -13,7 +13,7 @@
   "units": [
     {
       "name": "Pirazzos Lost Legion",
-      "order": 0,
+      "order": 99,
       "type": "Infantry",
       "replacesUnit": [],
       "replacesType": ["Infantry"],
@@ -36,7 +36,7 @@
     },
     {
       "name": "Tichi-Huichi's Raiders",
-      "order": 1,
+      "order": 99,
       "type": "Cavalry",
       "replacesUnit": [{ "faction": "Dwarfs", "type": "Infantry", "name": "Rangers" }],
       "replacesType": ["Cavalry", "Chariot"],
@@ -104,7 +104,7 @@
         "The pike is the traditional weapon of the mercenaries of Tilea. Twice as long as a spear and even longer than a cavalryman’s lance this is truly fearsome although rather unwieldy weapon. Due to this Pikemen never benefit from defended or fortified status when in dense terrain (even partially) or on fortress walls etc. They still may be in defended position on higher ground or behind low obstacle as usual. Pikemen count as defended against charging cavalry or chariots to their front. The bonus only applies in the first combat round of an engagement. Note that the rule doesn't apply when pikemen are partially in dense terrain. Pikemen should be based as cavalry - i.e. the models are orientated towards the narrow edge of the base. Pikemen stands may only give or receive support by other infantry or Pikemen stands that are facing the same direction and touch their flank with the whole of their own flank. Any support behind or in front of Pikemen stand is not allowed. In all other respects they count as infantry (movement/pursuit etc.)."
       ]
     },
-    "Tichi-Huichi‘s Raiders": {
+    "Tichi-Huichi's Raiders": {
       "order": 1,
       "text": [
         "Count as one highest point value limited cavalry or chariot unit type. Count as one Ranger unit in Dwarf army. Raiders can not be hired together with Pirazzo‘s Lost Legion."

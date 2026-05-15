@@ -1,24 +1,16 @@
 import Catapult from "@components/SVGS/Catapult";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { IconImageProps } from "./types";
+import UnitIconContainer from './UnitIconContainer';
 
 const Artillery = ({ size, color }: IconImageProps) => {
 	return (
-		<View
-			style={{
-				width: 28,
-				height: 40,
-				alignItems: "center",
-				justifyContent: "center",
-				backgroundColor: "#e3d9bc",
-				padding: 0,
-			}}
-		>
-			{/* <Spears width={size} height={size} color={color} /> */}
-			<Catapult width={size} height={size} color={"black"} />
-		</View>
-	);
+    <UnitIconContainer isLeader={false}>
+      {/* <Spears width={size} height={size} color={color} /> */}
+      <Catapult width={size} height={size} color={'black'} />
+    </UnitIconContainer>
+  );
 };
 
 export default Artillery;
