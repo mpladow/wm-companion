@@ -70,7 +70,7 @@ const BuilderEdit = ({ navigation }: any) => {
     if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
       navigation.setOptions({
         title: builder.selectedArmyList?.name,
-        headerRight: () => <HeaderMenu />,
+        headerRight: () => <HeaderMenu armyId={builder.selectedArmyList?.armyId} factionId={builder.selectedArmyList?.faction}/>,
         headerTitle: () => (
           <View style={{ width: 250 }}>
             <Text numberOfLines={1} variant="heading1" style={{ fontSize: 20 }}>
@@ -102,7 +102,6 @@ const BuilderEdit = ({ navigation }: any) => {
     if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
     if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
   }, [builder.calculateCurrentArmyPoints(), builder.selectedArmyList?.pointsLimit]);
-
 
   useEffect(() => {
     if (factionUnits && builder.selectedArmyList) {

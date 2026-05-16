@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
 
-const HeaderMenu = () => {
+const HeaderMenu = ({ armyId, factionId }: { armyId: string; factionId: string }) => {
   const navigation = useNavigation();
   const [showPopover, setShowPopover] = useState(false);
   const { theme } = useTheme();
@@ -49,6 +49,23 @@ const HeaderMenu = () => {
             <Entypo name="export" size={20} color={theme.text} />
           </View>
           <Text style={{ color: theme.text }}>{t('Export List')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setShowPopover(false);
+            navigation.navigate('BuilderCreationStackNavigator', {
+              screen: 'EditArmy',
+              params: { armyId, factionSelection: factionId },
+            });
+          }}
+          style={[
+            { flex: 1, flexDirection: 'row', paddingVertical: 8, backgroundColor: theme.blueGrey },
+            styles.menuButtons,
+          ]}>
+          <View style={{ marginRight: 8 }}>
+            <Entypo name="pencil" size={20} color={theme.text} />
+          </View>
+          <Text style={{ color: theme.text }}>{t('Edit Army')}</Text>
         </TouchableOpacity>
       </View>
     </Popover>

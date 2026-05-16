@@ -66,8 +66,6 @@ const BuilderHome = () => {
     setSectionListData(arr);
   }, [builder.userArmyLists, filterMain, filterFavourites]);
 
-
-
   const handleShowArmyNotesModal = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
     setShowArmyNotes(true);
@@ -177,7 +175,7 @@ const BuilderHome = () => {
 
   const generateContent = () => {
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         {changelog?.changes.map((x) => {
           let fontStyle: { color: string; fontSize: number } = { color: theme.text, fontSize: 16 };
 

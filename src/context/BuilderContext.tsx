@@ -607,6 +607,8 @@ export const BuilderContextProvider = ({ children }: any) => {
 
   const calculateArmyErrors = () => {
     // get the current army points for
+
+    const currentArmyPoints = calculateCurrentArmyPoints();
     let currentArmyPointsLimit = get1000PointInterval(
       currentArmyList?.pointsLimit !== undefined
         ? parseInt(currentArmyList?.pointsLimit)
@@ -653,6 +655,18 @@ export const BuilderContextProvider = ({ children }: any) => {
         }
       }
     });
+
+    // check if exceeding army limit - only if pointsLimit is set
+
+    if (
+      currentArmyList?.pointsLimit &&
+      currentArmyList.points > parseInt(currentArmyList?.pointsLimit)
+    ) {
+      errors.push({
+        sourceName: 'Army',
+        error: `Army: Your army has a strict points limit of ${currentArmyList.pointsLimit}.`,
+      });
+    }
     // check for army mins, if no army min
     const unitsWithArmyMin = currentUnits?.filter((x) => {
       if (x['armyMin'] != undefined || x['min'] != undefined) {
@@ -740,12 +754,13 @@ export const BuilderContextProvider = ({ children }: any) => {
 
     // check unit with army Min count - i.e.,  Generals
     unitsWithArmyMin?.map((u) => {
+      console.log('🚀 ~ calculateArmyErrors ~ u:', u);
       const unitExists = currentArmyList?.selectedUnits?.find((x) => x.unitName == u.name);
       if (unitExists) {
         // check for units that have a unit replacement up[grade]
-
-        const upgradeHasReplacesUnit = unitsThatHaveItemsThatReplaceUnits.find(
-          (up) => up.attachedToName == u.unitName,
+        // check for upgrade
+        const upgradeHasReplacesUnit = unitsThatHaveItemsThatReplaceUnits.find((up) =>
+          up.upgradeName?.toLowerCase().includes(u.unitName?.toLowerCase()),
         );
         // check for any RoR units that replace other units eg dwarven rangers
         const hasRoRUnit =
@@ -777,17 +792,20 @@ export const BuilderContextProvider = ({ children }: any) => {
       }
     });
     // check unit with army MAx Count
+    console.log('🚀 ~ unitsWithArmyMax START HERE ~ u:', unitsWithArmyMax);
     unitsWithArmyMax?.map((u) => {
       const unitExists = currentArmyList?.selectedUnits?.find(
         (x) => x.unitName == u.name || x.replacesUnit == u.name,
       );
+      // check for RoR unit
       const hasRoRUnit =
         currentArmyList?.selectedUnits?.filter(
           (x) => x.replacesUnit != null && x.replacesUnit == u.unitName,
         ).length ?? 0;
+
       if (unitExists) {
         // if count > == u count
-        const isValid = unitExists.currentCount + hasRoRUnit <= u.armyMax;
+        const isValid = unitExists?.currentCount + hasRoRUnit <= u.armyMax;
         if (!isValid) {
           errors.push({
             sourceName: unitExists.unitName,
@@ -934,11 +952,19 @@ export const BuilderContextProvider = ({ children }: any) => {
         //   );
         // check if RoR unit replaces a unit type exceeds count.
 
+        // check for upgrade
+        const upgradeHasReplacesUnit = unitsThatHaveItemsThatReplaceUnits.find((up) =>
+          up.upgradeName?.toLowerCase().includes(unit.unitName?.toLowerCase()),
+        );
+
         const maxCountPer1000Points = unit.maxCount * currentArmyPointsLimit;
-        if (unit.currentCount + hasRoRUnit > maxCountPer1000Points) {
+        if (
+          unit.currentCount + hasRoRUnit + (upgradeHasReplacesUnit?.currentCount ?? 0) >
+          maxCountPer1000Points
+        ) {
           errors.push({
             sourceName: unit.unitName,
-            error: `${t('MaximumUnitsPer1000', { maxCount: unit.maxCount, unit: unit.unitName })} ${hasRoRUnit ? `*Your Regiment of Renown units may contribute to your ${unit.unitName} limit.*` : ''}`,
+            error: `${t('MaximumUnitsPer1000', { maxCount: unit.maxCount, unit: unit.unitName })} ${hasRoRUnit ? `*Your Regiment of Renown units may contribute to your ${unit.unitName} limit.*` : ''} ${upgradeHasReplacesUnit?.currentCount > 0 ? '*Check your upgrades since some upgrades will replace this unit.' : ''}`,
           });
         }
       }

@@ -10,7 +10,7 @@ import { UnitProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { sectionListDataProps } from '../../BuilderEdit';
 import ArmyPointsCount from '../ArmyPointsCount';
 import ArmyErrorsPreview from '../ErrorsPreview';
@@ -240,15 +240,3 @@ const AddUnit = () => {
 };
 
 export default AddUnit;
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    //backgroundColor: 'blue',
-    backgroundColor: 'rgba(0,0,0,0.1)',
-  },
-});

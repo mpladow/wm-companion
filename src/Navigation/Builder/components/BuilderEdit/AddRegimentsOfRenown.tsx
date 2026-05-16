@@ -8,7 +8,7 @@ import { getGenericSpecialRules } from '@utils/factionHelpers';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, ScrollView, View } from 'react-native';
 import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import { sectionListDataProps } from '../../BuilderEdit';
 import ArmyPointsCount from '../ArmyPointsCount';
@@ -311,15 +311,3 @@ const AddRegimentsOfRenown = () => {
 };
 
 export default AddRegimentsOfRenown;
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    //backgroundColor: 'blue',
-    backgroundColor: 'rgba(0,0,0,0.1)',
-  },
-});

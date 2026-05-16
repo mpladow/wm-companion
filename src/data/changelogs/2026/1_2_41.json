@@ -7,7 +7,7 @@
       "description": [
         "*The Pirazzo’s Lost Legion steps forth into the jungles of Lustria. From a canopy above, the Tichi Huichi Raiders watch, silent and deadly, waiting for the moment to strike...*",
         "",
-        "You can now try out two Regiments of Renown in your lists."
+        "You can now try out TWO new Regiments of Renown in your lists."
       ]
     },
     {
@@ -16,18 +16,37 @@
       "description": [
         "Hotfixes for all 2.26 army lists",
         "",
-        "This includes many stat and points changes."
+        "This includes many stat and points changes. it is HIGHLY recommended that you create new lists instead of updating existing lists."
       ]
     },
     {
       "type": "improvement",
       "title": "UI/UX Improvements",
-      "description": ["Create Army UI has changed to make army creation more intuitive", "Unit Card/magic item details have been uplifted"]
+      "description": [
+        "Create Army UI has changed to make army creation more intuitive",
+        "Unit Card/magic item details have been given a facelift to give them a more intuitive UI."
+      ]
     },
     {
       "type": "improvement",
       "title": "Set Points Limit",
-      "description": ["When creating your army, you can now (optionally!) set a max points limit so you can clearly see the unit restrictions right from the beginning. Users must take caution with this option since armies that are below this limit will be considered legal. "]
+      "description": [
+        "When creating your army, you can now (optionally!) set a max points limit so you can clearly see the unit restrictions right from the beginning. Users must take caution with this option since armies that are below this limit will be considered legal. "
+      ]
+    },
+    {
+      "type": "improvement",
+      "title": "Swapping Units",
+      "description": [
+        "When creating your army, you can now (optionally!) set a max points limit so you can clearly see the unit restrictions right from the beginning. Users must take caution with this option since armies that are below this limit will be considered legal. "
+      ]
+    },
+    {
+      "type": "improvement",
+      "title": "Army Builder changes",
+      "description": [
+        "You can now both add and remove units from the Add Unit"
+      ]
     }
   ]
 }

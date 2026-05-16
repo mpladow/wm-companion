@@ -7,8 +7,9 @@ import { getUpgradeDetailsByName } from '@navigation/Builder/utils/builderHelper
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { UpgradesProps } from '@utils/types';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, Modal, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import ArmyPointsCount from '../ArmyPointsCount';
+import ArmyErrorsPreview from '../ErrorsPreview';
 import UpgradeCard from '../UpgradeCard';
 import UpgradePreview from '../UpgradePreview';
 
@@ -109,32 +110,11 @@ const AddItem = () => {
             );
           }}
         />
-
-        <Modal animationType="fade" visible={errorsVisible} transparent={true}>
-          <View style={styles.modalOverlay} onTouchStart={() => setErrorsVisible(!errorsVisible)}>
-            <View
-              style={{
-                marginTop: 500,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: theme.text,
-                padding: 16,
-                margin: 12,
-                borderRadius: 20,
-              }}>
-              <FlatList
-                data={builder.armyErrors}
-                renderItem={(nestedItem) => {
-                  return (
-                    <View>
-                      <Text style={{ color: theme.black }}>{nestedItem.item.error}</Text>
-                    </View>
-                  );
-                }}
-              />
-            </View>
-          </View>
-        </Modal>
+        <ArmyErrorsPreview
+          handleSetVisible={() => setErrorsVisible(!errorsVisible)}
+          visible={errorsVisible}
+          armyErrors={builder.armyErrors}
+        />
       </View>
       <View style={{ zIndex: 9, position: 'absolute', bottom: 10, left: 20, flexDirection: 'row' }}>
         {/* TODO extract out  */}
