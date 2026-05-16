@@ -1,9 +1,8 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import React from "react";
-import { useTheme } from "@hooks/useTheme";
 import { Text } from "@components/index";
-import { Entypo } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import { useTheme } from "@hooks/useTheme";
+import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 type ArmyPointsCount = {
 	armyErrorsCount: number;

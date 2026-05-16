@@ -40,8 +40,6 @@ const UnitCard = ({
   isUnique,
   onDeleteUnit,
 }: UnitCardProps) => {
-  console.log('🚀 ~ UnitCard ~ isUnique:', isUnique);
-  console.log('🚀 ~ UnitCard ~ currentCount:', currentCount);
   const { theme } = useTheme();
 
   const getUnitArmyMax = () => {
@@ -113,74 +111,86 @@ const UnitCard = ({
       <View style={{ flex: 1, justifyContent: 'center', marginLeft: 8 }}>
         <View
           style={{
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
             flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row',
           }}>
-          <View style={{ padding: 8, flexDirection: 'row' }}>
-            <Text>{totalUnitsCount}</Text>
-          </View>
           <View
             style={{
               justifyContent: 'flex-end',
-              alignItems: 'flex-end',
-              flex: 1,
+              alignItems: 'center',
+              marginBottom: 8,
+              flexDirection: 'row',
+              gap: 8,
             }}>
-            <View
-              style={{
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                marginBottom: 8,
-                flexDirection: 'row',
-                gap: 8,
-              }}>
-              {currentCount && currentCount > 0 && (
-                <TouchableOpacity onPress={() => onDeleteUnit()}>
-                  {/* Delete button */}
-                  <View style={{ backgroundColor: theme.danger, borderRadius: 4, padding: 4 }}>
-                    <Entypo name="minus" size={24} color="black" />
-                  </View>
-                </TouchableOpacity>
-              )}
-              {isUnique == true && currentCount == 0 && (
-                <TouchableOpacity
-                  onPress={() =>
-                    onAddUnitPress(
-                      unit.name,
-                      unit.points,
-                      unit.command ? true : false,
-                      unit.armyMax ? unit.armyMax : unit.max,
-                      unit.armyMin ? unit.armyMin : unit.min,
-                      unit.noCount,
-                    )
-                  }>
-                  <View style={{ backgroundColor: theme.warning, borderRadius: 4, padding: 4 }}>
-                    <Entypo name="plus" size={24} color="black" />
-                  </View>
-                </TouchableOpacity>
-              )}
-              {!isUnique && (
-                <TouchableOpacity
-                  onPress={() =>
-                    onAddUnitPress(
-                      unit.name,
-                      unit.points,
-                      unit.command ? true : false,
-                      unit.armyMax ? unit.armyMax : unit.max,
-                      unit.armyMin ? unit.armyMin : unit.min,
-                      unit.noCount,
-                    )
-                  }>
-                  <View style={{ backgroundColor: theme.warning, borderRadius: 4, padding: 4 }}>
-                    <Entypo name="plus" size={24} color="black" />
-                  </View>
-                </TouchableOpacity>
-              )}
+            {currentCount && currentCount > 0 && (
+              <TouchableOpacity onPress={() => onDeleteUnit()}>
+                {/* Delete button */}
+                <View
+                  style={{
+                    backgroundColor: theme.danger,
+                    borderRadius: 8,
+                    padding: 4,
+                    paddingHorizontal: 8,
+                  }}>
+                  <Entypo name="minus" size={24} color="black" />
+                </View>
+              </TouchableOpacity>
+            )}
+            {isUnique == true && currentCount == 0 && (
+              <TouchableOpacity
+                hitSlop={8}
+                onPress={() =>
+                  onAddUnitPress(
+                    unit.name,
+                    unit.points,
+                    unit.command ? true : false,
+                    unit.armyMax ? unit.armyMax : unit.max,
+                    unit.armyMin ? unit.armyMin : unit.min,
+                    unit.noCount,
+                  )
+                }>
+                <View
+                  style={{
+                    backgroundColor: theme.warning,
+                    borderRadius: 8,
+                    padding: 4,
+                    paddingHorizontal: 8,
+                  }}>
+                  <Entypo name="plus" size={24} color="black" />
+                </View>
+              </TouchableOpacity>
+            )}
+            {!isUnique && (
+              <TouchableOpacity
+                hitSlop={8}
+                onPress={() =>
+                  onAddUnitPress(
+                    unit.name,
+                    unit.points,
+                    unit.command ? true : false,
+                    unit.armyMax ? unit.armyMax : unit.max,
+                    unit.armyMin ? unit.armyMin : unit.min,
+                    unit.noCount,
+                  )
+                }>
+                <View
+                  style={{
+                    backgroundColor: theme.warning,
+                    borderRadius: 8,
+                    padding: 4,
+                    paddingHorizontal: 8,
+                  }}>
+                  <Entypo name="plus" size={24} color="black" />
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={{ alignItems: 'flex-end', flexDirection: 'row' }}>
+            <View style={{ marginRight: 8 }}>
+              <Text>{totalUnitsCount}</Text>
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <PointsContainer points={unit.points} />
-            </View>
+            <PointsContainer points={unit.points} />
           </View>
         </View>
       </View>

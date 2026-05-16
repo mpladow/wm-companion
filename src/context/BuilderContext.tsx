@@ -3,7 +3,7 @@ import { get1000PointInterval } from '@navigation/Builder/utils/builderHelpers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Factions, UpgradeTypes } from '@utils/constants';
 import { getKeyByValue } from '@utils/factionHelpers';
-import { FactionListProps, UpgradesProps } from '@utils/types';
+import { ArmyErrorsProps, FactionListProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import Constants from 'expo-constants';
 import { produce } from 'immer';
@@ -16,11 +16,7 @@ import magicItemsList from '../data/json/wmr/magic-items.json';
 
 export type ArmyListFilters = 'old' | 'losers' | 'all';
 export type ListSections = 'favourites' | 'main';
-type ArmyErrorsProps = {
-  source?: 'Unit' | 'Upgrade';
-  sourceName: string;
-  error: string;
-};
+
 export type SelectedUpgradesProps = {
   id: string;
   upgradeName: string;
@@ -130,7 +126,6 @@ export const BuilderContextProvider = ({ children }: any) => {
   //   const [regimentsOfRenown, setRegimentsOfRenown] = useState<AddRegimentsOfRenownProps>();
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
-  // const CURRENT_VERSION = 2; // TODO: this should be retrieved by the config
   const { t } = useTranslation(['builder', 'units']);
   const { getFactionUnitsByVersion } = useFactionUnits();
 
@@ -204,6 +199,10 @@ export const BuilderContextProvider = ({ children }: any) => {
             // surround this logic with some tests - some unit names may change between version
             if (!unitToAdd) {
               alert(`Unable to add ${u.unitName}`);
+              const newSelectedUnitsWithoutOldUnitName = newArmy.selectedUnits.filter(
+                (x) => x.unitName !== u.unitName,
+              );
+              newArmy.selectedUnits = newSelectedUnitsWithoutOldUnitName;
             } else {
               // add this unit
               let max;
@@ -767,17 +766,15 @@ export const BuilderContextProvider = ({ children }: any) => {
             })}`,
           });
         }
+      } else {
+        errors.push({
+          sourceName: u.name,
+          error: `${t('MinimumUnitsRequired', {
+            minCount: u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min,
+            unit: u.name,
+          })}`,
+        });
       }
-
-      //  else {
-      //   errors.push({
-      //     sourceName: u.name,
-      //     error: `${t('MinimumUnitsRequired', {
-      //       minCount: u.armyMin ? u.armyMin : currentArmyPointsLimit * u.min,
-      //       unit: u.name,
-      //     })}`,
-      //   });
-      // }
     });
     // check unit with army MAx Count
     unitsWithArmyMax?.map((u) => {
@@ -911,7 +908,7 @@ export const BuilderContextProvider = ({ children }: any) => {
       // CHECK - max of one RoR unit per 1000pts
       if (regimentsOfRenownUnitsInList.length > currentArmyPointsLimit) {
         errors.push({
-          sourceName: regimentsOfRenownUnitsInList[0].unitName,
+          sourceName: 'Regiments of Renown',
           error: `You can only have 1 Regiment of Renown per 1000pts`,
         });
       }

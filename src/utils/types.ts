@@ -33,6 +33,11 @@ export type UpgradesProps = {
 	addOnUpgrades: string[];
 	replacesUnit?: boolean
 };
+export type ArmyErrorsProps = {
+	source?: 'Unit' | 'Upgrade';
+	sourceName: string;
+	error: string;
+};
 export type SpellsProps = {
 	name?: string;
 	roll?: number;

@@ -1,6 +1,7 @@
 import { Text } from '@components/index';
 import UpgradeIcon from '@components/UnitCards/UpgradeIcon';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { useBottomSheetBack } from '@hooks/useBottomSheetBackHandler';
 import { useTheme } from '@hooks/useTheme';
 import { UpgradeTypes } from '@utils/constants';
 import { UpgradesProps } from '@utils/types';
@@ -38,6 +39,9 @@ const UpgradePreview = ({
       bottomSheetRef.current?.dismiss;
     }
   }, [visible]);
+
+  useBottomSheetBack(visible, bottomSheetRef, () => handleSetVisible(!visible));
+
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
@@ -52,7 +56,6 @@ const UpgradePreview = ({
       style={{ borderRadius: 24 }}
       onDismiss={() => {
         handleSetVisible(false);
-        console.log('DISMIGGING');
       }}
       backgroundStyle={{ backgroundColor: theme.grey3, borderRadius: 32 }}>
       <BottomSheetScrollView

@@ -10,9 +10,10 @@ import { UnitProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Modal, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { sectionListDataProps } from '../../BuilderEdit';
 import ArmyPointsCount from '../ArmyPointsCount';
+import ArmyErrorsPreview from '../ErrorsPreview';
 import UnitCard from '../UnitCard';
 import UnitPreview from '../UnitCardPreview/UnitPreview';
 
@@ -27,12 +28,12 @@ const AddUnit = () => {
   const navigation = useNavigation();
   const builder = useBuilderContext();
   const [factionUnits, setFactionUnits] = useState<UnitProps[] | undefined>(); //TODO: we NEED to strongly type this data
-  const [regimentsOfRenown, setRegimentsOfRenown] = useState<UnitProps[] | undefined>();
   const [sectionListData, setSectionListData] = useState<sectionListDataProps[]>([]);
   const [selectedUnitDetails, setSelectedUnitDetails] = useState<UnitProps>();
   const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
   const [totalPoints, setTotalPoints] = useState(1000);
   const [errorsVisible, setErrorsVisible] = useState(false);
+  const { getFactionUnitsByVersion } = useFactionUnits();
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -105,8 +106,6 @@ const AddUnit = () => {
     return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
   }, [builder.calculateCurrentArmyPoints(), totalPoints]);
 
-  const { getFactionUnitsByVersion } = useFactionUnits();
-
   const handleViewPreview = (unitName: string) => {
     const rawUnitData = factionUnits?.find((x) => x.name == unitName);
     let _unit = Object.assign({}, rawUnitData);
@@ -149,6 +148,7 @@ const AddUnit = () => {
       console.error(`UNIT NOT FOUND for ${unitName}`);
     }
   };
+
   return (
     <MainContainerWithBlankBG>
       <View>
@@ -197,32 +197,11 @@ const AddUnit = () => {
             );
           }}
         />
-
-        <Modal animationType="fade" visible={errorsVisible} transparent={true}>
-          <View style={styles.modalOverlay} onTouchStart={() => setErrorsVisible(!errorsVisible)}>
-            <View
-              style={{
-                marginTop: 500,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: theme.text,
-                padding: 16,
-                margin: 12,
-                borderRadius: 20,
-              }}>
-              <FlatList
-                data={builder.armyErrors}
-                renderItem={(nestedItem) => {
-                  return (
-                    <View>
-                      <Text style={{ color: theme.black }}>{nestedItem.item.error}</Text>
-                    </View>
-                  );
-                }}
-              />
-            </View>
-          </View>
-        </Modal>
+        <ArmyErrorsPreview
+          handleSetVisible={() => setErrorsVisible(!errorsVisible)}
+          visible={errorsVisible}
+          armyErrors={builder.armyErrors}
+        />
       </View>
       <View style={{ zIndex: 9, position: 'absolute', bottom: 10, left: 20, flexDirection: 'row' }}>
         {/* TODO extract out  */}

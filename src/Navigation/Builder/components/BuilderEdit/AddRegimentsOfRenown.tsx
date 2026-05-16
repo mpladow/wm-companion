@@ -3,16 +3,17 @@ import MainContainerWithBlankBG from '@components/MainContainerWithBlankBG';
 import { useBuilderContext } from '@context/BuilderContext';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { getGenericSpecialRules } from '@utils/factionHelpers';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import { sectionListDataProps } from '../../BuilderEdit';
 import ArmyPointsCount from '../ArmyPointsCount';
 import CollapsibleComponent from '../Collapsible';
+import ArmyErrorsPreview from '../ErrorsPreview';
 import UnitCard from '../UnitCard';
 import RegimentsOfRenownPreview from '../UnitCardPreview/RegimentsOfRenownPreview';
 
@@ -22,7 +23,6 @@ export type AddRegimentsOfRenownProps = {
 const AddRegimentsOfRenown = () => {
   const { t } = useTranslation('builder');
   const { theme } = useTheme();
-  const route = useRoute();
   const navigation = useNavigation();
   const builder = useBuilderContext();
   const [regimentsOfRenown, setRegimentsOfRenown] = useState<
@@ -50,7 +50,6 @@ const AddRegimentsOfRenown = () => {
 
   useLayoutEffect(() => {
     // get all units for selected army list
-    let title;
 
     if (builder.selectedArmyList) {
       navigation.setOptions({
@@ -93,7 +92,6 @@ const AddRegimentsOfRenown = () => {
   }, [builder.calculateCurrentArmyPoints(), totalPoints]);
 
   const {
-    getFactionUnitsByVersion,
     getRegimentsOfRenownForFaction,
     getRegimentsOfRenownFactionData,
   } = useFactionUnits();
@@ -145,11 +143,6 @@ const AddRegimentsOfRenown = () => {
     }
   };
 
-  const [toggleDescription, setToggleDescription] = useState(false);
-
-  const handleToggleDescription = () => {
-    setToggleDescription(!toggleDescription);
-  };
   return (
     <MainContainerWithBlankBG>
       <ScrollView>
@@ -275,31 +268,11 @@ const AddRegimentsOfRenown = () => {
           }}
         />
 
-        <Modal animationType="fade" visible={errorsVisible} transparent={true}>
-          <View style={styles.modalOverlay} onTouchStart={() => setErrorsVisible(!errorsVisible)}>
-            <View
-              style={{
-                marginTop: 500,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: theme.text,
-                padding: 16,
-                margin: 12,
-                borderRadius: 20,
-              }}>
-              <FlatList
-                data={builder.armyErrors}
-                renderItem={(nestedItem) => {
-                  return (
-                    <View>
-                      <Text style={{ color: theme.black }}>{nestedItem.item.error}</Text>
-                    </View>
-                  );
-                }}
-              />
-            </View>
-          </View>
-        </Modal>
+        <ArmyErrorsPreview
+          handleSetVisible={() => setErrorsVisible(!errorsVisible)}
+          visible={errorsVisible}
+          armyErrors={builder.armyErrors}
+        />
       </ScrollView>
       <View style={{ zIndex: 9, position: 'absolute', bottom: 10, left: 20, flexDirection: 'row' }}>
         {/* TODO extract out  */}

@@ -43,9 +43,9 @@ const UnitDetailsMenu = ({
       <View
         style={{
           paddingRight: 10,
-          paddingLeft: 12,
+          paddingLeft: 10,
           paddingVertical: 10,
-          maxWidth: 200,
+          minWidth: 200,
           backgroundColor: theme.backgroundVariant,
           flex: 1,
           borderRadius: 24,
@@ -151,8 +151,9 @@ export default UnitDetailsMenu;
 
 const styles = StyleSheet.create({
   menuButtons: {
-    paddingLeft: 12,
-    paddingRight: 44,
+    paddingLeft: 10,
+    paddingRight: 10,
+	 minWidth: 150,
     borderRadius: 16,
     minHeight: 40,
     alignItems: 'center',

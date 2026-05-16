@@ -1,5 +1,6 @@
 import { BottomSheetModalProps } from '@gorhom/bottom-sheet';
-import React, { useCallback } from 'react';
+import { useBottomSheetBack } from '@hooks/useBottomSheetBackHandler';
+import React, { useCallback, useEffect } from 'react';
 import { Pressable, StyleProp, StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 import BottomSheet, { BottomSheetHandle } from './BottomSheet';
 
@@ -64,6 +65,16 @@ const BottomSheetPopupMenu = React.forwardRef<BottomSheetHandle, BottomSheetPopu
         {item.description ? <Text style={styles.itemDescription}>{item.description}</Text> : null}
       </Pressable>
     ));
+
+    useEffect(() => {
+      if (visible) {
+        ref?.current?.present();
+      } else {
+        ref?.current?.dismiss;
+      }
+    }, [visible]);
+
+    useBottomSheetBack(visible, ref, () => onDismiss());
 
     return (
       <BottomSheet
