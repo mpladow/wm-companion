@@ -20,7 +20,7 @@
 			"min": 2
 		},
 		{
-			"name": "LeadBelchers",
+			"name": "Leadbelchers",
 			"order": 1,
 			"type": "Infantry",
 			"attack": "3/2",
