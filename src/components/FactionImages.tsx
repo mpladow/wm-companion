@@ -32,7 +32,7 @@ const FactionImages: React.FC<FactionImagesProps> = ({ factionId, style, imageSt
           left: 0,
           right: 0,
           bottom: -0,
-          height: Dimensions.get('screen').height,
+          height: Dimensions.get('screen').height/2,
           zIndex: 9,
         }}></LinearGradient>
       {factionImages.map((imageSource, index) => (
@@ -49,10 +49,10 @@ const FactionImages: React.FC<FactionImagesProps> = ({ factionId, style, imageSt
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
+   //  flexDirection: 'row',
+   //  flexWrap: 'wrap',
+   //  justifyContent: 'center',
+   //  alignItems: 'center',
   },
   image: {
     width: 300,

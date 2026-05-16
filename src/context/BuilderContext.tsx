@@ -754,7 +754,6 @@ export const BuilderContextProvider = ({ children }: any) => {
 
     // check unit with army Min count - i.e.,  Generals
     unitsWithArmyMin?.map((u) => {
-      console.log('🚀 ~ calculateArmyErrors ~ u:', u);
       const unitExists = currentArmyList?.selectedUnits?.find((x) => x.unitName == u.name);
       if (unitExists) {
         // check for units that have a unit replacement up[grade]
@@ -792,7 +791,6 @@ export const BuilderContextProvider = ({ children }: any) => {
       }
     });
     // check unit with army MAx Count
-    console.log('🚀 ~ unitsWithArmyMax START HERE ~ u:', unitsWithArmyMax);
     unitsWithArmyMax?.map((u) => {
       const unitExists = currentArmyList?.selectedUnits?.find(
         (x) => x.unitName == u.name || x.replacesUnit == u.name,

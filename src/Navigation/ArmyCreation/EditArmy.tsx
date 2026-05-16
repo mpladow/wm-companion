@@ -19,7 +19,7 @@ import {
 	View,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from 'react-native-toast-notifications';
 
 export type PointsLimitType = undefined | '1000' | '2000';
@@ -96,7 +96,7 @@ const EditArmy = () => {
           },
         ],
       });
-      toast.show(`Army updated!`);
+      toast.show(`Army updated!`, { type: 'success' });
     }
   };
 
@@ -163,9 +163,10 @@ const EditArmy = () => {
       return `${t('BuilderPointsRestrictions')}`;
     }
   }, [pointsLimitSelection]);
+  const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+    <View style={{ flex: 1, backgroundColor: theme.background, paddingBottom: insets.bottom }}>
       <ScrollView
         style={{
           flex: isKeyboardVisible ? 0.6 : 1,
@@ -287,7 +288,7 @@ const EditArmy = () => {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -69,8 +69,8 @@ const App = () => {
   useEffect(() => {
     const loadApp = async () => {
       if (appReady) {
-        await SplashScreen.hideAsync();
-      }
+		await SplashScreen.hideAsync();
+	}
     };
     loadApp();
   }, [appReady]);
@@ -84,7 +84,7 @@ const App = () => {
         <SafeAreaProvider>
           <ThemeContextProvider>
             <BottomSheetModalProvider>
-              <ToastProvider>
+              <ToastProvider offsetBottom={100}>
                 <UpdateCheckerContextProvider>
                   <SettingsContextProvider>
                     <RootSiblingParent>

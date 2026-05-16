@@ -20,7 +20,7 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from 'react-native-toast-notifications';
 
 const THUMBNAIL_HEIGHT = 100;
@@ -100,8 +100,15 @@ const CreateArmy = () => {
   const thumbRef = useRef<FlatList>(null);
   const nameRef = useRef<TextInput>(null);
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background, padding: 12 }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.background,
+        padding: 12,
+        paddingBottom: insets.bottom + 16,
+      }}>
       <View style={{ height: 70, marginVertical: 4, marginTop: 12 }}>
         <ImageBackground
           resizeMode="stretch"
@@ -216,7 +223,7 @@ const CreateArmy = () => {
           </Button>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
