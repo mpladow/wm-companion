@@ -308,20 +308,6 @@ const BuilderHome = () => {
         submitText={'Delete Army'}
         variant="danger"
       />
-      <StandardModal
-        content={
-          <Text>Updates found - please wait. App will reset after updates are complete.</Text>
-        }
-        heading={`Updates Permitted`}
-        onCancel={() => {
-          setUpdates(undefined);
-          setConfirmDialog(false);
-        }}
-        visible={confirmDialog}
-        onSubmit={handleDeleteConfirm}
-        submitText={'Delete Army'}
-        variant="danger"
-      />
     </SafeAreaView>
   );
 };

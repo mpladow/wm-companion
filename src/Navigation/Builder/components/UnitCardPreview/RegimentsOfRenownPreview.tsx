@@ -123,15 +123,6 @@ const RegimentsOfRenownPreview = ({
                     }}>
                     {selectedUnitDetails.name}
                   </Text>
-                  <Text
-                    variant="heading3"
-                    style={{
-                      fontSize: 16,
-                      color: theme.white,
-                      zIndex: 9999,
-                    }}>
-                    Bases: {selectedUnitDetails.size}
-                  </Text>
                 </View>
                 <View style={{ justifyContent: 'flex-end' }}>
                   <View
