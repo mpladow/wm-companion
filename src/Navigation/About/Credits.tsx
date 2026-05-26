@@ -40,8 +40,8 @@ const Credits = () => {
         <TextBlock variant="large">
           <Text>
             <Text bold>{t('SpecialMentionsForImages')}</Text>: Bornabairn, K Rauff, Przemas Bak,
-            Gecko.Goblin, Graf, Hobbes, Hardy, Alexander Carraro, Mattias R, Byron L, Kristoffer
-            Rauff, Geoff A, Kai Tek Ng, Mattias R, Darios
+            Gecko.Goblin, Graf, Hobbes, Hardy, Alexander Carraro, Mattias R, MattJ, Byron L,
+            Kristoffer Rauff, Geoff A, Kai Tek Ng, Mattias R, Darios
           </Text>
         </TextBlock>
         <TextBlock variant="large">
