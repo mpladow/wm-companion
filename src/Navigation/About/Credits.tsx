@@ -12,9 +12,8 @@ const Credits = () => {
         style={{
           flex: 1,
           zIndex: 9,
-          justifyContent: 'center',
           padding: 12,
-          paddingTop: 0,
+          paddingTop: 8,
         }}>
         <View
           style={{

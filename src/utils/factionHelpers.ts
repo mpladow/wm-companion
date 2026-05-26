@@ -51,7 +51,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Chaos":
 			return [require("../../assets/images/wm-chaos.jpeg")];
 		case "Wood_Elves":
-			return [require("../../assets/images/wm-woodelves-default.png")];
+			return [require("../../assets/images/wm-woodelves.png")];
 
 		case "Vampire_Counts":
 			return [require("../../assets/images/wm-vampcounts.jpeg")];
