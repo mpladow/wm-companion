@@ -106,7 +106,7 @@
       "name": "Bone Thrower",
       "order": 8,
       "type": "Artillery",
-      "attack": "1/2 per stand",
+      "attack": "1/2 + skewer",
       "range": "40cm",
       "hits": 2,
       "size": 2,

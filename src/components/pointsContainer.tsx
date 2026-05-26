@@ -14,6 +14,7 @@ const pointsContainer = ({ points, maxPoints }: PointsContainerProps) => {
       style={{
         padding: 4,
         paddingHorizontal: 8,
+        minWidth: 50,
         borderRadius: 4,
         backgroundColor: theme.white,
         alignItems: 'center',
@@ -21,7 +22,8 @@ const pointsContainer = ({ points, maxPoints }: PointsContainerProps) => {
         flexDirection: 'row',
       }}>
       <Text bold style={{ color: theme.black, fontSize: 12 }}>
-        {points}{maxPoints && `/${maxPoints}`}
+        {points}
+        {maxPoints && `/${maxPoints}`}
       </Text>
       <Text style={{ color: theme.black, fontSize: 12 }}> pts</Text>
     </View>

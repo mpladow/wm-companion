@@ -612,7 +612,7 @@ export const BuilderContextProvider = ({ children }: any) => {
     let currentArmyPointsLimit = get1000PointInterval(
       currentArmyList?.pointsLimit !== undefined
         ? parseInt(currentArmyList?.pointsLimit)
-        : calculateCurrentArmyPoints(),
+        : currentArmyPoints,
     );
 
     const errors: ArmyErrorsProps[] = [];

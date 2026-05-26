@@ -118,7 +118,7 @@
       "name": "Triple Bows",
       "order": 9,
       "type": "Artillery",
-      "attack": "1/2",
+      "attack": "1/2 + skewer",
       "range": "40cm",
       "armour": "-",
       "hits": 2,

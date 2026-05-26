@@ -98,7 +98,7 @@
       "noMagic": true
     },
     {
-      "name": "Elven Bolt Thrower",
+      "name": "Bolt Thrower (Dark Elves)",
       "order": 7,
       "type": "Artillery",
       "attack": "1/3",
@@ -107,8 +107,8 @@
       "size": 2,
       "points": 55,
       "max": 1,
-      "specialRules": ["Elven Bolt Thrower"],
-      "noMagic": true
+      "noMagic": true,
+		"specialRules": ["Elven Bolt Thrower"]
     },
     {
       "name": "General",
@@ -216,10 +216,6 @@
         "The War Hydra can breath fire with a range of 20cm and 2 Attacks that are worked out in the normal way. Once all hits have been struck for that round, and assuming it has not been slain, the War Hydra automatically regenerates 1 hit that it suffered that round. A hit that is inflicted and subsequently regenerated still counts towards the results for that round."
       ]
     },
-    "Bolt Thrower": {
-      "order": 6,
-      "text": ["The Bolt Thrower counts as an Elven Bolt Thrower."]
-    },
     "General": {
       "order": 7,
       "text": [
@@ -243,9 +239,6 @@
         "A Sorceress can have a Cauldron of Blood. A Sorceress with a Cauldron of Blood suffers a movement reduction to 30cm. The army can only ever include one Cauldron of Blood and it can only be included if there is at least 1 unit of Witch Elves in the army. The Cauldron of Blood adds +2 Attacks to the Sorceress and can be used to add +1 to the Sorceress‘ dice roll to cast a spell once per battle.",
         "The player must announce that the Cauldron of Blood‘s spell bonus is being used before rolling the dice to determine if the spell is cast."
       ]
-    },
-    "Elven Bolt Thrower": {
-      "order": 10
     }
   },
   "spells": [
