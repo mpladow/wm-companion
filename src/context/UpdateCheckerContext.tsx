@@ -44,7 +44,6 @@ export const UpdateCheckerContextProvider = ({ children }: { children: React.Rea
   async function onCheckForUpdate() {
     try {
       const update = await Updates.checkForUpdateAsync();
-      console.log('🚀 ~ onCheckForUpdate ~ update:', update);
       if (update.isAvailable) {
         await Updates.fetchUpdateAsync();
         setUpdatesComplete(true);
