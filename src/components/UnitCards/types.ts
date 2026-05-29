@@ -1,6 +1,7 @@
 export type IconImageProps = {
 	size: number;
 	color: string;
-    containerSize?: number;
+	containerSize?: number;
 	isUpgrade?: boolean;
+	isUnique?: boolean;
 };

@@ -1,21 +1,19 @@
-import MainContainerWithImage from "@components/MainContainerWithImage";
-import { Text, TextBlock } from "@components/index";
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
+import MainContainerWithImage from '@components/MainContainerWithImage';
+import { Text, TextBlock } from '@components/index';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 
 const Credits = () => {
-	const { t } = useTranslation(["home", "common"]);
-	return (
+  const { t } = useTranslation(['home', 'common']);
+  return (
     <MainContainerWithImage>
       <View
         style={{
           flex: 1,
           zIndex: 9,
-          justifyContent: 'center',
           padding: 12,
-          paddingTop: 0,
-          marginTop: -100,
+          paddingTop: 8,
         }}>
         <View
           style={{
@@ -41,9 +39,14 @@ const Credits = () => {
         </TextBlock>
         <TextBlock variant="large">
           <Text>
-            <Text bold>{t('SpecialMentionsForImages')}</Text>: Bornabairn, K Rauff, Przemas Bak, Gecko.Goblin, Hobbes, Hardy,
-            Alexander Carraro, Mattias R, Byron L, Kristoffer Rauff, Geoff A, Kai Tek Ng, Mattias R,
-            Darios
+            <Text bold>{t('SpecialMentionsForImages')}</Text>: Bornabairn, K Rauff, Przemas Bak,
+            Gecko.Goblin, Graf, Hobbes, Hardy, Alexander Carraro, Mattias R, MattJ, Byron L,
+            Kristoffer Rauff, Geoff A, Kai Tek Ng, Mattias R, Darios
+          </Text>
+        </TextBlock>
+        <TextBlock variant="large">
+          <Text>
+            <Text bold>Testing Team</Text>: <Text>Hroch, Graf, doomedtrooper</Text>
           </Text>
         </TextBlock>
         <TextBlock variant="large">

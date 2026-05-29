@@ -1,14 +1,14 @@
-import { Dimensions, Modal, StyleSheet, View } from "react-native";
-import React from "react";
-import { useTheme } from "@hooks/useTheme";
-import Button from "./button";
 import { Text } from "@components/index";
+import { useTheme } from "@hooks/useTheme";
+import React from "react";
+import { Dimensions, Modal, StyleSheet, View } from "react-native";
+import Button from "./button";
 
 type PopupConfirmProps = {
 	visible: boolean;
 	onConfirm: () => void;
 	onCancel: () => void;
-	text: JSX.Element;
+	text: any;
 	confirmText: string;
 	cancelText: string;
 	headerText: string;
@@ -24,7 +24,7 @@ const PopupConfirm = ({
 }: PopupConfirmProps) => {
 	const { theme } = useTheme();
 	return (
-		<Modal animationType='fade' visible={visible} transparent={true} style={{ elevation: 20 }}>
+		<Modal animationType='fade' visible={visible} transparent={true} style={{ elevation: 100 }}>
 			<View style={styles.modalOverlay} onTouchStart={() => onCancel()}></View>
 			<View
 				style={{

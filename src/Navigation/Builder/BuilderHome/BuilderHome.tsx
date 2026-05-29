@@ -1,35 +1,31 @@
+import { BottomSheetHandle, StandardModal, Text, TextBlock } from '@components/index';
 import {
-  Animated,
-  Dimensions,
-  FlatList,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '@hooks/useTheme';
-import { StandardModal, Text, TextBlock } from '@components/index';
-import {
-  ArmyListFilters,
-  ArmyListProps,
-  ListSections,
-  useBuilderContext,
+	ArmyListFilters,
+	ArmyListProps,
+	ListSections,
+	useBuilderContext,
 } from '@context/BuilderContext';
-import fonts from '@utils/fonts';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import PopupConfirm from '@components/PopupConfirm';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useToast } from 'react-native-toast-notifications';
-import { useTranslation } from 'react-i18next';
-import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
-import AddArmyButton from './components/AddArmyButton';
-import CreateArmyModal from './components/CreateArmyModal/CreateArmyModal';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
-import { filter } from 'lodash';
-import AnimatedHeader from '@components/AnimatedHeader/AnimatedHeader';
+import { useTheme } from '@hooks/useTheme';
+import { useNavigation } from '@react-navigation/native';
+import fonts from '@utils/fonts';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+	Animated,
+	Dimensions,
+	ImageBackground,
+	ScrollView,
+	StyleSheet,
+	TextInput,
+	View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useToast } from 'react-native-toast-notifications';
+import { sanitizeText } from '../utils/builderHelpers';
+import AddArmyButton from './components/AddArmyButton';
+import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
 
 const BuilderHome = () => {
   const [showCreateArmy, setShowCreateArmy] = useState(false);
@@ -43,9 +39,10 @@ const BuilderHome = () => {
     'all',
   ] as ArmyListFilters[]);
   const [filterMain, setFilterMain] = useState<ArmyListFilters[]>(['all'] as ArmyListFilters[]);
+  const [showPopupMenu, setShowPopupMenu] = useState(false);
 
   const { theme } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const builder = useBuilderContext();
   const { t } = useTranslation(['builder', 'common', 'forms']);
   const toast = useToast();
@@ -53,8 +50,6 @@ const BuilderHome = () => {
   const scrollY = useRef(new Animated.Value(0));
 
   useEffect(() => {
-    console.log('🚀 ~ BuilderHome ~ filterFavourites:', filterFavourites);
-    console.log('🚀 ~ BuilderHome ~ filterMain:', filterMain);
     const favourited = builder.getUserArmyLists(filterFavourites).filter((x) => x.isFavourite);
     const notFavourited = builder.getUserArmyLists(filterMain).filter((x) => !x.isFavourite);
     const sLData: armySectionListDataProps = {
@@ -80,10 +75,24 @@ const BuilderHome = () => {
     setFocusedArmy(undefined);
   };
   const handleAddArmyPress = () => {
-    setShowCreateArmy(true);
+    navigation.navigate('BuilderCreationStackNavigator', { screen: 'CreateArmy' });
   };
+  const handleOpenPopupMenu = () => {
+    if (!showPopupMenu) setShowPopupMenu(true);
+    else {
+      setShowPopupMenu(false);
+    }
+  };
+  const handleDismissPopupMenu = () => {
+    setShowPopupMenu(false);
+  };
+
   const handleEditArmyPress = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
+    navigation.navigate('BuilderCreationStackNavigator', {
+      screen: 'EditArmy',
+      params: { armyId: armyId },
+    });
     setShowCreateArmy(!showCreateArmy);
   };
   const onArmyListPress = (armyId: string) => {
@@ -101,15 +110,24 @@ const BuilderHome = () => {
   };
   const onArmyListDeletePress = (armyId: string) => {
     setFocusedArmyId(armyId);
-    setConfirmDialog(true);
+    setTimeout(() => {
+      setConfirmDialog(true);
+    }, 500);
   };
+  //   useEffect(() => {
+  //     console.log('🚀 ~ BuilderHome ~ focusedArmyId:', focusedArmyId);
+  //     if (focusedArmyId) {
+  //       setTimeout(() => {
+  //         setConfirmDialog(true);
+  //       }, 500);
+  //     }
+  //     console.log(confirmDialog);
+  //   }, [focusedArmyId]);
 
   const { isReady, changelog, dismissChangeLog, recentlyDismissedChangeLog } = useUpdateChecker();
   const [showChangeLogModal, setShowChangeLogModal] = useState(false);
   useEffect(() => {
     setTimeout(() => {
-      console.log('🚀 ~ setTimeout ~ recentlyDismissedChangeLog:', recentlyDismissedChangeLog);
-      console.log('🚀 ~ setTimeout ~ changelog:', changelog);
       if (changelog && recentlyDismissedChangeLog) {
         if (changelog.version !== recentlyDismissedChangeLog) {
           setShowChangeLogModal(true);
@@ -127,11 +145,15 @@ const BuilderHome = () => {
     setShowChangeLogModal(false);
   };
 
+  const handleDeleteConfirm = () => {
+    focusedArmyId && builder.deleteUserArmyList(focusedArmyId);
+    setConfirmDialog(false);
+  };
+
   // const handleFilterFavouritesChange = (newFilter: ArmyListFilters) => {
   // 	setFilterFavourites([...filterFavourites, newFilter]);
   // };
   const handleFilterChange = (newFilter: ArmyListFilters, section: ListSections) => {
-    console.log('🚀 ~ handleFilterChange ~ section:', section);
     if (section == 'main') {
       setFilterMain((filters) => {
         if (filters.find((x) => x == newFilter)) {
@@ -141,7 +163,6 @@ const BuilderHome = () => {
         }
       });
     } else {
-      console.log('setting filters');
       setFilterFavourites((filters) => {
         if (filters.find((x) => x == newFilter)) {
           return filters.filter((x) => x !== newFilter);
@@ -154,7 +175,7 @@ const BuilderHome = () => {
 
   const generateContent = () => {
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         {changelog?.changes.map((x) => {
           let fontStyle: { color: string; fontSize: number } = { color: theme.text, fontSize: 16 };
 
@@ -176,13 +197,26 @@ const BuilderHome = () => {
                 style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
                 {x.title}
               </Text>
-              {x.description && x.description?.map((d) => <Text>{d}</Text>)}
+              {x.description &&
+                x.description?.map((d) => {
+                  const sanitized = sanitizeText(d, theme.text);
+                  return <Text style={{ color: theme.text }}>{sanitized}</Text>;
+                })}
             </TextBlock>
           );
         })}
       </ScrollView>
     );
   };
+
+  const bottomSheetModalRef = useRef<BottomSheetHandle>(null);
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handle sheet changes', index);
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
@@ -203,7 +237,6 @@ const BuilderHome = () => {
             zIndex: 9,
           }}
         />
-
         <ArmySectionList
           handleFilterChange={handleFilterChange}
           sectionListData={sectionListData}
@@ -217,32 +250,8 @@ const BuilderHome = () => {
           favouritesFilters={filterFavourites}
           mainFilters={filterMain}
         />
-        <PopupConfirm
-          visible={confirmDialog}
-          onConfirm={() => {
-            focusedArmyId && builder.deleteUserArmyList(focusedArmyId);
-            setConfirmDialog(false);
-          }}
-          onCancel={() => {
-            setFocusedArmy(undefined);
-            setConfirmDialog(false);
-          }}
-          text={
-            <Text style={{ color: theme.text, fontSize: 16 }}>
-              Do you want to delete this army?
-            </Text>
-          }
-          confirmText={t('DeleteArmy', { ns: 'builder' })}
-          cancelText={t('Cancel', { ns: 'common' })}
-          headerText={t('DeleteArmy', { ns: 'builder' })}
-        />
       </ImageBackground>
-      <CreateArmyModal
-        onDismissCreateArmyModal={handleDismissArmyCreateModal}
-        theme={theme}
-        focusedArmy={focusedArmy}
-        isVisible={showCreateArmy}
-      />
+
       <AddArmyButton
         handleAddArmyPress={handleAddArmyPress}
         theme={theme}
@@ -287,6 +296,18 @@ const BuilderHome = () => {
         onSubmit={handleDismissModal}
         submitText={'Understood!'}
       />
+      <StandardModal
+        content={<Text>Are you sure you want to delete this army?</Text>}
+        heading={`Delete army`}
+        onCancel={() => {
+          setFocusedArmy(undefined);
+          setConfirmDialog(false);
+        }}
+        visible={confirmDialog}
+        onSubmit={handleDeleteConfirm}
+        submitText={'Delete Army'}
+        variant="danger"
+      />
     </SafeAreaView>
   );
 };
@@ -304,12 +325,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width,
   },
   modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    //backgroundColor: 'blue',
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -1,7 +1,7 @@
 {
   "name": "Cathay",
   "version": "Warmaster Revolution",
-  "versionNumber": 2.261,
+  "versionNumber": 2.262,
   "group": 2,
   "order": 7,
   "description": [
@@ -118,7 +118,7 @@
       "name": "Triple Bows",
       "order": 9,
       "type": "Artillery",
-      "attack": "1/2",
+      "attack": "1/2 + skewer",
       "range": "40cm",
       "armour": "-",
       "hits": 2,
@@ -168,7 +168,7 @@
       "order": 0,
       "type": "Chariot Mount",
       "attack": "+1",
-      "points": "+10",
+      "points": "+5",
       "max": 1
     },
     {

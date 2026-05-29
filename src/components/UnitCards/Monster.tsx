@@ -1,26 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Spears from "@components/SVGS/Spears";
 import MonsterIcon from "@components/SVGS/MonsterIcon";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { IconImageProps } from "./types";
+import UnitIconContainer from './UnitIconContainer';
 
 const Monster = ({ size, color }: IconImageProps) => {
 	return (
-		<View
-			style={{
-				width: 28,
-				height: 28,
-				alignItems: "center",
-				justifyContent: "center",
-				backgroundColor: "#e3d9bc",
-				padding: 0,
-                paddingTop: 8
-			}}
-		>
-            <MonsterIcon height={size} width={size} color={color}/>
-		</View>
-	);
+    <UnitIconContainer isLeader={false}>
+      <MonsterIcon style={{marginTop: 6}} height={size} width={size} color={color} />
+    </UnitIconContainer>
+  );
 };
 
 export default Monster;

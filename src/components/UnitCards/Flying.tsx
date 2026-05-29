@@ -1,24 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Wings from "@components/SVGS/Wings";
-import { IconImageProps } from "./types";
+import Wings from '@components/SVGS/Wings';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { IconImageProps } from './types';
+import UnitIconContainer from './UnitIconContainer';
 
-
-const Flying = ({ size = 20, color = "black" }: IconImageProps) => {
-	return (
-		<View
-			style={{
-				alignItems: "center",
-				justifyContent: "center",
-				backgroundColor: "#e3d9bc",
-				width: 28,
-				height: 28,
-			}}
-		>
-			<Wings width={size} height={size} />
-		</View>
-	);
+const Flying = ({ size = 20, color = 'black' }: IconImageProps) => {
+  return (
+    <UnitIconContainer isLeader={false}>
+      <Wings width={size} height={size} />
+    </UnitIconContainer>
+  );
 };
 
 export default Flying;

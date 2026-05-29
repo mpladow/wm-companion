@@ -1,17 +1,18 @@
-import { Dimensions, ImageBackground, Platform, SafeAreaView, StyleSheet, View } from "react-native";
-import React from "react";
 import Button from "@components/button";
+import { Text } from "@components/index";
+import MainContainerWithImage from "@components/MainContainerWithImage";
+import LogoWmr from "@components/SVGS/LogoWmr";
+import { useVictoryPoints } from "@context/VPContext";
+import { FontAwesome } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useTheme } from "@hooks/useTheme";
+import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useTheme } from "@hooks/useTheme";
-import { Text, TextBlock } from "@components/index";
-import LogoWmr from "@components/SVGS/LogoWmr";
-import { useVictoryPoints, VPContextProvider } from "@context/VPContext";
-import { TrackerStackParamList } from "@navigation/Stacks/TrackerStackNavigator";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import MainContainerWithImage from "@components/MainContainerWithImage";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { FontAwesome } from "@expo/vector-icons";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { HEADER_HEIGHT } from "src/constants/styling";
 
 const TrackerHome = () => {
@@ -31,7 +32,8 @@ const TrackerHome = () => {
 			<MainContainerWithImage>
 				<View
 					style={{
-						height: "100%",
+						// height: "100%",
+						flex: 1,
 						zIndex: 9,
 						alignItems: "center",
 						justifyContent: "space-between",
@@ -45,7 +47,6 @@ const TrackerHome = () => {
 							alignSelf: "center",
 							alignItems: "center",
 							flexDirection: "column",
-							marginBottom: 20,
 						}}
 					>
 						<LogoWmr height={80} width={200} />
@@ -92,7 +93,7 @@ const TrackerHome = () => {
 						</View>
 					</View>
 					<View>
-						<View style={{ marginTop: 20 }}>
+						<View>
 							<Button size={"lg"} onPress={() => navigation.navigate("Tracker")} variant={"confirm"}>
 								<Text bold style={{ color: theme.black }}>
 									{t("NewBattle")}

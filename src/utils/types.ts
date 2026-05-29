@@ -31,6 +31,12 @@ export type UpgradesProps = {
 	pointsValue?: string | undefined;
 	text: string[];
 	addOnUpgrades: string[];
+	replacesUnit?: boolean
+};
+export type ArmyErrorsProps = {
+	source?: 'Unit' | 'Upgrade';
+	sourceName: string;
+	error: string;
 };
 export type SpellsProps = {
 	name?: string;
@@ -83,4 +89,5 @@ export type UnitProps = {
 	noMagic?: boolean;
 	noCount?: boolean;
 	canFly?: boolean;
+	requiredUnits?: string[];
 };

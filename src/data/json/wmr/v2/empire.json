@@ -2,7 +2,7 @@
   "name": "Empire",
   "version": "Warmaster Revolution",
   "group": 0,
-  "versionNumber": 2.261,
+  "versionNumber": 2.262,
   "order": 0,
   "description": [
     "The Empire is by far the largest and most powerful of the human nations of the Old World. It stretches from the Grey Mountains in the west to the Worlds Edge Mountains and the borders of Kislev in the east. This vast nation is divided into many separate principalities or states each of which is something akin to an entire and independent land in its own right. Throughout much of the history of The Empire these states have fought amongst themselves. Rival dynasties have vied for power, alliances have been made and broken, and only rarely has a single claimant risen to control the entire land. The Empire of today is almost wholly united under the Prince of Altdorf the Elector of the Reikland - hereditary ruler of the western principality of the Reikland. Only the great sea-port of Marienburg in the Wasteland retains independence under the leadership of its powerful and wealthy mercantile community."
@@ -40,7 +40,7 @@
       "size": 3,
       "points": 55,
       "min": 2,
-      "upgrades": ["Handgunners"]
+      "upgrades": ["Replace with Handgunners"]
     },
     {
       "name": "Flagellants",
@@ -177,7 +177,7 @@
       "armyMax": 1
     },
     {
-      "name": "Handgunners",
+      "name": "Replace with Handgunners",
       "order": 2,
       "type": "Special",
       "attack": "3/1",
@@ -185,15 +185,27 @@
       "hits": 3,
       "size": 3,
       "points": 10,
-      "max": 1
+      "max": 1,
+      "replacesUnit": true
     }
   ],
   "magic": true,
   "specialRules": {
+    "Replace with Handgunners": {
+      "order": 1,
+      "text": [
+        "One unit of Crossbowmen per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Crossbowmen min/max value.",
+        "*Select the Handgunners upgrade option in a Crossbow unit to replace unit with Handgunners*"
+      ]
+    },
     "Handgunners": {
       "order": 1,
       "text": [
-        "Count enemy Armour values as one worse than normal when shot by a handgun. So an armour value of 3+ counts as 4+, 4+ as 5+, and 5+ as 6+, whilst an Armour value of 6+ can't save against a handgun. One unit of Crossbowmen per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Crossbowmen min/max value. Note that this unit also counts for min/max value of Handgunners."
+        "Count enemy Armour values as one worse than normal when shot by a handgun. So an armour value of 3+ counts as 4+, 4+ as 5+, and 5+ as 6+, whilst an Armour value of 6+ can't save against a handgun.",
+        "-----",
+        "One unit of Crossbowmen per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Crossbowmen min/max value.",
+        "Note that this unit also counts for min/max value of Handgunners.",
+        "*Select the Handgunners upgrade option in a Crossbow unit to replace unit with Handgunners*"
       ]
     },
     "Flagellants": {

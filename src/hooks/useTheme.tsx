@@ -30,26 +30,26 @@ export interface Theme {
 	darkGreen4: string;
 }
 const darkColours = {
-	DARK_GREEN: "#588157", //dark green
-	LIGHT_GREEN: "#80ed99", //light brown
-	LIGHT_GREEN2: "#BDE4A8", // light green
-	DARK_GREEN_2: "#344e41", // darkgreen
-	DARK_BROWN_2: "#6c584c", // dark brown
-	DARK_BLUE: "#00798C",
-	WHITE: "#ffffff",
-	DARK_BLUE_3: "#14213d",
-	RED: "#E14919",
-	YELLO: "#F8D33F",
-	BLACK: "#000000",
-	GREY1: "#6c757d",
-	GREY2: "#586994",
-	GREY3: "#2B2D42",
-	BLUEGREY: "#153243",
-	DARKRED: "#8f1b0e",
-	ORANGE: "#e36052",
-	YELLOW: "#877c03",
-	LIGHT_GREEN3: "#71c924",
-	DARK_GREEN4: "#017a19",
+  DARK_GREEN: '#588157', //dark green
+  LIGHT_GREEN: '#80ed99', //light brown
+  LIGHT_GREEN2: '#BDE4A8', // light green
+  DARK_GREEN_2: '#3d4742', // darkgreen
+  DARK_BROWN_2: '#6e5f56', // dark brown
+  DARK_BLUE: '#00798C',
+  WHITE: '#ffffff',
+  DARK_BLUE_3: '#344e41',
+  RED: '#E14919',
+  YELLO: '#F8D33F',
+  BLACK: '#000000',
+  GREY1: '#6c757d',
+  GREY2: '#586994',
+  GREY3: '#2B2D42',
+  BLUEGREY: '#153243',
+  DARKRED: '#8f1b0e',
+  ORANGE: '#e36052',
+  YELLOW: '#877c03',
+  LIGHT_GREEN3: '#71c924',
+  DARK_GREEN4: '#017a19',
 };
 const darkTheme: Theme = {
 	background: darkColours.DARK_GREEN_2,

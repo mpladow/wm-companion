@@ -47,6 +47,8 @@ export default {
 	SpawnLeaders: "Spawn Leaders",
 	SpawnUnits: "Spawn Units",
 	Export: "Export",
-	DeleteArmy: "Delete Army"
-
+	DeleteArmy: "Delete Army",
+	BuilderPointsRestrictions: "Your required unit restrictions (min/maxes) will be permantently set. Errors will not be shown when list points are below this threshold.",
+	BuilderDefaultPointsRestrictions: "The points limit will increase and decrease as you add more units. This is the default behavior.",
+	PlayersNeedToAgreeOnUsingRegimentsOfRenownMessage: "Players need to agree on using Regiments of Renown before a battle."
 };

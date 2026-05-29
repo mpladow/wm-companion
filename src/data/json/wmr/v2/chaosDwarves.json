@@ -2,7 +2,7 @@
   "name": "Chaos Dwarfs",
   "version": "Warmaster Revolution",
   "group": 2,
-  "versionNumber": 2.261,
+  "versionNumber": 2.262,
   "order": 3,
   "description": [
     "Many thousands of years ago the Dwarf race moved northwards from its ancestral home somewhere in the Southlands. They moved along the high ridge of mountains known as the Worlds Edge Mountains, following the trail of mineral ores and precious gems.",
@@ -124,7 +124,7 @@
       "name": "Bolt Thrower",
       "order": 9,
       "type": "Artillery",
-      "attack": "1/2 per stand",
+      "attack": "1/2 + skewer",
       "range": "40cm",
       "armour": "-",
       "hits": 2,
@@ -218,7 +218,7 @@
     "Blunderbusses": {
       "order": 1,
       "text": [
-        " Units with Blunderbusses have a shooting range of 15cm. The unit has 2 shooting attacks. Units hit by Blunderbusses get a -1 penalty for their armour rolls. One unit of Blunderbusses per full 1000 points can replace a unit of Warriors while still counting for the Warrior min/max value. Note that this unit still counts for max value of Blunderbusses."
+        "Units with Blunderbusses have a shooting range of 15cm. The unit has 2 shooting attacks. Units hit by Blunderbusses get a -1 penalty for their armour rolls. One unit of Blunderbusses per full 1000 points can replace a unit of Warriors while still counting for the Warrior min/max value. Note that this unit still counts for max value of Blunderbusses."
       ]
     },
     "Hobgoblins": {
@@ -236,12 +236,17 @@
     "Earthshaker Cannon": {
       "order": 4,
       "text": [
-        "The Earthshaker acts as a Stone Thrower as described in main Rulebook. The exception is that the drive back from the Eartshaker shot causes confusion on rolls of 4+ rather than the usual 6+. In addition the Earthshaker shot causes confusion in units in base contact with the victim unit on rolls of 6 on a D6 (roll for each unit)."
+        "The total number of Earthshakers and Death Rockets in the army is limited in the way that only 1 piece of this kind is allowed per 1000 points.",
+        "",
+        "The Earthshaker acts as a Stone Thrower as described in main Rulebook. The exception is that the drive back from the Eartshaker shot causes confusion on rolls of 4+ rather than the usual 6+. In addition the Earthshaker shot causes confusion in units in base contact with the victim unit on rolls of 6 on a D6 (roll for each unit).",
+        ""
       ]
     },
     "Death Rocket": {
       "order": 5,
       "text": [
+        "The total number of Earthshakers and Death Rockets in the army is limited in the way that only 1 piece of this kind is allowed per 1000 points.",
+        "",
         "The Death Rocket is treated as a Stone Thrower as described in the Rulebook (p.75), except it shoots 1D6 times per phase and any hits inflicted have an armour save with a -1 modifier. If the roll for the number of shots comes up a 1, the Rocket Launcher has misfired, and you must roll another D6 against the Rocket Launcher Misfire Chart.",
         "",
         "__Rocket Launcher Misfire Chart__",

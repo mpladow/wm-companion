@@ -5,7 +5,7 @@
     },
     "name": "wm-companion",
     "slug": "wm-companion",
-    "version": "1.2.40",
+    "version": "1.2.46",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,9 +14,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mldevelopment.wmcompanion",
@@ -39,17 +37,13 @@
       "eas": {
         "projectId": "e7bcb57d-bc08-49e5-a158-b19bd96e432c"
       },
-      "armyVersion": 2.261
+      "armyVersion": 2.262
     },
     "owner": "mldevelopment",
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/e7bcb57d-bc08-49e5-a158-b19bd96e432c"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font", "expo-sharing"]
   }
 }

@@ -1,23 +1,22 @@
+import { PointsLimitType } from '@navigation/ArmyCreation/EditArmy';
 import { get1000PointInterval } from '@navigation/Builder/utils/builderHelpers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UpgradeTypes } from '@utils/constants';
-import { FactionListProps, UpgradesProps } from '@utils/types';
+import { Factions, UpgradeTypes } from '@utils/constants';
+import { getKeyByValue } from '@utils/factionHelpers';
+import { ArmyErrorsProps, FactionListProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import Constants from 'expo-constants';
 import { produce } from 'immer';
 import _ from 'lodash';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import uuid from 'uuid-random';
 import magicItemsList from '../data/json/wmr/magic-items.json';
 
 export type ArmyListFilters = 'old' | 'losers' | 'all';
 export type ListSections = 'favourites' | 'main';
-type ArmyErrorsProps = {
-  source?: 'Unit' | 'Upgrade';
-  sourceName: string;
-  error: string;
-};
+
 export type SelectedUpgradesProps = {
   id: string;
   upgradeName: string;
@@ -28,6 +27,7 @@ export type SelectedUpgradesProps = {
   maxCount?: number;
   armyLimitMaxCount?: number; // hard limit
   addOnUpgrades?: string[];
+  replacesUnit?: boolean;
 };
 export type SelectedUnitProps = {
   id: string;
@@ -42,7 +42,13 @@ export type SelectedUnitProps = {
   ignoreBreakPoint?: boolean;
   attachedItems: SelectedUpgradesProps[];
   requiredUnits?: string[];
+  replacesUnit?: string; // when selecting a regimentsOfRenown unit, checks the replacesUnitOrType value for the name of the unit it replacesr
+  replacesType?: string[]; // when selecting a RoR unit, it will replace any of this unit type in the list - often used when a RoR is selected for Tomb Kings armies.
+  countsAsMonster?: string[];
+  unitSource: UnitSource;
+  type: string;
 };
+export type UnitSource = 'faction' | 'ror';
 export type ArmyListProps = {
   versionNumber?: number;
   armyId: string;
@@ -54,6 +60,7 @@ export type ArmyListProps = {
   selectedUnits: SelectedUnitProps[];
   selectedUpgrades: SelectedUpgradesProps[];
   points: number;
+  pointsLimit?: PointsLimitType;
 };
 interface BuilderContextInterface {
   userArmyLists: ArmyListProps[];
@@ -61,6 +68,8 @@ interface BuilderContextInterface {
   addUserArmyList: (
     faction: number,
     name: string,
+    notes: string,
+    pointsLimit: PointsLimitType,
     autopopulate: boolean,
     versionNumber: number,
   ) => Promise<string>;
@@ -91,6 +100,7 @@ interface BuilderContextInterface {
     maxCount?: number,
     armyLimitMaxCount?: number,
     addOnUpgrades?: string[],
+    replacesUnit?: boolean,
   ) => void;
   removeItem: (unitName: string, upgradeId: string) => void;
   updateUserArmyLists: () => void;
@@ -102,6 +112,7 @@ interface BuilderContextInterface {
   getArmyByArmyId: (armyId: string) => ArmyListProps | undefined;
   getUnitCounts: () => string;
   getMagicItemsForUnit: (unitName: string) => any[];
+  updatePointsLimit: (armyId: string, limit: PointsLimitType) => void;
 }
 
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
@@ -112,10 +123,9 @@ export const BuilderContextProvider = ({ children }: any) => {
   const [userArmyLists, setUserArmyLists] = useState<ArmyListProps[]>([]);
   const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
   const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
-
+  //   const [regimentsOfRenown, setRegimentsOfRenown] = useState<AddRegimentsOfRenownProps>();
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
-  // const CURRENT_VERSION = 2; // TODO: this should be retrieved by the config
   const { t } = useTranslation(['builder', 'units']);
   const { getFactionUnitsByVersion } = useFactionUnits();
 
@@ -136,6 +146,8 @@ export const BuilderContextProvider = ({ children }: any) => {
       setArmyErrors(calculateArmyErrors());
     }
   }, [currentArmyList]);
+
+  const { getRegimentsOfRenownForFaction } = useFactionUnits();
 
   const setCurrentFaction = (faction: number) => {
     setFaction(faction);
@@ -187,6 +199,10 @@ export const BuilderContextProvider = ({ children }: any) => {
             // surround this logic with some tests - some unit names may change between version
             if (!unitToAdd) {
               alert(`Unable to add ${u.unitName}`);
+              const newSelectedUnitsWithoutOldUnitName = newArmy.selectedUnits.filter(
+                (x) => x.unitName !== u.unitName,
+              );
+              newArmy.selectedUnits = newSelectedUnitsWithoutOldUnitName;
             } else {
               // add this unit
               let max;
@@ -214,7 +230,6 @@ export const BuilderContextProvider = ({ children }: any) => {
               );
               u.attachedItems.map((ai) => {
                 const magicItemToAdd = magicItemsForUnit.find((x) => x.name == ai.upgradeName);
-                console.log('🚀 ~ u.attachedItems.map ~ magicItemToAdd:', magicItemToAdd);
                 if (magicItemToAdd) {
                   ai.points = magicItemToAdd.points;
                   ai.id = uuid();
@@ -259,7 +274,9 @@ export const BuilderContextProvider = ({ children }: any) => {
   const addUserArmyList = async (
     faction: number,
     name: string,
-    autopopulate: boolean,
+    notes: string,
+    pointsLimit: PointsLimitType,
+    autopopulate: boolean = true,
     versionNumber: number,
   ) => {
     const newArmyList: ArmyListProps = {
@@ -272,7 +289,8 @@ export const BuilderContextProvider = ({ children }: any) => {
       selectedUpgrades: [],
       versionNumber: versionNumber,
       points: 0,
-      armyNotes: '',
+      armyNotes: notes,
+      pointsLimit: pointsLimit,
     };
     // autopopulate if true
     const _factionDetails = getFactionUnitsByVersion(faction, versionNumber);
@@ -283,14 +301,20 @@ export const BuilderContextProvider = ({ children }: any) => {
       const factionUnits = _factionDetails.factionList?.units?.filter(
         (x) => x['min'] != undefined || x['armyMin'] != undefined,
       );
-      // find min requirements
+      // find min requirements - take into account fixed points limit if this is set during army creation.
       const defaultUnits: SelectedUnitProps[] = [];
       factionUnits.forEach((x) => {
         let max;
         if (x.max) max = x.max;
+        if (pointsLimit != undefined && max != undefined) {
+          max = (max * parseInt(pointsLimit)) / 1000;
+        }
         if (x.armyMax) max = x.armyMax;
         let min;
         if (x.min) min = x.min;
+        if (pointsLimit != undefined && min != undefined) {
+          min = (min * parseInt(pointsLimit)) / 1000;
+        }
         if (x.armyMin) min = x.armyMin;
 
         const _newUnit: SelectedUnitProps = {
@@ -356,14 +380,14 @@ export const BuilderContextProvider = ({ children }: any) => {
 
   const setSelectedArmyList = (armyId: string, faction?: number) => {
     // once user selects army, set selectedUnits, name,
-    const selectedList = userArmyLists.find((x) => x.armyId == armyId);
-    console.log('🚀 ~ setSelectedArmyList ~ selectedList:', selectedList);
-    if (selectedList) {
+    let selectedList = userArmyLists.find((x) => x.armyId == armyId);
+    let selectedListClone = { ...selectedList };
+    if (selectedListClone) {
       // get list version
-      selectedList.points = calculateCurrentArmyPoints(selectedList);
+      selectedListClone.points = calculateCurrentArmyPoints(selectedList);
       const _factionDetails = getFactionUnitsByVersion(
-        selectedList?.faction,
-        selectedList.versionNumber,
+        selectedListClone.faction,
+        selectedListClone.versionNumber,
       );
       // set faction upgrade tails
       factionDetails && setFactionDetails(_factionDetails.factionList);
@@ -399,7 +423,16 @@ export const BuilderContextProvider = ({ children }: any) => {
       }),
     );
   };
-  // COMPLETED REFACTOR
+
+  const updatePointsLimit = (armyId: string, pointsLimit: PointsLimitType) => {
+    setUserArmyLists(
+      produce((draft) => {
+        const armyList = draft.find((x) => x.armyId == armyId);
+        if (armyList) armyList.pointsLimit = pointsLimit;
+      }),
+    );
+  };
+
   const addUnit = (
     unitName: string,
     unitPoints?: number,
@@ -409,27 +442,34 @@ export const BuilderContextProvider = ({ children }: any) => {
     ignoreBreakPoint?: boolean,
   ) => {
     const currentUnit = factionDetails && factionDetails.units?.find((x) => x.name == unitName);
+    let currentRoRUnit: RegimentOfRenownUnitReferenceType | undefined;
+    if (currentUnit == null) {
+      currentRoRUnit = getRegimentsOfRenownForFaction().find((x) => x.name == unitName);
+    }
     const newUnit: SelectedUnitProps = {
       id: uuid(),
       unitName: unitName,
-      order: currentUnit.order ? currentUnit.order : 1,
+      order: currentRoRUnit ? currentRoRUnit.order : currentUnit.order ? currentUnit.order : 1,
       attachedItems: [],
       points: unitPoints,
       isLeader: isLeader,
       currentCount: 1,
-      max: currentUnit.max,
+      max: currentRoRUnit ? 1 : currentUnit.max,
       maxCount: maxCount,
       minCount: minCount,
       ignoreBreakPoint: ignoreBreakPoint,
-      requiredUnits: currentUnit.requiredUnits,
+      requiredUnits: currentRoRUnit ? [] : currentUnit.requiredUnits,
+      replacesUnit: currentRoRUnit?.replacesUnit[0]?.name,
+      countsAsMonster: currentRoRUnit?.countsAsMonster,
+      replacesType:
+        currentRoRUnit?.replacesType !== null ? currentRoRUnit?.replacesType : undefined,
+      unitSource: currentRoRUnit ? 'ror' : 'faction',
+      type: currentRoRUnit ? currentRoRUnit.type : currentUnit.type,
     };
-    console.log('🚀 ~ BuilderContextProvider ~ factionDetails:', factionDetails);
 
     setCurrentArmyList(
       produce((draft) => {
         const unit = draft?.selectedUnits.find((u) => u.unitName == unitName);
-        console.log('🚀 ~ produce ~ unit:', unit);
-
         if (unit && unit.currentCount) {
           unit.currentCount = unit.currentCount + 1;
         } else {
@@ -469,6 +509,7 @@ export const BuilderContextProvider = ({ children }: any) => {
     maxCount?: number,
     armyLimitMaxCount?: number,
     addOnUpgrades?: string[],
+    replacesUnit?: boolean,
   ) => {
     const newUpgrade: SelectedUpgradesProps = {
       id: uuid(),
@@ -480,6 +521,7 @@ export const BuilderContextProvider = ({ children }: any) => {
       maxCount: maxCount,
       armyLimitMaxCount: armyLimitMaxCount,
       addOnUpgrades: addOnUpgrades,
+      replacesUnit: replacesUnit,
     };
 
     setCurrentArmyList(
@@ -548,22 +590,30 @@ export const BuilderContextProvider = ({ children }: any) => {
     if (armyList)
       armyList?.selectedUnits?.map((unit) => {
         // add points for selectedUnits
-        const amountToAdd = unit.points * unit.currentCount;
-        arrayOfPoints = arrayOfPoints + amountToAdd;
-        //add points for selected items
-        unit.attachedItems.map((up) => {
-          const amountToAdd = up.points * up.currentCount;
+        if (unit.points && unit.currentCount) {
+          const amountToAdd = unit.points * unit.currentCount;
           arrayOfPoints = arrayOfPoints + amountToAdd;
-        });
+          //add points for selected items
+          unit.attachedItems.map((up) => {
+            if (up.currentCount) {
+              const amountToAdd = up.points * up.currentCount;
+              arrayOfPoints = arrayOfPoints + amountToAdd;
+            }
+          });
+        }
       });
-    currentArmyList?.points;
     return arrayOfPoints;
   };
 
   const calculateArmyErrors = () => {
-    const POINTS_LEEWAY = 5;
     // get the current army points for
-    let currentArmyPointsLimit = get1000PointInterval(calculateCurrentArmyPoints());
+
+    const currentArmyPoints = calculateCurrentArmyPoints();
+    let currentArmyPointsLimit = get1000PointInterval(
+      currentArmyList?.pointsLimit !== undefined
+        ? parseInt(currentArmyList?.pointsLimit)
+        : currentArmyPoints,
+    );
 
     const errors: ArmyErrorsProps[] = [];
     let currentUnits = factionDetails?.units;
@@ -605,6 +655,18 @@ export const BuilderContextProvider = ({ children }: any) => {
         }
       }
     });
+
+    // check if exceeding army limit - only if pointsLimit is set
+
+    if (
+      currentArmyList?.pointsLimit &&
+      currentArmyList.points > parseInt(currentArmyList?.pointsLimit)
+    ) {
+      errors.push({
+        sourceName: 'Army',
+        error: `Army: Your army has a strict points limit of ${currentArmyList.pointsLimit}.`,
+      });
+    }
     // check for army mins, if no army min
     const unitsWithArmyMin = currentUnits?.filter((x) => {
       if (x['armyMin'] != undefined || x['min'] != undefined) {
@@ -659,7 +721,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         });
       }
     }
-
+    const unitsThatHaveItemsThatReplaceUnits: SelectedUpgradesProps[] = [];
     // check that allocated items don't exceed number of units
     currentArmyList?.selectedUnits.map((x) => {
       if (x.attachedItems.length > 0) {
@@ -680,17 +742,34 @@ export const BuilderContextProvider = ({ children }: any) => {
             error: `Unit: ${x.currentCount} ${x.unitName} can have a maximum of ${x.currentCount} magic items.`,
           });
         }
+        const _attachedItemsThatReplaceUnits = x.attachedItems.filter((x) => x.replacesUnit);
+        unitsThatHaveItemsThatReplaceUnits.push(..._attachedItemsThatReplaceUnits);
       }
     });
+    // get all the units that this RoR unit replaces.
+
+    // total up the currentCount of these units.
+    // total up the total max value of these units.
+    // if adding this RoR unit takes the value over the limit, then the list is not valid.
 
     // check unit with army Min count - i.e.,  Generals
     unitsWithArmyMin?.map((u) => {
       const unitExists = currentArmyList?.selectedUnits?.find((x) => x.unitName == u.name);
       if (unitExists) {
-        // if count > == u count
+        // check for units that have a unit replacement up[grade]
+        // check for upgrade
+        const upgradeHasReplacesUnit = unitsThatHaveItemsThatReplaceUnits.find((up) =>
+          up.upgradeName?.toLowerCase().includes(u.unitName?.toLowerCase()),
+        );
+        // check for any RoR units that replace other units eg dwarven rangers
+        const hasRoRUnit =
+          currentArmyList?.selectedUnits?.filter(
+            (x) => x.replacesUnit && x.replacesUnit == u.unitName,
+          ).length ?? 0;
+        // if any of thse RoR units have a replacingUnitType, then
         const isValid =
-          unitExists.currentCount >= u.armyMin ||
-          unitExists.currentCount >= currentArmyPointsLimit * u.min;
+          unitExists.currentCount + hasRoRUnit >= u.armyMin ||
+          unitExists.currentCount + hasRoRUnit >= currentArmyPointsLimit * u.min;
         if (!isValid) {
           errors.push({
             source: 'Unit',
@@ -713,10 +792,18 @@ export const BuilderContextProvider = ({ children }: any) => {
     });
     // check unit with army MAx Count
     unitsWithArmyMax?.map((u) => {
-      const unitExists = currentArmyList?.selectedUnits?.find((x) => x.unitName == u.name);
+      const unitExists = currentArmyList?.selectedUnits?.find(
+        (x) => x.unitName == u.name || x.replacesUnit == u.name,
+      );
+      // check for RoR unit
+      const hasRoRUnit =
+        currentArmyList?.selectedUnits?.filter(
+          (x) => x.replacesUnit != null && x.replacesUnit == u.unitName,
+        ).length ?? 0;
+
       if (unitExists) {
         // if count > == u count
-        const isValid = unitExists.currentCount <= u.armyMax;
+        const isValid = unitExists?.currentCount + hasRoRUnit <= u.armyMax;
         if (!isValid) {
           errors.push({
             sourceName: unitExists.unitName,
@@ -728,20 +815,154 @@ export const BuilderContextProvider = ({ children }: any) => {
         }
       }
     });
+
+    // NEW CHECK: check if RoR unit that replaces a SPECIFIC unit exceeds count.
+    const regimentsOfRenownUnitsInList =
+      currentArmyList?.selectedUnits.filter((u) => u.unitSource == 'ror') ?? [];
+
+    regimentsOfRenownUnitsInList?.forEach((roRUnit, i) => {
+      // find the HIGHEST unit in this faction for the type the RoR unit replaces. (NOTE this currently only works when there is only one replacing type. won't work if the RoR unit replaces both cavalry or chariots).
+      const hasUnitTypeInFaction = factionDetails?.units?.filter(
+        (u) =>
+          roRUnit.replacesType?.includes(u.type) &&
+          u.max !== null &&
+          u.unitName != roRUnit.unitName,
+      );
+      if (hasUnitTypeInFaction && hasUnitTypeInFaction.length > 0) {
+        const highestPointUnitsInFactionByType = hasUnitTypeInFaction?.reduce((prev, current) => {
+          return prev.points > current.points ? prev : current;
+        });
+
+        // check if this unit exists in the currentArmyList's selected units.
+        const unitOfSameRoRTypeInCurrentList = currentArmyList?.selectedUnits.find(
+          (x) => x.unitName == highestPointUnitsInFactionByType.name,
+        );
+
+        // const unitOfSameRoRType = currentArmyList?.selectedUnits.filter((u) => {
+        //   return (
+        //     roRUnit.replacesType?.includes(u.type) && u.max !== null && u.unitName != roRUnit.unitName
+        //   );
+        // });
+        if (unitOfSameRoRTypeInCurrentList !== undefined) {
+          //   const highestPointsValue = unitOfSameRoRType.reduce((prev, current) => {
+          //     return prev.max > current.max ? prev : current;
+          //   });
+          //   .reduce((prev, current) => {
+          //     return prev.max > current.max ? prev : current;
+          //   });
+          if (unitOfSameRoRTypeInCurrentList && unitOfSameRoRTypeInCurrentList.maxCount) {
+            const maxCountPer1000Points =
+              unitOfSameRoRTypeInCurrentList.maxCount * currentArmyPointsLimit;
+            if (unitOfSameRoRTypeInCurrentList?.currentCount + 1 > maxCountPer1000Points) {
+              // then adding this unit will not be permitted.
+              errors.push({
+                sourceName: roRUnit.unitName,
+                error: `Adding ${roRUnit.unitName} pushes the max limit for ${unitOfSameRoRTypeInCurrentList.unitName}.`,
+              });
+            }
+          }
+        }
+      }
+
+      // check if this unit has already exceeded its max.
+      // if it has, then this unit cannot be taken.
+      // if it hasn't then the RoR unit can be included.
+    });
+    // CHECK - special check for units that have the countsAsMonster value - for now this is just for Tomb Kings
+    regimentsOfRenownUnitsInList?.map((u) => {
+      if (u.countsAsMonster && u.countsAsMonster?.length > 0) {
+        u.countsAsMonster.map((unitType) =>
+          // if current list matches this value, then this unit is considered one of the monster types of this faction.
+          {
+            if (
+              unitType ==
+              getKeyByValue(Factions, parseInt(currentArmyList?.faction))?.replace('_', ' ')
+            ) {
+              // get total count of monsters in this faction list.
+              const totalUnitTypesInFaction = factionDetails?.units.filter(
+                (x) => x.type == 'Monster',
+              ).length;
+
+              const totalUnitTypesInList = currentArmyList?.selectedUnits.filter(
+                (x) => x.type == 'Monster',
+              );
+              // check if any units of this type ACTUALLY exist. if not, then continue.
+              if (totalUnitTypesInList && totalUnitTypesInFaction) {
+                const totalNumberOfUnitInstancesOFTypeInList = totalUnitTypesInList.reduce(
+                  (accumulator, currentItem) => {
+                    return accumulator + currentItem.currentCount;
+                  },
+                  0,
+                ); // Note: 0 is the initial value
+                if (
+                  totalNumberOfUnitInstancesOFTypeInList ==
+                  totalUnitTypesInFaction * currentArmyPointsLimit
+                ) {
+                  errors.push({
+                    sourceName: u.unitName,
+                    error: `${u.unitName} takes up a Monster slot and the total allowance for monsters has been reached.`,
+                  });
+                }
+              }
+
+              // total monster count vs total monster count in current list
+            }
+          },
+        );
+      }
+    });
+    // CHECK - that only one unique regiment of renown is included in this list.
+    if (regimentsOfRenownUnitsInList.length > 0) {
+      regimentsOfRenownUnitsInList.map((d, i) => {
+        if (d?.currentCount > 1) {
+          errors.push({
+            sourceName: d.unitName,
+            error: `You can only have 1 ${d.unitName} in a list.`,
+          });
+        }
+      });
+      // CHECK - max of one RoR unit per 1000pts
+      if (regimentsOfRenownUnitsInList.length > currentArmyPointsLimit) {
+        errors.push({
+          sourceName: 'Regiments of Renown',
+          error: `You can only have 1 Regiment of Renown per 1000pts`,
+        });
+      }
+    }
     // filter out the above
     currentUnits = currentUnits?.filter((u) => {
       return unitsWithArmyMax?.map((x) => x.name).indexOf(u.name);
     });
-    currentArmyList?.selectedUnits?.map((unit) => {
-      // check max count
 
-      console.log('🚀 ~ currentArmyList?.selectedUnits?.map ~ unit:', unit);
-      if (unit.maxCount) {
+    // check max counts // NEW: must also take into account RoR units that take the place of other units in an army: e.g., Tichi-Huichi Raiders count as a ranger unit.
+    currentArmyList?.selectedUnits?.map((unit) => {
+      if (unit.maxCount && unit.unitSource !== 'ror') {
+        // check if a RoR unit exists and it replaces a SPECIFIC unit
+        const hasRoRUnit =
+          currentArmyList?.selectedUnits?.filter(
+            (x) => x.replacesUnit != null && x.replacesUnit == unit.unitName,
+          ).length ?? 0;
+        //   console.log(
+        //     'HUHHH',
+        //     currentArmyList?.selectedUnits?.filter(
+        //       (x) => x.replacingUnit != null && x.replacingUnit == unit.unitName,
+        //     ),
+        //   );
+        // check if RoR unit replaces a unit type exceeds count.
+
+        // check for upgrade
+        const upgradeHasReplacesUnit = unitsThatHaveItemsThatReplaceUnits.find((up) =>
+          up.upgradeName?.toLowerCase().includes(unit.unitName?.toLowerCase()),
+        );
+
         const maxCountPer1000Points = unit.maxCount * currentArmyPointsLimit;
-        if (unit.currentCount > maxCountPer1000Points) {
+        if (
+          unit.currentCount + hasRoRUnit + (upgradeHasReplacesUnit?.currentCount ?? 0) >
+          maxCountPer1000Points
+        ) {
           errors.push({
             sourceName: unit.unitName,
-            error: `${t('MaximumUnitsPer1000', { maxCount: unit.maxCount, unit: unit.unitName })}`,
+            error: `${t('MaximumUnitsPer1000', { maxCount: unit.maxCount, unit: unit.unitName })} ${hasRoRUnit ? `*Your Regiment of Renown units may contribute to your ${unit.unitName} limit.*` : ''} ${upgradeHasReplacesUnit?.currentCount > 0 ? '*Check your upgrades since some upgrades will replace this unit.' : ''}`,
           });
         }
       }
@@ -870,7 +1091,6 @@ export const BuilderContextProvider = ({ children }: any) => {
       if (up.name == 'Banner of Shielding') {
         // check if the key for this exists. if it doesn't then we should ensure this upgrade cannot be added.
         if (unitHasArmour !== '4+') {
-          console.log(up.points[unitHasArmour]);
           pointsCost = up.points[unitHasArmour];
         } else {
           upgradesToRemove.push(up.name);
@@ -955,6 +1175,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         getUnitCounts,
         getMagicItemsForUnit,
         migrateArmyList,
+        updatePointsLimit,
       }}>
       {children}
     </BuilderContext.Provider>

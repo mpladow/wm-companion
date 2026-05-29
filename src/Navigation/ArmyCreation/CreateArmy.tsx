@@ -1,13 +1,13 @@
 import { Button, Text } from '@components/index';
 import { useBuilderContext } from '@context/BuilderContext';
-import { Theme } from '@hooks/useTheme';
+import { useTheme } from '@hooks/useTheme';
 import { DropDownItemProps } from '@navigation/Tracker/screens/Tracker';
+import { useNavigation } from '@react-navigation/native';
 import { Factions } from '@utils/constants';
 import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
-import fonts from '@utils/fonts';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import Constants from 'expo-constants';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	Dimensions,
@@ -20,18 +20,15 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from 'react-native-toast-notifications';
 
 const THUMBNAIL_HEIGHT = 100;
 const THUMBNAIL_WIDTH = 100;
 const SPACING = 5;
-
-type CreateArmyFormType = {
-  theme: Theme;
-  handleDismissModal: () => void;
-};
-const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
+const CreateArmy = () => {
   const builder = useBuilderContext();
+  const navigation = useNavigation();
 
   const { getFactionUnitsByVersion } = useFactionUnits();
   const { t } = useTranslation(['builder', 'common', 'forms']);
@@ -41,7 +38,7 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
   const [factionNameError, setFactionNameError] = useState(false);
   const [factionName, setFactionName] = useState<string>('');
 
-  const [factionSelection, setFactionSelection] = useState<number>();
+  const [factionSelection, setFactionSelection] = useState<number | string>();
   const [factionDescription, setFactionDescription] = useState([] as string[]);
 
   // faction selection
@@ -87,25 +84,11 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
     if (factionName != '') setFactionNameError(false);
   }, [factionName]);
 
-  const onConfirmCreateArmyPress = async (autopopulate: boolean) => {
-    if (factionName == '') {
-      console.error('🚀 ~ onConfirmCreateArmyPress ~ factionName:', factionName);
-      setFactionNameError(true);
-    } else {
-      setFactionNameError(false);
-    }
-    if (factionSelection && factionName != '') {
-      builder
-        .addUserArmyList(factionSelection, factionName, autopopulate, CURRENT_VERSION)
-        .then((result) => {
-          builder.setSelectedArmyList(result);
-        })
-        .catch(() => {})
-        .finally(() => {
-          // navigation.navigate("BuilderEdit");
-          handleDismiss();
-          toast.show(`New army created!`);
-        });
+  const onNextStopPress = () => {
+    if (factionSelection !== null) {
+      navigation.navigate('EditArmy', {
+        factionSelection: factionSelection,
+      });
     }
   };
 
@@ -114,43 +97,23 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
     setFactionName('');
   };
 
-  const handleDismiss = () => {
-    resetForm();
-    handleDismissModal();
-  };
-
   const thumbRef = useRef<FlatList>(null);
   const nameRef = useRef<TextInput>(null);
-
+  const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   return (
-    <>
-      <TextInput
-        ref={nameRef}
-        placeholder={t('PlaceholderEnterArmyName', { ns: 'forms' })}
-        onChangeText={(val) => setFactionName(val)}
-        style={[
-          {
-            color: theme.black,
-            fontFamily: fonts.PTSansBold,
-            fontSize: 16,
-            backgroundColor: theme.white,
-            borderRadius: 16,
-            padding: 16,
-          },
-          factionNameError && { borderColor: theme.danger, borderWidth: 4 },
-        ]}>
-        {factionName}
-      </TextInput>
-      {factionNameError && (
-        <Text italic style={{ color: theme.danger }}>
-          An army name is required
-        </Text>
-      )}
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.background,
+        padding: 12,
+        paddingBottom: insets.bottom + 16,
+      }}>
       <View style={{ height: 70, marginVertical: 4, marginTop: 12 }}>
         <ImageBackground
           resizeMode="stretch"
           style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 10 }}
-          source={require('../../../../../../images/svgs/scroll_header.png')}>
+          source={require('../../images/svgs/scroll_header.png')}>
           <Text
             style={{
               zIndex: 999,
@@ -163,10 +126,7 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
           </Text>
         </ImageBackground>
       </View>
-      <ScrollView
-        onStartShouldSetResponder={() => true}
-        contentContainerStyle={{ flexGrow: 1 }}
-        scrollEnabled={true}>
+      <ScrollView scrollEnabled={true}>
         {factionSelection == null && (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ textAlign: 'center', fontSize: 20 }} bold>
@@ -190,7 +150,6 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
           }}
           renderItem={({ item, index }) => {
             const armyName = item.value ? getKeyByValue(Factions, item?.value as number) : '';
-
             const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
             return (
               <TouchableOpacity
@@ -243,17 +202,33 @@ const CreateArmyForm = ({ theme, handleDismissModal }: CreateArmyFormType) => {
           ItemSeparatorComponent={() => <View style={{ width: 12 }}></View>}
         />
       </View>
-      <View style={{ paddingTop: 16 }}>
-        <Button onPress={() => onConfirmCreateArmyPress(true)} variant={'confirm'}>
+      <View style={{ paddingTop: 16, flexDirection: 'row', gap: 12 }}>
+        {/* <Button onPress={() => onConfirmCreateArmyPress(true)} variant={'confirm'}>
           <Text bold style={{ textTransform: 'uppercase', color: theme.black }}>
             {t('Create', { ns: 'common' })}
           </Text>
-        </Button>
+        </Button> */}
+        <View>
+          <Button onPress={() => navigation.goBack()} variant={'text'}>
+            <Text bold style={{ textTransform: 'uppercase', color: theme.white }}>
+              Close
+            </Text>
+          </Button>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Button onPress={() => onNextStopPress()} variant={'secondary'}>
+            <Text bold style={{ textTransform: 'uppercase', color: theme.white }}>
+              Next
+            </Text>
+          </Button>
+        </View>
       </View>
-    </>
+    </View>
   );
 };
-export default CreateArmyForm;
+
+export default CreateArmy;
+
 const styles = StyleSheet.create({
   stretch: {
     width: THUMBNAIL_WIDTH,

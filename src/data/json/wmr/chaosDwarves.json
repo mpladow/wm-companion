@@ -124,7 +124,7 @@
 			"name": "Bolt Thrower",
 			"order": 9,
 			"type": "Artillery",
-			"attack": "1/2 per stand",
+			"attack": "1/2 + skewer",
 			"range": "40cm",
 			"armour": "-",
 			"hits": 2,

@@ -1,7 +1,7 @@
-import { View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 import { Button, Text } from "@components/index";
+import { AntDesign } from "@expo/vector-icons";
 import { Theme } from "@hooks/useTheme";
+import { View } from "react-native";
 
 const AddArmyButton = ({
 	handleAddArmyPress,
@@ -13,19 +13,26 @@ const AddArmyButton = ({
 	buttonName: string;
 }) => {
 	return (
-		<View style={{ zIndex: 99999, position: "absolute", bottom: 30, right: 24 }}>
-			{/* <Button circle onPress={handleAddArmyPress} variant={"confirm"}>
+    <View
+      style={{
+        zIndex: 99999,
+        position: 'absolute',
+        bottom: 30,
+        right: 24,
+        boxShadow: `0px 0px 12px 8px rgba(0, 0, 0, 0.20)`,
+      }}>
+      {/* <Button circle onPress={handleAddArmyPress} variant={"confirm"}>
                 <AntDesign name='plus' size={24} color='black' />
             </Button> */}
-			<Button onPress={handleAddArmyPress} variant={"confirm"}>
-				<View style={{ flexDirection: "row", alignItems: "center" }}>
-					<AntDesign name='plus' size={20} color='black' />
-					<Text bold style={{ marginLeft: 4, color: theme.black }}>
-						{buttonName}
-					</Text>
-				</View>
-			</Button>
-		</View>
-	);
+      <Button onPress={handleAddArmyPress} variant={'confirm'}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <AntDesign name="plus" size={20} color="black" />
+          <Text bold style={{ marginLeft: 4, color: theme.black }}>
+            {buttonName}
+          </Text>
+        </View>
+      </Button>
+    </View>
+  );
 };
 export default AddArmyButton;

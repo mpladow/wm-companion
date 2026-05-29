@@ -21,6 +21,8 @@ export const getFactionsDropdown = () => {
 		}
 		return 0;
 	});
+	// exclude regiments of renown faction
+	ddFactionList = ddFactionList.filter(x => x.label !== "Regiments Of Renown")
 	return { ddFactionList: ddFactionList };
 };
 export const getKeyByValue = (object: object, value: number) => {
@@ -39,7 +41,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Orcs":
 			return [require("../../assets/images/wm-orcs.jpg")];
 		case "Tomb_Kings":
-			return [require("../../assets/images/wm-tombkings-default.png")];
+			return [require("../../assets/images/wm-tombkings.png")];
 
 		case "Empire":
 			return [require("../../assets/images/wm-empire2.jpeg")];
@@ -49,7 +51,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Chaos":
 			return [require("../../assets/images/wm-chaos.jpeg")];
 		case "Wood_Elves":
-			return [require("../../assets/images/wm-woodelves-default.png")];
+			return [require("../../assets/images/wm-woodelves.png")];
 
 		case "Vampire_Counts":
 			return [require("../../assets/images/wm-vampcounts.jpeg")];

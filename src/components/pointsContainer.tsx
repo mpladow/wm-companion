@@ -1,29 +1,33 @@
-import { StyleSheet, View } from "react-native";
-import React from "react";
-import { useTheme } from "@hooks/useTheme";
-import {Text} from '@components/index';
+import { Text } from '@components/index';
+import { useTheme } from '@hooks/useTheme';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 type PointsContainerProps = {
-	points?: number | string ;
+  points?: number | string;
+  maxPoints?: number | string;
 };
-const pointsContainer = ({ points }: PointsContainerProps) => {
-	const { theme } = useTheme();
-	return (
-		<View
-			style={{
-				flex: 1,
-				padding: 4,
-				paddingHorizontal: 8,
-				borderRadius: 4,
-				backgroundColor: theme.white,
-				alignItems: 'center',
-				justifyContent: 'center',
-				flexDirection: 'row'
-			}}
-		>
-			<Text bold style={{ color: theme.black, fontSize: 12 }}>{points}</Text><Text style={{color: theme.black, fontSize: 12}}> pts</Text>
-		</View>
-	);
+const pointsContainer = ({ points, maxPoints }: PointsContainerProps) => {
+  const { theme } = useTheme();
+  return (
+    <View
+      style={{
+        padding: 4,
+        paddingHorizontal: 8,
+        minWidth: 50,
+        borderRadius: 4,
+        backgroundColor: theme.white,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+      }}>
+      <Text bold style={{ color: theme.black, fontSize: 12 }}>
+        {points}
+        {maxPoints && `/${maxPoints}`}
+      </Text>
+      <Text style={{ color: theme.black, fontSize: 12 }}> pts</Text>
+    </View>
+  );
 };
 
 export default pointsContainer;

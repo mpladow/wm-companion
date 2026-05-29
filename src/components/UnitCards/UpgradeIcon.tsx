@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useMemo } from "react";
-import { UnitTypes, UpgradeTypes } from "@utils/constants";
 import { useTheme } from "@hooks/useTheme";
-import Chariot from "./Chariot";
+import { UpgradeTypes } from "@utils/constants";
+import React, { useMemo } from "react";
+import { StyleSheet, View } from "react-native";
 import Banner from "./Banner";
-import MagicWeapon from "./MagicWeapon";
+import Chariot from "./Chariot";
 import DeviceOfPower from "./DeviceOfPower";
+import MagicWeapon from "./MagicWeapon";
 import MonstrousMount from "./MonstrousMount";
 import Mount from "./Mount";
 import SpecialItem from "./SpecialItem";
@@ -41,7 +41,7 @@ const UpgradeIcon = ({ type, noCount, size = "small" }: UpgradeIconProps) => {
 		}
 	}, []);
 	return (
-		<View style={{ alignItems: "center", justifyContent: "center", opacity: noCount ? 0.2 : 1 }}>{renderIcon}</View>
+		<View style={{ alignItems: "center", justifyContent: "center", opacity: noCount ? 0.2 : 1, borderWidth: 1.5, borderColor: theme.white }}>{renderIcon}</View>
 	);
 };
 
