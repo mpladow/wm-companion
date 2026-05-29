@@ -47,6 +47,7 @@ export type SelectedUnitProps = {
   countsAsMonster?: string[];
   unitSource: UnitSource;
   type: string;
+  forbiddenRoRUnits?: string[]; // these units are not allowed to be in the same list as this unit.
 };
 export type UnitSource = 'faction' | 'ror';
 export type ArmyListProps = {
@@ -140,11 +141,16 @@ export const BuilderContextProvider = ({ children }: any) => {
   }, [userArmyLists]);
 
   useEffect(() => {
-    if (currentArmyList) {
-      updateUserArmyLists();
-      // update points count
-      setArmyErrors(calculateArmyErrors());
-    }
+    const updateArmyErrors = async () => {
+      if (currentArmyList) {
+        updateUserArmyLists();
+        // update points count
+        calculateArmyErrors().then((res) => {
+          setArmyErrors(res);
+        });
+      }
+    };
+    updateArmyErrors();
   }, [currentArmyList]);
 
   const { getRegimentsOfRenownForFaction } = useFactionUnits();
@@ -465,6 +471,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         currentRoRUnit?.replacesType !== null ? currentRoRUnit?.replacesType : undefined,
       unitSource: currentRoRUnit ? 'ror' : 'faction',
       type: currentRoRUnit ? currentRoRUnit.type : currentUnit.type,
+      forbiddenRoRUnits: currentRoRUnit ? currentRoRUnit.forbiddenRoRUnits : undefined,
     };
 
     setCurrentArmyList(
@@ -605,7 +612,7 @@ export const BuilderContextProvider = ({ children }: any) => {
     return arrayOfPoints;
   };
 
-  const calculateArmyErrors = () => {
+  const calculateArmyErrors = async () => {
     // get the current army points for
 
     const currentArmyPoints = calculateCurrentArmyPoints();
@@ -819,6 +826,10 @@ export const BuilderContextProvider = ({ children }: any) => {
     // NEW CHECK: check if RoR unit that replaces a SPECIFIC unit exceeds count.
     const regimentsOfRenownUnitsInList =
       currentArmyList?.selectedUnits.filter((u) => u.unitSource == 'ror') ?? [];
+    console.log(
+      '🚀 ~ calculateArmyErrors ~ regimentsOfRenownUnitsInList:',
+      regimentsOfRenownUnitsInList,
+    );
 
     regimentsOfRenownUnitsInList?.forEach((roRUnit, i) => {
       // find the HIGHEST unit in this faction for the type the RoR unit replaces. (NOTE this currently only works when there is only one replacing type. won't work if the RoR unit replaces both cavalry or chariots).
@@ -863,15 +874,9 @@ export const BuilderContextProvider = ({ children }: any) => {
           }
         }
       }
-
-      // check if this unit has already exceeded its max.
-      // if it has, then this unit cannot be taken.
-      // if it hasn't then the RoR unit can be included.
-    });
-    // CHECK - special check for units that have the countsAsMonster value - for now this is just for Tomb Kings
-    regimentsOfRenownUnitsInList?.map((u) => {
-      if (u.countsAsMonster && u.countsAsMonster?.length > 0) {
-        u.countsAsMonster.map((unitType) =>
+      // CHECK - special check for units that have the countsAsMonster value - for now this is just for Tomb Kings
+      if (roRUnit.countsAsMonster && roRUnit.countsAsMonster?.length > 0) {
+        roRUnit.countsAsMonster.map((unitType) =>
           // if current list matches this value, then this unit is considered one of the monster types of this faction.
           {
             if (
@@ -899,8 +904,8 @@ export const BuilderContextProvider = ({ children }: any) => {
                   totalUnitTypesInFaction * currentArmyPointsLimit
                 ) {
                   errors.push({
-                    sourceName: u.unitName,
-                    error: `${u.unitName} takes up a Monster slot and the total allowance for monsters has been reached.`,
+                    sourceName: roRUnit.unitName,
+                    error: `${roRUnit.unitName} takes up a Monster slot and the total allowance for monsters has been reached.`,
                   });
                 }
               }
@@ -910,17 +915,30 @@ export const BuilderContextProvider = ({ children }: any) => {
           },
         );
       }
+
+      // CHECK - that only one unique regiment of renown is included in this list.
+      if (roRUnit?.currentCount > 1) {
+        errors.push({
+          sourceName: roRUnit.unitName,
+          error: `You can only have 1 ${roRUnit.unitName} in a list.`,
+        });
+      }
+      // CHECK - check that another RoR unit that is forbidden is NOT in the list
+      if (roRUnit.forbiddenRoRUnits) {
+        roRUnit.forbiddenRoRUnits.map((x) => {
+          const forbiddenUnitInList = regimentsOfRenownUnitsInList.find(
+            (unit) => unit.unitName == x,
+          );
+          if (forbiddenUnitInList) {
+            errors.push({
+              sourceName: 'Regiments of Renown',
+              error: `${x} is not permitted in the same list as ${roRUnit.unitName}`,
+            });
+          }
+        });
+      }
     });
-    // CHECK - that only one unique regiment of renown is included in this list.
     if (regimentsOfRenownUnitsInList.length > 0) {
-      regimentsOfRenownUnitsInList.map((d, i) => {
-        if (d?.currentCount > 1) {
-          errors.push({
-            sourceName: d.unitName,
-            error: `You can only have 1 ${d.unitName} in a list.`,
-          });
-        }
-      });
       // CHECK - max of one RoR unit per 1000pts
       if (regimentsOfRenownUnitsInList.length > currentArmyPointsLimit) {
         errors.push({
