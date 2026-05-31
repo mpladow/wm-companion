@@ -114,6 +114,7 @@ interface BuilderContextInterface {
   getUnitCounts: () => string;
   getMagicItemsForUnit: (unitName: string) => any[];
   updatePointsLimit: (armyId: string, limit: PointsLimitType) => void;
+  totalPoints: number;
 }
 
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
@@ -452,6 +453,7 @@ export const BuilderContextProvider = ({ children }: any) => {
     if (currentUnit == null) {
       currentRoRUnit = getRegimentsOfRenownForFaction().find((x) => x.name == unitName);
     }
+    console.log('🚀 ~ addUnit ~ currentRoRUnit:', currentRoRUnit);
     const newUnit: SelectedUnitProps = {
       id: uuid(),
       unitName: unitName,
@@ -470,9 +472,10 @@ export const BuilderContextProvider = ({ children }: any) => {
       replacesType:
         currentRoRUnit?.replacesType !== null ? currentRoRUnit?.replacesType : undefined,
       unitSource: currentRoRUnit ? 'ror' : 'faction',
-      type: currentRoRUnit ? currentRoRUnit.type : currentUnit.type,
-      forbiddenRoRUnits: currentRoRUnit ? currentRoRUnit.forbiddenRoRUnits : undefined,
+      type: currentRoRUnit ? currentRoRUnit?.type : currentUnit?.type,
+      forbiddenRoRUnits: currentRoRUnit ? currentRoRUnit?.forbiddenRoRUnits : undefined,
     };
+    console.log('🚀 ~ addUnit ~ newUnit:', newUnit);
 
     setCurrentArmyList(
       produce((draft) => {
@@ -826,10 +829,6 @@ export const BuilderContextProvider = ({ children }: any) => {
     // NEW CHECK: check if RoR unit that replaces a SPECIFIC unit exceeds count.
     const regimentsOfRenownUnitsInList =
       currentArmyList?.selectedUnits.filter((u) => u.unitSource == 'ror') ?? [];
-    console.log(
-      '🚀 ~ calculateArmyErrors ~ regimentsOfRenownUnitsInList:',
-      regimentsOfRenownUnitsInList,
-    );
 
     regimentsOfRenownUnitsInList?.forEach((roRUnit, i) => {
       // find the HIGHEST unit in this faction for the type the RoR unit replaces. (NOTE this currently only works when there is only one replacing type. won't work if the RoR unit replaces both cavalry or chariots).
@@ -924,6 +923,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         });
       }
       // CHECK - check that another RoR unit that is forbidden is NOT in the list
+
       if (roRUnit.forbiddenRoRUnits) {
         roRUnit.forbiddenRoRUnits.map((x) => {
           const forbiddenUnitInList = regimentsOfRenownUnitsInList.find(
@@ -1007,6 +1007,24 @@ export const BuilderContextProvider = ({ children }: any) => {
     return `${breakCount}/${unitCount}`;
   };
 
+  const [totalPoints, setTotalPoints] = useState<number>();
+  useEffect(() => {
+    calculatePointsLimit();
+  }, [currentArmyList, calculateCurrentArmyPoints(), currentArmyList?.pointsLimit]);
+  const calculatePointsLimit = () => {
+    const _currentPoints = calculateCurrentArmyPoints();
+    if (currentArmyList?.pointsLimit != undefined) {
+      setTotalPoints(parseInt(currentArmyList.pointsLimit));
+      return;
+    }
+    if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000)
+      setTotalPoints(2000);
+    if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000)
+      setTotalPoints(3000);
+    if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
+    if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
+    if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
+  };
   const getMagicItemsForUnit = (unitName: string, faction?: number, versionNumber?: number) => {
     // this needs to be retrieved for each unit, since costs are different each time
     let _factionDetails = factionDetails;
@@ -1194,6 +1212,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         getMagicItemsForUnit,
         migrateArmyList,
         updatePointsLimit,
+        totalPoints,
       }}>
       {children}
     </BuilderContext.Provider>

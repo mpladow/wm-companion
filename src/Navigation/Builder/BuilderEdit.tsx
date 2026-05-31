@@ -88,6 +88,8 @@ const BuilderEdit = ({ navigation }: any) => {
     }
   }, [navigation, builder.selectedArmyList]);
 
+
+
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
     if (builder.selectedArmyList?.pointsLimit != undefined) {
@@ -336,8 +338,8 @@ const BuilderEdit = ({ navigation }: any) => {
   };
 
   const armyCount = useMemo(() => {
-    return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
-  }, [builder.calculateCurrentArmyPoints(), totalPoints]);
+    return `${builder.calculateCurrentArmyPoints()}/${builder.totalPoints}`;
+  }, [builder.calculateCurrentArmyPoints(), builder.totalPoints]);
 
   return (
     <>

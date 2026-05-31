@@ -3,7 +3,7 @@ import MainContainerWithBlankBG from '@components/MainContainerWithBlankBG';
 import { useBuilderContext } from '@context/BuilderContext';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { getGenericSpecialRules } from '@utils/factionHelpers';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
@@ -18,12 +18,18 @@ import UnitCard from '../UnitCard';
 import RegimentsOfRenownPreview from '../UnitCardPreview/RegimentsOfRenownPreview';
 
 export type AddRegimentsOfRenownProps = {
-  addingUnits: boolean;
+  addingLeader: boolean;
 };
 const AddRegimentsOfRenown = () => {
   const { t } = useTranslation('builder');
   const { theme } = useTheme();
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const { addingLeader } = route.params as {
+    addingLeader: boolean;
+  };
+
   const builder = useBuilderContext();
   const [regimentsOfRenown, setRegimentsOfRenown] = useState<
     RegimentOfRenownUnitReferenceType[] | undefined
@@ -39,6 +45,10 @@ const AddRegimentsOfRenown = () => {
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
+    if (builder.selectedArmyList?.pointsLimit != undefined) {
+      setTotalPoints(parseInt(builder.selectedArmyList.pointsLimit));
+      return;
+    }
     if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000)
       setTotalPoints(2000);
     if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000)
@@ -46,7 +56,7 @@ const AddRegimentsOfRenown = () => {
     if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
     if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
     if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
-  }, [builder.calculateCurrentArmyPoints()]);
+  }, [builder.calculateCurrentArmyPoints(), builder.selectedArmyList?.pointsLimit]);
 
   useLayoutEffect(() => {
     // get all units for selected army list
@@ -56,7 +66,10 @@ const AddRegimentsOfRenown = () => {
         title: 'Regiments Of Renown',
       });
 
-      const _regimentsOfRenown = getRegimentsOfRenownForFaction(builder.selectedArmyList?.faction);
+      const _regimentsOfRenown = getRegimentsOfRenownForFaction(
+        builder.selectedArmyList?.faction,
+        addingLeader,
+      );
 
       setRegimentsOfRenown(_regimentsOfRenown);
     }
@@ -88,13 +101,10 @@ const AddRegimentsOfRenown = () => {
   }, []);
 
   const armyCount = useMemo(() => {
-    return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
-  }, [builder.calculateCurrentArmyPoints(), totalPoints]);
+    return `${builder.calculateCurrentArmyPoints()}/${builder.totalPoints}`;
+  }, [builder.calculateCurrentArmyPoints(), builder.totalPoints]);
 
-  const {
-    getRegimentsOfRenownForFaction,
-    getRegimentsOfRenownFactionData,
-  } = useFactionUnits();
+  const { getRegimentsOfRenownForFaction, getRegimentsOfRenownFactionData } = useFactionUnits();
 
   const handleViewPreview = (unitName: string) => {
     const rawUnitData = regimentsOfRenown?.find((x) => x.name == unitName);
@@ -243,9 +253,18 @@ const AddRegimentsOfRenown = () => {
           contentContainerStyle={{ paddingTop: 8, paddingBottom: 100 }}
           scrollEnabled={false}
           data={regimentsOfRenown}
+          ListEmptyComponent={
+            <View style={{ padding: 12, alignItems: 'center' }}>
+              <Text style={{ textAlign: 'center' }}>
+                There are no Regiments of Renown available to your faction at the moment.
+              </Text>
+            </View>
+          }
           renderItem={({ item, index }) => {
             // get unit count for this unit.
-            const units = sectionListData?.find((x) => x.title == 'Units')?.data;
+            const units = addingLeader
+              ? sectionListData?.find((x) => x.title == 'Leaders')?.data
+              : sectionListData?.find((x) => x.title == 'Units')?.data;
             const _unit = units?.filter((x) => x.unitName == item.name)[0];
             // find current units/leaders in army
             const unitCount = _unit ? _unit.currentCount : 0;

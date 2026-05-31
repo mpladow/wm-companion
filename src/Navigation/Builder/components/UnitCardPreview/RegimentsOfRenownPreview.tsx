@@ -267,20 +267,27 @@ const RegimentsOfRenownPreview = ({
               }}>
               <View style={{ flex: 1, flexDirection: 'column' }}>
                 <View style={{ marginTop: 8 }}>
-                  <Text bold style={{ fontSize: 20, marginBottom: 8 }}>
-                    {t('SpecialRules')}
-                  </Text>
+                  {selectedUnitDetails.specialRules?.filter(
+                    (x) => x.label !== selectedUnitDetails.name,
+                  ).length > 0 ? (
+                    <Text bold style={{ fontSize: 20, marginBottom: 8 }}>
+                      {t('SpecialRules')}
+                    </Text>
+                  ) : undefined}
+
                   {selectedUnitDetails.specialRules?.map((x) => {
                     return x?.text?.map((rule, index) => {
-                      let sanitized = sanitizeText(rule, theme.text);
-                      return (
-                        <View key={index} style={{ marginBottom: 8 }}>
-                          <Text style={{ color: theme.text }}>
-                            {index == 0 && x.label && <Text bold>{x.label}: </Text>}
-                            {sanitized}
-                          </Text>
-                        </View>
-                      );
+                      if (x.label !== selectedUnitDetails.name) {
+                        let sanitized = sanitizeText(rule, theme.text);
+                        return (
+                          <View key={index} style={{ marginBottom: 8 }}>
+                            <Text style={{ color: theme.text }}>
+                              {index == 0 && x.label && <Text bold>{x.label}: </Text>}
+                              {sanitized}
+                            </Text>
+                          </View>
+                        );
+                      }
                     });
                   })}
                 </View>
