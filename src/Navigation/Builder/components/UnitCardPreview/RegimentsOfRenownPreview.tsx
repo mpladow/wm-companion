@@ -268,7 +268,7 @@ const RegimentsOfRenownPreview = ({
               <View style={{ flex: 1, flexDirection: 'column' }}>
                 <View style={{ marginTop: 8 }}>
                   {selectedUnitDetails.specialRules?.filter(
-                    (x) => x.label !== selectedUnitDetails.name,
+                    (x) => x?.label !== selectedUnitDetails.name,
                   ).length > 0 ? (
                     <Text bold style={{ fontSize: 20, marginBottom: 8 }}>
                       {t('SpecialRules')}
