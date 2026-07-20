@@ -129,7 +129,7 @@ const UnitCard = ({
                 <View
                   style={{
                     backgroundColor: theme.danger,
-                    borderRadius: 8,
+                    borderRadius: 16,
                     padding: 4,
                     paddingHorizontal: 8,
                   }}>
@@ -177,7 +177,7 @@ const UnitCard = ({
                 <View
                   style={{
                     backgroundColor: theme.warning,
-                    borderRadius: 8,
+                    borderRadius: 16,
                     padding: 4,
                     paddingHorizontal: 8,
                   }}>

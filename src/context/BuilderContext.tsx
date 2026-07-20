@@ -8,11 +8,16 @@ import { useFactionUnits } from '@utils/useFactionUnits';
 import Constants from 'expo-constants';
 import { produce } from 'immer';
 import _ from 'lodash';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import uuid from 'uuid-random';
 import magicItemsList from '../data/json/wmr/magic-items.json';
+import {
+  calculateArmyPoints,
+  calculateDisplayedPointsLimit,
+  calculateUnitCounts,
+} from './builderCalculations';
 
 export type ArmyListFilters = 'old' | 'losers' | 'all';
 export type ListSections = 'favourites' | 'main';
@@ -47,6 +52,7 @@ export type SelectedUnitProps = {
   countsAsMonster?: string[];
   unitSource: UnitSource;
   type: string;
+  forbiddenRoRUnits?: string[]; // these units are not allowed to be in the same list as this unit.
 };
 export type UnitSource = 'faction' | 'ror';
 export type ArmyListProps = {
@@ -113,6 +119,7 @@ interface BuilderContextInterface {
   getUnitCounts: () => string;
   getMagicItemsForUnit: (unitName: string) => any[];
   updatePointsLimit: (armyId: string, limit: PointsLimitType) => void;
+  totalPoints: number;
 }
 
 const BuilderContext = createContext<BuilderContextInterface>({} as BuilderContextInterface);
@@ -128,6 +135,18 @@ export const BuilderContextProvider = ({ children }: any) => {
 
   const { t } = useTranslation(['builder', 'units']);
   const { getFactionUnitsByVersion } = useFactionUnits();
+  const currentVersionArmyLists = useMemo(() => {
+    return userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
+  }, [CURRENT_VERSION, userArmyLists]);
+  const currentArmyPoints = useMemo(() => {
+    return calculateArmyPoints(currentArmyList);
+  }, [currentArmyList]);
+  const currentUnitCounts = useMemo(() => {
+    return calculateUnitCounts(currentArmyList, factionDetails);
+  }, [currentArmyList, factionDetails?.name]);
+  const totalPoints = useMemo(() => {
+    return calculateDisplayedPointsLimit(currentArmyPoints, currentArmyList?.pointsLimit);
+  }, [currentArmyList?.pointsLimit, currentArmyPoints]);
 
   useEffect(() => {
     //AsyncStorage.removeItem(`userArmies`);
@@ -140,11 +159,16 @@ export const BuilderContextProvider = ({ children }: any) => {
   }, [userArmyLists]);
 
   useEffect(() => {
-    if (currentArmyList) {
-      updateUserArmyLists();
-      // update points count
-      setArmyErrors(calculateArmyErrors());
-    }
+    const updateArmyErrors = async () => {
+      if (currentArmyList) {
+        updateUserArmyLists();
+        // update points count
+        calculateArmyErrors().then((res) => {
+          setArmyErrors(res);
+        });
+      }
+    };
+    updateArmyErrors();
   }, [currentArmyList]);
 
   const { getRegimentsOfRenownForFaction } = useFactionUnits();
@@ -464,8 +488,10 @@ export const BuilderContextProvider = ({ children }: any) => {
       replacesType:
         currentRoRUnit?.replacesType !== null ? currentRoRUnit?.replacesType : undefined,
       unitSource: currentRoRUnit ? 'ror' : 'faction',
-      type: currentRoRUnit ? currentRoRUnit.type : currentUnit.type,
+      type: currentRoRUnit ? currentRoRUnit?.type : currentUnit?.type,
+      forbiddenRoRUnits: currentRoRUnit ? currentRoRUnit?.forbiddenRoRUnits : undefined,
     };
+    console.log('🚀 ~ addUnit ~ newUnit:', newUnit);
 
     setCurrentArmyList(
       produce((draft) => {
@@ -578,34 +604,18 @@ export const BuilderContextProvider = ({ children }: any) => {
     );
   };
 
-  const calculateCurrentArmyPoints = (targetArmyList?: ArmyListProps) => {
-    // get current army
-    let arrayOfPoints = 0;
-    let armyList: ArmyListProps | undefined = undefined;
-    if (targetArmyList) {
-      armyList = targetArmyList;
-    } else {
-      armyList = currentArmyList;
-    }
-    if (armyList)
-      armyList?.selectedUnits?.map((unit) => {
-        // add points for selectedUnits
-        if (unit.points && unit.currentCount) {
-          const amountToAdd = unit.points * unit.currentCount;
-          arrayOfPoints = arrayOfPoints + amountToAdd;
-          //add points for selected items
-          unit.attachedItems.map((up) => {
-            if (up.currentCount) {
-              const amountToAdd = up.points * up.currentCount;
-              arrayOfPoints = arrayOfPoints + amountToAdd;
-            }
-          });
-        }
-      });
-    return arrayOfPoints;
-  };
+  const calculateCurrentArmyPoints = useCallback(
+    (targetArmyList?: ArmyListProps) => {
+      if (targetArmyList) {
+        return calculateArmyPoints(targetArmyList);
+      }
 
-  const calculateArmyErrors = () => {
+      return currentArmyPoints;
+    },
+    [currentArmyPoints],
+  );
+
+  const calculateArmyErrors = async () => {
     // get the current army points for
 
     const currentArmyPoints = calculateCurrentArmyPoints();
@@ -790,6 +800,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         });
       }
     });
+
     // check unit with army MAx Count
     unitsWithArmyMax?.map((u) => {
       const unitExists = currentArmyList?.selectedUnits?.find(
@@ -801,7 +812,12 @@ export const BuilderContextProvider = ({ children }: any) => {
           (x) => x.replacesUnit != null && x.replacesUnit == u.unitName,
         ).length ?? 0;
 
-      if (unitExists) {
+      const hasRoRCharacter =
+        u.type ==
+        currentArmyList?.selectedUnits.find((x) => {
+          return x.replacesType?.includes(u.type);
+        });
+      if (unitExists || hasRoRCharacter) {
         // if count > == u count
         const isValid = unitExists?.currentCount + hasRoRUnit <= u.armyMax;
         if (!isValid) {
@@ -863,15 +879,9 @@ export const BuilderContextProvider = ({ children }: any) => {
           }
         }
       }
-
-      // check if this unit has already exceeded its max.
-      // if it has, then this unit cannot be taken.
-      // if it hasn't then the RoR unit can be included.
-    });
-    // CHECK - special check for units that have the countsAsMonster value - for now this is just for Tomb Kings
-    regimentsOfRenownUnitsInList?.map((u) => {
-      if (u.countsAsMonster && u.countsAsMonster?.length > 0) {
-        u.countsAsMonster.map((unitType) =>
+      // CHECK - special check for units that have the countsAsMonster value - for now this is just for Tomb Kings
+      if (roRUnit.countsAsMonster && roRUnit.countsAsMonster?.length > 0) {
+        roRUnit.countsAsMonster.map((unitType) =>
           // if current list matches this value, then this unit is considered one of the monster types of this faction.
           {
             if (
@@ -899,8 +909,8 @@ export const BuilderContextProvider = ({ children }: any) => {
                   totalUnitTypesInFaction * currentArmyPointsLimit
                 ) {
                   errors.push({
-                    sourceName: u.unitName,
-                    error: `${u.unitName} takes up a Monster slot and the total allowance for monsters has been reached.`,
+                    sourceName: roRUnit.unitName,
+                    error: `${roRUnit.unitName} takes up a Monster slot and the total allowance for monsters has been reached.`,
                   });
                 }
               }
@@ -910,17 +920,31 @@ export const BuilderContextProvider = ({ children }: any) => {
           },
         );
       }
+
+      // CHECK - that only one unique regiment of renown is included in this list.
+      if (roRUnit?.currentCount > 1) {
+        errors.push({
+          sourceName: roRUnit.unitName,
+          error: `You can only have 1 ${roRUnit.unitName} in a list.`,
+        });
+      }
+      // CHECK - check that another RoR unit that is forbidden is NOT in the list
+
+      if (roRUnit.forbiddenRoRUnits) {
+        roRUnit.forbiddenRoRUnits.map((x) => {
+          const forbiddenUnitInList = regimentsOfRenownUnitsInList.find(
+            (unit) => unit.unitName == x,
+          );
+          if (forbiddenUnitInList) {
+            errors.push({
+              sourceName: 'Regiments of Renown',
+              error: `${x} is not permitted in the same list as ${roRUnit.unitName}`,
+            });
+          }
+        });
+      }
     });
-    // CHECK - that only one unique regiment of renown is included in this list.
     if (regimentsOfRenownUnitsInList.length > 0) {
-      regimentsOfRenownUnitsInList.map((d, i) => {
-        if (d?.currentCount > 1) {
-          errors.push({
-            sourceName: d.unitName,
-            error: `You can only have 1 ${d.unitName} in a list.`,
-          });
-        }
-      });
       // CHECK - max of one RoR unit per 1000pts
       if (regimentsOfRenownUnitsInList.length > currentArmyPointsLimit) {
         errors.push({
@@ -942,6 +966,12 @@ export const BuilderContextProvider = ({ children }: any) => {
           currentArmyList?.selectedUnits?.filter(
             (x) => x.replacesUnit != null && x.replacesUnit == unit.unitName,
           ).length ?? 0;
+
+        const hasRoRCharacter =
+          currentArmyList?.selectedUnits.filter((x) => {
+            return x.replacesType?.includes(unit.type) ?? 0;
+          }).length ?? 0;
+        console.log(hasRoRCharacter, 'HAS ROR CHARACTER');
         //   console.log(
         //     'HUHHH',
         //     currentArmyList?.selectedUnits?.filter(
@@ -957,7 +987,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 
         const maxCountPer1000Points = unit.maxCount * currentArmyPointsLimit;
         if (
-          unit.currentCount + hasRoRUnit + (upgradeHasReplacesUnit?.currentCount ?? 0) >
+          unit.currentCount +
+            hasRoRUnit +
+            hasRoRCharacter +
+            (upgradeHasReplacesUnit?.currentCount ?? 0) >
           maxCountPer1000Points
         ) {
           errors.push({
@@ -970,24 +1003,9 @@ export const BuilderContextProvider = ({ children }: any) => {
 
     return errors;
   };
-  const getUnitCounts = () => {
-    // ARMY SPECIAL RULE: special rule for bretonnians
-    let units = currentArmyList?.selectedUnits.filter((x) => !x.isLeader);
-    // filter out noBreak units
-    units = units?.filter((x) => !x.ignoreBreakPoint);
-    // get total counts
-    const totalCounts = units?.map((x) => x.currentCount);
-    const sumOfPoints = totalCounts?.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0);
-    let breakCount = sumOfPoints ? Math.round(sumOfPoints / 2) : 0;
-    // ARMY SPECIAL RULES
-    if (factionDetails?.name == 'Nippon') {
-      breakCount = breakCount + 1;
-    }
-    const unitCount = sumOfPoints;
-    return `${breakCount}/${unitCount}`;
-  };
+  const getUnitCounts = useCallback(() => {
+    return currentUnitCounts;
+  }, [currentUnitCounts]);
 
   const getMagicItemsForUnit = (unitName: string, faction?: number, versionNumber?: number) => {
     // this needs to be retrieved for each unit, since costs are different each time
@@ -1086,7 +1104,13 @@ export const BuilderContextProvider = ({ children }: any) => {
         console.error(up.name, 'UPGRADE WITH UNDEFINED');
       }
       if (up.name == 'Battle Banner' || up.name == 'Banner of Fortune') {
-        pointsCost = up.points[unitAttacks];
+			// add additional logic here
+			// if the unit is a chariot
+			if (unitDetails?.type == 'Chariot') {
+				pointsCost = '+30';
+			}else{
+				pointsCost = up.points[unitAttacks];
+			}
       }
       if (up.name == 'Banner of Shielding') {
         // check if the key for this exists. if it doesn't then we should ensure this upgrade cannot be added.
@@ -1134,19 +1158,17 @@ export const BuilderContextProvider = ({ children }: any) => {
     });
     return specificUpgradesForUnitArr;
   };
-  const getUserArmyLists = (filters?: ArmyListFilters[]) => {
+  const getUserArmyLists = useCallback((filters?: ArmyListFilters[]) => {
     if (filters && filters?.length > 0) {
       if (filters.find((x) => x == 'all')) {
         return userArmyLists;
       } else {
-        const filteredByVersion = userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
-        return filteredByVersion;
+        return currentVersionArmyLists;
       }
     } else {
-      const filteredByVersion = userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
-      return filteredByVersion;
+      return currentVersionArmyLists;
     }
-  };
+  }, [currentVersionArmyLists, userArmyLists]);
 
   return (
     <BuilderContext.Provider
@@ -1176,6 +1198,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         getMagicItemsForUnit,
         migrateArmyList,
         updatePointsLimit,
+        totalPoints,
       }}>
       {children}
     </BuilderContext.Provider>

@@ -35,6 +35,37 @@
       "forbiddenRoRUnits": ["Tichi-Huichi's Raiders"]
     },
     {
+      "name": "The Cursed Company",
+      "order": 100,
+      "type": "Infantry",
+      "replacesUnit": [],
+      "replacesType": ["Infantry"],
+      "countsAsMonster": [],
+      "attack": "3",
+      "hits": 3,
+      "armour": "5+",
+      "size": 3,
+      "points": 70,
+      "armyMax": 1,
+      "noMagic": true,
+      "specialRules": ["Undead"],
+      "quoteOne": "The battle-cry of Richter Kreugar has long been forgotten by the people of the Old World. The silence of the grave hangs over the Cursed Company as it traverses the land, marching to war accompanied only by the sound of creaking, ancient leather and the scrape of rusted metal.",
+      "quoteOneAuthor": "",
+      "description": [
+        "Pirazzo's Lost Legion is a famous mercenary company known for surviving an expedition to the dangerous jungle continent of Lustria—something very few armies in the Known World have achieved. Their commander, Fernando Pirazzo, returned immensely wealthy after claiming treasure there and later became a sought-after mercenary leader serving powerful clients across the Old World."
+      ],
+      "forbiddenFactions": [
+        "Tomb Kings",
+        "Bretonnia",
+        "Vampire Counts",
+        "Witch Hunters",
+        "Norse",
+        "Cathay",
+        "Nippon"
+      ],
+      "forbiddenRoRUnits": ["The Witch Hunters"]
+    },
+    {
       "name": "Tichi-Huichi's Raiders",
       "order": 99,
       "type": "Cavalry",
@@ -70,6 +101,48 @@
         "Nippon"
       ],
       "forbiddenRoRUnits": ["Pirazzos Lost Legion"]
+    },
+    {
+      "name": "Gotrek and Felix",
+      "order": 80,
+      "type": "Hero",
+      "attack": "+2",
+      "command": 8,
+      "size": 1,
+      "points": 100,
+      "armyMax": 1,
+      "noMagic": true,
+      "replacesUnit": [],
+      "replacesType": ["Hero"],
+      "countsAsMonster": [],
+      "quoteOne": "After the terrible events and nightmare adventures we endured in Altdorf, my companion and I fled southwards, following no path more certain than that chosen for us by blind chance. The extent and nature of the evil was to become very clear to me one dark evening after boarding a southbound stagecoach, on what is perhaps the most ill-omened night in our entire calendar...",
+      "quoteOneAuthor": "'My Travels with Gotrek' Vol. II, by Herr Felix Jaeger (Altdorf Press, 2505)",
+      "description": [
+        "Gotrek is a Dwarf Slayer—a disgraced warrior who wanders the world seeking a glorious death in battle to atone for an unknown, ancient sin.",
+        "Felix, a human scholar and poet, is bound to him by a drunken blood-oath to chronicle the Slayer’s epic, yet seemingly unachievable, doom.",
+        "Together, the perpetually angry dwarf and his reluctant human chronicler travel from the dark under-cities of the Empire to the chaotic, monstrous north, fighting demons, Skaven, and dragons in a desperate, action-packed search for the ultimate foe."
+      ],
+      "forbiddenFactions": [
+        "Tomb Kings",
+        "Chaos",
+        "Orcs",
+        "High_Elves",
+        "Skaven",
+        "Lizardmen",
+        "Dark_Elves",
+        "Daemons",
+        "Vampire_Counts",
+        "Ogre Kingdoms",
+        "Goblins",
+        "Chaos_Dwarfs",
+        "Beastmen",
+        "Norse",
+        "Nippon",
+        "Wood_Elves",
+        "Beastmen",
+        "Norse"
+      ],
+      "forbiddenRoRUnits": []
     }
   ],
   "upgrades": [
@@ -96,7 +169,8 @@
       "order": 1,
       "text": [
         "Count as one highest point value limited infantry type unit. If not available, hiring does not restrict taking other units. Count as 1 of any monster type in Tomb Kings army. Lost Legion can not be hired together with Tichi-Huichi‘s Raiders."
-      ]
+      ],
+      "showInSelectionLimitOnly": true
     },
     "Pikemen": {
       "order": 2,
@@ -108,13 +182,36 @@
       "order": 1,
       "text": [
         "Count as one highest point value limited cavalry or chariot unit type. Count as one Ranger unit in Dwarf army. Raiders can not be hired together with Pirazzo‘s Lost Legion."
-      ]
+      ],
+      "showInSelectionLimitOnly": true
     },
     "Light Cavalry": {
       "order": 2,
       "text": [
         "Light cavalry formations have a great use among the mercenaries. They are experts at outmaneuvering an enemy and harrying his flanks. Light cavalry has a shooting range of only 15cm and 360° vision - stands in this unit can draw line of sight from all edges for the purpose of evading and shooting, including shooting at charging enemies.",
         "Note that this unit still needs Line of Sight from its front edge to charge an enemy."
+      ]
+    },
+    "The Cursed Company": {
+      "order": 1,
+      "text": [
+        "Count as one highest point value limited infantry type unit. If not available, hiring does not restrict taking other units. The Cursed Company can not be hired together with The Witch Hunters."
+      ],
+      "showInSelectionLimitOnly": true
+    },
+    "Undead": {
+      "order": 2,
+      "text": [
+        "The Cursed Company is undead, and as such the following rules apply to them:",
+        "They never act on initiative. The unit only moves in the Command phase if given orders.",
+        "They are unaffected by the -1 Command penalty for enemy within 20cm. They are unaffected by the -1 Combat penalty for fighting terrifying troops.",
+        "They are unaffected by the Confusion rule - they cannot become confused for any reason."
+      ]
+    },
+    "Gotrek and Felix": {
+      "order": 3,
+      "text": [
+        "Count as one any Hero type unit. They can not be hired together with Ruglud‘s Armoured Orcs, Oglah Khan‘s Wolfboyz, Mengil Manhide‘s Manflyers nor Arsanil the Dragonlord."
       ]
     }
   }

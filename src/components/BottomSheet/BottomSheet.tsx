@@ -49,13 +49,13 @@ const BottomSheet = forwardRef<BottomSheetHandle, BottomSheetProps>(
       [],
     );
 
-   //  useEffect(() => {
-   //    const handleBackButton = () => {
-   //      return modalRef.current?.close(); // dismiss() returns true/false, it means there is any instance of Bottom Sheet visible on current screen.
-   //    };
+    //  useEffect(() => {
+    //    const handleBackButton = () => {
+    //      return modalRef.current?.close(); // dismiss() returns true/false, it means there is any instance of Bottom Sheet visible on current screen.
+    //    };
 
-   //    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
-   //  }, []);
+    //    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    //  }, []);
 
     useEffect(() => {
       if (typeof isVisible === 'undefined') {
@@ -81,7 +81,6 @@ const BottomSheet = forwardRef<BottomSheetHandle, BottomSheetProps>(
     return (
       <BottomSheetModal
         ref={modalRef}
-		  
         snapPoints={snapPoints}
         backdropComponent={resolvedBackdrop}
         onDismiss={onDismiss}

@@ -4,9 +4,9 @@ import { StyleSheet } from "react-native";
 import { IconImageProps } from "./types";
 import UnitIconContainer from './UnitIconContainer';
 
-const General = ({ size, color }: IconImageProps) => {
+const General = ({ size, color, isUnique }: IconImageProps) => {
   return (
-    <UnitIconContainer isLeader={true}>
+    <UnitIconContainer isLeader={true} isUnique={isUnique}>
       <FontAwesome name="star" size={size} color={color} />
     </UnitIconContainer>
   );

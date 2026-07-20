@@ -37,6 +37,10 @@ const AddUnit = () => {
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
+    if (builder.selectedArmyList?.pointsLimit != undefined) {
+      setTotalPoints(parseInt(builder.selectedArmyList.pointsLimit));
+      return;
+    }
     if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000)
       setTotalPoints(2000);
     if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000)
@@ -44,7 +48,7 @@ const AddUnit = () => {
     if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
     if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
     if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
-  }, [builder.calculateCurrentArmyPoints()]);
+  }, [builder.calculateCurrentArmyPoints(), builder.selectedArmyList?.pointsLimit]);
 
   useLayoutEffect(() => {
     // get all units for selected army list
@@ -103,8 +107,8 @@ const AddUnit = () => {
   }, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
 
   const armyCount = useMemo(() => {
-    return `${builder.calculateCurrentArmyPoints()}/${totalPoints}`;
-  }, [builder.calculateCurrentArmyPoints(), totalPoints]);
+    return `${builder.calculateCurrentArmyPoints()}/${builder.totalPoints}`;
+  }, [builder.calculateCurrentArmyPoints(), builder.totalPoints]);
 
   const handleViewPreview = (unitName: string) => {
     const rawUnitData = factionUnits?.find((x) => x.name == unitName);
@@ -163,7 +167,9 @@ const AddUnit = () => {
           ListFooterComponent={() => (
             <View>
               <Button
-                onPress={() => navigation.navigate('AddRegimentsOfRenown')}
+                onPress={() =>
+                  navigation.navigate('AddRegimentsOfRenown', { addingLeader: !addingUnits })
+                }
                 variant={'confirm'}
                 style={{ flexDirection: 'row' }}>
                 <View style={{ marginRight: 8 }}>

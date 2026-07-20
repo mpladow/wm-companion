@@ -4,11 +4,11 @@ import { StyleSheet, View } from 'react-native';
 type UnitIconContainerProps = { isLeader: boolean; isUnique?: boolean } & PropsWithChildren;
 const UnitIconContainer = ({ isLeader, isUnique = false, children }: UnitIconContainerProps) => {
   const backgroundColor = useMemo(() => {
-    if (isLeader) {
-      return '#fabb0c';
-    }
     if (isUnique) {
       return '#a5b6e2';
+    }
+    if (isLeader) {
+      return '#fabb0c';
     }
     return '#e3d9bc';
   }, []);

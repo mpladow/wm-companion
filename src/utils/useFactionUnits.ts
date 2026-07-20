@@ -28,20 +28,31 @@ import woodElvesList from "../data/json/wmr/woodElves.json";
 import { Factions } from "./constants";
 
 export const useFactionUnits = () => {
-	const getRegimentsOfRenownUnitsForFaction = (factionSelection?: number) => {
+	const getRegimentsOfRenownUnitsForFaction = (factionSelection?: number, getLeaders?: boolean) => {
 		const regimentsOfRenownPermittedList: RegimentOfRenownUnitReferenceType[] = [];
+
 		const regimentsOfRenownList = regimentsOfReknownListV1.find((a => a.name == "Regiments_of_Renown"));
 		if (regimentsOfRenownList) {
 			if (factionSelection == undefined) {
-				return regimentsOfRenownList.units;
+				return getLeaders ? regimentsOfRenownList.units.filter(x => (x.command !== undefined) == getLeaders) : regimentsOfRenownList.units;
 			}
 			// iterate over all units and check the forbiddenFactions array and ensure this factionSelection is not included.
-			regimentsOfRenownList.units.forEach((item, index) => {
-				const unitIsForbiddenFromFaction = item.forbiddenFactions.includes(Factions[factionSelection])
-				if (!unitIsForbiddenFromFaction) {
-					regimentsOfRenownPermittedList.push(item);
-				}
-			})
+			if (getLeaders !== undefined) {
+				regimentsOfRenownList.units.filter(x => (x.command !== undefined) == getLeaders).forEach((item, index) => {
+					const unitIsForbiddenFromFaction = item.forbiddenFactions?.includes(Factions[factionSelection])
+					if (!unitIsForbiddenFromFaction) {
+						regimentsOfRenownPermittedList.push(item);
+					}
+				})
+			} else {
+				regimentsOfRenownList.units.forEach((item, index) => {
+					const unitIsForbiddenFromFaction = item.forbiddenFactions?.includes(Factions[factionSelection])
+					if (!unitIsForbiddenFromFaction) {
+						regimentsOfRenownPermittedList.push(item);
+					}
+				})
+
+			}
 		}
 		return regimentsOfRenownPermittedList;
 	}
