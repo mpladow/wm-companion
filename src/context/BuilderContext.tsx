@@ -8,11 +8,16 @@ import { useFactionUnits } from '@utils/useFactionUnits';
 import Constants from 'expo-constants';
 import { produce } from 'immer';
 import _ from 'lodash';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import uuid from 'uuid-random';
 import magicItemsList from '../data/json/wmr/magic-items.json';
+import {
+  calculateArmyPoints,
+  calculateDisplayedPointsLimit,
+  calculateUnitCounts,
+} from './builderCalculations';
 
 export type ArmyListFilters = 'old' | 'losers' | 'all';
 export type ListSections = 'favourites' | 'main';
@@ -130,6 +135,18 @@ export const BuilderContextProvider = ({ children }: any) => {
 
   const { t } = useTranslation(['builder', 'units']);
   const { getFactionUnitsByVersion } = useFactionUnits();
+  const currentVersionArmyLists = useMemo(() => {
+    return userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
+  }, [CURRENT_VERSION, userArmyLists]);
+  const currentArmyPoints = useMemo(() => {
+    return calculateArmyPoints(currentArmyList);
+  }, [currentArmyList]);
+  const currentUnitCounts = useMemo(() => {
+    return calculateUnitCounts(currentArmyList, factionDetails);
+  }, [currentArmyList, factionDetails?.name]);
+  const totalPoints = useMemo(() => {
+    return calculateDisplayedPointsLimit(currentArmyPoints, currentArmyList?.pointsLimit);
+  }, [currentArmyList?.pointsLimit, currentArmyPoints]);
 
   useEffect(() => {
     //AsyncStorage.removeItem(`userArmies`);
@@ -587,32 +604,16 @@ export const BuilderContextProvider = ({ children }: any) => {
     );
   };
 
-  const calculateCurrentArmyPoints = (targetArmyList?: ArmyListProps) => {
-    // get current army
-    let arrayOfPoints = 0;
-    let armyList: ArmyListProps | undefined = undefined;
-    if (targetArmyList) {
-      armyList = targetArmyList;
-    } else {
-      armyList = currentArmyList;
-    }
-    if (armyList)
-      armyList?.selectedUnits?.map((unit) => {
-        // add points for selectedUnits
-        if (unit.points && unit.currentCount) {
-          const amountToAdd = unit.points * unit.currentCount;
-          arrayOfPoints = arrayOfPoints + amountToAdd;
-          //add points for selected items
-          unit.attachedItems.map((up) => {
-            if (up.currentCount) {
-              const amountToAdd = up.points * up.currentCount;
-              arrayOfPoints = arrayOfPoints + amountToAdd;
-            }
-          });
-        }
-      });
-    return arrayOfPoints;
-  };
+  const calculateCurrentArmyPoints = useCallback(
+    (targetArmyList?: ArmyListProps) => {
+      if (targetArmyList) {
+        return calculateArmyPoints(targetArmyList);
+      }
+
+      return currentArmyPoints;
+    },
+    [currentArmyPoints],
+  );
 
   const calculateArmyErrors = async () => {
     // get the current army points for
@@ -1002,43 +1003,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 
     return errors;
   };
-  const getUnitCounts = () => {
-    // ARMY SPECIAL RULE: special rule for bretonnians
-    let units = currentArmyList?.selectedUnits.filter((x) => !x.isLeader);
-    // filter out noBreak units
-    units = units?.filter((x) => !x.ignoreBreakPoint);
-    // get total counts
-    const totalCounts = units?.map((x) => x.currentCount);
-    const sumOfPoints = totalCounts?.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0);
-    let breakCount = sumOfPoints ? Math.round(sumOfPoints / 2) : 0;
-    // ARMY SPECIAL RULES
-    if (factionDetails?.name == 'Nippon') {
-      breakCount = breakCount + 1;
-    }
-    const unitCount = sumOfPoints;
-    return `${breakCount}/${unitCount}`;
-  };
+  const getUnitCounts = useCallback(() => {
+    return currentUnitCounts;
+  }, [currentUnitCounts]);
 
-  const [totalPoints, setTotalPoints] = useState<number>();
-  useEffect(() => {
-    calculatePointsLimit();
-  }, [currentArmyList, calculateCurrentArmyPoints(), currentArmyList?.pointsLimit]);
-  const calculatePointsLimit = () => {
-    const _currentPoints = calculateCurrentArmyPoints();
-    if (currentArmyList?.pointsLimit != undefined) {
-      setTotalPoints(parseInt(currentArmyList.pointsLimit));
-      return;
-    }
-    if ((_currentPoints > 1000 && _currentPoints < 2000) || _currentPoints == 2000)
-      setTotalPoints(2000);
-    if ((_currentPoints > 2000 && _currentPoints < 3000) || _currentPoints == 3000)
-      setTotalPoints(3000);
-    if (_currentPoints > 3000 && _currentPoints < 4000) setTotalPoints(4000);
-    if (_currentPoints > 4000 && _currentPoints < 5000) setTotalPoints(5000);
-    if (_currentPoints > 5000 && _currentPoints < 6000) setTotalPoints(6000);
-  };
   const getMagicItemsForUnit = (unitName: string, faction?: number, versionNumber?: number) => {
     // this needs to be retrieved for each unit, since costs are different each time
     let _factionDetails = factionDetails;
@@ -1190,19 +1158,17 @@ export const BuilderContextProvider = ({ children }: any) => {
     });
     return specificUpgradesForUnitArr;
   };
-  const getUserArmyLists = (filters?: ArmyListFilters[]) => {
+  const getUserArmyLists = useCallback((filters?: ArmyListFilters[]) => {
     if (filters && filters?.length > 0) {
       if (filters.find((x) => x == 'all')) {
         return userArmyLists;
       } else {
-        const filteredByVersion = userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
-        return filteredByVersion;
+        return currentVersionArmyLists;
       }
     } else {
-      const filteredByVersion = userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
-      return filteredByVersion;
+      return currentVersionArmyLists;
     }
-  };
+  }, [currentVersionArmyLists, userArmyLists]);
 
   return (
     <BuilderContext.Provider
