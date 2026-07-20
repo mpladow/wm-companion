@@ -113,7 +113,7 @@
       "armyMax": 1,
       "noMagic": true,
       "replacesUnit": [],
-      "replacesType": [],
+      "replacesType": ["Hero"],
       "countsAsMonster": [],
       "quoteOne": "After the terrible events and nightmare adventures we endured in Altdorf, my companion and I fled southwards, following no path more certain than that chosen for us by blind chance. The extent and nature of the evil was to become very clear to me one dark evening after boarding a southbound stagecoach, on what is perhaps the most ill-omened night in our entire calendar...",
       "quoteOneAuthor": "'My Travels with Gotrek' Vol. II, by Herr Felix Jaeger (Altdorf Press, 2505)",

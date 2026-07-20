@@ -7,11 +7,12 @@ import { sanitizeText } from '@navigation/Builder/utils/builderHelpers';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { Image, ImageBackground, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import StatContainer from './StatContainer';
 const unitPreviewBackground = require('../../../../../assets/images/wm-bg2.jpeg');
+const testImage = require('../../../../../assets/images/gotrek_felix_01.png');
 
 type RegimentsOfRenownPreviewProps = {
   handleSetVisible: (visible: boolean) => void;
@@ -50,6 +51,15 @@ const RegimentsOfRenownPreview = ({
   }, [selectedUnitDetails]);
 
   useBottomSheetBack(visible, unitPreviewBottomSheetRef, () => handleSetVisible(false));
+
+  const setBackgroundImage = useMemo(() => {
+    switch (selectedUnitDetails.name) {
+      case 'Gotrek and Felix':
+        return testImage;
+      default:
+        return null;
+    }
+  }, [selectedUnitDetails]);
 
   return (
     <BottomSheetModal
@@ -100,7 +110,7 @@ const RegimentsOfRenownPreview = ({
                   right: 0,
                   bottom: -1,
                   // height: Dimensions.get('screen').height / 2,
-                  height: 300,
+                  height: setBackgroundImage !== null ? 600 : 300,
                   zIndex: 9,
                 }}
               />
@@ -144,13 +154,42 @@ const RegimentsOfRenownPreview = ({
                   </View>
                 </View>
               </View>
-              <View style={{ zIndex: 99, paddingHorizontal: 16 }}>
-                <Text italic style={{ color: theme.text }}>
-                  "{selectedUnitDetails.quoteOne}"
-                </Text>
-                <Text style={{ color: theme.text, marginLeft: 20 }}>
-                  - {selectedUnitDetails.quoteOneAuthor}
-                </Text>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 12,
+                }}>
+                <View style={{ flex: 1, zIndex: 99, paddingHorizontal: 16 }}>
+                  <Text italic style={{ color: theme.text }}>
+                    "{selectedUnitDetails.quoteOne}"
+                  </Text>
+                  <Text style={{ color: theme.text, marginLeft: 20 }}>
+                    - {selectedUnitDetails.quoteOneAuthor}
+                  </Text>
+                </View>
+                {setBackgroundImage !== null && (
+                  <View
+                    style={{
+                      flex: 1,
+                      zIndex: 999,
+                      marginTop: 8,
+                      borderRadius: 30,
+                      overflow: 'hidden',
+                    }}>
+                    <Image
+                      source={setBackgroundImage}
+                      style={{
+                        height: 150,
+                        width: 150,
+                        zIndex: 999,
+                        resizeMode: 'contain',
+                        overflow: 'hidden',
+                      }}
+                    />
+                  </View>
+                )}
               </View>
             </ImageBackground>
           </View>

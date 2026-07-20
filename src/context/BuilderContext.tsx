@@ -453,7 +453,6 @@ export const BuilderContextProvider = ({ children }: any) => {
     if (currentUnit == null) {
       currentRoRUnit = getRegimentsOfRenownForFaction().find((x) => x.name == unitName);
     }
-    console.log('🚀 ~ addUnit ~ currentRoRUnit:', currentRoRUnit);
     const newUnit: SelectedUnitProps = {
       id: uuid(),
       unitName: unitName,
@@ -800,6 +799,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         });
       }
     });
+
     // check unit with army MAx Count
     unitsWithArmyMax?.map((u) => {
       const unitExists = currentArmyList?.selectedUnits?.find(
@@ -811,7 +811,12 @@ export const BuilderContextProvider = ({ children }: any) => {
           (x) => x.replacesUnit != null && x.replacesUnit == u.unitName,
         ).length ?? 0;
 
-      if (unitExists) {
+      const hasRoRCharacter =
+        u.type ==
+        currentArmyList?.selectedUnits.find((x) => {
+          return x.replacesType?.includes(u.type);
+        });
+      if (unitExists || hasRoRCharacter) {
         // if count > == u count
         const isValid = unitExists?.currentCount + hasRoRUnit <= u.armyMax;
         if (!isValid) {
@@ -960,6 +965,12 @@ export const BuilderContextProvider = ({ children }: any) => {
           currentArmyList?.selectedUnits?.filter(
             (x) => x.replacesUnit != null && x.replacesUnit == unit.unitName,
           ).length ?? 0;
+
+        const hasRoRCharacter =
+          currentArmyList?.selectedUnits.filter((x) => {
+            return x.replacesType?.includes(unit.type) ?? 0;
+          }).length ?? 0;
+        console.log(hasRoRCharacter, 'HAS ROR CHARACTER');
         //   console.log(
         //     'HUHHH',
         //     currentArmyList?.selectedUnits?.filter(
@@ -975,7 +986,10 @@ export const BuilderContextProvider = ({ children }: any) => {
 
         const maxCountPer1000Points = unit.maxCount * currentArmyPointsLimit;
         if (
-          unit.currentCount + hasRoRUnit + (upgradeHasReplacesUnit?.currentCount ?? 0) >
+          unit.currentCount +
+            hasRoRUnit +
+            hasRoRCharacter +
+            (upgradeHasReplacesUnit?.currentCount ?? 0) >
           maxCountPer1000Points
         ) {
           errors.push({
@@ -1122,7 +1136,13 @@ export const BuilderContextProvider = ({ children }: any) => {
         console.error(up.name, 'UPGRADE WITH UNDEFINED');
       }
       if (up.name == 'Battle Banner' || up.name == 'Banner of Fortune') {
-        pointsCost = up.points[unitAttacks];
+			// add additional logic here
+			// if the unit is a chariot
+			if (unitDetails?.type == 'Chariot') {
+				pointsCost = '+30';
+			}else{
+				pointsCost = up.points[unitAttacks];
+			}
       }
       if (up.name == 'Banner of Shielding') {
         // check if the key for this exists. if it doesn't then we should ensure this upgrade cannot be added.

@@ -174,8 +174,8 @@
   "specialRules": {
     "Replace with Handgunners": {
       "text": [
-        "One unit of Crossbowmen per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Crossbowmen min/max value.",
-        "*Select the Handgunners upgrade option in a Crossbow unit to replace unit with Handgunners*"
+        "One unit of Warriors per full 1000 points can be replaced by Handgunners (including the 10pts extra in price) while still counting for the Warrior min/max value.",
+        "*Select the Handgunners upgrade option in a Warriors unit to replace unit with Handgunners*"
       ]
     },
     "Handgunners": {
