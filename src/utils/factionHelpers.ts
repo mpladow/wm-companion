@@ -56,7 +56,7 @@ export const getLocalFactionAssets = (faction: string) => {
 		case "Vampire_Counts":
 			return [require("../../assets/images/wm-vampcounts.jpeg")];
 		case "Beastmen":
-			return [require("../../assets/images/wm-beastmen-default.png")];
+			return [require("../../assets/images/wm-beastmen.png")];
 
 		case "Goblins":
 			return [require("../../assets/images/wm-goblins.jpg")];
