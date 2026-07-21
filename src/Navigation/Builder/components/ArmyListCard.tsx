@@ -41,16 +41,42 @@ const ArmyListCard = ({
     // const armyName = getKeyByValue(Factions, armyList.faction);
     const armyName = Factions[armyList.faction];
     const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
+    const imageSource = factionAssets && factionAssets[0];
+
+    if (!imageSource) {
+      return null;
+    }
+
     return (
-      <View
-        style={{
-          backgroundColor: 'black',
-          position: 'absolute',
-          top: 0,
-          borderLeftColor: theme.white,
-          borderLeftWidth: 4,
-        }}>
-        <Image style={[styles.stretch]} source={factionAssets && factionAssets[0]} />
+      <View pointerEvents="none" style={styles.artworkLayer}>
+        <Image resizeMode="cover" style={styles.armyArtwork} source={imageSource} />
+        <LinearGradient
+          colors={['rgba(6,9,7, 0.0)', 'rgba(6,9,7, 0.44)', 'rgba(6,9,7, 0.9)']}
+          start={{ y: 0.5, x: 0 }}
+          end={{ y: 0.5, x: 1 }}
+          style={styles.artworkRightShade}
+        />
+        <LinearGradient
+          colors={['rgba(6,9,7, 0.12)', 'rgba(6,9,7, 0.34)']}
+          start={{ y: 0, x: 0.5 }}
+          end={{ y: 1, x: 0.5 }}
+          style={styles.artworkShade}
+        />
+        <View
+          style={[styles.edgeMask, styles.edgeMaskTop, { backgroundColor: theme.background }]}
+        />
+        <View
+          style={[styles.edgeMask, styles.edgeMaskUpper, { backgroundColor: theme.background }]}
+        />
+        <View
+          style={[styles.edgeMask, styles.edgeMaskMiddle, { backgroundColor: theme.background }]}
+        />
+        <View
+          style={[styles.edgeMask, styles.edgeMaskLower, { backgroundColor: theme.background }]}
+        />
+        <View
+          style={[styles.edgeMask, styles.edgeMaskBottom, { backgroundColor: theme.background }]}
+        />
       </View>
     );
   };
@@ -65,13 +91,16 @@ const ArmyListCard = ({
           flexDirection: 'row',
           borderWidth: 1,
           borderColor: theme.grey3,
+          minHeight: 132,
+          position: 'relative',
         }}>
         <Image
           source={require('../../../../assets/images/card-texture.png')}
           resizeMode="contain"
-          style={{ opacity: 0.2, position: 'absolute' }}
+          style={{ opacity: 0.2, position: 'absolute', zIndex: 1 }}
         />
-        <View style={{ flex: 3, margin: 16 }}>
+        {setImage()}
+        <View style={{ flex: 1, margin: 16, paddingRight: 104, zIndex: 2 }}>
           <View style={{ marginBottom: 4, flex: 1, paddingRight: 30 }}>
             <Text
               variant="heading3"
@@ -122,26 +151,7 @@ const ArmyListCard = ({
 						)} */}
           </View>
         </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
-          {setImage()}
-          <LinearGradient
-            colors={[
-              'rgba(31,46,39, 0.9)',
-              'rgba(6,9,7, 0.6)',
-              'rgba(6,9,7, 0.2)',
-              'rgba(6,9,7, 0.0)',
-            ]}
-            start={{ y: 0, x: 1 }}
-            end={{ y: 0, x: 0 }}
-            style={{
-              position: 'absolute',
-              left: -40,
-              right: 0,
-              bottom: -0,
-              width: 150,
-              height: 300,
-              zIndex: 9,
-            }}></LinearGradient>
+        <View style={{ width: 52, justifyContent: 'center', alignItems: 'flex-end', zIndex: 3 }}>
           <View
             style={{
               flexDirection: 'row',
@@ -195,7 +205,7 @@ const ArmyListCard = ({
               arrowSize={{ width: 0, height: 0 }}
               animationConfig={{ duration: 0 }}
               from={
-                <View>
+                <View style={{ zIndex: 9999, padding: 8 }}>
                   <Pressable onPress={() => setShowPopover(true)} hitSlop={36}>
                     <MaterialCommunityIcons name="dots-vertical" size={24} color={theme.text} />
                   </Pressable>
@@ -301,12 +311,74 @@ const ArmyListCard = ({
 export default ArmyListCard;
 
 const styles = StyleSheet.create({
-  stretch: {
-    // width: 120,
-    width: 120,
-    height: 150,
-    // resizeMode: "contain",
-    marginTop: -8,
+  artworkLayer: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    overflow: 'hidden',
+  },
+  armyArtwork: {
+    position: 'absolute',
+    top: -8,
+    right: -20,
+    bottom: -8,
+    width: '50%',
+    minWidth: 200,
+    height: '112%',
+  },
+  artworkRightShade: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: '24%',
+    zIndex: 6,
+  },
+  artworkShade: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 3,
+  },
+  edgeMask: {
+    position: 'absolute',
+    left: '46%',
+    width: 18,
+    opacity: 1,
+  },
+  edgeMaskTop: {
+    top: -24,
+    height: 70,
+    left: '46%',
+    transform: [{ rotate: '8deg' }],
+  },
+  edgeMaskUpper: {
+    top: 28,
+    height: 52,
+    left: '47%',
+    transform: [{ rotate: '-16deg' }],
+  },
+  edgeMaskMiddle: {
+    top: 58,
+    height: 62,
+    left: '47%',
+    transform: [{ rotate: '12deg' }],
+  },
+  edgeMaskLower: {
+    bottom: 10,
+    height: 58,
+    left: '46%',
+    transform: [{ rotate: '-14deg' }],
+  },
+  edgeMaskBottom: {
+    bottom: -30,
+    height: 78,
+    left: '46%',
+    transform: [{ rotate: '10deg' }],
   },
   menuButtons: {
     paddingLeft: 12,
