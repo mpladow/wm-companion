@@ -1,4 +1,5 @@
 import IconButton from '@components/IconButton';
+import ChangelogContent from '@components/ChangelogContent';
 import { Button, Text, TextBlock } from '@components/index';
 import MainContainerWithImage from '@components/MainContainerWithImage';
 import LogoWmr from '@components/SVGS/LogoWmr';
@@ -51,37 +52,7 @@ const Home = () => {
 
   const { changelog, clearDismissedDEBUG } = useUpdateChecker();
 
-  const generateContent = () => {
-    return (
-      <ScrollView>
-        {changelog?.changes.map((x) => {
-          let fontStyle: { color: string; fontSize: number } = { color: theme.text, fontSize: 16 };
-
-          switch (x.type) {
-            case 'overhaul':
-              fontStyle.color = theme.accent;
-              fontStyle.fontSize = 18;
-              break;
-            case 'bug':
-              fontStyle.fontSize = 16;
-              break;
-            default:
-              break;
-          }
-          return (
-            <TextBlock variant="medium">
-              <Text
-                variant="heading3"
-                style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
-                {x.title}
-              </Text>
-              {x.description && x.description?.map((d) => <Text>{d}</Text>)}
-            </TextBlock>
-          );
-        })}
-      </ScrollView>
-    );
-  };
+  const generateContent = () => <ChangelogContent changelog={changelog} />;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>

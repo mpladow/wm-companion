@@ -1,9 +1,10 @@
 import FormLabel from '@components/forms/FormLabel';
 import { Button, FactionImages, Text } from '@components/index';
 import { useBuilderContext } from '@context/BuilderContext';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { generateRandomArmyName } from '@utils/armyNames';
 import { Factions } from '@utils/constants';
 import { getKeyByValue } from '@utils/factionHelpers';
 import fonts from '@utils/fonts';
@@ -29,8 +30,13 @@ const EditArmy = () => {
   const navigation = useNavigation();
   const builder = useBuilderContext();
   const toast = useToast();
-  const { factionSelection, armyId } = route.params as { factionSelection: string; armyId: string };
-  const currentArmy = builder.getArmyByArmyId(armyId);
+  const { factionSelection, armyId } = route.params as {
+    factionSelection?: string | number;
+    armyId?: string;
+  };
+  const currentArmy = armyId ? builder.getArmyByArmyId(armyId) : undefined;
+  const selectedFactionId =
+    currentArmy?.faction ?? (factionSelection ? Number(factionSelection) : undefined);
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
   const [pointsLimitSelection, setPointsLimitSelection] = useState<PointsLimitType>(
     currentArmy?.pointsLimit,
@@ -54,8 +60,10 @@ const EditArmy = () => {
 
   // form data
   const [factionNameError, setFactionNameError] = useState(false);
-  const [factionName, setFactionName] = useState<string>(currentArmy?.name || '');
-  const [factionNotes, setFactionNotes] = useState<string>(currentArmy?.armyNotes);
+  const [factionName, setFactionName] = useState<string>(
+    currentArmy?.name || generateRandomArmyName(selectedFactionId),
+  );
+  const [factionNotes, setFactionNotes] = useState<string>(currentArmy?.armyNotes ?? '');
   const [setFactionNotesError, setSetFactionNotesError] = useState();
   const [createdArmyId, setCreatedArmyId] = useState<string | null>(null);
 
@@ -70,7 +78,19 @@ const EditArmy = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (currentArmy) {
+      setFactionName(currentArmy.name);
+      setFactionNotes(currentArmy.armyNotes);
+      setPointsLimitSelection(currentArmy.pointsLimit);
+    }
+  }, [currentArmy?.armyId]);
+
   const onConfirmEditArmyPress = async () => {
+    if (!armyId) {
+      return;
+    }
+
     if (factionName == '') {
       setFactionNameError(true);
     } else {
@@ -107,10 +127,10 @@ const EditArmy = () => {
     } else {
       setFactionNameError(false);
     }
-    if (factionSelection && factionName != '') {
+    if (selectedFactionId && factionName != '') {
       builder
         .addUserArmyList(
-          parseInt(factionSelection),
+          selectedFactionId,
           factionName,
           factionNotes,
           pointsLimitSelection,
@@ -152,6 +172,11 @@ const EditArmy = () => {
     setPointsLimitSelection(value);
   };
 
+  const onRandomiseArmyName = () => {
+    setFactionName(generateRandomArmyName(selectedFactionId));
+    setFactionNameError(false);
+  };
+
   const renderPointsLimitDetails = useCallback(() => {
     if (pointsLimitSelection == undefined) {
       return `${t('BuilderDefaultPointsRestrictions')}`;
@@ -172,29 +197,36 @@ const EditArmy = () => {
           flex: isKeyboardVisible ? 0.6 : 1,
         }}
         contentContainerStyle={{ flexGrow: 1 }}>
-        <FactionImages factionId={parseInt(factionSelection)} />
+        <FactionImages factionId={selectedFactionId ?? 0} />
         <View style={{ height: 2, backgroundColor: theme.white, width: '100%' }}></View>
         <KeyboardAvoidingView style={{ flex: 1, padding: 16 }}>
           <Text variant="heading3" style={{ marginBottom: 8, fontSize: 32 }}>
-            {getKeyByValue(Factions, parseInt(factionSelection))?.replace('_', ' ')}
+            {selectedFactionId && getKeyByValue(Factions, selectedFactionId)?.replace('_', ' ')}
           </Text>
-          <TextInput
-            ref={nameRef}
-            placeholder={t('PlaceholderEnterArmyName', { ns: 'forms' })}
-            onChangeText={(val) => setFactionName(val)}
-            style={[
-              {
-                color: theme.black,
-                fontFamily: fonts.PTSansBold,
-                fontSize: 16,
-                backgroundColor: theme.white,
-                borderRadius: 16,
-                padding: 16,
-              },
-              factionNameError && { borderColor: theme.danger, borderWidth: 4 },
-            ]}>
-            {factionName}
-          </TextInput>
+          <View style={styles.armyNameRow}>
+            <TextInput
+              ref={nameRef}
+              placeholder={t('PlaceholderEnterArmyName', { ns: 'forms' })}
+              value={factionName}
+              onChangeText={(val) => setFactionName(val)}
+              style={[
+                styles.armyNameInput,
+                {
+                  color: theme.black,
+                  fontFamily: fonts.PTSansBold,
+                  backgroundColor: theme.white,
+                },
+                factionNameError && { borderColor: theme.danger, borderWidth: 4 },
+              ]}
+            />
+            <TouchableOpacity
+              accessibilityLabel="Randomise army name"
+              accessibilityRole="button"
+              onPress={onRandomiseArmyName}
+              style={[styles.randomNameButton, { backgroundColor: theme.secondary }]}>
+              <FontAwesome5 name="dice-d6" size={20} color={theme.white} />
+            </TouchableOpacity>
+          </View>
           {factionNameError && (
             <Text italic style={{ color: theme.danger }}>
               An army name is required
@@ -295,6 +327,25 @@ const EditArmy = () => {
 export default EditArmy;
 
 const styles = StyleSheet.create({
+  armyNameRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  armyNameInput: {
+    borderRadius: 16,
+    flex: 1,
+    fontSize: 16,
+    minHeight: 52,
+    padding: 16,
+  },
+  randomNameButton: {
+    alignItems: 'center',
+    borderRadius: 26,
+    height: 52,
+    justifyContent: 'center',
+    width: 52,
+  },
   pointsCostToggle: {
     padding: 8,
     borderRadius: 16,

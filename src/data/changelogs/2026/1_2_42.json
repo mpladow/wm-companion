@@ -1,0 +1,31 @@
+{
+  "version": "1.2.47",
+  "changes": [
+    {
+      "type": "improvement",
+      "title": "Gotrek and Felix have arrived!",
+      "images": [
+        {
+          "source": "gotrek_felix_01.png",
+          "accessibilityLabel": "Gotrek Gurnisson and Felix Jaeger",
+          "placement": "top"
+        }
+      ],
+      "description": [
+        "The legendary duo of Gotrek Gurnisson and Felix Jaeger are available for hire."
+      ]
+    },
+    {
+      "type": "bug",
+      "title": "Wording changes",
+      "description": [
+        "Updated Beastment army list to remove obsolete references and wording."
+      ]
+    },
+	 {
+     "type": "bug",
+     "title": "Points calculations for Banners",
+     "description": ["Bugs in calculating correct Battle Banner cost for some units."]
+   }
+  ]
+}

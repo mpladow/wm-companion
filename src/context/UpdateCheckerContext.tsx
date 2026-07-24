@@ -64,6 +64,7 @@ export const UpdateCheckerContextProvider = ({ children }: { children: React.Rea
           setRecentlyDismissedChangeLog(resObj);
         }
         const currentChangeLog = getChangeLogsByVersion(version);
+        console.log('🚀 ~ getStorageItems ~ currentChangeLog:', currentChangeLog);
         if (currentChangeLog) {
           console.log('---CHANGELOG FOUND');
         } else {
@@ -81,10 +82,10 @@ export const UpdateCheckerContextProvider = ({ children }: { children: React.Rea
     AsyncStorage.setItem(CHANGE_LOG_DISMISSED, JSON.stringify(version));
     setRecentlyDismissedChangeLog(version);
   };
-
   const clearDismissedDEBUG = () => {
-    AsyncStorage.removeItem(CHANGE_LOG_DISMISSED);
-  };
+	  AsyncStorage.removeItem(CHANGE_LOG_DISMISSED);
+	};
+	// clearDismissedDEBUG();
   // if dismissed is true AND current version has a change
 
   // -- if no, then check current current version with changelogs.

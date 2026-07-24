@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import { Animated, SectionList, View } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
 import { HEADER_HEIGHT } from 'src/constants/styling';
-import ArmyListFilter from './ArmyListFilter';
 export type armySectionListDataProps = {
   title: string;
   data: ArmyListProps[];
@@ -147,19 +146,6 @@ const ArmySectionList = ({
             <Text variant="heading3" style={{ fontSize: 20, textTransform: 'uppercase' }}>
               {title}
             </Text>
-            {title === 'Favourited' ? (
-              <ArmyListFilter
-                listTarget="favourites"
-                filters={favouritesFilters}
-                handleFilterChange={(filter, target) => handleFilterChange(filter, target)}
-              />
-            ) : (
-              <ArmyListFilter
-                listTarget="main"
-                filters={mainFilters}
-                handleFilterChange={(filter, target) => handleFilterChange(filter, target)}
-              />
-            )}
           </View>
         )}
         ItemSeparatorComponent={() => (

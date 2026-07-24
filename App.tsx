@@ -34,6 +34,10 @@ const darkTheme = {
 };
 
 SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({
+	duration: 1000,
+	fade: true
+})
 
 const App = () => {
   const [appReady, setAppReady] = useState(false);

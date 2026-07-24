@@ -5,15 +5,10 @@
     },
     "name": "wm-companion",
     "slug": "wm-companion",
-    "version": "1.2.46",
+    "version": "1.2.47",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
@@ -44,6 +39,17 @@
     "updates": {
       "url": "https://u.expo.dev/e7bcb57d-bc08-49e5-a158-b19bd96e432c"
     },
-    "plugins": ["expo-font", "expo-sharing"]
+    "plugins": [
+      "expo-font",
+      "expo-sharing",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#000000",
+          "image": "./assets/adaptive-icon.png",
+          "imageWidth": 200
+        }
+      ]
+    ]
   }
 }

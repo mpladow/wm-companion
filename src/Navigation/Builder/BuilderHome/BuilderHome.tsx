@@ -1,4 +1,5 @@
-import { BottomSheetHandle, StandardModal, Text, TextBlock } from '@components/index';
+import ChangelogContent from '@components/ChangelogContent';
+import { BottomSheetHandle, StandardModal, Text } from '@components/index';
 import {
 	ArmyListFilters,
 	ArmyListProps,
@@ -16,14 +17,12 @@ import {
 	Animated,
 	Dimensions,
 	ImageBackground,
-	ScrollView,
 	StyleSheet,
 	TextInput,
 	View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from 'react-native-toast-notifications';
-import { sanitizeText } from '../utils/builderHelpers';
 import AddArmyButton from './components/AddArmyButton';
 import ArmySectionList, { armySectionListDataProps } from './components/ArmySectionList';
 
@@ -173,42 +172,6 @@ const BuilderHome = () => {
     }
   };
 
-  const generateContent = () => {
-    return (
-      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-        {changelog?.changes.map((x) => {
-          let fontStyle: { color: string; fontSize: number } = { color: theme.text, fontSize: 16 };
-
-          switch (x.type) {
-            case 'overhaul':
-              fontStyle.color = theme.accent;
-              fontStyle.fontSize = 18;
-              break;
-            case 'bug':
-              fontStyle.fontSize = 16;
-              break;
-            default:
-              break;
-          }
-          return (
-            <TextBlock variant="medium">
-              <Text
-                variant="heading3"
-                style={{ fontSize: fontStyle.fontSize, color: fontStyle.color }}>
-                {x.title}
-              </Text>
-              {x.description &&
-                x.description?.map((d) => {
-                  const sanitized = sanitizeText(d, theme.text);
-                  return <Text style={{ color: theme.text }}>{sanitized}</Text>;
-                })}
-            </TextBlock>
-          );
-        })}
-      </ScrollView>
-    );
-  };
-
   const bottomSheetModalRef = useRef<BottomSheetHandle>(null);
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -285,7 +248,7 @@ const BuilderHome = () => {
         onCancel={() => setShowArmyNotes(false)}
       />
       <StandardModal
-        content={generateContent()}
+        content={<ChangelogContent changelog={changelog} />}
         heading={
           changelog
             ? `Changelog v${changelog?.version}`
