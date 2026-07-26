@@ -1,8 +1,9 @@
 import IconButton from '@components/IconButton';
 import ChangelogContent from '@components/ChangelogContent';
-import { Button, Text, TextBlock } from '@components/index';
+import RulesetSelectorSheetHost from '@components/RulesetSelectorSheetHost';
+import { Button, RulesetHomeMenu, Text, TextBlock } from '@components/index';
 import MainContainerWithImage from '@components/MainContainerWithImage';
-import LogoWmr from '@components/SVGS/LogoWmr';
+import RulesetLogo from '@components/RulesetLogo';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
 import { Entypo, EvilIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
@@ -67,7 +68,7 @@ const Home = () => {
                   alignItems: 'center',
                   flexDirection: 'column',
                 }}>
-                <LogoWmr height={80} width={200} />
+                <RulesetLogo height={80} width={200} />
                 <View style={{ marginTop: -12 }}>
                   <Text variant="heading3" style={{ fontSize: 24 }}>
                     {t('Companion', { ns: 'common' })}
@@ -162,7 +163,9 @@ const Home = () => {
 				visible={showChangeLogModal}
 				onSubmit={handleDismissModal}
 				submitText={"Understood!"}
-			/> */}
+      /> */}
+      <RulesetHomeMenu />
+      <RulesetSelectorSheetHost />
     </SafeAreaView>
   );
 };

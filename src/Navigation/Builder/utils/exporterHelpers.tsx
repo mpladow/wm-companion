@@ -3,7 +3,7 @@ import { asterixSingleRegex, Factions, newLineRegex, underscoreRegex } from "@ut
 import { getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
 const Mustache = require("mustache");
-import magicItemsList from "../../../data/json/wmr/magic-items.json";
+import { defaultRulesetId, getRulesetData } from "src/data/rulesets";
 import { getUpgradeDetailsByName } from "./builderHelpers";
 
 export const generateHtml = (
@@ -64,7 +64,7 @@ export const generateSpecialRules = (army: ArmyListProps, factionDetails: Factio
 	let specialRules = army.selectedUnits.map((u) => {
 		//@ts-ignore - TODO: need to check typing
 		const _specialRules = factionDetails?.specialRules[u.unitName];
-		const _allGenericSpecialRules = getGenericSpecialRules();
+		const _allGenericSpecialRules = getGenericSpecialRules(army.ruleset ?? defaultRulesetId);
 
 		//@ts-ignore
 		const _genericSpecialRulesExist = _allGenericSpecialRules[u.unitName];
@@ -108,6 +108,7 @@ export const generateSpecialRules = (army: ArmyListProps, factionDetails: Factio
 	}
 };
 export const generateUsedMagicItems = (army: ArmyListProps, factionDetails: FactionListProps) => {
+	const rulesetMagicItems = getRulesetData(army.ruleset ?? defaultRulesetId).magicItems;
 	const _html = `
     <div style="margin-bottom: 8px">
         <div style="align-items: center">
@@ -126,7 +127,7 @@ export const generateUsedMagicItems = (army: ArmyListProps, factionDetails: Fact
 		// find special rules
 		let factionRule = factionDetails?.upgrades?.find((mi) => mi.name == x.upgradeName);
 		if (factionRule == undefined) {
-			factionRule = magicItemsList?.upgrades.find((mi) => mi.name == x.upgradeName);
+			factionRule = rulesetMagicItems?.upgrades.find((mi: any) => mi.name == x.upgradeName);
 		} else {
 			factionRule.text = factionDetails?.specialRules[x.upgradeName]?.text;
 		}
@@ -234,7 +235,7 @@ export const generateUnitTable = (
 				if (factionDetails?.specialRules && _unit?.name) {
 					//@ts-ignore - TODO: need to check typing
 					const _specialRules = factionDetails?.specialRules[_unit.name];
-					const _allGenericSpecialRules = getGenericSpecialRules();
+					const _allGenericSpecialRules = getGenericSpecialRules(armyProps.ruleset ?? defaultRulesetId);
 
 					//@ts-ignore
 					const _genericSpecialRulesExist = _allGenericSpecialRules[_unit.name];
@@ -249,7 +250,7 @@ export const generateUnitTable = (
 
 					_unit["upgradesExpanded"] = [];
 					x.attachedItems.map((x) => {
-						const upgrade = getUpgradeDetailsByName(x.upgradeName, factionDetails);
+						const upgrade = getUpgradeDetailsByName(x.upgradeName, factionDetails, armyProps.ruleset ?? defaultRulesetId);
 						_unit["upgradesExpanded"]?.push(upgrade);
 					});
 				}
@@ -268,7 +269,7 @@ export const generateUnitTable = (
 				if (factionDetails?.specialRules && _unit?.name) {
 					//@ts-ignore - TODO: need to check typing
 					const _specialRules = factionDetails?.specialRules[_unit.name];
-					const _allGenericSpecialRules = getGenericSpecialRules();
+					const _allGenericSpecialRules = getGenericSpecialRules(armyProps.ruleset ?? defaultRulesetId);
 					//@ts-ignore
 					const _genericSpecialRulesExist = _allGenericSpecialRules[_unit.name];
 					if (_specialRules?.text != undefined) {
@@ -282,7 +283,7 @@ export const generateUnitTable = (
 					// get magic items details
 					_unit["upgradesExpanded"] = [];
 					x.attachedItems.map((x) => {
-						const upgrade = getUpgradeDetailsByName(x.upgradeName, factionDetails);
+						const upgrade = getUpgradeDetailsByName(x.upgradeName, factionDetails, armyProps.ruleset ?? defaultRulesetId);
 						console.log("upgrade found for unit");
 						_unit["upgradesExpanded"]?.push(upgrade);
 					});

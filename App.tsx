@@ -1,5 +1,6 @@
 import { BuilderContextProvider } from '@context/BuilderContext';
 import { CollectionProvider } from '@context/CollectionContext';
+import { RulesetContextProvider } from '@context/RulesetContext';
 import { SettingsContextProvider } from '@context/SettingsContext';
 import { ThemeContextProvider } from '@context/ThemeContext';
 import { UpdateCheckerContextProvider } from '@context/UpdateCheckerContext';
@@ -92,16 +93,18 @@ const App = () => {
                 <UpdateCheckerContextProvider>
                   <SettingsContextProvider>
                     <RootSiblingParent>
-                      <CollectionProvider>
-                        <BuilderContextProvider>
-                          <VPContextProvider>
-                            <NavigationContainer theme={darkTheme}>
-                              <RootStack />
-                              <StatusBar />
-                            </NavigationContainer>
-                          </VPContextProvider>
-                        </BuilderContextProvider>
-                      </CollectionProvider>
+                      <RulesetContextProvider>
+                        <CollectionProvider>
+                          <BuilderContextProvider>
+                            <VPContextProvider>
+                              <NavigationContainer theme={darkTheme}>
+                                <RootStack />
+                                <StatusBar />
+                              </NavigationContainer>
+                            </VPContextProvider>
+                          </BuilderContextProvider>
+                        </CollectionProvider>
+                      </RulesetContextProvider>
                     </RootSiblingParent>
                   </SettingsContextProvider>
                 </UpdateCheckerContextProvider>

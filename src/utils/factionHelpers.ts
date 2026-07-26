@@ -1,4 +1,4 @@
-import genericSpecialRules from "../data/json/wmr/generic-special-rules/generic-special-rules.json";
+import { defaultRulesetId, getRulesetData, RulesetId } from 'src/data/rulesets';
 import { Factions } from "./constants";
 
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
@@ -25,11 +25,11 @@ export const getFactionsDropdown = () => {
 	ddFactionList = ddFactionList.filter(x => x.label !== "Regiments Of Renown")
 	return { ddFactionList: ddFactionList };
 };
-export const getKeyByValue = (object: object, value: number) => {
+export const getKeyByValue = (object: Record<string, unknown>, value: number) => {
 	return Object.keys(object).find((key) => object[key] === value);
 };
-export const getGenericSpecialRules = () => {
-	return genericSpecialRules;
+export const getGenericSpecialRules = (rulesetId: RulesetId = defaultRulesetId) => {
+	return getRulesetData(rulesetId).genericSpecialRules;
 };
 export const getLocalFactionAssets = (faction: string) => {
 	switch (faction) {

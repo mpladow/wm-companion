@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
 
-const HeaderMenu = ({ armyId, factionId }: { armyId: string; factionId: string }) => {
-  const navigation = useNavigation();
+const HeaderMenu = ({ armyId, factionId }: { armyId?: string; factionId?: string | number }) => {
+  const navigation = useNavigation<any>();
   const [showPopover, setShowPopover] = useState(false);
   const { theme } = useTheme();
 

@@ -5,7 +5,6 @@ import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Factions } from '@utils/constants';
-import { getGenericSpecialRules } from '@utils/factionHelpers';
 import { UnitProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
@@ -33,7 +32,7 @@ const AddUnit = () => {
   const [unitPreviewVisible, setUnitPreviewVisible] = useState(false);
   const [totalPoints, setTotalPoints] = useState(1000);
   const [errorsVisible, setErrorsVisible] = useState(false);
-  const { getFactionUnitsByVersion } = useFactionUnits();
+  const { getFactionUnitsByVersion, getGenericSpecialRules } = useFactionUnits();
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -74,6 +73,7 @@ const AddUnit = () => {
       const factionListData = getFactionUnitsByVersion(
         builder.selectedArmyList?.faction,
         builder.selectedArmyList?.versionNumber,
+        builder.selectedArmyList?.ruleset,
       );
       setFactionUnits(factionListData?.factionList?.units);
     }
@@ -84,6 +84,7 @@ const AddUnit = () => {
       const factionListData = getFactionUnitsByVersion(
         builder.selectedArmyList?.faction,
         builder.selectedArmyList?.versionNumber,
+        builder.selectedArmyList?.ruleset,
       );
       setFactionUnits(factionListData?.factionList?.units);
     }

@@ -68,7 +68,11 @@ const AddItem = () => {
 
   const handleOnUpgradePress = (upgradeName: string) => {
     if (builder.factionDetails) {
-      const _upgrades = getUpgradeDetailsByName(upgradeName, builder.factionDetails);
+      const _upgrades = getUpgradeDetailsByName(
+        upgradeName,
+        builder.factionDetails,
+        builder.selectedArmyList?.ruleset,
+      );
       // let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find((x) => x.name == upgradeName);
       // if (!_upgrades?.text) {
       // 	_upgrades = builder.factionDetails?.upgrades?.find((x) => x.name == upgradeName);

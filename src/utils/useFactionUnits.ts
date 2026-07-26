@@ -1,37 +1,20 @@
-import { regimentsOfReknownListV1, wmrArmiesV2 } from "src/data/json/wmr/v2/_armies";
+import { useRulesetContext } from '@context/RulesetContext';
+import { defaultRulesetId, getRulesetData, RulesetId } from 'src/data/rulesets';
 import { ArmyReferenceType, RegimentOfRenownUnitReferenceType } from "src/types/data/army";
-import albionList from "../data/json/wmr/albion.json";
-import arabyList from "../data/json/wmr/araby.json";
-import beastmenList from "../data/json/wmr/beastmen.json";
-import bretonnianList from "../data/json/wmr/bretonnian.json";
-import cathayList from "../data/json/wmr/cathay.json";
-import chaosList from "../data/json/wmr/chaos.json";
-import chaosDwarvesList from "../data/json/wmr/chaosDwarves.json";
-import daemonsList from "../data/json/wmr/daemons.json";
-import darkElvesList from "../data/json/wmr/darkelves.json";
-import dogsOfWarList from "../data/json/wmr/dogsOfWar.json";
-import dwarvesList from "../data/json/wmr/dwarves.json";
-import empireList from "../data/json/wmr/empire.json";
-import highElvesList from "../data/json/wmr/highElves.json";
-import kislevList from "../data/json/wmr/kislev.json";
-import lizardmenList from "../data/json/wmr/lizardmen.json";
-import nightGoblinsList from "../data/json/wmr/nightGoblins.json";
-import nipponList from "../data/json/wmr/nippon.json";
-import norseList from "../data/json/wmr/norse.json";
-import ogresList from "../data/json/wmr/ogres.json";
-import orcList from "../data/json/wmr/orks.json";
-import skavenList from "../data/json/wmr/skaven.json";
-import tombKingsList from "../data/json/wmr/tombKings.json";
-import vampireCountsList from "../data/json/wmr/vampireCounts.json";
-import witchHunterList from "../data/json/wmr/witchHunters.json";
-import woodElvesList from "../data/json/wmr/woodElves.json";
 import { Factions } from "./constants";
 
 export const useFactionUnits = () => {
-	const getRegimentsOfRenownUnitsForFaction = (factionSelection?: number, getLeaders?: boolean) => {
-		const regimentsOfRenownPermittedList: RegimentOfRenownUnitReferenceType[] = [];
+	const { selectedRulesetId } = useRulesetContext();
 
-		const regimentsOfRenownList = regimentsOfReknownListV1.find((a => a.name == "Regiments_of_Renown"));
+	const getRegimentsOfRenownUnitsForFaction = (
+		factionSelection?: number,
+		getLeaders?: boolean,
+		rulesetId: RulesetId = selectedRulesetId,
+	) => {
+		const regimentsOfRenownPermittedList: RegimentOfRenownUnitReferenceType[] = [];
+		const { regimentsOfRenown } = getRulesetData(rulesetId);
+
+		const regimentsOfRenownList = regimentsOfRenown.find((a => a.name == "Regiments_of_Renown"));
 		if (regimentsOfRenownList) {
 			if (factionSelection == undefined) {
 				return getLeaders ? regimentsOfRenownList.units.filter(x => (x.command !== undefined) == getLeaders) : regimentsOfRenownList.units;
@@ -58,17 +41,26 @@ export const useFactionUnits = () => {
 	}
 
 	const getRegimentsOfRenownFactionData = () => {
-		return regimentsOfReknownListV1.find((a => a.name == "Regiments_of_Renown"));
+		const { regimentsOfRenown } = getRulesetData(selectedRulesetId);
+		return regimentsOfRenown.find((a => a.name == "Regiments_of_Renown"));
 
 	}
-	const getFactionUnitsByVersion = (factionSelection: number, version?: number) => {
+	const getFactionUnitsByVersion = (
+		factionSelection?: number,
+		version?: number,
+		rulesetId: RulesetId = selectedRulesetId,
+	) => {
 		let list: any[] = [];
 		let factionList: ArmyReferenceType = {} as ArmyReferenceType;
 		let description: string[] = [];
+		if (factionSelection == undefined) {
+			return { ddFactionUnits: [], factionList: factionList, description: description };
+		}
 		const army = Factions[factionSelection]?.replaceAll("_", " ");
+		const { armiesV2, legacyArmies } = getRulesetData(rulesetId);
 
-		if (version == 2.25 || version == 2.26 || version == 2.262) {
-			const _factionList = wmrArmiesV2.find((x) => x.name == army);
+		if (version == undefined || version >= 2.24) {
+			const _factionList = armiesV2.find((x) => x.name == army);
 			if (_factionList) {
 				factionList = _factionList;
 				list = factionList?.units;
@@ -76,165 +68,15 @@ export const useFactionUnits = () => {
 				description = factionList.description;
 			}
 		}
-		else if (version == 2.24) {
-			const _factionList = wmrArmiesV2.find((x) => x.name == army);
-			if (_factionList) {
-				factionList = _factionList;
-				list = factionList?.units;
-				// factionList = factionList;
-				description = factionList.description;
-			}
-		} else {
+		else {
 			// old army versions
-			switch (factionSelection) {
-				case Factions.Bretonnia:
-					list = bretonnianList.units;
-					factionList = bretonnianList as ArmyReferenceType;
-					description = bretonnianList.description;
-					break;
-				case Factions.Orcs:
-					list = orcList.units;
-					factionList = orcList as ArmyReferenceType;
-					description = orcList.description;
-					break;
-				case Factions.Tomb_Kings:
-					list = tombKingsList.units;
-					factionList = tombKingsList as ArmyReferenceType;
-					description = tombKingsList.description;
-					break;
-				case Factions.Empire:
-					list = empireList.units;
-					factionList = empireList as ArmyReferenceType;
-					description = empireList.description;
-					break;
-				case Factions.Skaven:
-					list = skavenList.units;
-					factionList = skavenList as ArmyReferenceType;
-					description = skavenList.description;
-
-					break;
-				case Factions.Chaos:
-					list = chaosList.units;
-					factionList = chaosList as ArmyReferenceType;
-					description = chaosList.description;
-
-					break;
-				case Factions.Wood_Elves:
-					list = woodElvesList.units;
-					factionList = woodElvesList as ArmyReferenceType;
-					description = woodElvesList.description;
-
-					break;
-				case Factions.Vampire_Counts:
-					list = vampireCountsList.units;
-					factionList = vampireCountsList as ArmyReferenceType;
-					description = vampireCountsList.description;
-
-					break;
-				case Factions.Beastmen:
-					list = beastmenList.units;
-					factionList = beastmenList as ArmyReferenceType;
-					description = beastmenList.description;
-
-					break;
-				case Factions.Cathay:
-					list = cathayList.units;
-					factionList = cathayList as ArmyReferenceType;
-					description = cathayList.description;
-					break;
-				case Factions.Goblins:
-					list = nightGoblinsList.units;
-					factionList = nightGoblinsList as ArmyReferenceType;
-					description = nightGoblinsList.description;
-
-					break;
-				case Factions.Dwarfs:
-					list = dwarvesList.units;
-					factionList = dwarvesList as ArmyReferenceType;
-					description = dwarvesList.description;
-
-					break;
-				case Factions.Dark_Elves:
-					list = darkElvesList.units;
-					factionList = darkElvesList as ArmyReferenceType;
-					description = darkElvesList.description;
-
-					break;
-				case Factions.High_Elves:
-					list = highElvesList.units;
-					factionList = highElvesList as ArmyReferenceType;
-					description = highElvesList.description;
-
-					break;
-				case Factions.Daemons:
-					list = daemonsList.units;
-					factionList = daemonsList as ArmyReferenceType;
-					description = daemonsList.description;
-
-					break;
-				case Factions.Nippon:
-					list = nipponList.units;
-					factionList = nipponList as ArmyReferenceType;
-					description = nipponList.description;
-
-					break;
-				case Factions.Chaos_Dwarfs:
-					list = chaosDwarvesList.units;
-					factionList = chaosDwarvesList as ArmyReferenceType;
-					description = chaosDwarvesList.description;
-
-					break;
-				case Factions.Dogs_of_War:
-					list = dogsOfWarList.units;
-					factionList = dogsOfWarList as ArmyReferenceType;
-					description = dogsOfWarList.description;
-
-					break;
-				case Factions.Araby:
-					list = arabyList.units;
-					factionList = arabyList as ArmyReferenceType;
-					description = arabyList.description;
-
-					break;
-				case Factions.Lizardmen:
-					list = lizardmenList.units;
-					factionList = lizardmenList as ArmyReferenceType;
-					description = lizardmenList.description;
-
-					break;
-				case Factions.Albion:
-					list = albionList.units;
-					factionList = albionList as ArmyReferenceType;
-					description = albionList.description;
-
-					break;
-				case Factions.Ogre_Kingdoms:
-					list = ogresList.units;
-					factionList = ogresList as ArmyReferenceType;
-					description = ogresList.description;
-
-					break;
-				case Factions.Kislev:
-					list = kislevList.units;
-					factionList = kislevList as ArmyReferenceType;
-					description = kislevList.description;
-
-					break;
-				case Factions.Norse:
-					list = norseList.units;
-					factionList = norseList as ArmyReferenceType;
-					description = norseList.description;
-
-					break;
-				case Factions.Witch_Hunters:
-					console.log(witchHunterList, "witch hunters list");
-					list = witchHunterList.units;
-					factionList = witchHunterList as ArmyReferenceType;
-					description = witchHunterList.description;
-
-					break;
-				default:
-					break;
+			const legacyFactionList =
+				legacyArmies[factionSelection as Factions] ??
+				getRulesetData(defaultRulesetId).legacyArmies[factionSelection as Factions];
+			if (legacyFactionList) {
+				list = legacyFactionList.units;
+				factionList = legacyFactionList as ArmyReferenceType;
+				description = legacyFactionList.description;
 			}
 		}
 		const ddFactionUnits = list?.map((x) => ({
@@ -243,6 +85,13 @@ export const useFactionUnits = () => {
 		}));
 		return { ddFactionUnits: ddFactionUnits, factionList: factionList, description: description };
 	};
+	const getGenericSpecialRules = (rulesetId: RulesetId = selectedRulesetId) => {
+		return getRulesetData(rulesetId).genericSpecialRules;
+	};
 
-	return { getFactionUnitsByVersion, getRegimentsOfRenownForFaction: getRegimentsOfRenownUnitsForFaction, getRegimentsOfRenownFactionData };
+	const getMagicItemsList = (rulesetId: RulesetId = selectedRulesetId) => {
+		return getRulesetData(rulesetId).magicItems;
+	};
+
+	return { getFactionUnitsByVersion, getGenericSpecialRules, getMagicItemsList, getRegimentsOfRenownForFaction: getRegimentsOfRenownUnitsForFaction, getRegimentsOfRenownFactionData };
 };

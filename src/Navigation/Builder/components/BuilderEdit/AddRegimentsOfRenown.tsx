@@ -4,7 +4,6 @@ import { useBuilderContext } from '@context/BuilderContext';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { getGenericSpecialRules } from '@utils/factionHelpers';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -69,6 +68,7 @@ const AddRegimentsOfRenown = () => {
       const _regimentsOfRenown = getRegimentsOfRenownForFaction(
         builder.selectedArmyList?.faction,
         addingLeader,
+        builder.selectedArmyList?.ruleset,
       );
 
       setRegimentsOfRenown(_regimentsOfRenown);
@@ -96,7 +96,11 @@ const AddRegimentsOfRenown = () => {
   }, [builder?.selectedArmyList, builder?.selectedArmyList?.selectedUnits]);
 
   useEffect(() => {
-    const data = getRegimentsOfRenownForFaction(builder.selectedArmyList?.faction);
+    const data = getRegimentsOfRenownForFaction(
+      builder.selectedArmyList?.faction,
+      undefined,
+      builder.selectedArmyList?.ruleset,
+    );
     setRegimentsOfRenownDetails(data);
   }, []);
 
@@ -104,7 +108,7 @@ const AddRegimentsOfRenown = () => {
     return `${builder.calculateCurrentArmyPoints()}/${builder.totalPoints}`;
   }, [builder.calculateCurrentArmyPoints(), builder.totalPoints]);
 
-  const { getRegimentsOfRenownForFaction, getRegimentsOfRenownFactionData } = useFactionUnits();
+  const { getGenericSpecialRules, getRegimentsOfRenownForFaction, getRegimentsOfRenownFactionData } = useFactionUnits();
 
   const handleViewPreview = (unitName: string) => {
     const rawUnitData = regimentsOfRenown?.find((x) => x.name == unitName);

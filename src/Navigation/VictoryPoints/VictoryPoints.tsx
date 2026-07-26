@@ -2,7 +2,6 @@ import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from "react-
 import React, { useEffect, useRef, useState } from "react";
 import ModalContainer from "@components/ModalContainer";
 import { useNavigation } from "@react-navigation/native";
-import magicItemsList from "../../data/json/wmr/magic-items.json";
 
 import { useTheme } from "@hooks/useTheme";
 import { Button, Text } from "@components/index";
@@ -44,7 +43,7 @@ const VictoryPoints = () => {
 	const [ddFactions, setDdFactions] = useState<DropDownItemProps[]>([]);
 	const [ddUnits, setDdUnits] = useState<DropDownItemProps[]>([]);
 	const [ddMagicItems, setDdMagicItems] = useState<DropDownItemProps[]>([]);
-	const { getFactionUnitsByVersion } = useFactionUnits();
+	const { getFactionUnitsByVersion, getMagicItemsList } = useFactionUnits();
 	const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
 
 	// on startup, if a selected faction exists, use this faction
@@ -90,7 +89,7 @@ const VictoryPoints = () => {
 
 	useEffect(() => {
 		if (unit != undefined) {
-			const itemsArray: any[] = magicItemsList.upgrades;
+			const itemsArray: any[] = getMagicItemsList().upgrades;
 			const factionUpgrades: any[] = factionList?.upgrades;
 			console.log(factionUpgrades, "Faction upgrades");
 			let totalItems = [];

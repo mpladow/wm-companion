@@ -10,9 +10,10 @@ import { produce } from 'immer';
 import _ from 'lodash';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRulesetContext } from './RulesetContext';
+import { defaultRulesetId, RulesetId } from 'src/data/rulesets';
 import { RegimentOfRenownUnitReferenceType } from 'src/types/data/army';
 import uuid from 'uuid-random';
-import magicItemsList from '../data/json/wmr/magic-items.json';
 import {
   calculateArmyPoints,
   calculateDisplayedPointsLimit,
@@ -57,6 +58,7 @@ export type SelectedUnitProps = {
 export type UnitSource = 'faction' | 'ror';
 export type ArmyListProps = {
   versionNumber?: number;
+  ruleset?: RulesetId;
   armyId: string;
   faction: number;
   name: string;
@@ -84,6 +86,7 @@ interface BuilderContextInterface {
   migrateArmyList: (armyId: string, versionNumber: number) => void;
 
   setSelectedArmyList: (armyId: string) => void;
+  clearSelectedArmyList: () => void;
   selectedArmyList?: ArmyListProps;
   //armyName: string;
   updateArmyName: (name: string, armyId: string) => void;
@@ -128,16 +131,22 @@ export const BuilderContextProvider = ({ children }: any) => {
   const [faction, setFaction] = useState<number | undefined>();
   const [currentArmyList, setCurrentArmyList] = useState<ArmyListProps>();
   const [userArmyLists, setUserArmyLists] = useState<ArmyListProps[]>([]);
+  const [hasLoadedArmyLists, setHasLoadedArmyLists] = useState(false);
   const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
   const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
   //   const [regimentsOfRenown, setRegimentsOfRenown] = useState<AddRegimentsOfRenownProps>();
   const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+  const { selectedRulesetId } = useRulesetContext();
 
   const { t } = useTranslation(['builder', 'units']);
-  const { getFactionUnitsByVersion } = useFactionUnits();
+  const { getFactionUnitsByVersion, getMagicItemsList, getRegimentsOfRenownForFaction } =
+    useFactionUnits();
+  const getArmyRuleset = (army?: ArmyListProps) => army?.ruleset ?? defaultRulesetId;
   const currentVersionArmyLists = useMemo(() => {
-    return userArmyLists.filter((x) => x.versionNumber == CURRENT_VERSION);
-  }, [CURRENT_VERSION, userArmyLists]);
+    return userArmyLists.filter(
+      (x) => x.versionNumber == CURRENT_VERSION && getArmyRuleset(x) === selectedRulesetId,
+    );
+  }, [CURRENT_VERSION, selectedRulesetId, userArmyLists]);
   const currentArmyPoints = useMemo(() => {
     return calculateArmyPoints(currentArmyList);
   }, [currentArmyList]);
@@ -155,8 +164,17 @@ export const BuilderContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     // save changes to local storage
-    updateStorage();
-  }, [userArmyLists]);
+    if (hasLoadedArmyLists) {
+      updateStorage();
+    }
+  }, [hasLoadedArmyLists, userArmyLists]);
+
+  useEffect(() => {
+    setCurrentArmyList(undefined);
+    setFaction(undefined);
+    setFactionDetails({});
+    setArmyErrors([]);
+  }, [selectedRulesetId]);
 
   useEffect(() => {
     const updateArmyErrors = async () => {
@@ -171,8 +189,6 @@ export const BuilderContextProvider = ({ children }: any) => {
     updateArmyErrors();
   }, [currentArmyList]);
 
-  const { getRegimentsOfRenownForFaction } = useFactionUnits();
-
   const setCurrentFaction = (faction: number) => {
     setFaction(faction);
   };
@@ -185,9 +201,17 @@ export const BuilderContextProvider = ({ children }: any) => {
 
       const userArmyListObj: ArmyListProps[] = userArmyLists && JSON.parse(userArmyLists);
       if (userArmyListObj) {
-        setUserArmyLists(userArmyListObj);
+        setUserArmyLists(
+          userArmyListObj.map((armyList) => ({
+            ...armyList,
+            ruleset: getArmyRuleset(armyList),
+          })),
+        );
       }
     } catch (e) {}
+    finally {
+      setHasLoadedArmyLists(true);
+    }
   };
   const updateStorage = async () => {
     try {
@@ -214,7 +238,12 @@ export const BuilderContextProvider = ({ children }: any) => {
           // upgrade equipment
           newArmy.selectedUpgrades = [];
           // populate selected units
-          const _factionDetails = getFactionUnitsByVersion(armyToMigrate.faction, versionNumber);
+          newArmy.ruleset = getArmyRuleset(armyToMigrate);
+          const _factionDetails = getFactionUnitsByVersion(
+            armyToMigrate.faction,
+            versionNumber,
+            newArmy.ruleset,
+          );
           newArmy.selectedUnits.map((u) => {
             let unitToAdd = _factionDetails.factionList.units.find((x) => x.name == u.unitName);
             if (!unitToAdd) {
@@ -312,12 +341,13 @@ export const BuilderContextProvider = ({ children }: any) => {
       selectedUnits: [],
       selectedUpgrades: [],
       versionNumber: versionNumber,
+      ruleset: selectedRulesetId,
       points: 0,
       armyNotes: notes,
       pointsLimit: pointsLimit,
     };
     // autopopulate if true
-    const _factionDetails = getFactionUnitsByVersion(faction, versionNumber);
+    const _factionDetails = getFactionUnitsByVersion(faction, versionNumber, selectedRulesetId);
     // set faction upgrade tails
     factionDetails && setFactionDetails(_factionDetails.factionList);
     if (autopopulate) {
@@ -352,6 +382,8 @@ export const BuilderContextProvider = ({ children }: any) => {
           maxCount: max,
           minCount: x.min ? x.min : x.armyMin,
           ignoreBreakPoint: x.noCount,
+          unitSource: 'faction',
+          type: x.type,
         };
         defaultUnits.push(_newUnit);
       });
@@ -402,16 +434,28 @@ export const BuilderContextProvider = ({ children }: any) => {
     );
   };
 
+  const clearSelectedArmyList = () => {
+    setCurrentArmyList(undefined);
+    setFaction(undefined);
+    setFactionDetails({});
+    setArmyErrors([]);
+  };
+
   const setSelectedArmyList = (armyId: string, faction?: number) => {
     // once user selects army, set selectedUnits, name,
     let selectedList = userArmyLists.find((x) => x.armyId == armyId);
-    let selectedListClone = { ...selectedList };
-    if (selectedListClone) {
+    if (selectedList) {
+      let selectedListClone = { ...selectedList };
+      if (getArmyRuleset(selectedListClone) !== selectedRulesetId) {
+        clearSelectedArmyList();
+        return;
+      }
       // get list version
       selectedListClone.points = calculateCurrentArmyPoints(selectedList);
       const _factionDetails = getFactionUnitsByVersion(
         selectedListClone.faction,
         selectedListClone.versionNumber,
+        getArmyRuleset(selectedListClone),
       );
       // set faction upgrade tails
       factionDetails && setFactionDetails(_factionDetails.factionList);
@@ -419,7 +463,7 @@ export const BuilderContextProvider = ({ children }: any) => {
     } else {
       if (faction) {
         console.log('WHY ARE WE HITTING THIS?');
-        const _factionDetails = getFactionUnitsByVersion(faction, CURRENT_VERSION);
+        const _factionDetails = getFactionUnitsByVersion(faction, CURRENT_VERSION, selectedRulesetId);
         factionDetails && setFactionDetails(_factionDetails.factionList);
         setCurrentArmyList(selectedList);
       }
@@ -468,7 +512,11 @@ export const BuilderContextProvider = ({ children }: any) => {
     const currentUnit = factionDetails && factionDetails.units?.find((x) => x.name == unitName);
     let currentRoRUnit: RegimentOfRenownUnitReferenceType | undefined;
     if (currentUnit == null) {
-      currentRoRUnit = getRegimentsOfRenownForFaction().find((x) => x.name == unitName);
+      currentRoRUnit = getRegimentsOfRenownForFaction(
+        currentArmyList?.faction,
+        undefined,
+        getArmyRuleset(currentArmyList),
+      ).find((x) => x.name == unitName);
     }
     const newUnit: SelectedUnitProps = {
       id: uuid(),
@@ -1007,7 +1055,7 @@ export const BuilderContextProvider = ({ children }: any) => {
     return currentUnitCounts;
   }, [currentUnitCounts]);
 
-  const getMagicItemsForUnit = (unitName: string, faction?: number, versionNumber?: number) => {
+  const getMagicItemsForUnit = (unitName: string, faction?: number, versionNumber?: number): any[] => {
     // this needs to be retrieved for each unit, since costs are different each time
     let _factionDetails = factionDetails;
     if (faction && versionNumber) {
@@ -1018,8 +1066,9 @@ export const BuilderContextProvider = ({ children }: any) => {
     // get all magic items
     const selectedUnit = currentArmyList?.selectedUnits.find((x) => x.unitName == unitName);
     // ensure we clone this item so the original list does not get mutated.
-    const itemsArray: any = _.cloneDeep(magicItemsList.upgrades);
-    const magicItemConstraints = magicItemsList.upgradeConstraints;
+    const rulesetMagicItemsList: any = getMagicItemsList(getArmyRuleset(currentArmyList));
+    const itemsArray: any = _.cloneDeep(rulesetMagicItemsList.upgrades);
+    const magicItemConstraints = rulesetMagicItemsList.upgradeConstraints;
 
     // faction unit types can override the above constraints
     const factionUpgrades = factionDetails?.upgrades;
@@ -1036,7 +1085,7 @@ export const BuilderContextProvider = ({ children }: any) => {
 
     // flying units cannot use magic items.
     if (unitDetails?.canFly) {
-      return;
+      return [];
     }
 
     let specificUpgradesForUnitArr: UpgradesProps[] = [];
@@ -1061,7 +1110,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         }
       });
       unitHasWizardUpgrade?.addOnUpgrades?.map((y) => {
-        const upgradeToAdd = magicItemsList.upgrades.find((x) => x.name == y);
+        const upgradeToAdd = rulesetMagicItemsList.upgrades.find((x) => x.name == y);
         if (upgradeToAdd) {
           permittedUpgrades.push(upgradeToAdd.name);
         }
@@ -1161,14 +1210,14 @@ export const BuilderContextProvider = ({ children }: any) => {
   const getUserArmyLists = useCallback((filters?: ArmyListFilters[]) => {
     if (filters && filters?.length > 0) {
       if (filters.find((x) => x == 'all')) {
-        return userArmyLists;
+        return userArmyLists.filter((x) => getArmyRuleset(x) === selectedRulesetId);
       } else {
         return currentVersionArmyLists;
       }
     } else {
       return currentVersionArmyLists;
     }
-  }, [currentVersionArmyLists, userArmyLists]);
+  }, [currentVersionArmyLists, selectedRulesetId, userArmyLists]);
 
   return (
     <BuilderContext.Provider
@@ -1179,6 +1228,7 @@ export const BuilderContextProvider = ({ children }: any) => {
         duplicateArmyList,
         deleteUserArmyList,
         setSelectedArmyList,
+        clearSelectedArmyList,
         selectedArmyList: currentArmyList,
         updateArmyName,
         toggleFavourite,

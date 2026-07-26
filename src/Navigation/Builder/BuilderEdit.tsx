@@ -6,7 +6,7 @@ import { useSettingsContext } from '@context/SettingsContext';
 import { Entypo } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { Factions } from '@utils/constants';
-import { getGenericSpecialRules, getKeyByValue } from '@utils/factionHelpers';
+import { getKeyByValue } from '@utils/factionHelpers';
 import { UnitProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -54,6 +54,7 @@ const BuilderEdit = ({ navigation }: any) => {
 
   const {
     getFactionUnitsByVersion,
+    getGenericSpecialRules,
     getRegimentsOfRenownForFaction,
     getRegimentsOfRenownFactionData,
   } = useFactionUnits();
@@ -62,9 +63,14 @@ const BuilderEdit = ({ navigation }: any) => {
     const factionListData = getFactionUnitsByVersion(
       builder.selectedArmyList?.faction,
       builder.selectedArmyList?.versionNumber,
+      builder.selectedArmyList?.ruleset,
     );
     setFactionUnits(factionListData?.factionList?.units);
-    const RoRData = getRegimentsOfRenownForFaction(builder.selectedArmyList?.faction);
+    const RoRData = getRegimentsOfRenownForFaction(
+      builder.selectedArmyList?.faction,
+      undefined,
+      builder.selectedArmyList?.ruleset,
+    );
     setRegimentsOfRenown(RoRData);
     // get all units for selected army list
     if (builder.selectedArmyList?.faction && builder.selectedArmyList.name) {
@@ -315,7 +321,11 @@ const BuilderEdit = ({ navigation }: any) => {
   };
   const handleOnUpgradePress = (upgradeName: string) => {
     if (builder.factionDetails) {
-      const _upgrades = getUpgradeDetailsByName(upgradeName, builder.factionDetails);
+      const _upgrades = getUpgradeDetailsByName(
+        upgradeName,
+        builder.factionDetails,
+        builder.selectedArmyList?.ruleset,
+      );
       // let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find((x) => x.name == upgradeName);
       // if (!_upgrades?.text) {
       // 	_upgrades = builder.factionDetails?.upgrades?.find((x) => x.name == upgradeName);
@@ -427,7 +437,11 @@ const BuilderEdit = ({ navigation }: any) => {
           renderItem={({ item, index }) => {
             // get total unit count
             const unitDetails = factionUnits?.find((x) => x.name == item.unitName);
-            const regimentOfRenown = getRegimentsOfRenownForFaction().find(
+            const regimentOfRenown = getRegimentsOfRenownForFaction(
+              builder.selectedArmyList?.faction,
+              undefined,
+              builder.selectedArmyList?.ruleset,
+            ).find(
               (x) => x.name == item.unitName,
             );
             if (unitDetails) {

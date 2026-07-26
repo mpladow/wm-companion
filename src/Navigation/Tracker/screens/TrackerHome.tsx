@@ -1,7 +1,7 @@
 import Button from "@components/button";
 import { Text } from "@components/index";
 import MainContainerWithImage from "@components/MainContainerWithImage";
-import LogoWmr from "@components/SVGS/LogoWmr";
+import RulesetLogo from "@components/RulesetLogo";
 import { useVictoryPoints } from "@context/VPContext";
 import { FontAwesome } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -49,7 +49,7 @@ const TrackerHome = () => {
 							flexDirection: "column",
 						}}
 					>
-						<LogoWmr height={80} width={200} />
+						<RulesetLogo height={80} width={200} />
 						<View style={{ marginTop: -12 }}>
 							<Text variant='heading3' style={{ fontSize: 24 }}>
 								{t("BattleTracker")}

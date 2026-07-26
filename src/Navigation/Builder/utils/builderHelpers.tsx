@@ -3,7 +3,7 @@ import { SelectedUnitProps } from '@context/BuilderContext';
 import { asterixRegex, asterixSingleRegex, underscoreRegex } from '@utils/constants';
 import { FactionListProps, UpgradesProps } from '@utils/types';
 import reactStringReplace from 'react-string-replace';
-import magicItemsList from '../../../data/json/wmr/magic-items.json';
+import { defaultRulesetId, getRulesetData, RulesetId } from 'src/data/rulesets';
 export const groupByKey = (list, key) => {
   return list.reduce(
     (hash, obj) => ({ ...hash, [obj[key]]: (hash[obj[key]] || []).concat(obj) }),
@@ -57,9 +57,13 @@ export const get1000PointInterval = (currentArmyPoints: number) => {
   return currentArmyPointsLimit;
 };
 
-export const getUpgradeDetailsByName = (upgradeName: string, factionDetails: FactionListProps) => {
-  let _upgrades: UpgradesProps | undefined = magicItemsList.upgrades.find(
-    (gUp) => gUp.name == upgradeName,
+export const getUpgradeDetailsByName = (
+  upgradeName: string,
+  factionDetails: FactionListProps,
+  rulesetId: RulesetId = defaultRulesetId,
+) => {
+  let _upgrades: UpgradesProps | undefined = getRulesetData(rulesetId).magicItems.upgrades.find(
+    (gUp: any) => gUp.name == upgradeName,
   );
   if (!_upgrades) {
     _upgrades = factionDetails?.upgrades?.find((fUp) => fUp.name == upgradeName);

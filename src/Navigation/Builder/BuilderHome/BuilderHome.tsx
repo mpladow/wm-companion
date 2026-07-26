@@ -1,5 +1,6 @@
 import ChangelogContent from '@components/ChangelogContent';
-import { BottomSheetHandle, StandardModal, Text } from '@components/index';
+import RulesetSelectorSheetHost from '@components/RulesetSelectorSheetHost';
+import { BottomSheetHandle, RulesetHomeMenu, StandardModal, Text } from '@components/index';
 import {
 	ArmyListFilters,
 	ArmyListProps,
@@ -63,7 +64,7 @@ const BuilderHome = () => {
     arr.push(sLData);
     arr.push(notFavouritedSLData);
     setSectionListData(arr);
-  }, [builder.userArmyLists, filterMain, filterFavourites]);
+  }, [builder.getUserArmyLists, builder.userArmyLists, filterMain, filterFavourites]);
 
   const handleShowArmyNotesModal = (armyId: string) => {
     setFocusedArmy(builder.getArmyByArmyId(armyId));
@@ -271,6 +272,8 @@ const BuilderHome = () => {
         submitText={'Delete Army'}
         variant="danger"
       />
+      <RulesetHomeMenu />
+      <RulesetSelectorSheetHost />
     </SafeAreaView>
   );
 };

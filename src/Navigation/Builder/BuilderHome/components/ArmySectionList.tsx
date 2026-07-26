@@ -1,6 +1,6 @@
 import CustomText from '@components/CustomText';
 import { StandardModal, Text, TextBlock } from '@components/index';
-import LogoWmr from '@components/SVGS/LogoWmr';
+import RulesetLogo from '@components/RulesetLogo';
 import { ArmyListFilters, ArmyListProps, ListSections } from '@context/BuilderContext';
 import { useTheme } from '@hooks/useTheme';
 import ArmyListCard from '@navigation/Builder/components/ArmyListCard';
@@ -85,7 +85,7 @@ const ArmySectionList = ({
               alignItems: 'center',
               flexDirection: 'column',
             }}>
-            <LogoWmr height={80} width={200} />
+            <RulesetLogo height={80} width={200} />
             <View style={{ marginTop: -12 }}>
               <Text variant="heading3" style={{ fontSize: 24 }}>
                 {t('Builder', { ns: 'common' })}
