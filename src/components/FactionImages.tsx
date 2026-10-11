@@ -1,18 +1,24 @@
-import { Factions } from '@utils/constants';
-import { getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
+import { getFactionNameByValue, getLocalFactionAssets } from '@utils/factionHelpers';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { defaultRulesetId, RulesetId } from 'src/data/rulesets';
 
 interface FactionImagesProps {
   factionId: number;
+  rulesetId?: RulesetId;
   style?: any;
   imageStyle?: any;
 }
 
-const FactionImages: React.FC<FactionImagesProps> = ({ factionId, style, imageStyle }) => {
+const FactionImages: React.FC<FactionImagesProps> = ({
+  factionId,
+  imageStyle,
+  rulesetId = defaultRulesetId,
+  style,
+}) => {
   // Get the faction name from the ID
-  const factionName = getKeyByValue(Factions, factionId);
+  const factionName = getFactionNameByValue(factionId, rulesetId);
 
   if (!factionName) {
     return null;

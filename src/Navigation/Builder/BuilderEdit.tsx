@@ -5,8 +5,7 @@ import { SelectedUnitProps, useBuilderContext } from '@context/BuilderContext';
 import { useSettingsContext } from '@context/SettingsContext';
 import { Entypo } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
-import { Factions } from '@utils/constants';
-import { getKeyByValue } from '@utils/factionHelpers';
+import { getFactionDisplayName } from '@utils/factionHelpers';
 import { UnitProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -84,7 +83,10 @@ const BuilderEdit = ({ navigation }: any) => {
             </Text>
             <Text>
               {builder.selectedArmyList?.name &&
-                getKeyByValue(Factions, builder.selectedArmyList.faction)?.replaceAll('_', ' ')}
+                getFactionDisplayName(
+                  builder.selectedArmyList.faction,
+                  builder.selectedArmyList.ruleset,
+                )}
               {builder.selectedArmyList?.pointsLimit &&
                 ` - ${builder.selectedArmyList?.pointsLimit}pts`}
             </Text>

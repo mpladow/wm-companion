@@ -10,7 +10,7 @@ export type FactionListProps = {
 	name?: string;
 	id?: number;
 	version?: string;
-	group?: number;
+	group?: number | string;
 	order?: number;
 	units?: any[];
 	upgrades?: UpgradesProps[];

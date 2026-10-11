@@ -3,14 +3,18 @@ import PointsContainer from '@components/pointsContainer';
 import { ArmyListProps } from '@context/BuilderContext';
 import { AntDesign, FontAwesome, Foundation, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
-import { Factions } from '@utils/constants';
-import { getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
-import Constants from 'expo-constants';
+import {
+  getFactionDisplayName,
+  getFactionNameByValue,
+  getLocalFactionAssets,
+} from '@utils/factionHelpers';
+import { getRulesetArmyVersion } from '@utils/rulesetVersion';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
+import { defaultRulesetId } from 'src/data/rulesets';
 
 type ArmyListCardProps = {
   armyList: ArmyListProps;
@@ -36,10 +40,10 @@ const ArmyListCard = ({
   const { theme } = useTheme();
   const [showPopover, setShowPopover] = useState(false);
 
-  const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+  const armyRuleset = armyList.ruleset ?? defaultRulesetId;
+  const CURRENT_VERSION = getRulesetArmyVersion(armyRuleset);
   const setImage = () => {
-    // const armyName = getKeyByValue(Factions, armyList.faction);
-    const armyName = Factions[armyList.faction];
+    const armyName = getFactionNameByValue(armyList.faction, armyRuleset);
     const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
     const imageSource = factionAssets && factionAssets[0];
 
@@ -113,8 +117,7 @@ const ArmyListCard = ({
 
           <View style={{ marginBottom: 4 }}>
             <Text>
-              {armyList.faction &&
-                getKeyByValue(Factions, armyList.faction).replaceAll('_', ' ')}{' '}
+              {getFactionDisplayName(armyList.faction, armyRuleset)}{' '}
             </Text>
           </View>
           <View style={{ alignItems: 'center', flexDirection: 'row' }}>

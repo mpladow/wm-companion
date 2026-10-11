@@ -1,14 +1,38 @@
-import { defaultRulesetId, getRulesetData, RulesetId } from 'src/data/rulesets';
+import { defaultRulesetId, getRulesetData, RulesetId, rulesetIds } from 'src/data/rulesets';
 import { Factions } from "./constants";
+import { WmaFactions } from './wmaConstants';
 
 import { DropDownItemProps } from "@navigation/Tracker/screens/Tracker";
 
-export const getFactionsDropdown = () => {
+export const getFactionEnum = (rulesetId: RulesetId = defaultRulesetId) => {
+	return rulesetId === rulesetIds.warmasterAncients ? WmaFactions : Factions;
+};
+
+export const getFactionNameByValue = (
+	value?: number,
+	rulesetId: RulesetId = defaultRulesetId,
+) => {
+	if (!value) {
+		return undefined;
+	}
+
+	return getKeyByValue(getFactionEnum(rulesetId), value);
+};
+
+export const getFactionDisplayName = (
+	value?: number,
+	rulesetId: RulesetId = defaultRulesetId,
+) => {
+	return getFactionNameByValue(value, rulesetId)?.replaceAll("_", " ");
+};
+
+export const getFactionsDropdown = (rulesetId: RulesetId = defaultRulesetId) => {
 	let ddFactionList = [];
+	const factionEnum = getFactionEnum(rulesetId);
 	// for (const value in Factions) {
 	// 	ddFactionList.push({ label: value?.replaceAll("_", " "), value: key } as DropDownItemProps);
 	// }
-	for (const [key, value] of Object.entries(Factions)) {
+	for (const [key, value] of Object.entries(factionEnum)) {
 		isNaN(parseInt(key)) &&
 			ddFactionList.push({ label: key.replaceAll("_", " "), value: value } as DropDownItemProps);
 	}

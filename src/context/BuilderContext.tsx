@@ -1,11 +1,11 @@
 import { PointsLimitType } from '@navigation/ArmyCreation/EditArmy';
 import { get1000PointInterval } from '@navigation/Builder/utils/builderHelpers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Factions, UpgradeTypes } from '@utils/constants';
-import { getKeyByValue } from '@utils/factionHelpers';
+import { UpgradeTypes } from '@utils/constants';
+import { getFactionDisplayName } from '@utils/factionHelpers';
 import { ArmyErrorsProps, FactionListProps, UpgradesProps } from '@utils/types';
 import { useFactionUnits } from '@utils/useFactionUnits';
-import Constants from 'expo-constants';
+import { getRulesetArmyVersion } from '@utils/rulesetVersion';
 import { produce } from 'immer';
 import _ from 'lodash';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -135,8 +135,8 @@ export const BuilderContextProvider = ({ children }: any) => {
   const [factionDetails, setFactionDetails] = useState<FactionListProps | undefined>({});
   const [armyErrors, setArmyErrors] = useState<ArmyErrorsProps[]>([] as ArmyErrorsProps[]);
   //   const [regimentsOfRenown, setRegimentsOfRenown] = useState<AddRegimentsOfRenownProps>();
-  const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
   const { selectedRulesetId } = useRulesetContext();
+  const CURRENT_VERSION = getRulesetArmyVersion(selectedRulesetId);
 
   const { t } = useTranslation(['builder', 'units']);
   const { getFactionUnitsByVersion, getMagicItemsList, getRegimentsOfRenownForFaction } =
@@ -934,7 +934,10 @@ export const BuilderContextProvider = ({ children }: any) => {
           {
             if (
               unitType ==
-              getKeyByValue(Factions, parseInt(currentArmyList?.faction))?.replace('_', ' ')
+              getFactionDisplayName(
+                parseInt(currentArmyList?.faction),
+                getArmyRuleset(currentArmyList),
+              )
             ) {
               // get total count of monsters in this faction list.
               const totalUnitTypesInFaction = factionDetails?.units.filter(

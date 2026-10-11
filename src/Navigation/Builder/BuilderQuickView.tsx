@@ -4,8 +4,7 @@ import { useBuilderContext } from '@context/BuilderContext';
 import { Foundation } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
-import { Factions } from '@utils/constants';
-import { getKeyByValue } from '@utils/factionHelpers';
+import { getFactionDisplayName } from '@utils/factionHelpers';
 import * as Clipboard from 'expo-clipboard';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -54,10 +53,10 @@ const BuilderQuickView = () => {
   };
 
   const generateFaction = () => {
-    let html = '';
-    html = `${getKeyByValue(Factions, builder.selectedArmyList?.faction)}\n`;
-    html = `${html.replaceAll('_', ' ')}`;
-    return `${html}`;
+    return `${getFactionDisplayName(
+      builder.selectedArmyList?.faction,
+      builder.selectedArmyList?.ruleset,
+    )}\n`;
   };
   const generatePlainText = () => {
     let _html = '';

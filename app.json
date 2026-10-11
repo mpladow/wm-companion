@@ -32,7 +32,8 @@
       "eas": {
         "projectId": "e7bcb57d-bc08-49e5-a158-b19bd96e432c"
       },
-      "armyVersion": 2.263
+      "armyVersion": 2.263,
+      "wmaArmyVersion": 1
     },
     "owner": "mldevelopment",
     "runtimeVersion": "1.0.0",

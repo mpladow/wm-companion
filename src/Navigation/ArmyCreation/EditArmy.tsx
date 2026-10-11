@@ -1,14 +1,14 @@
 import FormLabel from '@components/forms/FormLabel';
 import { Button, FactionImages, Text } from '@components/index';
 import { useBuilderContext } from '@context/BuilderContext';
+import { useRulesetContext } from '@context/RulesetContext';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { generateRandomArmyName } from '@utils/armyNames';
-import { Factions } from '@utils/constants';
-import { getKeyByValue } from '@utils/factionHelpers';
+import { getFactionDisplayName } from '@utils/factionHelpers';
 import fonts from '@utils/fonts';
-import Constants from 'expo-constants';
+import { getRulesetArmyVersion } from '@utils/rulesetVersion';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -29,6 +29,7 @@ const EditArmy = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const builder = useBuilderContext();
+  const { selectedRulesetId } = useRulesetContext();
   const toast = useToast();
   const { factionSelection, armyId } = route.params as {
     factionSelection?: string | number;
@@ -37,7 +38,8 @@ const EditArmy = () => {
   const currentArmy = armyId ? builder.getArmyByArmyId(armyId) : undefined;
   const selectedFactionId =
     currentArmy?.faction ?? (factionSelection ? Number(factionSelection) : undefined);
-  const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+  const armyRuleset = currentArmy?.ruleset ?? selectedRulesetId;
+  const CURRENT_VERSION = getRulesetArmyVersion(armyRuleset);
   const [pointsLimitSelection, setPointsLimitSelection] = useState<PointsLimitType>(
     currentArmy?.pointsLimit,
   );
@@ -197,11 +199,11 @@ const EditArmy = () => {
           flex: isKeyboardVisible ? 0.6 : 1,
         }}
         contentContainerStyle={{ flexGrow: 1 }}>
-        <FactionImages factionId={selectedFactionId ?? 0} />
+        <FactionImages factionId={selectedFactionId ?? 0} rulesetId={armyRuleset} />
         <View style={{ height: 2, backgroundColor: theme.white, width: '100%' }}></View>
         <KeyboardAvoidingView style={{ flex: 1, padding: 16 }}>
           <Text variant="heading3" style={{ marginBottom: 8, fontSize: 32 }}>
-            {selectedFactionId && getKeyByValue(Factions, selectedFactionId)?.replace('_', ' ')}
+            {getFactionDisplayName(selectedFactionId, armyRuleset)}
           </Text>
           <View style={styles.armyNameRow}>
             <TextInput

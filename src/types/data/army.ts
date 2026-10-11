@@ -4,7 +4,7 @@ export type GenericArmyReferenceType = {
 	name: string;
 	version: string;
 	versionNumber?: number;
-	group: number;
+	group: number | string;
 	order: number;
 	description: string[];
 	magic: boolean;

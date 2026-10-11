@@ -2,9 +2,10 @@ import CustomText from '@components/CustomText';
 import { StandardModal, Text, TextBlock } from '@components/index';
 import RulesetLogo from '@components/RulesetLogo';
 import { ArmyListFilters, ArmyListProps, ListSections } from '@context/BuilderContext';
+import { useRulesetContext } from '@context/RulesetContext';
 import { useTheme } from '@hooks/useTheme';
 import ArmyListCard from '@navigation/Builder/components/ArmyListCard';
-import Constants from 'expo-constants';
+import { getRulesetArmyVersion } from '@utils/rulesetVersion';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, SectionList, View } from 'react-native';
@@ -42,10 +43,11 @@ const ArmySectionList = ({
   handleMigrateArmy,
 }: BuilderHomeListProps) => {
   const { theme } = useTheme();
+  const { selectedRulesetId } = useRulesetContext();
   const [selectedArmy, setSelectedArmy] = useState<ArmyListProps>();
 
   const [showMigrateModal, setShowMigrateModal] = useState(false);
-  const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+  const CURRENT_VERSION = getRulesetArmyVersion(selectedRulesetId);
   const toast = useToast();
   const { t } = useTranslation(['builder', 'common', 'forms']);
 

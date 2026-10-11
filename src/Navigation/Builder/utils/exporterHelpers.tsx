@@ -1,6 +1,6 @@
 import { ArmyListProps } from "@context/BuilderContext";
-import { asterixSingleRegex, Factions, newLineRegex, underscoreRegex } from "@utils/constants";
-import { getGenericSpecialRules, getKeyByValue } from "@utils/factionHelpers";
+import { asterixSingleRegex, newLineRegex, underscoreRegex } from "@utils/constants";
+import { getFactionDisplayName, getGenericSpecialRules } from "@utils/factionHelpers";
 import { FactionListProps, UnitProps, UpgradesProps } from "@utils/types";
 const Mustache = require("mustache");
 import { defaultRulesetId, getRulesetData } from "src/data/rulesets";
@@ -200,7 +200,10 @@ export const generateSpells = (army: ArmyListProps, factionDetails: FactionListP
 };
 
 export const generateHeader = (armyProps: ArmyListProps) => {
-	const armyHeaderDetails = { armyName: armyProps.name, faction: getKeyByValue(Factions, armyProps.faction) };
+	const armyHeaderDetails = {
+		armyName: armyProps.name,
+		faction: getFactionDisplayName(armyProps.faction, armyProps.ruleset),
+	};
 	let template = `
     <div style="margin-bottom: 16px">
         <div style="align-items: center">

@@ -1,12 +1,17 @@
 import { Button, Text } from '@components/index';
 import { useBuilderContext } from '@context/BuilderContext';
+import { useRulesetContext } from '@context/RulesetContext';
 import { useTheme } from '@hooks/useTheme';
 import { DropDownItemProps } from '@navigation/Tracker/screens/Tracker';
 import { useNavigation } from '@react-navigation/native';
-import { Factions } from '@utils/constants';
-import { getFactionsDropdown, getKeyByValue, getLocalFactionAssets } from '@utils/factionHelpers';
+import {
+  getFactionDisplayName,
+  getFactionNameByValue,
+  getFactionsDropdown,
+  getLocalFactionAssets,
+} from '@utils/factionHelpers';
+import { getRulesetArmyVersion } from '@utils/rulesetVersion';
 import { useFactionUnits } from '@utils/useFactionUnits';
-import Constants from 'expo-constants';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -28,6 +33,7 @@ const THUMBNAIL_WIDTH = 100;
 const SPACING = 5;
 const CreateArmy = () => {
   const builder = useBuilderContext();
+  const { selectedRulesetId } = useRulesetContext();
   const navigation = useNavigation();
 
   const { getFactionUnitsByVersion } = useFactionUnits();
@@ -63,12 +69,12 @@ const CreateArmy = () => {
   };
   const [activeIndex, setActiveIndex] = useState(0);
   const { width } = Dimensions.get('screen');
-  const CURRENT_VERSION = Constants.expoConfig?.extra?.armyVersion;
+  const CURRENT_VERSION = getRulesetArmyVersion(selectedRulesetId);
 
   useEffect(() => {
-    const { ddFactionList } = getFactionsDropdown();
+    const { ddFactionList } = getFactionsDropdown(selectedRulesetId);
     setDdFactions(ddFactionList);
-  }, []);
+  }, [selectedRulesetId]);
 
   useEffect(() => {
     if (ddFactions.length > 0) {
@@ -77,9 +83,13 @@ const CreateArmy = () => {
   }, [ddFactions]);
   useEffect(() => {
     // get factionDescription
-    const factionunits = getFactionUnitsByVersion(factionSelection as number, CURRENT_VERSION);
+    const factionunits = getFactionUnitsByVersion(
+      factionSelection as number,
+      CURRENT_VERSION,
+      selectedRulesetId,
+    );
     setFactionDescription(factionunits.description);
-  }, [factionSelection]);
+  }, [CURRENT_VERSION, factionSelection, selectedRulesetId]);
   useEffect(() => {
     if (factionName != '') setFactionNameError(false);
   }, [factionName]);
@@ -122,7 +132,7 @@ const CreateArmy = () => {
               color: theme.textInverted,
             }}
             bold>
-            {factionSelection && Factions[factionSelection]?.replaceAll('_', ' ')}
+            {getFactionDisplayName(factionSelection as number, selectedRulesetId)}
           </Text>
         </ImageBackground>
       </View>
@@ -149,7 +159,9 @@ const CreateArmy = () => {
             paddingVertical: 4,
           }}
           renderItem={({ item, index }) => {
-            const armyName = item.value ? getKeyByValue(Factions, item?.value as number) : '';
+            const armyName = item.value
+              ? getFactionNameByValue(item?.value as number, selectedRulesetId)
+              : '';
             const factionAssets = getLocalFactionAssets(armyName ? armyName : '');
             return (
               <TouchableOpacity

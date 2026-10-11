@@ -15,6 +15,7 @@ import ArmyPointsCount from '../ArmyPointsCount';
 import ArmyErrorsPreview from '../ErrorsPreview';
 import UnitCard from '../UnitCard';
 import UnitPreview from '../UnitCardPreview/UnitPreview';
+import { allowsRegimentsOfRenown } from 'src/data/rulesets';
 
 export type AddUnitProps = {
   addingUnits: boolean;
@@ -33,6 +34,7 @@ const AddUnit = () => {
   const [totalPoints, setTotalPoints] = useState(1000);
   const [errorsVisible, setErrorsVisible] = useState(false);
   const { getFactionUnitsByVersion, getGenericSpecialRules } = useFactionUnits();
+  const canAddRegimentsOfRenown = allowsRegimentsOfRenown(builder.selectedArmyList?.ruleset);
 
   useEffect(() => {
     const _currentPoints = builder.calculateCurrentArmyPoints();
@@ -165,21 +167,23 @@ const AddUnit = () => {
               : factionUnits?.filter((x) => x.command || x.command == 0)
           }
           ListFooterComponentStyle={{ marginTop: 16 }}
-          ListFooterComponent={() => (
-            <View>
-              <Button
-                onPress={() =>
-                  navigation.navigate('AddRegimentsOfRenown', { addingLeader: !addingUnits })
-                }
-                variant={'confirm'}
-                style={{ flexDirection: 'row' }}>
-                <View style={{ marginRight: 8 }}>
-                  <FontAwesome5 name="coins" size={16} color={theme.textInverted} />
-                </View>
-                <Text style={{ color: theme.textInverted }}>Add Regiments of Renown</Text>
-              </Button>
-            </View>
-          )}
+          ListFooterComponent={() =>
+            canAddRegimentsOfRenown ? (
+              <View>
+                <Button
+                  onPress={() =>
+                    navigation.navigate('AddRegimentsOfRenown', { addingLeader: !addingUnits })
+                  }
+                  variant={'confirm'}
+                  style={{ flexDirection: 'row' }}>
+                  <View style={{ marginRight: 8 }}>
+                    <FontAwesome5 name="coins" size={16} color={theme.textInverted} />
+                  </View>
+                  <Text style={{ color: theme.textInverted }}>Add Regiments of Renown</Text>
+                </Button>
+              </View>
+            ) : null
+          }
           renderItem={({ item, index }) => {
             const units = addingUnits
               ? sectionListData?.find((x) => x.title == 'Units')?.data

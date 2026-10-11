@@ -4,11 +4,13 @@ import RulesetSelectorSheetHost from '@components/RulesetSelectorSheetHost';
 import { Button, RulesetHomeMenu, Text, TextBlock } from '@components/index';
 import MainContainerWithImage from '@components/MainContainerWithImage';
 import RulesetLogo from '@components/RulesetLogo';
+import { useRulesetContext } from '@context/RulesetContext';
 import { useUpdateChecker } from '@context/UpdateCheckerContext';
 import { Entypo, EvilIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
 import { margin } from '@utils/constants';
+import { getRulesetArmyVersion } from '@utils/rulesetVersion';
 import * as Clipboard from 'expo-clipboard';
 import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
@@ -30,7 +32,8 @@ const Home = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
   const version = Constants?.expoConfig?.version;
-  const armyVersion = Constants?.expoConfig?.extra?.armyVersion;
+  const { selectedRulesetId } = useRulesetContext();
+  const armyVersion = getRulesetArmyVersion(selectedRulesetId);
   const toast = useToast();
   const handlePressSupport = () => {
     Linking.openURL(

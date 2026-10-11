@@ -2,6 +2,7 @@ import { useRulesetContext } from '@context/RulesetContext';
 import { defaultRulesetId, getRulesetData, RulesetId } from 'src/data/rulesets';
 import { ArmyReferenceType, RegimentOfRenownUnitReferenceType } from "src/types/data/army";
 import { Factions } from "./constants";
+import { getFactionDisplayName } from './factionHelpers';
 
 export const useFactionUnits = () => {
 	const { selectedRulesetId } = useRulesetContext();
@@ -22,14 +23,18 @@ export const useFactionUnits = () => {
 			// iterate over all units and check the forbiddenFactions array and ensure this factionSelection is not included.
 			if (getLeaders !== undefined) {
 				regimentsOfRenownList.units.filter(x => (x.command !== undefined) == getLeaders).forEach((item, index) => {
-					const unitIsForbiddenFromFaction = item.forbiddenFactions?.includes(Factions[factionSelection])
+					const unitIsForbiddenFromFaction = item.forbiddenFactions?.includes(
+						getFactionDisplayName(factionSelection, rulesetId) ?? Factions[factionSelection],
+					)
 					if (!unitIsForbiddenFromFaction) {
 						regimentsOfRenownPermittedList.push(item);
 					}
 				})
 			} else {
 				regimentsOfRenownList.units.forEach((item, index) => {
-					const unitIsForbiddenFromFaction = item.forbiddenFactions?.includes(Factions[factionSelection])
+					const unitIsForbiddenFromFaction = item.forbiddenFactions?.includes(
+						getFactionDisplayName(factionSelection, rulesetId) ?? Factions[factionSelection],
+					)
 					if (!unitIsForbiddenFromFaction) {
 						regimentsOfRenownPermittedList.push(item);
 					}
@@ -56,10 +61,10 @@ export const useFactionUnits = () => {
 		if (factionSelection == undefined) {
 			return { ddFactionUnits: [], factionList: factionList, description: description };
 		}
-		const army = Factions[factionSelection]?.replaceAll("_", " ");
+		const army = getFactionDisplayName(factionSelection, rulesetId);
 		const { armiesV2, legacyArmies } = getRulesetData(rulesetId);
 
-		if (version == undefined || version >= 2.24) {
+		if (rulesetId !== defaultRulesetId || version == undefined || version >= 2.24) {
 			const _factionList = armiesV2.find((x) => x.name == army);
 			if (_factionList) {
 				factionList = _factionList;

@@ -1,38 +1,15 @@
 import { Factions } from '@utils/constants';
+import { WmaFactions } from '@utils/wmaConstants';
 import { ArmyReferenceType, RegimentOfRenownArmyReferenceType } from 'src/types/data/army';
 import wmaGenericSpecialRules from './json/wma/generic-special-rules/generic-special-rules.json';
 import wmaMagicItemsList from './json/wma/magic-items.json';
-import wmaAlbionList from './json/wma/albion.json';
-import wmaArabyList from './json/wma/araby.json';
-import wmaBeastmenList from './json/wma/beastmen.json';
-import wmaBretonnianList from './json/wma/bretonnian.json';
-import wmaCathayList from './json/wma/cathay.json';
-import wmaChaosList from './json/wma/chaos.json';
-import wmaChaosDwarvesList from './json/wma/chaosDwarves.json';
-import wmaDaemonsList from './json/wma/daemons.json';
-import wmaDarkElvesList from './json/wma/darkelves.json';
-import wmaDogsOfWarList from './json/wma/dogsOfWar.json';
-import wmaDwarvesList from './json/wma/dwarves.json';
-import wmaEmpireList from './json/wma/empire.json';
-import wmaHighElvesList from './json/wma/highElves.json';
-import wmaKislevList from './json/wma/kislev.json';
-import wmaLizardmenList from './json/wma/lizardmen.json';
-import wmaNightGoblinsList from './json/wma/nightGoblins.json';
-import wmaNipponList from './json/wma/nippon.json';
-import wmaNorseList from './json/wma/norse.json';
-import wmaOgresList from './json/wma/ogres.json';
-import wmaOrcList from './json/wma/orks.json';
-import wmaSkavenList from './json/wma/skaven.json';
-import wmaTombKingsList from './json/wma/tombKings.json';
-import wmaVampireCountsList from './json/wma/vampireCounts.json';
-import wmaWitchHunterList from './json/wma/witchHunters.json';
-import wmaWoodElvesList from './json/wma/woodElves.json';
+import achaemenidPersianList from './json/wma/achaemenid-persian.json';
+import greekList from './json/wma/greek.json';
 import {
-  regimentsOfReknownListV1 as wmaRegimentsOfReknownListV1,
-  wmrArmiesV2 as wmaArmiesV2,
-} from './json/wma/v2/_armies';
-import wmrGenericSpecialRules from './json/wmr/generic-special-rules/generic-special-rules.json';
-import wmrMagicItemsList from './json/wmr/magic-items.json';
+  wmaArmiesV2,
+  wmaRegimentsOfReknownListV1,
+} from './json/wma/_armies';
+
 import wmrAlbionList from './json/wmr/albion.json';
 import wmrArabyList from './json/wmr/araby.json';
 import wmrBeastmenList from './json/wmr/beastmen.json';
@@ -45,9 +22,11 @@ import wmrDarkElvesList from './json/wmr/darkelves.json';
 import wmrDogsOfWarList from './json/wmr/dogsOfWar.json';
 import wmrDwarvesList from './json/wmr/dwarves.json';
 import wmrEmpireList from './json/wmr/empire.json';
+import wmrGenericSpecialRules from './json/wmr/generic-special-rules/generic-special-rules.json';
 import wmrHighElvesList from './json/wmr/highElves.json';
 import wmrKislevList from './json/wmr/kislev.json';
 import wmrLizardmenList from './json/wmr/lizardmen.json';
+import wmrMagicItemsList from './json/wmr/magic-items.json';
 import wmrNightGoblinsList from './json/wmr/nightGoblins.json';
 import wmrNipponList from './json/wmr/nippon.json';
 import wmrNorseList from './json/wmr/norse.json';
@@ -55,13 +34,13 @@ import wmrOgresList from './json/wmr/ogres.json';
 import wmrOrcList from './json/wmr/orks.json';
 import wmrSkavenList from './json/wmr/skaven.json';
 import wmrTombKingsList from './json/wmr/tombKings.json';
+import {
+	wmrArmiesV2,
+	regimentsOfReknownListV1 as wmrRegimentsOfReknownListV1,
+} from './json/wmr/v2/_armies';
 import wmrVampireCountsList from './json/wmr/vampireCounts.json';
 import wmrWitchHunterList from './json/wmr/witchHunters.json';
 import wmrWoodElvesList from './json/wmr/woodElves.json';
-import {
-  regimentsOfReknownListV1 as wmrRegimentsOfReknownListV1,
-  wmrArmiesV2,
-} from './json/wmr/v2/_armies';
 
 export const RULESET_STORAGE_KEY = 'selectedRuleset';
 
@@ -95,12 +74,12 @@ export const getRulesetLabel = (rulesetId: RulesetId = defaultRulesetId) => {
 type RulesetData = {
   armiesV2: ArmyReferenceType[];
   regimentsOfRenown: RegimentOfRenownArmyReferenceType[];
-  legacyArmies: Partial<Record<Factions, ArmyReferenceType>>;
+  legacyArmies: Partial<Record<number, ArmyReferenceType>>;
   magicItems: any;
   genericSpecialRules: any;
 };
 
-const wmrLegacyArmies: Partial<Record<Factions, ArmyReferenceType>> = {
+const wmrLegacyArmies: Partial<Record<number, ArmyReferenceType>> = {
   [Factions.Bretonnia]: wmrBretonnianList as ArmyReferenceType,
   [Factions.Orcs]: wmrOrcList as ArmyReferenceType,
   [Factions.Tomb_Kings]: wmrTombKingsList as ArmyReferenceType,
@@ -128,32 +107,9 @@ const wmrLegacyArmies: Partial<Record<Factions, ArmyReferenceType>> = {
   [Factions.Witch_Hunters]: wmrWitchHunterList as ArmyReferenceType,
 };
 
-const wmaLegacyArmies: Partial<Record<Factions, ArmyReferenceType>> = {
-  [Factions.Bretonnia]: wmaBretonnianList as ArmyReferenceType,
-  [Factions.Orcs]: wmaOrcList as ArmyReferenceType,
-  [Factions.Tomb_Kings]: wmaTombKingsList as ArmyReferenceType,
-  [Factions.Empire]: wmaEmpireList as ArmyReferenceType,
-  [Factions.Skaven]: wmaSkavenList as ArmyReferenceType,
-  [Factions.Chaos]: wmaChaosList as ArmyReferenceType,
-  [Factions.Wood_Elves]: wmaWoodElvesList as ArmyReferenceType,
-  [Factions.Vampire_Counts]: wmaVampireCountsList as ArmyReferenceType,
-  [Factions.Beastmen]: wmaBeastmenList as ArmyReferenceType,
-  [Factions.Cathay]: wmaCathayList as ArmyReferenceType,
-  [Factions.Goblins]: wmaNightGoblinsList as ArmyReferenceType,
-  [Factions.Dwarfs]: wmaDwarvesList as ArmyReferenceType,
-  [Factions.Dark_Elves]: wmaDarkElvesList as ArmyReferenceType,
-  [Factions.High_Elves]: wmaHighElvesList as ArmyReferenceType,
-  [Factions.Daemons]: wmaDaemonsList as ArmyReferenceType,
-  [Factions.Nippon]: wmaNipponList as ArmyReferenceType,
-  [Factions.Chaos_Dwarfs]: wmaChaosDwarvesList as ArmyReferenceType,
-  [Factions.Dogs_of_War]: wmaDogsOfWarList as ArmyReferenceType,
-  [Factions.Araby]: wmaArabyList as ArmyReferenceType,
-  [Factions.Lizardmen]: wmaLizardmenList as ArmyReferenceType,
-  [Factions.Albion]: wmaAlbionList as ArmyReferenceType,
-  [Factions.Ogre_Kingdoms]: wmaOgresList as ArmyReferenceType,
-  [Factions.Kislev]: wmaKislevList as ArmyReferenceType,
-  [Factions.Norse]: wmaNorseList as ArmyReferenceType,
-  [Factions.Witch_Hunters]: wmaWitchHunterList as ArmyReferenceType,
+const wmaLegacyArmies: Partial<Record<number, ArmyReferenceType>> = {
+  [WmaFactions.Greek]: greekList as ArmyReferenceType,
+  [WmaFactions.Achaemenid_Persian]: achaemenidPersianList as ArmyReferenceType,
 };
 
 const rulesetData: Record<RulesetId, RulesetData> = {
@@ -175,4 +131,8 @@ const rulesetData: Record<RulesetId, RulesetData> = {
 
 export const getRulesetData = (rulesetId: RulesetId = defaultRulesetId) => {
   return rulesetData[rulesetId] ?? rulesetData[defaultRulesetId];
+};
+
+export const allowsRegimentsOfRenown = (rulesetId: RulesetId = defaultRulesetId) => {
+  return getRulesetData(rulesetId).regimentsOfRenown.length > 0;
 };

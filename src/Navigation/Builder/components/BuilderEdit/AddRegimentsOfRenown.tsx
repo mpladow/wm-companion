@@ -15,6 +15,7 @@ import CollapsibleComponent from '../Collapsible';
 import ArmyErrorsPreview from '../ErrorsPreview';
 import UnitCard from '../UnitCard';
 import RegimentsOfRenownPreview from '../UnitCardPreview/RegimentsOfRenownPreview';
+import { allowsRegimentsOfRenown } from 'src/data/rulesets';
 
 export type AddRegimentsOfRenownProps = {
   addingLeader: boolean;
@@ -109,6 +110,13 @@ const AddRegimentsOfRenown = () => {
   }, [builder.calculateCurrentArmyPoints(), builder.totalPoints]);
 
   const { getGenericSpecialRules, getRegimentsOfRenownForFaction, getRegimentsOfRenownFactionData } = useFactionUnits();
+  const canAddRegimentsOfRenown = allowsRegimentsOfRenown(builder.selectedArmyList?.ruleset);
+
+  useEffect(() => {
+    if (!canAddRegimentsOfRenown) {
+      navigation.goBack();
+    }
+  }, [canAddRegimentsOfRenown, navigation]);
 
   const handleViewPreview = (unitName: string) => {
     const rawUnitData = regimentsOfRenown?.find((x) => x.name == unitName);
